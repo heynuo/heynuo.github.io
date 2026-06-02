@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <title>Modern Web Development Guide — HTML, CSS, JS, GitHub Pages | HeyNuo</title>
+  <meta name="description" content="Complete guide to modern web dev: semantic HTML5, CSS flex/grid, vanilla JavaScript interactivity, and free GitHub Pages deployment.">
+  <link rel="canonical" href="https://heynuo.github.io/web-dev-guide.html">
+  <meta property="og:title" content="Modern Web Development Guide | HeyNuo">
+  <meta property="og:description" content="Build beautiful websites with HTML, CSS, JavaScript, and deploy for free on GitHub Pages.">
+  <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .article-enhanced { max-width: 880px; margin: 0 auto; }
+    .article-header { margin-bottom: var(--space-xl); text-align: center; border-bottom: 1px solid var(--border); padding-bottom: var(--space-lg); }
+    .article-header h1 { font-size: 3rem; background: linear-gradient(135deg, #fff, var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: var(--space-sm); }
+    .article-meta { display: flex; justify-content: center; gap: var(--space-md); color: var(--muted); font-size: 0.9rem; flex-wrap: wrap; }
+    .article-meta span { background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 40px; }
+    .prose { font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+    .prose h2 { font-size: 1.8rem; margin: 1.8em 0 0.8em; font-weight: 700; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
+    .prose h3 { font-size: 1.4rem; margin: 1.5em 0 0.5em; color: var(--accent); }
+    .prose p { margin-bottom: 1.2rem; color: #e2e8f0; }
+    .prose code { background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 8px; font-family: monospace; font-size: 0.9em; color: #facc15; }
+    .prose pre { background: #0a0f1c; border-radius: 20px; padding: 1rem; overflow-x: auto; border: 1px solid var(--border); margin: 1.5rem 0; }
+    .prose pre code { background: none; color: #bbf0ff; }
+    .demo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 12px; margin: 1.5rem 0; }
+    .demo-card { background: rgba(255,255,255,0.03); border-radius: 16px; padding: 12px; text-align: center; border: 1px solid var(--border); }
+    .info-card { background: rgba(16,185,129,0.1); border-left: 4px solid var(--success); padding: 1rem 1.5rem; border-radius: 20px; margin: 2rem 0; }
+    .related-links { display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0; justify-content: center; }
+    .related-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 18px; padding: 1rem 1.5rem; transition: all 0.2s; text-decoration: none; color: var(--text); }
+    .related-card:hover { border-color: var(--primary); transform: translateY(-3px); background: rgba(59,130,246,0.08); }
+    .breadcrumb { margin: 20px 0 10px; font-size: 0.85rem; color: var(--muted); }
+    @media (max-width: 768px) { .article-header h1 { font-size: 2.2rem; } }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <header>
+    <nav class="container">
+      <div class="logo">Hey<span>Nuo</span></div>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <main id="main-content" class="article-enhanced">
+      <div class="breadcrumb"><a href="index.html">🏠 Home</a> / <span>Modern Web Development Guide</span></div>
+      <article>
+        <div class="article-header">
+          <h1>Modern Web Development Guide</h1>
+          <div class="article-meta"><span>📅 June 2, 2026</span><span>🌐 Web Dev</span><span>⏱ 9 min read</span></div>
+        </div>
+        <div class="prose">
+          <p>You don’t need complex frameworks to ship fast, responsive, and accessible websites. This guide walks you through modern HTML, CSS, vanilla JavaScript, and deployment on <strong>GitHub Pages — 100% free</strong>.</p>
+
+          <h2>📄 1. Semantic HTML5</h2>
+          <p>Use <code>&lt;header&gt;, &lt;main&gt;, &lt;article&gt;, &lt;section&gt;</code> for accessibility and SEO. Screen readers love meaningful tags.</p>
+          <pre><code>&lt;article&gt;
+  &lt;h2&gt;Blog title&lt;/h2&gt;
+  &lt;time datetime="2026-06-02"&gt;June 2, 2026&lt;/time&gt;
+  &lt;p&gt;Content...&lt;/p&gt;
+&lt;/article&gt;</code></pre>
+
+          <h2>🎨 2. Modern CSS Techniques</h2>
+          <p>Leverage Flexbox, CSS Grid, custom properties (variables), and container queries. Here’s a responsive card grid:</p>
+          <div class="demo-grid">
+            <div class="demo-card">Flexible</div>
+            <div class="demo-card">Grid</div>
+            <div class="demo-card">Responsive</div>
+          </div>
+          <pre><code>.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}</code></pre>
+
+          <h2>⚡ 3. Vanilla JavaScript Interactivity</h2>
+          <p>No build steps — use modern ES6+ for DOM manipulation, event handling, and dynamic content. Example: dark mode toggle (optional, extendable).</p>
+          <pre><code>document.querySelector('#theme-toggle')?.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});</code></pre>
+
+          <div class="info-card">
+            🚀 <strong>Performance tip:</strong> Use debounced search, lazy loading images, and `prefers-reduced-motion` media queries for inclusive experiences — exactly as implemented in HeyNuo’s global script.
+          </div>
+
+          <h2>🛠 4. Free Deployment: GitHub Pages</h2>
+          <p>1. Push your code to a GitHub repository.<br>
+             2. Go to Settings → Pages → Branch: <code>main</code> (or <code>gh-pages</code>).<br>
+             3. Your site goes live at <code>https://username.github.io/repo</code> or custom domain.<br>
+             No hosting costs, SSL included, CDN delivery.</p>
+          <p>This site (HeyNuo) itself is deployed exactly that way. All articles are static, blazing fast.</p>
+
+          <h2>🔧 Best Practices & Tooling</h2>
+          <ul>
+            <li>✔️ Mobile-first design & viewport meta.</li>
+            <li>✔️ Use <code>:focus-visible</code> for keyboard accessibility.</li>
+            <li>✔️ Optimize images (WebP format, srcset).</li>
+            <li>✔️ Validate HTML/CSS with W3C validators.</li>
+          </ul>
+          <p>Start building right now. No complex terminal — just HTML/CSS/JS and creativity.</p>
+        </div>
+
+        <div class="related-links">
+          <a href="java-oop.html" class="related-card">☕ Java OOP Crash Course</a>
+          <a href="jinn-islamic-theology.html" class="related-card">📖 Jinn & Islamic Theology</a>
+        </div>
+        <div style="margin-top: 2.5rem; text-align: center;">
+          <a href="index.html#articles" class="btn btn-secondary">← Back to all articles</a>
+        </div>
+      </article>
+    </main>
+    <footer><p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p></footer>
+  </div>
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+  <script src="js/script.js"></script>
+</body>
+</html>

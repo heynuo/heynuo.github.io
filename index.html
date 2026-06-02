@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Primary SEO -->
+  <title>HeyNuo – Modern Notes, Research & Projects</title>
+  <meta name="description" content="HeyNuo is a personal blog sharing Java tutorials, Islamic research, web development guides, and Quranic healing references. Clean, fast, and educational content." />
+  <meta name="keywords" content="HeyNuo, Java OOP, Islamic research, web development, GitHub Pages, tutorials, Ruqyah guide, programming blog" />
+  <meta name="author" content="HeyNuo" />
+  <link rel="canonical" href="https://heynuo.github.io/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="HeyNuo – Modern Notes, Research & Projects" />
+  <meta property="og:description" content="Personal blog for Java tutorials, Islamic research, web dev guides, and Quranic healing references." />
+  <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg" />
+  <meta property="og:url" content="https://heynuo.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="HeyNuo" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HeyNuo – Modern Notes, Research & Projects" />
+  <meta name="twitter:description" content="Java tutorials, Islamic research, and web development guides." />
+  <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "HeyNuo",
+    "url": "https://heynuo.github.io/",
+    "description": "Personal blog for Java tutorials, Islamic research, web development guides, and Quranic healing references.",
+    "author": { "@type": "Person", "name": "HeyNuo" },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://heynuo.github.io/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <header>
+    <nav class="container" aria-label="Main navigation">
+      <div class="logo">Hey<span>Nuo</span></div>
+      <button class="menu-btn" id="menu-btn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <main id="main-content">
+      <section class="hero" aria-label="Introduction">
+        <h1>Modern Notes & <span>Research Blog</span></h1>
+        <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.</p>
+        <div class="hero-buttons">
+          <a href="about.html" class="btn btn-secondary">About Me</a>
+        </div>
+      </section>
+
+      <section aria-label="Featured project">
+        <div class="featured-project">
+          <article class="project-card">
+            <div class="project-info">
+              <h3>📿 <span>Ruqyah Shariyah</span> Guide</h3>
+              <p>Comprehensive Quranic healing reference – all essential verses for protection, jinn expulsion, love, and more.</p>
+            </div>
+            <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">
+              <i>📖</i> Open Ruqyah Guide <i>→</i>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section id="articles" aria-label="Latest articles">
+        <h2 class="section-title">📚 Latest Articles</h2>
+        <div class="toolbar">
+          <input type="text" id="searchInput" class="search-box" placeholder="Search articles..." autocomplete="off" aria-label="Search articles" />
+          <div id="filter-buttons" role="group" aria-label="Filter articles by category">
+            <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
+            <button class="filter-btn" data-category="Java" aria-pressed="false">Java</button>
+            <button class="filter-btn" data-category="Research" aria-pressed="false">Research</button>
+            <button class="filter-btn" data-category="Web Dev" aria-pressed="false">Web Dev</button>
+          </div>
+        </div>
+        <div class="cards" id="cards-container"></div>
+      </section>
+
+      <section class="about" id="about" aria-label="About this website">
+        <article class="about-box">
+          <h2>✨ About This Website</h2>
+          <p>This is my digital notebook – a place where I publish educational notes, deep research, and tutorials in a clean, distraction‑free layout.</p>
+        </article>
+        <article class="about-box">
+          <h2>🚀 Built with</h2>
+          <p>Pure HTML, CSS & JavaScript · Hosted 100% free on GitHub Pages · No databases, no complexity – just fast content delivery.</p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+    </footer>
+  </div>
+
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
