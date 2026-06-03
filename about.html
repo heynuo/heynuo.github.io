@@ -1,68 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="index, follow">
   <title>About Me - HeyNuo | Developer & Researcher</title>
-  <meta name="description" content="Learn about HeyNuo - a passionate Java developer, Islamic researcher, and content creator sharing tutorials, research notes, and web development guides." />
-  <meta name="keywords" content="About HeyNuo, developer bio, Java programmer, Islamic research, web development, content creator, Ruqyah guide" />
-  <meta name="author" content="HeyNuo" />
-  <link rel="canonical" href="https://heynuo.github.io/about.html" />
-  <meta property="og:title" content="About Me - HeyNuo | Developer & Researcher" />
-  <meta property="og:description" content="Passionate developer, Java enthusiast, Islamic researcher, and content creator." />
-  <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg" />
-  <meta property="og:url" content="https://heynuo.github.io/about.html" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="About Me - HeyNuo | Developer & Researcher" />
-  <meta name="twitter:description" content="Java tutorials, Islamic research, and web development guides by HeyNuo." />
-  <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg" />
-  <link rel="icon" type="image/png" href="images/favicon.png" />
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-  <link rel="stylesheet" href="css/style.css" />
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "HeyNuo",
-    "url": "https://heynuo.github.io/",
-    "jobTitle": "Developer & Content Creator",
-    "description": "Java programmer, Islamic researcher, and web developer sharing educational content.",
-    "sameAs": ["https://github.com/heynuo", "https://www.youtube.com/@heynuo"]
-  }
-  </script>
+  <meta name="description" content="Learn about HeyNuo - a passionate Java developer, Islamic researcher, and content creator sharing tutorials, research notes, and web development guides.">
+  <meta name="keywords" content="About HeyNuo, developer bio, Java programmer, Islamic research, web development, content creator, Ruqyah guide">
+  <meta name="author" content="HeyNuo">
+  <link rel="canonical" href="https://heynuo.github.io/about.html">
+  <meta property="og:title" content="About Me - HeyNuo | Developer & Researcher">
+  <meta property="og:description" content="Passionate developer, Java enthusiast, Islamic researcher, and content creator.">
+  <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <meta property="og:url" content="https://heynuo.github.io/about.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About Me - HeyNuo | Developer & Researcher">
+  <meta name="twitter:description" content="Java tutorials, Islamic research, and web development guides by HeyNuo.">
+  <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  
+  <!-- Inline CSS – complete global + about page refinements -->
+  <style>
+    /* ============================================
+       HeyNuo – Complete Global Styles + About page fixes
+       ============================================ */
+    @layer reset, base, components, utilities;
+
+    @layer reset {
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    }
+
+    @layer base {
+      :root {
+        color-scheme: light;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #2563eb;
+        --secondary: #0891b2;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: rgba(0, 0, 0, 0.08);
+        --accent: #3b82f6;
+        --success: #10b981;
+        --error: #ef4444;
+        --warning: #f59e0b;
+        --glass-bg: rgba(0, 0, 0, 0.02);
+        --glass-border: rgba(0, 0, 0, 0.08);
+        --glass-blur: 12px;
+        --glass-blur-header: 16px;
+        --space-xs: 8px;
+        --space-sm: 12px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 35px;
+        --space-2xl: 40px;
+        --space-3xl: 60px;
+        --space-4xl: 80px;
+        --space-5xl: 100px;
+        --z-base: 1;
+        --z-dropdown: 100;
+        --z-sticky: 200;
+        --z-nav: 300;
+        --z-modal: 400;
+        --z-toast: 500;
+        --transition-default: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        --transition-slow: transform 0.4s ease, box-shadow 0.4s ease;
+        --header-height: 65px;
+        --scroll-offset: 90px;
+        --fixed-offset: 24px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #0f172a;
+          --card-bg: #111827;
+          --primary: #3b82f6;
+          --secondary: #06b6d4;
+          --text: #f8fafc;
+          --muted: #cbd5e1;
+          --border: rgba(255, 255, 255, 0.08);
+          --accent: #60a5fa;
+          --glass-bg: rgba(255, 255, 255, 0.04);
+          --glass-border: rgba(255, 255, 255, 0.08);
+        }
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: var(--scroll-offset);
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) var(--bg);
+      }
+      body {
+        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(to bottom, #ffffff, #f1f5f9);
+        background-attachment: fixed;
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      @media (prefers-color-scheme: dark) { body { background: linear-gradient(to bottom, #020617, #0f172a); } }
+      ::selection { background: var(--primary); color: white; }
+      a, button { -webkit-tap-highlight-color: transparent; }
+    }
+
+    @layer components {
+      .skip-link {
+        position: absolute;
+        top: -60px;
+        left: 0;
+        background: var(--primary);
+        color: white;
+        padding: 12px 20px;
+        z-index: var(--z-modal);
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 0 0 8px 0;
+        transition: top 0.25s ease;
+      }
+      .skip-link:focus { top: 0; outline: none; }
+      .container { width: min(1200px, 90%); margin: 0 auto; padding-inline: 1rem; }
+      header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(var(--glass-blur-header));
+        z-index: var(--z-nav);
+        border-bottom: 1px solid var(--border);
+      }
+      @media (prefers-color-scheme: dark) { header { background: rgba(15, 23, 42, 0.98); } }
+      header nav { display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg) 0; }
+      .logo { font-size: 28px; font-weight: bold; color: var(--text); }
+      .logo span { color: var(--primary); }
+      .nav-links { display: flex; gap: var(--space-lg); list-style: none; }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--muted);
+        transition: var(--transition-default);
+        font-size: 15px;
+        font-weight: 500;
+        padding: 8px 16px;
+        border-radius: 8px;
+      }
+      .nav-links a:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); }
+      @media (prefers-color-scheme: dark) { .nav-links a:hover { background: rgba(255, 255, 255, 0.06); } }
+      .nav-links a.active { color: var(--primary); background: rgba(37, 99, 235, 0.1); font-weight: 600; }
+      .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 28px; cursor: pointer; min-height: 48px; min-width: 48px; }
+      .hero { padding: var(--space-3xl) 0 var(--space-4xl); text-align: center; }
+      .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; font-weight: 800; }
+      .hero h1 span, .section-title span, .hero-subtitle { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .hero p { max-width: 700px; margin: 0 auto; color: var(--muted); font-size: 18px; line-height: 1.8; }
+      .hero-subtitle { font-size: 20px; margin-bottom: var(--space-md); font-weight: 500; display: inline-block; }
+      .hero-description { margin-bottom: var(--space-lg); }
+      .hero-buttons { margin-top: var(--space-xl); display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+      .btn {
+        padding: 14px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        transition: var(--transition-default);
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        border: none;
+        font-size: 16px;
+      }
+      .btn-primary { background: linear-gradient(to right, #2563eb, #0891b2); color: white; }
+      .btn-secondary {
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: rgba(0, 0, 0, 0.03);
+        backdrop-filter: blur(8px);
+      }
+      @media (prefers-color-scheme: dark) { .btn-secondary { border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); color: white; } }
+      .section-title { font-size: clamp(1.5rem, 3vw + 0.5rem, 2.125rem); margin-bottom: 20px; text-align: center; font-weight: 700; }
+      .section-spacing { margin-bottom: var(--space-5xl); }
+      .about { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-2xl); margin-bottom: var(--space-5xl); }
+      .about-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: 24px; transition: var(--transition-slow); height: 100%; }
+      .about-box h2 { margin-bottom: 18px; font-size: 28px; font-weight: 700; }
+      .about-box p { color: var(--muted); line-height: 1.9; }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: var(--space-lg); margin-bottom: var(--space-5xl); }
+      .card {
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        padding: 28px;
+        border-radius: 22px;
+        transition: var(--transition-slow);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .card h3 { margin-bottom: 14px; font-size: 22px; font-weight: 700; }
+      .card p { color: var(--muted); line-height: 1.7; margin-bottom: 18px; flex-grow: 1; }
+      .card .category { display: inline-block; background: rgba(37, 99, 235, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 12px; font-weight: 600; }
+      .skill-list { list-style: none; padding-left: 0; margin-top: 10px; }
+      .skill-list li { color: var(--muted); padding: 4px 0; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+      .skill-list li::before { content: "▹"; color: var(--primary); font-size: 0.8rem; }
+      .featured-project { margin: 40px 0 var(--space-3xl); display: flex; justify-content: center; }
+      .project-card {
+        background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        padding: 35px 45px;
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--space-lg);
+        max-width: 800px;
+        width: 100%;
+      }
+      @media (prefers-color-scheme: dark) { .project-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); } }
+      .project-info h3 { font-size: clamp(1.25rem, 3vw, 1.625rem); margin-bottom: 10px; }
+      .project-info h3 span { color: var(--warning); }
+      .project-info p { color: var(--muted); }
+      .project-btn {
+        background: linear-gradient(to right, #b45309, var(--warning));
+        color: white;
+        padding: 16px 32px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: bold;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: var(--transition-default);
+        white-space: nowrap;
+      }
+      .cta-section { background: var(--glass-bg); border-radius: 48px; padding: 60px 20px; margin-bottom: var(--space-4xl); }
+      .cta-text { max-width: 600px; margin: 20px auto 0; }
+      .scroll-to-top {
+        position: fixed;
+        bottom: calc(var(--fixed-offset) + env(safe-area-inset-bottom));
+        right: calc(var(--fixed-offset) + env(safe-area-inset-right));
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(to right, var(--primary), var(--secondary));
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: var(--transition-default);
+        z-index: var(--z-sticky);
+      }
+      .scroll-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+      footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--muted); font-size: 14px; margin-top: var(--space-3xl); }
+      @media (max-width: 768px) {
+        .nav-links {
+          position: fixed;
+          top: var(--header-height);
+          right: 0;
+          width: 100%;
+          max-width: 300px;
+          height: calc(100dvh - var(--header-height));
+          background: white;
+          backdrop-filter: blur(20px);
+          padding: 20px;
+          border-left: 1px solid var(--border);
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          opacity: 0;
+          visibility: hidden;
+          gap: var(--space-md);
+        }
+        @media (prefers-color-scheme: dark) { .nav-links { background: rgba(15, 23, 42, 0.98); } }
+        .nav-links.show { transform: translateX(0); opacity: 1; visibility: visible; }
+        .nav-links a { padding: 12px 16px; width: 100%; text-align: left; }
+        .menu-btn { display: block; }
+        .project-card { flex-direction: column; text-align: center; padding: 28px; }
+        .project-btn { white-space: normal; }
+        .cards { grid-template-columns: 1fr; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+      }
+    }
+  </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <header>
-    <nav class="container" aria-label="Main navigation">
+    <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
-      <button class="menu-btn" id="menu-btn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
       <div class="nav-links" id="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html" class="active">About</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html" target="_self">Home</a>
+        <a href="about.html" class="active" target="_self">About</a>
+        <a href="contact.html" target="_self">Contact</a>
       </div>
     </nav>
   </header>
 
   <div class="container">
     <main id="main-content">
-      <section class="hero about-hero" aria-label="About introduction">
+      <section class="hero about-hero">
         <div class="hero-content">
           <h1>About <span>Me</span></h1>
           <p class="hero-subtitle">Developer · Researcher · Content Creator</p>
           <p class="hero-description">Assalamu Alaikum! I'm HeyNuo — passionate about sharing knowledge through code, authentic Islamic research, and clean educational content.</p>
           <div class="hero-buttons">
-            <a href="index.html#articles" class="btn btn-primary">View My Articles</a>
-            <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
+            <a href="index.html#articles" class="btn btn-primary" target="_self">View My Articles</a>
+            <a href="contact.html" class="btn btn-secondary" target="_self">Get In Touch</a>
           </div>
         </div>
       </section>
 
-      <section class="about-section section-spacing" aria-label="Introduction">
+      <section class="about-section section-spacing">
         <h2 class="section-title">Who <span>Am I?</span></h2>
         <div class="about">
           <article class="about-box">
@@ -71,30 +325,63 @@
           </article>
           <article class="about-box">
             <h2>📚 This Website</h2>
-            <p>This is my digital notebook: a place where I document tutorials, share research findings, and build resources like the <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener">Ruqyah Shariyah Guide</a>.</p>
+            <p>This is my digital notebook: a place where I document tutorials, share research findings, and build resources like the <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer">Ruqyah Shariyah Guide</a>.</p>
           </article>
         </div>
       </section>
 
-      <section class="about-section section-spacing" aria-label="Skills and expertise">
+      <!-- FIXED "My Expertise" section – cards now use .cards with proper styling -->
+      <section class="about-section section-spacing">
         <h2 class="section-title">My <span>Expertise</span></h2>
-        <div class="cards skills-grid">
+        <div class="cards">
           <article class="card">
-            <div><span class="category">Java</span><h3>☕ Java Development</h3><p>Object-Oriented Programming, Data Structures, Algorithms, and practical projects.</p><ul class="skill-list"><li>• OOP Principles</li><li>• Design Patterns</li><li>• Problem Solving</li><li>• Code Documentation</li></ul></div>
+            <span class="category">Java</span>
+            <h3>☕ Java Development</h3>
+            <p>Object-Oriented Programming, Data Structures, Algorithms, and practical projects.</p>
+            <ul class="skill-list">
+              <li>OOP Principles</li>
+              <li>Design Patterns</li>
+              <li>Problem Solving</li>
+              <li>Code Documentation</li>
+            </ul>
           </article>
           <article class="card">
-            <div><span class="category">Web Dev</span><h3>🌐 Web Development</h3><p>Clean, responsive websites built with pure HTML, CSS & JavaScript.</p><ul class="skill-list"><li>• HTML5 & CSS3</li><li>• JavaScript (ES6+)</li><li>• GitHub Pages</li><li>• SEO Best Practices</li></ul></div>
+            <span class="category">Web Dev</span>
+            <h3>🌐 Web Development</h3>
+            <p>Clean, responsive websites built with pure HTML, CSS & JavaScript.</p>
+            <ul class="skill-list">
+              <li>HTML5 & CSS3</li>
+              <li>JavaScript (ES6+)</li>
+              <li>GitHub Pages</li>
+              <li>SEO Best Practices</li>
+            </ul>
           </article>
           <article class="card">
-            <div><span class="category">Research</span><h3>📚 Islamic Research</h3><p>Authentic research on Quran, Hadith, Tawheed, and contemporary issues.</p><ul class="skill-list"><li>• Quranic Studies</li><li>• Hadith Verification</li><li>• Islamic Theology</li><li>• Ruqyah Shariyah</li></ul></div>
+            <span class="category">Research</span>
+            <h3>📚 Islamic Research</h3>
+            <p>Authentic research on Quran, Hadith, Tawheed, and contemporary issues.</p>
+            <ul class="skill-list">
+              <li>Quranic Studies</li>
+              <li>Hadith Verification</li>
+              <li>Islamic Theology</li>
+              <li>Ruqyah Shariyah</li>
+            </ul>
           </article>
           <article class="card">
-            <div><span class="category">Content</span><h3>🎓 Content Creation</h3><p>Educational tutorials, guides, and research articles for learners worldwide.</p><ul class="skill-list"><li>• Technical Writing</li><li>• Clear Explanations</li><li>• SEO Optimization</li><li>• Community Focus</li></ul></div>
+            <span class="category">Content</span>
+            <h3>🎓 Content Creation</h3>
+            <p>Educational tutorials, guides, and research articles for learners worldwide.</p>
+            <ul class="skill-list">
+              <li>Technical Writing</li>
+              <li>Clear Explanations</li>
+              <li>SEO Optimization</li>
+              <li>Community Focus</li>
+            </ul>
           </article>
         </div>
       </section>
 
-      <section class="about-section section-spacing" aria-label="Featured project">
+      <section class="about-section section-spacing">
         <h2 class="section-title">Featured <span>Project</span></h2>
         <div class="featured-project">
           <article class="project-card">
@@ -102,12 +389,12 @@
               <h3>📿 <span>Ruqyah Shariyah</span> Guide</h3>
               <p>A comprehensive, authentic resource for Quranic healing verses — covering protection, jinn expulsion, spiritual remedies, and more, based on Quran & Sunnah.</p>
             </div>
-            <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn"><i>📖</i> Open Ruqyah Guide <i>→</i></a>
+            <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">📖 Open Ruqyah Guide →</a>
           </article>
         </div>
       </section>
 
-      <section class="about-section section-spacing" aria-label="Core values">
+      <section class="about-section section-spacing">
         <h2 class="section-title">My <span>Values</span></h2>
         <div class="about">
           <article class="about-box"><h2>✓ Authenticity</h2><p>Verified information from reliable sources — in both code and faith.</p></article>
@@ -117,12 +404,12 @@
         </div>
       </section>
 
-      <section class="hero cta-section" aria-label="Call to action">
+      <section class="hero cta-section">
         <h2>Let's <span>Connect</span></h2>
         <p class="cta-text">Have questions, suggestions, or want to collaborate? I'd love to hear from you!</p>
         <div class="hero-buttons">
-          <a href="contact.html" class="btn btn-primary">Get In Touch</a>
-          <a href="index.html" class="btn btn-secondary">Back to Home</a>
+          <a href="contact.html" class="btn btn-primary" target="_self">Get In Touch</a>
+          <a href="index.html" class="btn btn-secondary" target="_self">Back to Home</a>
         </div>
       </section>
     </main>
@@ -133,6 +420,33 @@
   </div>
 
   <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
-  <script src="js/script.js"></script>
+
+  <!-- Inline JavaScript for mobile menu, scroll to top, skip link -->
+  <script>
+    (function() {
+      const menuBtn = document.getElementById('menu-btn');
+      const navLinks = document.getElementById('nav-links');
+      if (menuBtn && navLinks) {
+        function closeMenu() { if (navLinks.classList.contains('show')) { navLinks.classList.remove('show'); menuBtn.setAttribute('aria-expanded', 'false'); } }
+        function toggleMenu() { const expanded = navLinks.classList.toggle('show'); menuBtn.setAttribute('aria-expanded', expanded); }
+        menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+        document.querySelectorAll('#nav-links a').forEach(link => link.addEventListener('click', closeMenu));
+        document.addEventListener('click', (e) => { if (navLinks.classList.contains('show') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
+        window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
+      }
+      const scrollBtn = document.getElementById('scrollToTop');
+      if (scrollBtn) {
+        window.addEventListener('scroll', () => { scrollBtn.classList.toggle('visible', window.scrollY > 350); });
+        scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      }
+      const skip = document.querySelector('.skip-link');
+      if (skip) {
+        skip.addEventListener('click', (e) => {
+          const target = document.querySelector(skip.getAttribute('href'));
+          if (target) { e.preventDefault(); target.setAttribute('tabindex', '-1'); target.focus(); target.removeAttribute('tabindex'); window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' }); }
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

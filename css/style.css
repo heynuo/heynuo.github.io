@@ -3,8 +3,8 @@
    Light Mode Default + Dark Mode Support
    ============================================ */
 
-/* ---------- CSS LAYERS (cascade management) ---------- */
-@layer reset, base, components, utilities, overrides;
+/* ---------- CSS LAYERS ---------- */
+@layer reset, base, components, utilities;
 
 /* ---------- RESET LAYER ---------- */
 @layer reset {
@@ -39,7 +39,6 @@
     /* Glassmorphism (light mode adapted) */
     --glass-bg: rgba(0, 0, 0, 0.02);
     --glass-border: rgba(0, 0, 0, 0.08);
-    --glass-blur: 12px;
     --glass-blur-header: 16px;
 
     /* Spacing */
@@ -169,7 +168,7 @@
     padding-inline: 1rem;
   }
 
-  /* Header / Nav - light mode compatible */
+  /* Header / Nav */
   header {
     position: sticky;
     top: 0;
@@ -337,7 +336,7 @@
     margin-inline: auto;
   }
 
-  /* Buttons - light mode adjusted */
+  /* Buttons */
   .btn {
     padding: 14px 28px;
     border-radius: 12px;
@@ -410,7 +409,7 @@
     margin-bottom: var(--space-5xl);
   }
 
-  /* Featured project - light mode */
+  /* Featured project */
   .featured-project {
     margin: 40px 0 var(--space-3xl);
     display: flex;
@@ -790,6 +789,7 @@
   .form-textarea {
     resize: vertical;
     min-height: 120px;
+    field-sizing: content; /* expands naturally with content, modern browsers */
   }
 
   #form-status {
@@ -948,21 +948,12 @@
     background: var(--muted);
   }
 
-  /* Focus styles */
-  :focus-visible {
+  /* Focus styles - unified with :is() */
+  :is(.btn, .filter-btn, .menu-btn, .project-btn, .contact-link):focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 3px;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
     border-radius: 4px;
-  }
-
-  .btn:focus-visible,
-  .filter-btn:focus-visible,
-  .menu-btn:focus-visible,
-  .project-btn:focus-visible,
-  .contact-link:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 3px;
   }
 
   .project-btn:focus-visible {
@@ -998,7 +989,7 @@
       font-size: 24px;
     }
 
-    /* Mobile slide‑out menu */
+    /* Mobile slide‑out menu - now uses variable blur */
     .nav-links {
       position: fixed;
       top: var(--header-height);
@@ -1008,8 +999,8 @@
       height: calc(100vh - var(--header-height));
       height: calc(100dvh - var(--header-height));
       background: white;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(var(--glass-blur-header));
+      -webkit-backdrop-filter: blur(var(--glass-blur-header));
       padding: 20px;
       border-left: 1px solid var(--border);
       transform: translateX(100%);
@@ -1128,6 +1119,22 @@
     .project-card {
       animation: none !important;
       box-shadow: none !important;
+    }
+  }
+
+  /* Reduced transparency support */
+  @media (prefers-reduced-transparency: reduce) {
+    header,
+    .nav-links,
+    .btn-secondary {
+      backdrop-filter: none !important;
+      background: var(--bg);
+    }
+    .card,
+    .about-box,
+    .contact-link,
+    .filter-btn {
+      background: var(--card-bg);
     }
   }
 
