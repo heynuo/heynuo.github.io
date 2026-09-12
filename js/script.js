@@ -130,6 +130,39 @@ function showToast(message, icon = '✨', duration = 2800) {
   }, duration);
 }
 
+// ---------- Bookmarks Management ----------
+const Bookmarks = {
+  key: 'heynuo-bookmarks',
+  get() {
+    try {
+      return JSON.parse(localStorage.getItem(this.key)) || [];
+    } catch {
+      return [];
+    }
+  },
+  has(url) {
+    if (!url) return false;
+    const cleanUrl = url.split('#')[0];
+    return this.get().some(b => b.url.split('#')[0] === cleanUrl);
+  },
+  toggle(url, title) {
+    let list = this.get();
+    const cleanUrl = url.split('#')[0];
+    const exists = list.some(b => b.url.split('#')[0] === cleanUrl);
+    if (exists) {
+      list = list.filter(b => b.url.split('#')[0] !== cleanUrl);
+      localStorage.setItem(this.key, JSON.stringify(list));
+      showToast('Removed from bookmarks', '🗑️');
+      return false;
+    } else {
+      list.push({ url, title, date: new Date().toISOString() });
+      localStorage.setItem(this.key, JSON.stringify(list));
+      showToast('Saved to bookmarks ⭐', '⭐');
+      return true;
+    }
+  }
+};
+
 // ---------- Theme Management ----------
 function initTheme() {
   const saved = localStorage.getItem('heynuo-theme');
@@ -149,6 +182,8 @@ function initThemeToggle() {
   const btn = $.get('#theme-toggle');
   if (!btn) return;
   $.on(btn, 'click', () => {
+    btn.classList.add('rotating');
+    setTimeout(() => btn.classList.remove('rotating'), 400);
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
@@ -347,17 +382,22 @@ const Articles = {
 
   renderFilters() {
     if (!this.elements.filters) return;
-    const categories = ['all', ...new Set(state.posts.map(p => p.category))];
-    this.elements.filters.innerHTML = categories.map((cat, i) => `
-      <button class="filter-btn${cat === state.activeCategory ? ' active' : ''}"
-              data-category="${escapeHTML(cat)}"
-              role="tab"
-              aria-selected="${cat === state.activeCategory}"
-              id="tab-${escapeHTML(cat)}"
-              tabindex="${cat === state.activeCategory ? 0 : -1}">
-        ${cat === 'all' ? 'All' : escapeHTML(cat)}
-      </button>
-    `).join('');
+    const categories = ['all', ...new Set(state.posts.map(p => p.category)), 'saved'];
+    this.elements.filters.innerHTML = categories.map((cat) => {
+      let label = cat;
+      if (cat === 'all') label = 'All';
+      else if (cat === 'saved') label = '⭐ Saved';
+      return `
+        <button class="filter-btn${cat === state.activeCategory ? ' active' : ''}"
+                data-category="${escapeHTML(cat)}"
+                role="tab"
+                aria-selected="${cat === state.activeCategory}"
+                id="tab-${escapeHTML(cat)}"
+                tabindex="${cat === state.activeCategory ? 0 : -1}">
+          ${escapeHTML(label)}
+        </button>
+      `;
+    }).join('');
   },
 
   getFilteredPosts() {
@@ -365,7 +405,14 @@ const Articles = {
     return state.posts.filter(post => {
       const tagsStr = (post.tags || []).join(' ').toLowerCase();
       const matchesSearch = !term || post.searchText.includes(term) || tagsStr.includes(term);
-      const matchesCategory = state.activeCategory === 'all' || post.category === state.activeCategory;
+      let matchesCategory = false;
+      if (state.activeCategory === 'all') {
+        matchesCategory = true;
+      } else if (state.activeCategory === 'saved') {
+        matchesCategory = Bookmarks.has(post.link);
+      } else {
+        matchesCategory = post.category === state.activeCategory;
+      }
       return matchesSearch && matchesCategory;
     });
   },
@@ -394,6 +441,8 @@ const Articles = {
       </div>
     ` : '';
 
+    const isBookmarked = Bookmarks.has(post.link);
+
     const article = document.createElement('article');
     article.className = 'card reveal revealed';
     article.innerHTML = `
@@ -410,7 +459,12 @@ const Articles = {
       </div>
       <div class="card-footer">
         <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
-        <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link">🔗 Share</button>
+        <div class="card-actions">
+          <button type="button" class="card-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}" title="${isBookmarked ? 'Remove bookmark' : 'Save article'}" aria-label="Bookmark article">
+            <span>${isBookmarked ? '★' : '☆'}</span> ${isBookmarked ? 'Saved' : 'Save'}
+          </button>
+          <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link">🔗 Share</button>
+        </div>
       </div>
     `;
     return article;
@@ -421,7 +475,10 @@ const Articles = {
     const filtered = this.getFilteredPosts();
 
     if (filtered.length === 0) {
-      $.setHtml(this.elements.container, `<p class="empty-msg" role="status">${CONFIG.messages.emptySearch}</p>`);
+      const msg = state.activeCategory === 'saved'
+        ? 'No saved articles yet. Click the ☆ Save button on any article to keep it here for quick reference!'
+        : CONFIG.messages.emptySearch;
+      $.setHtml(this.elements.container, `<p class="empty-msg" role="status">${escapeHTML(msg)}</p>`);
       this.announceResults(0);
       this.updateCountBadge(0, state.posts.length);
       return;
@@ -429,7 +486,7 @@ const Articles = {
 
     const fragment = document.createDocumentFragment();
     filtered.forEach(post => {
-      // ✅ TWEAK 2 APPLIED: Append the element directly to the fragment
+      // Append the element directly to the fragment
       fragment.appendChild(this.createCardElement(post));
     });
 
@@ -542,7 +599,7 @@ const Articles = {
       }
     });
 
-    // Delegation for tag pills and card share buttons
+    // Delegation for tag pills, bookmark buttons, and card share buttons
     $.on(this.elements.container, 'click', async (e) => {
       const tagBtn = e.target.closest('.tag-pill');
       if (tagBtn) {
@@ -557,6 +614,20 @@ const Articles = {
           this.renderCards();
           this.syncUrl();
           showToast(`Filtered by #${tag}`, '🏷️');
+        }
+        return;
+      }
+
+      const bookmarkBtn = e.target.closest('.card-bookmark-btn');
+      if (bookmarkBtn) {
+        const url = bookmarkBtn.dataset.url;
+        const title = bookmarkBtn.dataset.title;
+        const isNowBookmarked = Bookmarks.toggle(url, title);
+        bookmarkBtn.classList.toggle('bookmarked', isNowBookmarked);
+        bookmarkBtn.innerHTML = `<span>${isNowBookmarked ? '★' : '☆'}</span> ${isNowBookmarked ? 'Saved' : 'Save'}`;
+        bookmarkBtn.title = isNowBookmarked ? 'Remove bookmark' : 'Save article';
+        if (state.activeCategory === 'saved') {
+          this.renderCards();
         }
         return;
       }
@@ -594,8 +665,8 @@ const Articles = {
 
   restoreFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    // Ignore unknown categories from URLs or stale localStorage
-    const validCategories = new Set(['all', ...new Set(state.posts.map(p => p.category))]);
+    // Include saved in valid categories
+    const validCategories = new Set(['all', ...new Set(state.posts.map(p => p.category)), 'saved']);
     const requested = params.get('category') || localStorage.getItem('activeCategory');
     state.activeCategory = validCategories.has(requested) ? requested : 'all';
     state.searchTerm = params.get('q') || '';
@@ -682,38 +753,79 @@ function initContactForm() {
   }
 }
 
-// ---------- Code Block Copy Buttons ----------
+// ---------- IDE-Style Code Blocks & Copy Buttons ----------
 function initCodeCopyButtons() {
   const preBlocks = document.querySelectorAll('.prose pre');
   preBlocks.forEach(pre => {
     if (pre.closest('.code-block-wrapper')) return;
+
+    // Detect or infer programming language
+    const codeEl = pre.querySelector('code');
+    let lang = 'Code';
+    if (codeEl) {
+      const classList = Array.from(codeEl.classList);
+      const langClass = classList.find(c => c.startsWith('language-') || c.startsWith('lang-'));
+      if (langClass) {
+        lang = langClass.replace(/^(language-|lang-)/, '').toUpperCase();
+      } else {
+        const text = (codeEl.textContent || '').trim();
+        if (text.includes('public class') || text.includes('System.out') || text.includes('void honk()')) lang = 'JAVA';
+        else if (text.includes('<article>') || text.includes('<!DOCTYPE') || text.includes('<div>')) lang = 'HTML';
+        else if (text.includes('{') && (text.includes('grid-template') || text.includes('display: flex'))) lang = 'CSS';
+        else if (text.includes('addEventListener') || text.includes('querySelector') || text.includes('const ')) lang = 'JS';
+      }
+    }
+
     const wrapper = document.createElement('div');
     wrapper.className = 'code-block-wrapper';
     pre.parentNode.insertBefore(wrapper, pre);
+
+    const header = document.createElement('div');
+    header.className = 'code-block-header';
+    header.innerHTML = `
+      <div class="code-block-left">
+        <div class="code-block-dots" aria-hidden="true">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+        </div>
+        <span class="code-block-lang">${escapeHTML(lang)}</span>
+      </div>
+      <button class="copy-code-btn" type="button" aria-label="Copy code to clipboard">
+        <span class="copy-icon">📋</span> <span class="copy-text">Copy</span>
+      </button>
+    `;
+    wrapper.appendChild(header);
     wrapper.appendChild(pre);
 
-    const btn = document.createElement('button');
-    btn.className = 'copy-code-btn';
-    btn.textContent = 'Copy';
-    btn.setAttribute('aria-label', 'Copy code to clipboard');
-    wrapper.appendChild(btn);
+    const copyBtn = header.querySelector('.copy-code-btn');
+    const copyText = header.querySelector('.copy-text');
+    const copyIcon = header.querySelector('.copy-icon');
 
-    $.on(btn, 'click', async () => {
-      const code = pre.querySelector('code')?.textContent || pre.textContent;
+    $.on(copyBtn, 'click', async () => {
+      const code = codeEl?.textContent || pre.textContent;
       try {
         await navigator.clipboard.writeText(code);
-        btn.textContent = '✓ Copied!';
+        copyBtn.classList.add('copied');
+        if (copyIcon) copyIcon.textContent = '✓';
+        if (copyText) copyText.textContent = 'Copied!';
         showToast('Code copied to clipboard!', '📋');
-        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          if (copyIcon) copyIcon.textContent = '📋';
+          if (copyText) copyText.textContent = 'Copy';
+        }, 2000);
       } catch {
-        btn.textContent = 'Failed';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        if (copyText) copyText.textContent = 'Failed';
+        setTimeout(() => {
+          if (copyText) copyText.textContent = 'Copy';
+        }, 2000);
       }
     });
   });
 }
 
-// ---------- Article Reading Suite (TOC, Font Size, Share) ----------
+// ---------- Article Reading Suite (TOC, Font Size, Share, Bookmark) ----------
 function initArticleSuite() {
   const articleEnhanced = $.get('.article-enhanced');
   if (!articleEnhanced) return;
@@ -737,6 +849,9 @@ function initArticleSuite() {
         <button type="button" class="tool-btn" id="btnShareArticle" title="Copy article link" aria-label="Share article">
           <span>🔗</span> Share
         </button>
+        <button type="button" class="tool-btn tool-btn-bookmark" id="btnBookmarkArticle" title="Bookmark article" aria-label="Bookmark article">
+          <span class="bookmark-icon">☆</span> <span class="bookmark-text">Bookmark</span>
+        </button>
         <button type="button" class="tool-btn" id="btnToggleToc" title="Jump to section" aria-label="Table of contents">
           <span>📖</span> Contents
         </button>
@@ -749,6 +864,26 @@ function initArticleSuite() {
     `;
     const header = $.get('.article-header', articleEnhanced) || prose;
     header.parentNode.insertBefore(toolbar, header.nextSibling);
+  }
+
+  // Wire up article bookmark button
+  const bookmarkArticleBtn = $.get('#btnBookmarkArticle');
+  if (bookmarkArticleBtn) {
+    const pagePath = Page.getCurrentPage();
+    const pageTitle = $.get('h1', articleEnhanced)?.textContent || document.title;
+    const isBookmarked = Bookmarks.has(pagePath);
+    bookmarkArticleBtn.classList.toggle('bookmarked', isBookmarked);
+    const bIcon = bookmarkArticleBtn.querySelector('.bookmark-icon');
+    const bText = bookmarkArticleBtn.querySelector('.bookmark-text');
+    if (bIcon) bIcon.textContent = isBookmarked ? '★' : '☆';
+    if (bText) bText.textContent = isBookmarked ? 'Saved' : 'Bookmark';
+
+    $.on(bookmarkArticleBtn, 'click', () => {
+      const isNow = Bookmarks.toggle(pagePath, pageTitle);
+      bookmarkArticleBtn.classList.toggle('bookmarked', isNow);
+      if (bIcon) bIcon.textContent = isNow ? '★' : '☆';
+      if (bText) bText.textContent = isNow ? 'Saved' : 'Bookmark';
+    });
   }
 
   // Bind font size buttons
@@ -802,7 +937,7 @@ function initArticleSuite() {
           h.id = id;
         }
         const isH3 = h.tagName.toLowerCase() === 'h3';
-        return `<li class="${isH3 ? 'toc-h3' : 'toc-h2'}"><a href="#${id}" class="toc-link">${escapeHTML(h.textContent.replace(/^[0-9️⃣🔟]+\s*/, ''))}</a></li>`;
+        return `<li class="${isH3 ? 'toc-h3' : 'toc-h2'}"><a href="#${id}" class="toc-link">${escapeHTML(h.textContent.replace(/^[\d\s.\u20E3\uFE0F\uD83D\uDD1F-]+\s*/, ''))}</a></li>`;
       }).join('');
 
       tocBox.innerHTML = `
@@ -904,6 +1039,262 @@ function initReadingProgress() {
   updateProgress();
 }
 
+// ---------- Command Palette (Ctrl+K) ----------
+const CommandPalette = {
+  backdrop: null,
+  input: null,
+  resultsContainer: null,
+  selectedIndex: 0,
+  items: [],
+
+  init() {
+    this.createModal();
+    this.bindShortcuts();
+  },
+
+  createModal() {
+    if ($.get('#cmdPalette')) return;
+
+    const backdrop = document.createElement('div');
+    backdrop.id = 'cmdPalette';
+    backdrop.className = 'cmd-palette-backdrop';
+    backdrop.setAttribute('role', 'dialog');
+    backdrop.setAttribute('aria-modal', 'true');
+    backdrop.setAttribute('aria-label', 'Command Palette and Article Search');
+
+    backdrop.innerHTML = `
+      <div class="cmd-palette-modal">
+        <div class="cmd-palette-input-wrap">
+          <span class="cmd-palette-icon" aria-hidden="true">🔍</span>
+          <input type="search" id="cmdPaletteInput" class="cmd-palette-input" placeholder="Search articles, guides, topics... (or press /)" autocomplete="off">
+          <kbd class="cmd-palette-esc-badge">ESC</kbd>
+        </div>
+        <div class="cmd-palette-results" id="cmdPaletteResults" role="listbox"></div>
+        <div class="cmd-palette-footer">
+          <div class="cmd-palette-hints">
+            <span class="cmd-palette-hint"><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+            <span class="cmd-palette-hint"><kbd>↵</kbd> Open</span>
+            <span class="cmd-palette-hint"><kbd>ESC</kbd> Close</span>
+          </div>
+          <span class="cmd-palette-badge">HeyNuo Search</span>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(backdrop);
+    this.backdrop = backdrop;
+    this.input = backdrop.querySelector('#cmdPaletteInput');
+    this.resultsContainer = backdrop.querySelector('#cmdPaletteResults');
+
+    // Close when clicking outside modal
+    $.on(backdrop, 'click', (e) => {
+      if (e.target === backdrop) this.close();
+    });
+
+    // Search input typing
+    $.on(this.input, 'input', () => {
+      this.search(this.input.value);
+    });
+
+    // Keyboard navigation within modal
+    $.on(this.input, 'keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        this.navigate(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.navigate(-1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        this.selectCurrent();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this.close();
+      }
+    });
+  },
+
+  bindShortcuts() {
+    // Global hotkey: Ctrl+K or Cmd+K
+    $.on(document, 'keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        this.toggle();
+      } else if (e.key === 'Escape' && this.isOpen()) {
+        e.preventDefault();
+        this.close();
+      }
+    });
+
+    // Navbar search button click
+    const navSearchBtn = $.get('#navSearchBtn');
+    if (navSearchBtn) {
+      $.on(navSearchBtn, 'click', (e) => {
+        e.preventDefault();
+        this.open();
+      });
+    }
+  },
+
+  isOpen() {
+    return this.backdrop?.classList.contains('open');
+  },
+
+  open() {
+    if (!this.backdrop) this.createModal();
+    this.backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    this.input.value = '';
+    this.search('');
+    setTimeout(() => this.input.focus(), 50);
+  },
+
+  close() {
+    if (!this.backdrop) return;
+    this.backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  },
+
+  toggle() {
+    if (this.isOpen()) this.close();
+    else this.open();
+  },
+
+  search(query) {
+    const q = (query || '').toLowerCase().trim();
+    const allPosts = POSTS;
+
+    this.items = allPosts.filter(post => {
+      if (!q) return true;
+      const text = `${post.title} ${post.excerpt} ${post.category} ${(post.tags || []).join(' ')}`.toLowerCase();
+      return text.includes(q);
+    });
+
+    this.selectedIndex = 0;
+    this.renderResults(q);
+  },
+
+  renderResults(query) {
+    if (!this.resultsContainer) return;
+
+    if (this.items.length === 0) {
+      this.resultsContainer.innerHTML = `
+        <div class="cmd-palette-empty">
+          <p>No results found for "<strong>${escapeHTML(query)}</strong>"</p>
+          <p style="font-size:12.5px; margin-top:4px;">Try searching for Java, OOP, Quran, or Web Dev</p>
+        </div>
+      `;
+      return;
+    }
+
+    this.resultsContainer.innerHTML = this.items.map((post, idx) => {
+      const isSelected = idx === this.selectedIndex;
+      const titleHighlighted = Articles && Articles.highlightMatch
+        ? Articles.highlightMatch(post.title, query)
+        : escapeHTML(post.title);
+      return `
+        <a href="${escapeHTML(post.link)}" class="cmd-palette-item ${isSelected ? 'is-selected' : ''}" data-index="${idx}" role="option" aria-selected="${isSelected}">
+          <div class="cmd-palette-item-main">
+            <span class="cmd-palette-item-title">${titleHighlighted}</span>
+            <span class="cmd-palette-item-desc">${escapeHTML(post.excerpt)}</span>
+          </div>
+          <span class="cmd-palette-item-tag">${escapeHTML(post.category)}</span>
+        </a>
+      `;
+    }).join('');
+
+    // Click handling on results
+    const itemEls = this.resultsContainer.querySelectorAll('.cmd-palette-item');
+    itemEls.forEach(el => {
+      $.on(el, 'mouseenter', () => {
+        const idx = parseInt(el.dataset.index, 10);
+        this.selectedIndex = idx;
+        this.updateSelection();
+      });
+      $.on(el, 'click', () => {
+        this.close();
+      });
+    });
+  },
+
+  navigate(direction) {
+    if (this.items.length === 0) return;
+    this.selectedIndex = (this.selectedIndex + direction + this.items.length) % this.items.length;
+    this.updateSelection();
+    this.scrollToSelected();
+  },
+
+  updateSelection() {
+    const itemEls = this.resultsContainer.querySelectorAll('.cmd-palette-item');
+    itemEls.forEach((el, idx) => {
+      const isSel = idx === this.selectedIndex;
+      el.classList.toggle('is-selected', isSel);
+      el.setAttribute('aria-selected', isSel);
+    });
+  },
+
+  scrollToSelected() {
+    const selectedEl = this.resultsContainer.querySelector('.cmd-palette-item.is-selected');
+    if (selectedEl) {
+      selectedEl.scrollIntoView({ block: 'nearest' });
+    }
+  },
+
+  selectCurrent() {
+    if (this.items.length > 0 && this.items[this.selectedIndex]) {
+      const post = this.items[this.selectedIndex];
+      this.close();
+      window.location.href = post.link;
+    }
+  }
+};
+
+// ---------- Article Next/Previous Navigation ----------
+function initArticleNav() {
+  const articleEnhanced = $.get('.article-enhanced');
+  if (!articleEnhanced) return;
+
+  const currentPath = Page.getCurrentPage();
+  const currentIndex = POSTS.findIndex(p => p.link.includes(currentPath));
+  if (currentIndex === -1) return;
+
+  if ($.get('#articleNavContainer')) return;
+
+  const prevPost = currentIndex > 0 ? POSTS[currentIndex - 1] : null;
+  const nextPost = currentIndex < POSTS.length - 1 ? POSTS[currentIndex + 1] : null;
+
+  if (!prevPost && !nextPost) return;
+
+  const navContainer = document.createElement('div');
+  navContainer.id = 'articleNavContainer';
+  navContainer.className = 'article-nav-container';
+  navContainer.innerHTML = `
+    <div class="article-nav-title">Continue Reading</div>
+    <div class="article-nav-grid">
+      ${prevPost ? `
+        <a href="${escapeHTML(prevPost.link)}" class="article-nav-card prev">
+          <span class="article-nav-label">← Previous Guide</span>
+          <span class="article-nav-card-title">${escapeHTML(prevPost.title)}</span>
+        </a>
+      ` : '<div></div>'}
+      ${nextPost ? `
+        <a href="${escapeHTML(nextPost.link)}" class="article-nav-card next">
+          <span class="article-nav-label">Next Guide →</span>
+          <span class="article-nav-card-title">${escapeHTML(nextPost.title)}</span>
+        </a>
+      ` : '<div></div>'}
+    </div>
+  `;
+
+  const related = $.get('.related-links', articleEnhanced);
+  if (related) {
+    related.parentNode.insertBefore(navContainer, related);
+  } else {
+    const prose = $.get('.prose', articleEnhanced);
+    if (prose) prose.parentNode.insertBefore(navContainer, prose.nextSibling);
+  }
+}
+
 // ---------- Initialization ----------
 function init() {
   initTheme();
@@ -918,6 +1309,8 @@ function init() {
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
   initCodeCopyButtons();
   initArticleSuite();
+  initArticleNav();
+  CommandPalette.init();
   initScrollReveal();
   initCopyEmail();
 

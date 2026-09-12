@@ -35,6 +35,11 @@
     <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
       <div class="nav-right">
+        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles" title="Quick Search (Ctrl+K)">
+          <span class="nav-search-icon" aria-hidden="true">🔍</span>
+          <span class="nav-search-text">Search...</span>
+          <kbd class="nav-search-kbd">Ctrl K</kbd>
+        </button>
         <div class="nav-links" id="nav-links">
           <a href="index.html">Home</a>
           <a href="about.html">About</a>
@@ -59,7 +64,7 @@
 
           <h2>📄 1. Semantic HTML5</h2>
           <p>Use <code>&lt;header&gt;, &lt;main&gt;, &lt;article&gt;, &lt;section&gt;</code> for accessibility and SEO. Screen readers love meaningful tags.</p>
-          <pre><code>&lt;article&gt;
+          <pre><code class="language-html">&lt;article&gt;
   &lt;h2&gt;Blog title&lt;/h2&gt;
   &lt;time datetime="2026-06-02"&gt;June 2, 2026&lt;/time&gt;
   &lt;p&gt;Content...&lt;/p&gt;
@@ -72,7 +77,7 @@
             <div class="demo-card">Grid</div>
             <div class="demo-card">Responsive</div>
           </div>
-          <pre><code>.cards {
+          <pre><code class="language-css">.cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
@@ -80,7 +85,7 @@
 
           <h2>⚡ 3. Vanilla JavaScript Interactivity</h2>
           <p>No build steps — use modern ES6+ for DOM manipulation, event handling, and dynamic content. Example: dark mode toggle (optional, extendable).</p>
-          <pre><code>document.querySelector('#theme-toggle')?.addEventListener('click', () => {
+          <pre><code class="language-javascript">document.querySelector('#theme-toggle')?.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
 });</code></pre>
 

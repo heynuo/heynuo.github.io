@@ -36,6 +36,11 @@
     <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
       <div class="nav-right">
+        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles" title="Quick Search (Ctrl+K)">
+          <span class="nav-search-icon" aria-hidden="true">🔍</span>
+          <span class="nav-search-text">Search...</span>
+          <kbd class="nav-search-kbd">Ctrl K</kbd>
+        </button>
         <div class="nav-links" id="nav-links">
           <a href="index.html">Home</a>
           <a href="about.html">About</a>
@@ -72,7 +77,7 @@
 
           <h2>1. Encapsulation — data hiding</h2>
           <p>Encapsulation bundles data (fields) and methods inside a class while restricting direct access. Use <code>private</code> fields and public getters/setters.</p>
-          <pre><code>public class BankAccount {
+          <pre><code class="language-java">public class BankAccount {
     private double balance;
     
     public void deposit(double amount) {
@@ -83,7 +88,7 @@
 
           <h2>2. Inheritance — reusability</h2>
           <p>Child classes inherit fields and methods from a parent class using <code>extends</code>. Reduces duplication.</p>
-          <pre><code>class Vehicle {
+          <pre><code class="language-java">class Vehicle {
     String brand;
     void honk() { System.out.println("Beep!"); }
 }
@@ -93,7 +98,7 @@ class Car extends Vehicle {
 
           <h2>3. Polymorphism — many forms</h2>
           <p>One interface, multiple implementations: method overloading (compile-time) and overriding (runtime).</p>
-          <pre><code>class Animal { void sound() { System.out.println("some sound"); } }
+          <pre><code class="language-java">class Animal { void sound() { System.out.println("some sound"); } }
 class Cat extends Animal { 
     @Override 
     void sound() { System.out.println("Meow"); } 
@@ -108,7 +113,7 @@ class Cat extends Animal {
           </div>
 
           <h2>Real-World Example: Employee Management</h2>
-          <pre><code>abstract class Employee {
+          <pre><code class="language-java">abstract class Employee {
     abstract double calculateSalary();
 }
 class FullTime extends Employee {
