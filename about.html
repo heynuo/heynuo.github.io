@@ -126,6 +126,20 @@
       </section>
 
       <section class="section-spacing">
+        <h2 class="section-title">Tech <span>Stack &amp; Tools</span></h2>
+        <div class="tech-stack-grid">
+          <div class="tech-pill"><span class="icon">☕</span> Java (OOP)</div>
+          <div class="tech-pill"><span class="icon">🍃</span> Spring Boot</div>
+          <div class="tech-pill"><span class="icon">🌐</span> HTML5 / CSS3</div>
+          <div class="tech-pill"><span class="icon">⚡</span> JavaScript ES6+</div>
+          <div class="tech-pill"><span class="icon">🐙</span> Git &amp; GitHub</div>
+          <div class="tech-pill"><span class="icon">📖</span> Quranic Studies</div>
+          <div class="tech-pill"><span class="icon">✍️</span> Technical Writing</div>
+          <div class="tech-pill"><span class="icon">🚀</span> GitHub Pages</div>
+        </div>
+      </section>
+
+      <section class="section-spacing">
         <h2 class="section-title">Featured <span>Project</span></h2>
         <div class="featured-project">
           <article class="project-card">
@@ -153,17 +167,33 @@
         <p class="cta-text">Have questions, suggestions, or want to collaborate? I'd love to hear from you!</p>
         <div class="hero-buttons">
           <a href="contact.html" class="btn btn-primary">Get In Touch</a>
-          <a href="index.html" class="btn btn-secondary">Back to Home</a>
+          <button type="button" class="btn btn-secondary copy-email-btn" data-email="zahiruddin44044@gmail.com">✉️ Copy Email</button>
         </div>
       </section>
     </main>
 
     <footer>
-      <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+      </div>
     </footer>
   </div>
 
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
+    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
+      <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path class="progress-ring-circle" id="scrollProgressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+    </svg>
+    <span class="scroll-arrow">↑</span>
+  </button>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
   <!-- Shared script: mobile menu, active nav, scroll-to-top, skip link -->
   <script src="js/script.js"></script>

@@ -108,6 +108,28 @@ function escapeHTML(str) {
     .replace(/'/g, "&#039;");
 }
 
+// ---------- Toast Notifications ----------
+function showToast(message, icon = '✨', duration = 2800) {
+  let container = $.get('#toastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'toast-container';
+    container.setAttribute('aria-live', 'polite');
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<span>${icon}</span><span>${escapeHTML(message)}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('toast-out');
+    setTimeout(() => toast.remove(), 250);
+  }, duration);
+}
+
 // ---------- Theme Management ----------
 function initTheme() {
   const saved = localStorage.getItem('heynuo-theme');
@@ -128,7 +150,9 @@ function initThemeToggle() {
   if (!btn) return;
   $.on(btn, 'click', () => {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
-    applyTheme(current === 'dark' ? 'light' : 'dark');
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    showToast(next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode', next === 'dark' ? '🌙' : '☀️');
   });
 }
 
@@ -242,10 +266,21 @@ function initSmoothScroll() {
 function initScrollToTop() {
   const btn = $.get(CONFIG.selectors.scrollTop);
   if (!btn) return;
+  const circle = $.get('#scrollProgressCircle');
 
-  const toggleVisibility = () => btn.classList.toggle('visible', window.scrollY > 400);
-  $.on(window, 'scroll', toggleVisibility, { passive: true });
-  toggleVisibility();
+  const updateScroll = () => {
+    const scrollY = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    btn.classList.toggle('visible', scrollY > 280);
+
+    if (circle && docH > 0) {
+      const scrollPercent = Math.min(Math.max((scrollY / docH) * 100, 0), 100);
+      circle.style.strokeDashoffset = (100 - scrollPercent).toFixed(1);
+    }
+  };
+
+  $.on(window, 'scroll', updateScroll, { passive: true });
+  updateScroll();
 
   $.on(btn, 'click', () => {
     window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : CONFIG.smoothScrollBehavior });
@@ -328,24 +363,39 @@ const Articles = {
   getFilteredPosts() {
     const term = state.searchTerm.toLowerCase().trim();
     return state.posts.filter(post => {
-      const matchesSearch = !term || post.searchText.includes(term);
+      const tagsStr = (post.tags || []).join(' ').toLowerCase();
+      const matchesSearch = !term || post.searchText.includes(term) || tagsStr.includes(term);
       const matchesCategory = state.activeCategory === 'all' || post.category === state.activeCategory;
       return matchesSearch && matchesCategory;
     });
   },
 
-  // ✅ TWEAK 2 APPLIED: Direct element creation (no wrapper div needed)
+  highlightMatch(text, query) {
+    if (!query || !query.trim()) return escapeHTML(text);
+    const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    return escapeHTML(text).replace(regex, '<mark class="search-highlight">$1</mark>');
+  },
+
   createCardElement(post) {
     const isExternal = post.link.startsWith('http');
     const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer" aria-label="Opens in a new tab"' : '';
 
-    // Format date
     const dateFormatted = post.date
       ? new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       : '';
 
+    const highlightedTitle = this.highlightMatch(post.title, state.searchTerm);
+    const highlightedExcerpt = this.highlightMatch(post.excerpt, state.searchTerm);
+
+    const tagsHtml = post.tags && post.tags.length ? `
+      <div class="card-tags">
+        ${post.tags.map(t => `<button type="button" class="tag-pill${state.searchTerm.toLowerCase().includes(t.toLowerCase()) ? ' active' : ''}" data-tag="${escapeHTML(t)}">#${escapeHTML(t)}</button>`).join('')}
+      </div>
+    ` : '';
+
     const article = document.createElement('article');
-    article.className = 'card';
+    article.className = 'card reveal revealed';
     article.innerHTML = `
       <div class="card-body">
         <span class="category">${escapeHTML(post.category)}</span>
@@ -354,10 +404,14 @@ const Articles = {
           ${dateFormatted ? `<span>📅 ${escapeHTML(dateFormatted)}</span>` : ''}
           ${post.readTime ? `<span>⏱ ${escapeHTML(post.readTime)}</span>` : ''}
         </div>` : ''}
-        <h3><a href="${escapeHTML(post.link)}" ${targetAttr}>${escapeHTML(post.title)}</a></h3>
-        <p>${escapeHTML(post.excerpt)}</p>
+        <h3><a href="${escapeHTML(post.link)}" ${targetAttr}>${highlightedTitle}</a></h3>
+        <p>${highlightedExcerpt}</p>
+        ${tagsHtml}
       </div>
-      <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
+      <div class="card-footer">
+        <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
+        <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link">🔗 Share</button>
+      </div>
     `;
     return article;
   },
@@ -488,6 +542,38 @@ const Articles = {
       }
     });
 
+    // Delegation for tag pills and card share buttons
+    $.on(this.elements.container, 'click', async (e) => {
+      const tagBtn = e.target.closest('.tag-pill');
+      if (tagBtn) {
+        const tag = tagBtn.dataset.tag;
+        if (tag) {
+          state.searchTerm = tag;
+          if (this.elements.search) {
+            this.elements.search.value = tag;
+            const clearBtn = $.get('#searchClear');
+            if (clearBtn) clearBtn.classList.add('visible');
+          }
+          this.renderCards();
+          this.syncUrl();
+          showToast(`Filtered by #${tag}`, '🏷️');
+        }
+        return;
+      }
+
+      const shareBtn = e.target.closest('.card-share-btn');
+      if (shareBtn) {
+        const relUrl = shareBtn.dataset.url;
+        const fullUrl = new URL(relUrl, window.location.origin).href;
+        try {
+          await navigator.clipboard.writeText(fullUrl);
+          showToast('Article link copied to clipboard!', '🔗');
+        } catch {
+          showToast('Could not copy link', '⚠️');
+        }
+      }
+    });
+
     this.setupSearch();
   },
 
@@ -600,6 +686,7 @@ function initContactForm() {
 function initCodeCopyButtons() {
   const preBlocks = document.querySelectorAll('.prose pre');
   preBlocks.forEach(pre => {
+    if (pre.closest('.code-block-wrapper')) return;
     const wrapper = document.createElement('div');
     wrapper.className = 'code-block-wrapper';
     pre.parentNode.insertBefore(wrapper, pre);
@@ -616,11 +703,184 @@ function initCodeCopyButtons() {
       try {
         await navigator.clipboard.writeText(code);
         btn.textContent = '✓ Copied!';
+        showToast('Code copied to clipboard!', '📋');
         setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
       } catch {
         btn.textContent = 'Failed';
         setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
       }
+    });
+  });
+}
+
+// ---------- Article Reading Suite (TOC, Font Size, Share) ----------
+function initArticleSuite() {
+  const articleEnhanced = $.get('.article-enhanced');
+  if (!articleEnhanced) return;
+
+  const prose = $.get('.prose', articleEnhanced);
+  if (!prose) return;
+
+  // 1. Restore font size if saved
+  const savedFontSize = localStorage.getItem('heynuo-font-size');
+  if (savedFontSize) {
+    prose.style.fontSize = savedFontSize;
+  }
+
+  // 2. Inject Article Reading Toolbar if not already in HTML
+  let toolbar = $.get('.article-toolbar', articleEnhanced);
+  if (!toolbar) {
+    toolbar = document.createElement('div');
+    toolbar.className = 'article-toolbar';
+    toolbar.innerHTML = `
+      <div class="article-toolbar-left">
+        <button type="button" class="tool-btn" id="btnShareArticle" title="Copy article link" aria-label="Share article">
+          <span>🔗</span> Share
+        </button>
+        <button type="button" class="tool-btn" id="btnToggleToc" title="Jump to section" aria-label="Table of contents">
+          <span>📖</span> Contents
+        </button>
+      </div>
+      <div class="article-toolbar-right">
+        <span class="font-size-label">Text:</span>
+        <button type="button" class="tool-btn-sm" id="btnFontDec" title="Decrease font size" aria-label="Smaller text">A−</button>
+        <button type="button" class="tool-btn-sm" id="btnFontInc" title="Increase font size" aria-label="Larger text">A+</button>
+      </div>
+    `;
+    const header = $.get('.article-header', articleEnhanced) || prose;
+    header.parentNode.insertBefore(toolbar, header.nextSibling);
+  }
+
+  // Bind font size buttons
+  const fontDec = $.get('#btnFontDec');
+  const fontInc = $.get('#btnFontInc');
+  let currentSize = parseFloat(window.getComputedStyle(prose).fontSize) || 16;
+
+  $.on(fontDec, 'click', () => {
+    if (currentSize > 13) {
+      currentSize -= 1;
+      prose.style.fontSize = `${currentSize}px`;
+      localStorage.setItem('heynuo-font-size', `${currentSize}px`);
+      showToast(`Text size: ${currentSize}px`, '🔠');
+    }
+  });
+
+  $.on(fontInc, 'click', () => {
+    if (currentSize < 24) {
+      currentSize += 1;
+      prose.style.fontSize = `${currentSize}px`;
+      localStorage.setItem('heynuo-font-size', `${currentSize}px`);
+      showToast(`Text size: ${currentSize}px`, '🔠');
+    }
+  });
+
+  // Bind share button
+  const shareBtn = $.get('#btnShareArticle');
+  $.on(shareBtn, 'click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      showToast('Article link copied to clipboard!', '🔗');
+    } catch {
+      showToast('Could not copy link', '⚠️');
+    }
+  });
+
+  // 3. Generate Table of Contents from h2 and h3 headings in .prose
+  const headings = Array.from(prose.querySelectorAll('h2, h3'));
+  if (headings.length > 1) {
+    let tocBox = $.get('#articleTocBox');
+    if (!tocBox) {
+      tocBox = document.createElement('aside');
+      tocBox.id = 'articleTocBox';
+      tocBox.className = 'article-toc-box';
+      tocBox.setAttribute('aria-label', 'Table of Contents');
+
+      const itemsHtml = headings.map((h, idx) => {
+        let id = h.id;
+        if (!id) {
+          id = `heading-${idx}-${h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`;
+          h.id = id;
+        }
+        const isH3 = h.tagName.toLowerCase() === 'h3';
+        return `<li class="${isH3 ? 'toc-h3' : 'toc-h2'}"><a href="#${id}" class="toc-link">${escapeHTML(h.textContent.replace(/^[0-9️⃣🔟]+\s*/, ''))}</a></li>`;
+      }).join('');
+
+      tocBox.innerHTML = `
+        <div class="toc-header">
+          <span class="toc-title">📖 Quick Navigation</span>
+        </div>
+        <ul class="toc-list" id="tocList">
+          ${itemsHtml}
+        </ul>
+      `;
+
+      toolbar.parentNode.insertBefore(tocBox, toolbar.nextSibling);
+    }
+
+    // Toggle TOC button
+    const toggleTocBtn = $.get('#btnToggleToc');
+    if (toggleTocBtn) {
+      $.on(toggleTocBtn, 'click', () => {
+        if (tocBox) {
+          const isHidden = tocBox.style.display === 'none';
+          tocBox.style.display = isHidden ? 'block' : 'none';
+        }
+      });
+    }
+
+    // Scrollspy with IntersectionObserver
+    const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+    if ('IntersectionObserver' in window && tocLinks.length) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            tocLinks.forEach(link => {
+              link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+            });
+          }
+        });
+      }, { rootMargin: '-80px 0px -65% 0px' });
+
+      headings.forEach(h => observer.observe(h));
+    }
+  }
+}
+
+// ---------- Scroll Reveal ----------
+function initScrollReveal() {
+  if (prefersReducedMotion()) return;
+  const elements = document.querySelectorAll('.card, .about-box, .featured-project, .hero-stat');
+  elements.forEach(el => el.classList.add('reveal'));
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    elements.forEach(el => observer.observe(el));
+  } else {
+    elements.forEach(el => el.classList.add('revealed'));
+  }
+}
+
+// ---------- Copy Email Feature ----------
+function initCopyEmail() {
+  const emailBtns = document.querySelectorAll('.copy-email-btn');
+  emailBtns.forEach(btn => {
+    $.on(btn, 'click', (e) => {
+      e.preventDefault();
+      const email = btn.dataset.email || 'zahiruddin44044@gmail.com';
+      navigator.clipboard?.writeText(email).then(() => {
+        showToast(`Copied ${email} to clipboard!`, '✉️');
+      }).catch(() => {
+        showToast(`Email: ${email}`, '✉️');
+      });
     });
   });
 }
@@ -657,8 +917,9 @@ function init() {
   if (Page.isHome()) Articles.init();
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
   initCodeCopyButtons();
-
-  // ✅ TWEAK 1 APPLIED: Removed preloadImages entirely since there's no LCP image to preload.
+  initArticleSuite();
+  initScrollReveal();
+  initCopyEmail();
 
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }

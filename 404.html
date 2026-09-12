@@ -42,9 +42,29 @@
         <a href="contact.html" class="btn btn-secondary">Contact Me</a>
       </div>
     </main>
-    <footer><div class="footer-inner"><p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p></div></footer>
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+      </div>
+    </footer>
   </div>
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
+    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
+      <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path class="progress-ring-circle" id="scrollProgressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+    </svg>
+    <span class="scroll-arrow">↑</span>
+  </button>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
   <script src="js/script.js"></script>
 </body>
 </html>
