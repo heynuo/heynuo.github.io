@@ -27,327 +27,121 @@
   <meta name="twitter:description" content="Java tutorials, Islamic research, and web development guides.">
   <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
 
-  <!-- Favicon (placeholders) -->
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
 
-  <style>
-    /* ============================================
-       HeyNuo – Complete Global Styles (inline)
-       Light + Dark Mode, Responsive, Accessible
-       ============================================ */
-    @layer reset, base, components, utilities;
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    @layer reset {
-      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    }
+  <!-- Shared stylesheet: global styles + home page components -->
+  <link rel="stylesheet" href="css/style.css">
 
-    @layer base {
-      :root {
-        color-scheme: light;
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --primary: #2563eb;
-        --secondary: #0891b2;
-        --text: #0f172a;
-        --muted: #475569;
-        --border: rgba(0, 0, 0, 0.08);
-        --accent: #3b82f6;
-        --success: #10b981;
-        --error: #ef4444;
-        --warning: #f59e0b;
-        --glass-bg: rgba(0, 0, 0, 0.02);
-        --glass-border: rgba(0, 0, 0, 0.08);
-        --glass-blur: 12px;
-        --glass-blur-header: 16px;
-        --space-xs: 8px;
-        --space-sm: 12px;
-        --space-md: 16px;
-        --space-lg: 24px;
-        --space-xl: 35px;
-        --space-2xl: 40px;
-        --space-3xl: 60px;
-        --space-4xl: 80px;
-        --space-5xl: 100px;
-        --z-base: 1;
-        --z-dropdown: 100;
-        --z-sticky: 200;
-        --z-nav: 300;
-        --z-modal: 400;
-        --z-toast: 500;
-        --transition-default: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        --transition-slow: transform 0.4s ease, box-shadow 0.4s ease;
-        --header-height: 65px;
-        --scroll-offset: 90px;
-        --fixed-offset: 24px;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          color-scheme: dark;
-          --bg: #0f172a;
-          --card-bg: #111827;
-          --primary: #3b82f6;
-          --secondary: #06b6d4;
-          --text: #f8fafc;
-          --muted: #cbd5e1;
-          --border: rgba(255, 255, 255, 0.08);
-          --accent: #60a5fa;
-          --glass-bg: rgba(255, 255, 255, 0.04);
-          --glass-border: rgba(255, 255, 255, 0.08);
-        }
-      }
-      html {
-        scroll-behavior: smooth;
-        scroll-padding-top: var(--scroll-offset);
-        scrollbar-width: thin;
-        scrollbar-color: var(--border) var(--bg);
-      }
-      body {
-        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-        background: linear-gradient(to bottom, #ffffff, #f1f5f9);
-        background-attachment: fixed;
-        color: var(--text);
-        min-height: 100vh;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-      }
-      @media (prefers-color-scheme: dark) {
-        body { background: linear-gradient(to bottom, #020617, #0f172a); }
-      }
-      ::selection { background: var(--primary); color: white; }
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "HeyNuo",
+    "url": "https://heynuo.github.io/",
+    "description": "A personal blog sharing Java tutorials, Islamic research, web development guides, and Quranic healing references.",
+    "author": {
+      "@type": "Person",
+      "name": "HeyNuo",
+      "url": "https://heynuo.github.io/about.html"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://heynuo.github.io/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
     }
-
-    @layer components {
-      .skip-link {
-        position: absolute;
-        top: -60px;
-        left: 0;
-        background: var(--primary);
-        color: white;
-        padding: 12px 20px;
-        z-index: var(--z-modal);
-        text-decoration: none;
-        font-weight: 600;
-        border-radius: 0 0 8px 0;
-        transition: top 0.25s ease;
-      }
-      .skip-link:focus { top: 0; outline: none; }
-      .container { width: min(1200px, 90%); margin: 0 auto; padding-inline: 1rem; }
-      header {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(var(--glass-blur-header));
-        z-index: var(--z-nav);
-        border-bottom: 1px solid var(--border);
-      }
-      @media (prefers-color-scheme: dark) { header { background: rgba(15, 23, 42, 0.98); } }
-      header nav { display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg) 0; }
-      .logo { font-size: 28px; font-weight: bold; color: var(--text); }
-      .logo span { color: var(--primary); }
-      .nav-links { display: flex; gap: var(--space-lg); list-style: none; }
-      .nav-links a {
-        text-decoration: none;
-        color: var(--muted);
-        transition: var(--transition-default);
-        font-size: 15px;
-        font-weight: 500;
-        padding: 8px 16px;
-        border-radius: 8px;
-      }
-      .nav-links a:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); }
-      @media (prefers-color-scheme: dark) { .nav-links a:hover { background: rgba(255, 255, 255, 0.06); } }
-      .nav-links a.active { color: var(--primary); background: rgba(37, 99, 235, 0.1); font-weight: 600; }
-      .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 28px; cursor: pointer; min-height: 48px; min-width: 48px; }
-      .hero { padding: var(--space-3xl) 0 var(--space-4xl); text-align: center; }
-      .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 20px; font-weight: 800; }
-      .hero h1 span, .section-title span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-      .hero p { max-width: 700px; margin: 0 auto; color: var(--muted); font-size: 18px; line-height: 1.8; }
-      .hero-buttons { margin-top: var(--space-xl); display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-      .btn {
-        padding: 14px 28px;
-        border-radius: 12px;
-        text-decoration: none;
-        transition: var(--transition-default);
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        border: none;
-        font-size: 16px;
-      }
-      .btn-primary { background: linear-gradient(to right, #2563eb, #0891b2); color: white; }
-      .btn-secondary {
-        border: 1px solid var(--border);
-        color: var(--text);
-        background: rgba(0, 0, 0, 0.03);
-        backdrop-filter: blur(8px);
-      }
-      @media (prefers-color-scheme: dark) { .btn-secondary { border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); color: white; } }
-      .featured-project { margin: 40px 0 var(--space-3xl); display: flex; justify-content: center; }
-      .project-card {
-        background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        padding: 35px 45px;
-        border-radius: 30px;
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: var(--space-lg);
-        box-shadow: 0 0 30px rgba(245, 158, 11, 0.08);
-        transition: var(--transition-slow);
-        max-width: 800px;
-        width: 100%;
-      }
-      @media (prefers-color-scheme: dark) { .project-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); } }
-      .project-info h3 { font-size: clamp(1.25rem, 3vw, 1.625rem); margin-bottom: 10px; }
-      .project-info h3 span { color: var(--warning); }
-      .project-info p { color: var(--muted); }
-      .project-btn {
-        background: linear-gradient(to right, #b45309, var(--warning));
-        color: white;
-        padding: 16px 32px;
-        border-radius: 40px;
-        text-decoration: none;
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: var(--transition-default);
-      }
-      .section-title { font-size: clamp(1.5rem, 3vw + 0.5rem, 2.125rem); margin-bottom: 20px; text-align: center; font-weight: 700; }
-      .toolbar { display: flex; justify-content: center; gap: var(--space-sm); flex-wrap: wrap; margin-bottom: 30px; }
-      .search-box {
-        width: 100%;
-        max-width: 400px;
-        padding: 12px 18px;
-        border-radius: 25px;
-        border: 1px solid var(--border);
-        background: var(--card-bg);
-        color: var(--text);
-        font-size: 16px;
-        outline: none;
-      }
-      .filter-btn {
-        padding: 10px 20px;
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        background: var(--glass-bg);
-        color: var(--muted);
-        cursor: pointer;
-        transition: var(--transition-default);
-        font-size: 14px;
-      }
-      .filter-btn:hover, .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: var(--space-lg); margin-bottom: var(--space-5xl); }
-      .card {
-        background: var(--glass-bg);
-        border: 1px solid var(--glass-border);
-        padding: 28px;
-        border-radius: 22px;
-        transition: var(--transition-slow);
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-      .card h3 { margin-bottom: 14px; font-size: 22px; font-weight: 700; }
-      .card p { color: var(--muted); line-height: 1.7; margin-bottom: 18px; flex-grow: 1; }
-      .card .category { display: inline-block; background: rgba(37, 99, 235, 0.1); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-bottom: 12px; font-weight: 600; }
-      .card a { color: var(--accent); text-decoration: none; font-weight: bold; }
-      .empty-msg { text-align: center; color: var(--muted); grid-column: 1 / -1; margin-top: 40px; }
-      .about { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); margin-bottom: var(--space-5xl); }
-      .about-box { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 35px; border-radius: 24px; transition: var(--transition-slow); }
-      .about-box h2 { margin-bottom: 18px; font-size: 28px; font-weight: 700; }
-      .about-box p { color: var(--muted); line-height: 1.9; }
-      .scroll-to-top {
-        position: fixed;
-        bottom: calc(var(--fixed-offset) + env(safe-area-inset-bottom));
-        right: calc(var(--fixed-offset) + env(safe-area-inset-right));
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(to right, var(--primary), var(--secondary));
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(20px);
-        transition: var(--transition-default);
-        z-index: var(--z-sticky);
-        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-      }
-      .scroll-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-      footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--muted); font-size: 14px; margin-top: var(--space-3xl); }
-      @media (max-width: 768px) {
-        .nav-links {
-          position: fixed;
-          top: var(--header-height);
-          right: 0;
-          width: 100%;
-          max-width: 300px;
-          height: calc(100dvh - var(--header-height));
-          background: white;
-          backdrop-filter: blur(20px);
-          padding: 20px;
-          border-left: 1px solid var(--border);
-          transform: translateX(100%);
-          transition: transform 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          opacity: 0;
-          visibility: hidden;
-          gap: var(--space-md);
-        }
-        @media (prefers-color-scheme: dark) { .nav-links { background: rgba(15, 23, 42, 0.98); } }
-        .nav-links.show { transform: translateX(0); opacity: 1; visibility: visible; }
-        .nav-links a { padding: 12px 16px; width: 100%; text-align: left; }
-        .menu-btn { display: block; }
-        .about { grid-template-columns: 1fr; }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
-      }
-    }
-  </style>
+  }
+  </script>
 </head>
 <body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <header>
     <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
-      <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
-      <div class="nav-links" id="nav-links">
-        <a href="index.html" class="active" target="_self">Home</a>
-        <a href="about.html" target="_self">About</a>
-        <a href="contact.html" target="_self">Contact</a>
+
+      <div class="nav-right">
+        <div class="nav-links" id="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
       </div>
     </nav>
   </header>
 
   <div class="container">
     <main id="main-content">
+
+      <!-- ===== Hero ===== -->
       <section class="hero">
-        <h1>Modern Notes & <span>Research Blog</span></h1>
-        <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.</p>
-        <div class="hero-buttons">
-          <a href="about.html" class="btn btn-secondary" target="_self">About Me</a>
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            ✦ Welcome to my digital notebook
+          </div>
+
+          <h1>Modern Notes &amp; <span>Research Blog</span></h1>
+
+          <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.</p>
+
+          <div class="hero-buttons">
+            <a href="#articles" class="btn btn-primary">Explore Articles ↓</a>
+            <a href="about.html" class="btn btn-secondary">About Me →</a>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-icon">📚</span>
+              <div class="hero-stat-info">
+                <div class="hero-stat-value">3 In-Depth Guides</div>
+                <div class="hero-stat-label">Java · Research · Web Dev</div>
+              </div>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-icon">📿</span>
+              <div class="hero-stat-info">
+                <div class="hero-stat-value">Ruqyah Reference</div>
+                <div class="hero-stat-label">Authentic Quranic Healing</div>
+              </div>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-icon">⚡</span>
+              <div class="hero-stat-info">
+                <div class="hero-stat-value">100% Static &amp; Fast</div>
+                <div class="hero-stat-label">No trackers · Instant load</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section>
+      <!-- ===== Featured Resource ===== -->
+      <section aria-label="Featured Resource">
         <div class="featured-project">
           <article class="project-card">
             <div class="project-info">
+              <div class="project-featured-badge">⭐ Featured Resource</div>
               <h3>📿 <span>Ruqyah Shariyah</span> Guide</h3>
               <p>Comprehensive Quranic healing reference – all essential verses for protection, jinn expulsion, love, and more.</p>
+              <div class="project-tags">
+                <span class="project-tag">Quran</span>
+                <span class="project-tag">Islamic</span>
+                <span class="project-tag">Protection</span>
+              </div>
             </div>
             <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">
               📖 Open Ruqyah Guide →
@@ -356,34 +150,77 @@
         </div>
       </section>
 
+      <!-- ===== Articles ===== -->
       <section id="articles">
-        <h2 class="section-title">📚 Latest Articles</h2>
+        <h2 class="section-title">📚 Latest <span>Articles</span></h2>
         <div class="toolbar">
-          <input type="text" id="searchInput" class="search-box" placeholder="Search articles..." autocomplete="off">
-          <div id="filter-buttons">
-            <button class="filter-btn active" data-category="all">All</button>
-            <button class="filter-btn" data-category="Java">Java</button>
-            <button class="filter-btn" data-category="Research">Research</button>
-            <button class="filter-btn" data-category="Web Dev">Web Dev</button>
+          <div class="search-wrapper">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="search" id="searchInput" class="search-box" placeholder="Search articles… (or press /)" autocomplete="off" aria-label="Search articles">
+            <button class="search-clear" id="searchClear" aria-label="Clear search">✕</button>
+          </div>
+          <div class="filter-row">
+            <div id="filter-buttons" role="tablist" aria-label="Article categories">
+              <!-- Filter buttons rendered by js/script.js -->
+            </div>
+            <span class="article-count-badge" id="articleCountBadge" aria-live="polite"></span>
           </div>
         </div>
-        <div class="cards" id="cards-container"></div>
+        <div class="cards" id="cards-container">
+          <!-- Static fallback for SEO &amp; no-JS visitors; replaced by js/script.js -->
+          <article class="card">
+            <div class="card-body">
+              <span class="category">Java</span>
+              <div class="card-meta"><span>📅 Jun 2, 2026</span><span>⏱ 8 min read</span></div>
+              <h3><a href="java-oop.html">Java OOP Crash Course</a></h3>
+              <p>Learn object-oriented programming with Java – classes, inheritance, polymorphism, and real-world examples.</p>
+            </div>
+            <a href="java-oop.html" class="read-more">Read More →</a>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <span class="category">Research</span>
+              <div class="card-meta"><span>📅 Jun 2, 2026</span><span>⏱ 15 min read</span></div>
+              <h3><a href="jinn-islamic-theology.html">Jinn &amp; Islamic Theology</a></h3>
+              <p>Authentic research on Jinn, sihr, and Islamic theology from Quran &amp; Sunnah.</p>
+            </div>
+            <a href="jinn-islamic-theology.html" class="read-more">Read More →</a>
+          </article>
+          <article class="card">
+            <div class="card-body">
+              <span class="category">Web Dev</span>
+              <div class="card-meta"><span>📅 Jun 2, 2026</span><span>⏱ 10 min read</span></div>
+              <h3><a href="web-dev-guide.html">Modern Web Development Guide</a></h3>
+              <p>Build beautiful websites with HTML, CSS, JavaScript, and deploy for free on GitHub Pages.</p>
+            </div>
+            <a href="web-dev-guide.html" class="read-more">Read More →</a>
+          </article>
+        </div>
       </section>
 
-      <section class="about">
+      <!-- ===== About Blurb ===== -->
+      <section class="about" aria-label="About this website">
         <article class="about-box">
           <h2>✨ About This Website</h2>
           <p>This is my digital notebook – a place where I publish educational notes, deep research, and tutorials in a clean, distraction‑free layout.</p>
         </article>
         <article class="about-box">
           <h2>🚀 Built with</h2>
-          <p>Pure HTML, CSS & JavaScript · Hosted 100% free on GitHub Pages · No databases, no complexity – just fast content delivery.</p>
+          <p>Pure HTML, CSS &amp; JavaScript · Hosted 100% free on GitHub Pages · No databases, no complexity – just fast content delivery.</p>
         </article>
       </section>
     </main>
 
     <footer>
-      <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+      </div>
     </footer>
   </div>
 
@@ -398,116 +235,7 @@
     gtag('config', 'G-TYJNKZE5LL');
   </script>
 
-  <script>
-    // ----- ARTICLES DATA (same as original) -----
-    const articles = [
-      { title: "Java OOP Crash Course", description: "Master encapsulation, inheritance, polymorphism, and abstraction with real-world examples.", category: "Java", link: "java-oop.html" },
-      { title: "Jinn & Islamic Theology", description: "Authentic Islamic research on Jinn, sihr, ruqyah, and comprehensive Quranic verses for protection.", category: "Research", link: "jinn-islamic-theology.html" },
-      { title: "Modern Web Development Guide", description: "Learn semantic HTML5, CSS Flex/Grid, vanilla JS, and deploy on GitHub Pages for free.", category: "Web Dev", link: "web-dev-guide.html" }
-    ];
-
-    // DOM elements
-    const container = document.getElementById('cards-container');
-    const searchInput = document.getElementById('searchInput');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-
-    let currentCategory = 'all';
-    let currentSearch = '';
-
-    function renderCards() {
-      if (!container) return;
-      const filtered = articles.filter(article => {
-        const matchesCategory = currentCategory === 'all' || article.category === currentCategory;
-        const matchesSearch = article.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
-                              article.description.toLowerCase().includes(currentSearch.toLowerCase());
-        return matchesCategory && matchesSearch;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty-msg">✨ No matching articles found. Try another search or category.</div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map(article => `
-        <article class="card">
-          <span class="category">${article.category}</span>
-          <h3>${article.title}</h3>
-          <p>${article.description}</p>
-          <a href="${article.link}" target="_self">Read more →</a>
-        </article>
-      `).join('');
-    }
-
-    // Event listeners
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        currentSearch = e.target.value;
-        renderCards();
-      });
-    }
-
-    if (filterBtns.length) {
-      filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          filterBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentCategory = btn.getAttribute('data-category');
-          renderCards();
-        });
-      });
-    }
-
-    // Initial render
-    renderCards();
-
-    // ----- Mobile menu toggle -----
-    const menuBtn = document.getElementById('menu-btn');
-    const navLinks = document.getElementById('nav-links');
-    if (menuBtn && navLinks) {
-      function closeMenu() {
-        if (navLinks.classList.contains('show')) {
-          navLinks.classList.remove('show');
-          menuBtn.setAttribute('aria-expanded', 'false');
-        }
-      }
-      function toggleMenu() {
-        const expanded = navLinks.classList.toggle('show');
-        menuBtn.setAttribute('aria-expanded', expanded);
-      }
-      menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMenu();
-      });
-      document.querySelectorAll('#nav-links a').forEach(link => link.addEventListener('click', closeMenu));
-      document.addEventListener('click', (e) => {
-        if (navLinks.classList.contains('show') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) closeMenu();
-      });
-      window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
-    }
-
-    // ----- Scroll to top button -----
-    const scrollBtn = document.getElementById('scrollToTop');
-    if (scrollBtn) {
-      window.addEventListener('scroll', () => {
-        scrollBtn.classList.toggle('visible', window.scrollY > 350);
-      });
-      scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    }
-
-    // ----- Skip link smooth scroll -----
-    const skip = document.querySelector('.skip-link');
-    if (skip) {
-      skip.addEventListener('click', (e) => {
-        const target = document.querySelector(skip.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.setAttribute('tabindex', '-1');
-          target.focus({ preventScroll: false });
-          target.removeAttribute('tabindex');
-          window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' });
-        }
-      });
-    }
-  </script>
+  <!-- Shared script: search/filter, mobile menu, active nav, scroll-to-top, skip link -->
+  <script src="js/script.js"></script>
 </body>
 </html>

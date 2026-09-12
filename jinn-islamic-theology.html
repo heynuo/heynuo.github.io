@@ -6,284 +6,41 @@
   <meta name="robots" content="index, follow">
   <title>Jinn & Islamic Theology — Complete Ruqyah & Qur'anic Verses | HeyNuo</title>
   <meta name="description" content="Authentic Islamic research on Jinn, sihr, ruqyah, and a comprehensive list of Qur'anic verses for protection, subduing enemies, love, breaking magic, and spiritual strength.">
+  <meta name="author" content="HeyNuo">
   <link rel="canonical" href="https://heynuo.github.io/jinn-islamic-theology.html">
   <meta property="og:title" content="Jinn & Islamic Theology | HeyNuo">
   <meta property="og:description" content="Authentic research on Jinn, sihr, and full Qur'anic reference for ruqyah, protection, and healing.">
   <meta property="og:type" content="article">
+  <meta property="og:url" content="https://heynuo.github.io/jinn-islamic-theology.html">
   <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <meta property="og:site_name" content="HeyNuo">
   <meta name="twitter:card" content="summary_large_image">
-  
-  <style>
-    /* ============================================
-       HeyNuo – Complete Global Styles + Article Refinements
-       Light Mode Default + Dark Mode Support (inline)
-       ============================================ */
-    
-    @layer reset, base, components, utilities;
-    
-    @layer reset {
-      *, *::before, *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-    }
-    
-    @layer base {
-      :root {
-        color-scheme: light;
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --primary: #2563eb;
-        --secondary: #0891b2;
-        --text: #0f172a;
-        --muted: #475569;
-        --border: rgba(0, 0, 0, 0.08);
-        --accent: #3b82f6;
-        --success: #10b981;
-        --error: #ef4444;
-        --warning: #f59e0b;
-        --glass-bg: rgba(0, 0, 0, 0.02);
-        --glass-border: rgba(0, 0, 0, 0.08);
-        --glass-blur: 12px;
-        --glass-blur-header: 16px;
-        --space-xs: 8px;
-        --space-sm: 12px;
-        --space-md: 16px;
-        --space-lg: 24px;
-        --space-xl: 35px;
-        --space-2xl: 40px;
-        --space-3xl: 60px;
-        --space-4xl: 80px;
-        --space-5xl: 100px;
-        --z-base: 1;
-        --z-dropdown: 100;
-        --z-sticky: 200;
-        --z-nav: 300;
-        --z-modal: 400;
-        --z-toast: 500;
-        --transition-fast: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
-        --transition-default: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        --transition-slow: transform 0.4s ease, box-shadow 0.4s ease;
-        --header-height: 65px;
-        --scroll-offset: 90px;
-        --fixed-offset: 24px;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          color-scheme: dark;
-          --bg: #0f172a;
-          --card-bg: #111827;
-          --primary: #3b82f6;
-          --secondary: #06b6d4;
-          --text: #f8fafc;
-          --muted: #cbd5e1;
-          --border: rgba(255, 255, 255, 0.08);
-          --accent: #60a5fa;
-          --glass-bg: rgba(255, 255, 255, 0.04);
-          --glass-border: rgba(255, 255, 255, 0.08);
-        }
-      }
-      html {
-        scroll-behavior: smooth;
-        overflow-y: auto;
-        scrollbar-gutter: stable;
-        scrollbar-width: thin;
-        scrollbar-color: var(--border) var(--bg);
-        scroll-padding-top: var(--scroll-offset);
-      }
-      body {
-        font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-        background: linear-gradient(to bottom, #ffffff, #f1f5f9);
-        background-attachment: fixed;
-        color: var(--text);
-        min-height: 100vh;
-        overflow-x: hidden;
-        line-height: 1.6;
-        -webkit-font-smoothing: antialiased;
-        overflow-wrap: break-word;
-      }
-      @media (prefers-color-scheme: dark) {
-        body { background: linear-gradient(to bottom, #020617, #0f172a); }
-      }
-      ::selection { background: var(--primary); color: white; }
-      img { max-width: 100%; height: auto; display: block; }
-      a, button { -webkit-tap-highlight-color: transparent; }
-    }
-    
-    @layer components {
-      .skip-link {
-        position: absolute;
-        top: -60px;
-        inset-inline-start: 0;
-        background: var(--primary);
-        color: white;
-        padding: 12px 20px;
-        z-index: var(--z-modal);
-        text-decoration: none;
-        font-weight: 600;
-        border-radius: 0 0 8px 0;
-        transition: top 0.25s ease;
-        font-size: 14px;
-      }
-      .skip-link:focus { top: 0; outline: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-      .container { width: min(1200px, 90%); margin-left: auto; margin-right: auto; padding-inline: 1rem; }
-      header {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(var(--glass-blur-header));
-        z-index: var(--z-nav);
-        border-bottom: 1px solid var(--border);
-      }
-      @media (prefers-color-scheme: dark) { header { background: rgba(15, 23, 42, 0.98); } }
-      header nav { display: flex; justify-content: space-between; align-items: center; padding: var(--space-lg) 0; }
-      .logo { font-size: 28px; font-weight: bold; color: var(--text); }
-      .logo span { color: var(--primary); }
-      .nav-links { display: flex; gap: var(--space-lg); list-style: none; }
-      .nav-links a {
-        text-decoration: none;
-        color: var(--muted);
-        transition: var(--transition-default);
-        font-size: 15px;
-        font-weight: 500;
-        padding: 8px 16px;
-        border-radius: 8px;
-      }
-      .nav-links a:hover { color: var(--text); background: rgba(0, 0, 0, 0.05); }
-      @media (prefers-color-scheme: dark) { .nav-links a:hover { background: rgba(255, 255, 255, 0.06); } }
-      .nav-links a.active { color: var(--primary); background: rgba(37, 99, 235, 0.1); font-weight: 600; }
-      .menu-btn { display: none; background: none; border: none; color: var(--text); font-size: 28px; cursor: pointer; min-height: 48px; min-width: 48px; }
-      .btn {
-        padding: 14px 28px;
-        border-radius: 12px;
-        text-decoration: none;
-        transition: var(--transition-default);
-        font-weight: bold;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        border: none;
-        font-size: 16px;
-      }
-      .btn-primary { background: linear-gradient(to right, #2563eb, #0891b2); color: white; }
-      .btn-secondary {
-        border: 1px solid var(--border);
-        color: var(--text);
-        background: rgba(0, 0, 0, 0.03);
-        backdrop-filter: blur(8px);
-      }
-      @media (prefers-color-scheme: dark) { .btn-secondary { border-color: rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.08); color: white; } }
-      .scroll-to-top {
-        position: fixed;
-        bottom: calc(var(--fixed-offset) + env(safe-area-inset-bottom));
-        right: calc(var(--fixed-offset) + env(safe-area-inset-right));
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        background: linear-gradient(to right, var(--primary), var(--secondary));
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(20px);
-        transition: var(--transition-default);
-        z-index: var(--z-sticky);
-        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-      }
-      .scroll-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-      footer { border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--muted); font-size: 14px; margin-top: var(--space-3xl); }
-      @media (max-width: 768px) {
-        .nav-links {
-          position: fixed;
-          top: var(--header-height);
-          right: 0;
-          width: 100%;
-          max-width: 300px;
-          height: calc(100dvh - var(--header-height));
-          background: white;
-          backdrop-filter: blur(20px);
-          padding: 20px;
-          border-left: 1px solid var(--border);
-          transform: translateX(100%);
-          transition: transform 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          opacity: 0;
-          visibility: hidden;
-          gap: var(--space-md);
-          box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
-        }
-        @media (prefers-color-scheme: dark) { .nav-links { background: rgba(15, 23, 42, 0.98); } }
-        .nav-links.show { transform: translateX(0); opacity: 1; visibility: visible; }
-        .nav-links a { padding: 12px 16px; width: 100%; text-align: left; }
-        .menu-btn { display: block; }
-      }
-      /* Article specific styles */
-      .article-enhanced { max-width: 980px; margin: 0 auto; }
-      .article-header { margin-bottom: var(--space-xl); text-align: center; border-bottom: 1px solid var(--border); padding-bottom: var(--space-lg); }
-      .article-header h1 { font-size: clamp(2rem, 5vw, 3rem); background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: var(--space-sm); }
-      .article-meta { display: flex; justify-content: center; gap: var(--space-md); color: var(--muted); font-size: 0.9rem; flex-wrap: wrap; }
-      .article-meta span { background: var(--glass-bg); padding: 4px 12px; border-radius: 40px; backdrop-filter: blur(4px); border: 1px solid var(--glass-border); }
-      .prose { font-size: 1.05rem; line-height: 1.75; color: var(--text); }
-      .prose h2 { font-size: 1.8rem; margin: 1.8em 0 0.6em; font-weight: 700; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
-      .prose h3 { font-size: 1.4rem; margin: 1.5em 0 0.5em; color: var(--accent); }
-      .prose p { margin-bottom: 1.2rem; color: var(--text); }
-      .prose ul, .prose ol { margin: 1rem 0 1.2rem 1.8rem; color: var(--muted); }
-      .prose li { margin: 0.4rem 0; }
-      .prose blockquote { border-left: 4px solid var(--primary); background: rgba(59,130,246,0.08); padding: 1rem 1.5rem; border-radius: 24px; font-style: italic; margin: 1.8rem 0; }
-      .quran-ref {
-        font-family: monospace;
-        background: var(--card-bg);
-        padding: 0.2rem 0.5rem;
-        border-radius: 12px;
-        color: var(--secondary);
-        font-weight: 500;
-        border: 1px solid var(--border);
-      }
-      .info-card { background: rgba(6,182,212,0.1); border-left: 4px solid var(--secondary); padding: 1.2rem 1.5rem; border-radius: 20px; margin: 2rem 0; backdrop-filter: blur(4px); color: var(--text); }
-      .verses-table-wrapper { overflow-x: auto; margin: 1.5rem 0 2rem; border-radius: 20px; border: 1px solid var(--border); background: var(--glass-bg); }
-      .verses-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-      .verses-table th, .verses-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-      .verses-table th { background: rgba(59,130,246,0.2); font-weight: 600; color: var(--accent); }
-      .verses-table tr:last-child td { border-bottom: none; }
-      .verses-table td:first-child {
-        font-family: 'SF Mono', monospace;
-        font-weight: 600;
-        color: var(--secondary);
-        width: 32%;
-      }
-      .related-links { display: flex; flex-wrap: wrap; gap: 1rem; margin: 2rem 0; justify-content: center; }
-      .related-card { background: var(--glass-bg); border: 1px solid var(--border); border-radius: 18px; padding: 1rem 1.5rem; transition: all 0.2s; text-decoration: none; color: var(--text); font-weight: 500; }
-      .related-card:hover { border-color: var(--primary); transform: translateY(-3px); background: rgba(59,130,246,0.08); }
-      .breadcrumb { margin: 20px 0 10px; font-size: 0.85rem; color: var(--muted); }
-      .breadcrumb a { color: var(--accent); text-decoration: none; }
-      @media (max-width: 768px) { .verses-table td:first-child { width: 35%; font-size: 0.8rem; } }
-    }
-    
-    @layer utilities {
-      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
-      @media print { .nav-links, .menu-btn, .scroll-to-top { display: none; } }
-    }
-  </style>
+  <meta name="twitter:title" content="Jinn & Islamic Theology | HeyNuo">
+  <meta name="twitter:description" content="Authentic research on Jinn, sihr, and full Qur'anic reference for ruqyah, protection, and healing.">
+  <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Shared stylesheet: global styles + article components -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
     <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
-      <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
-      <div class="nav-links" id="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
+      <div class="nav-right">
+        <div class="nav-links" id="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
       </div>
     </nav>
   </header>
@@ -298,7 +55,7 @@
         </div>
         <div class="prose">
           <p>In Islamic creed, the existence of Jinn is an undeniable reality mentioned in the Qur’an. Created from “smokeless fire” (<span class="quran-ref">Surah Ar-Rahman 55:15</span>), they possess intellect, free will, and are accountable before Allah. This article presents an authentic study based on Qur’an and Sunnah, clearing misconceptions and explaining protection.</p>
-          
+
           <h2>📜 Origin & Nature of Jinn</h2>
           <p>Jinn were created before humans and, like us, have communities, believers, and disbelievers. The word “Jinn” derives from <em>ijtinan</em> (concealment) because they are hidden from human sight. Their primary substance is fire, while humans are from clay.</p>
           <blockquote>“And the jinn We created before from scorching fire.” (Qur’an 15:27)</blockquote>
@@ -306,7 +63,7 @@
           <h2>🕌 Abilities & Interaction with Humans</h2>
           <p>Jinn can move rapidly, change form, and whisper insinuations (<em>waswas</em>). However, they have no power to benefit or harm except by Allah’s will. Possession (mas’h) is possible, but the prophetic cure is Ruqyah Shari’yah — reciting Qur’anic verses like <strong>Al-Fatihah, Ayat-ul-Kursi, Al-Mu'awwidhatain</strong>.</p>
 
-          <div class="info-card">
+          <div class="info-card secondary">
             🛡️ <strong>Protection from evil Jinn & Sihr:</strong> Recite Ayat-ul-Kursi (2:255) after every prayer, morning/evening adhkar, and Surah Al-Ikhlas, Al-Falaq, An-Nas three times. The Prophet ﷺ said: “Whoever recites the last two verses of Surah Al-Baqarah at night, they suffice him.” (Bukhari)
           </div>
 
@@ -325,7 +82,7 @@
           → Ayat-ul-Kursi (Al-Baqarah 255)<br/>
           → Surah Al-Ikhlas, Al-Falaq, An-Nas (three times each morning/evening)<br/>
           → “Bismillah alladhi la yadurru ma’a ismihi shay’un...” (Who recites it three times morning/evening nothing harms him).</p>
-          
+
           <h2>📚 Comprehensive Qur’anic Verses for Ruqyah, Protection & Spiritual Healing</h2>
           <p>The following tables compile authentic verses from the Qur’an, categorized for specific needs. Recite with unwavering tawheed and trust in Allah.</p>
 
@@ -461,30 +218,11 @@
         </div>
       </article>
     </main>
-    <footer><p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p></footer>
+    <footer><div class="footer-inner"><p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p></div></footer>
   </div>
   <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
 
-  <script>
-    (function() {
-      const menuBtn = document.getElementById('menu-btn');
-      const navLinks = document.getElementById('nav-links');
-      function closeMenu() { if (navLinks?.classList.contains('show')) { navLinks.classList.remove('show'); menuBtn?.setAttribute('aria-expanded', 'false'); } }
-      function toggleMenu() { if (!navLinks) return; const expanded = navLinks.classList.toggle('show'); menuBtn?.setAttribute('aria-expanded', expanded); }
-      if (menuBtn && navLinks) {
-        menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
-        document.querySelectorAll('#nav-links a').forEach(link => link.addEventListener('click', closeMenu));
-        document.addEventListener('click', (e) => { if (navLinks.classList.contains('show') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
-        window.addEventListener('resize', () => { if (window.innerWidth > 768) closeMenu(); });
-      }
-      const scrollBtn = document.getElementById('scrollToTop');
-      if (scrollBtn) {
-        window.addEventListener('scroll', () => { scrollBtn.classList.toggle('visible', window.scrollY > 350); });
-        scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-      }
-      const skip = document.querySelector('.skip-link');
-      if (skip) skip.addEventListener('click', (e) => { const target = document.querySelector(skip.getAttribute('href')); if(target) { e.preventDefault(); target.setAttribute('tabindex', '-1'); target.focus(); target.removeAttribute('tabindex'); window.scrollTo({ top: target.offsetTop - 70, behavior: 'smooth' }); } });
-    })();
-  </script>
+  <!-- Shared script: mobile menu, active nav, scroll-to-top, skip link -->
+  <script src="js/script.js"></script>
 </body>
 </html>

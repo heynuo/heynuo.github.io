@@ -41,21 +41,27 @@ const POSTS = Object.freeze([
     excerpt: "Learn object-oriented programming with Java – classes, inheritance, polymorphism, and real-world examples.",
     category: "Java",
     link: "java-oop.html",
-    date: "2026-06-02"
+    date: "2026-06-02",
+    readTime: "8 min read",
+    tags: ["OOP", "Java", "Beginners"]
   },
   {
     title: "Jinn & Islamic Theology",
     excerpt: "Authentic research on Jinn, sihr, and Islamic theology from Quran & Sunnah.",
     category: "Research",
     link: "jinn-islamic-theology.html",
-    date: "2026-06-02"
+    date: "2026-06-02",
+    readTime: "15 min read",
+    tags: ["Islam", "Quran", "Research"]
   },
   {
     title: "Modern Web Development Guide",
     excerpt: "Build beautiful websites with HTML, CSS, JavaScript, and deploy for free on GitHub Pages.",
     category: "Web Dev",
     link: "web-dev-guide.html",
-    date: "2026-06-02"
+    date: "2026-06-02",
+    readTime: "10 min read",
+    tags: ["HTML", "CSS", "GitHub Pages"]
   }
 ]);
 
@@ -102,6 +108,30 @@ function escapeHTML(str) {
     .replace(/'/g, "&#039;");
 }
 
+// ---------- Theme Management ----------
+function initTheme() {
+  const saved = localStorage.getItem('heynuo-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  applyTheme(theme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('heynuo-theme', theme);
+  const btn = $.get('#theme-toggle');
+  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+}
+
+function initThemeToggle() {
+  const btn = $.get('#theme-toggle');
+  if (!btn) return;
+  $.on(btn, 'click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  });
+}
+
 // ---------- Mobile Menu ----------
 function initMobileMenu() {
   const menuBtn = $.get(CONFIG.selectors.menuBtn);
@@ -125,6 +155,15 @@ function initMobileMenu() {
 
   $.getAll('a', navLinks).forEach(link => {
     $.on(link, 'click', () => toggleMenu(false));
+  });
+
+  // Close when clicking outside the menu and the toggle
+  $.on(document, 'click', (e) => {
+    if (navLinks.classList.contains('show') &&
+        !navLinks.contains(e.target) &&
+        !menuBtn.contains(e.target)) {
+      toggleMenu(false);
+    }
   });
 
   $.on(document, 'keydown', (e) => {
@@ -220,6 +259,21 @@ function initScrollToTop() {
   });
 }
 
+// ---------- Skip Link ----------
+function initSkipLink() {
+  const skip = $.get('.skip-link');
+  if (!skip) return;
+  $.on(skip, 'click', (e) => {
+    const target = $.get(skip.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.setAttribute('tabindex', '-1');
+    target.focus();
+    // Remove tabindex on blur, not synchronously, or focus drops to <body>
+    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+  });
+}
+
 // ---------- Search & Filter ----------
 const Articles = {
   elements: null,
@@ -253,7 +307,7 @@ const Articles = {
     this.renderFilters();
     this.renderCards();
     this.bindEvents();
-    this.announceResults(state.posts.length);
+    // renderCards() already announces the filtered count
   },
 
   renderFilters() {
@@ -284,12 +338,22 @@ const Articles = {
   createCardElement(post) {
     const isExternal = post.link.startsWith('http');
     const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer" aria-label="Opens in a new tab"' : '';
-    
+
+    // Format date
+    const dateFormatted = post.date
+      ? new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      : '';
+
     const article = document.createElement('article');
     article.className = 'card';
     article.innerHTML = `
-      <div>
+      <div class="card-body">
         <span class="category">${escapeHTML(post.category)}</span>
+        ${(dateFormatted || post.readTime) ? `
+        <div class="card-meta">
+          ${dateFormatted ? `<span>📅 ${escapeHTML(dateFormatted)}</span>` : ''}
+          ${post.readTime ? `<span>⏱ ${escapeHTML(post.readTime)}</span>` : ''}
+        </div>` : ''}
         <h3><a href="${escapeHTML(post.link)}" ${targetAttr}>${escapeHTML(post.title)}</a></h3>
         <p>${escapeHTML(post.excerpt)}</p>
       </div>
@@ -305,6 +369,7 @@ const Articles = {
     if (filtered.length === 0) {
       $.setHtml(this.elements.container, `<p class="empty-msg" role="status">${CONFIG.messages.emptySearch}</p>`);
       this.announceResults(0);
+      this.updateCountBadge(0, state.posts.length);
       return;
     }
 
@@ -317,17 +382,57 @@ const Articles = {
     this.elements.container.innerHTML = '';
     this.elements.container.appendChild(fragment);
     this.announceResults(filtered.length);
+    this.updateCountBadge(filtered.length, state.posts.length);
+  },
+
+  updateCountBadge(shown, total) {
+    const badge = $.get('#articleCountBadge');
+    if (!badge) return;
+    if (shown === total) {
+      badge.textContent = `${total} article${total !== 1 ? 's' : ''}`;
+    } else {
+      badge.textContent = `${shown} of ${total}`;
+    }
   },
 
   setupSearch() {
     if (!this.elements.search) return;
+
+    // Search input with debounce
     $.on(this.elements.search, 'input', (e) => {
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
         state.searchTerm = e.target.value;
         this.renderCards();
         this.syncUrl();
+        // Show/hide clear button
+        const clearBtn = $.get('#searchClear');
+        if (clearBtn) clearBtn.classList.toggle('visible', !!e.target.value);
       }, CONFIG.searchDebounceMs);
+    });
+
+    // Clear button
+    const clearBtn = $.get('#searchClear');
+    if (clearBtn) {
+      $.on(clearBtn, 'click', () => {
+        if (this.elements.search) {
+          this.elements.search.value = '';
+          state.searchTerm = '';
+          clearBtn.classList.remove('visible');
+          this.renderCards();
+          this.syncUrl();
+          this.elements.search.focus();
+        }
+      });
+    }
+
+    // Keyboard shortcut: press "/" to focus search
+    $.on(document, 'keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== this.elements.search &&
+          !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
+        e.preventDefault();
+        this.elements.search?.focus();
+      }
     });
   },
 
@@ -403,7 +508,10 @@ const Articles = {
 
   restoreFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    state.activeCategory = params.get('category') || localStorage.getItem('activeCategory') || 'all';
+    // Ignore unknown categories from URLs or stale localStorage
+    const validCategories = new Set(['all', ...new Set(state.posts.map(p => p.category))]);
+    const requested = params.get('category') || localStorage.getItem('activeCategory');
+    state.activeCategory = validCategories.has(requested) ? requested : 'all';
     state.searchTerm = params.get('q') || '';
     if (this.elements.search) this.elements.search.value = state.searchTerm;
   },
@@ -488,17 +596,70 @@ function initContactForm() {
   }
 }
 
+// ---------- Code Block Copy Buttons ----------
+function initCodeCopyButtons() {
+  const preBlocks = document.querySelectorAll('.prose pre');
+  preBlocks.forEach(pre => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-block-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-code-btn';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    wrapper.appendChild(btn);
+
+    $.on(btn, 'click', async () => {
+      const code = pre.querySelector('code')?.textContent || pre.textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = '✓ Copied!';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      } catch {
+        btn.textContent = 'Failed';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      }
+    });
+  });
+}
+
+// ---------- Reading Progress Bar ----------
+function initReadingProgress() {
+  const bar = $.get('#readingProgress');
+  if (!bar) return;
+
+  // Only show on article pages, not home
+  if (Page.isHome()) return;
+
+  const updateProgress = () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    if (docH <= 0) return;
+    const progress = (window.scrollY / docH) * 100;
+    bar.style.width = `${Math.min(progress, 100)}%`;
+  };
+
+  $.on(window, 'scroll', updateProgress, { passive: true });
+  updateProgress();
+}
+
 // ---------- Initialization ----------
 function init() {
+  initTheme();
+  initThemeToggle();
   initMobileMenu();
   initActiveNav();
   initSmoothScroll();
   initScrollToTop();
+  initSkipLink();
+  initReadingProgress();
   if (Page.isHome()) Articles.init();
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
-  
+  initCodeCopyButtons();
+
   // ✅ TWEAK 1 APPLIED: Removed preloadImages entirely since there's no LCP image to preload.
-  
+
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }
 
