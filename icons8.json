@@ -1,0 +1,25 @@
+{
+  "pack": "fluent",
+  "size": 96,
+  "icons": {
+    "books": { "id": "ChugQlss1ohB", "file": "assets/icons/books.png" },
+    "quran": { "id": "lqTKRzFebUxy", "file": "assets/icons/quran.png" },
+    "lightning": { "id": "GtgqQIYSqT50", "file": "assets/icons/lightning.png" },
+    "star": { "id": "8ggStxqyboK5", "file": "assets/icons/star.png" },
+    "open-book": { "id": "39FLspc26r4c", "file": "assets/icons/open-book.png" },
+    "search": { "id": "KPmthqkeTgDN", "file": "assets/icons/search.png" },
+    "moon": { "id": "nNtT9r4dDsaU", "file": "assets/icons/moon.png" },
+    "sun": { "id": "8EUmYhfLPTCF", "file": "assets/icons/sun.png" },
+    "menu": { "id": "Rdp3AydLFY2A", "file": "assets/icons/menu.png" },
+    "calendar": { "id": "WpQIVxfhhzqt", "file": "assets/icons/calendar.png" },
+    "clock": { "id": "wrIwUNhk1J4k", "file": "assets/icons/clock.png" },
+    "bookmark": { "id": "iBJpnJfF62fn", "file": "assets/icons/bookmark.png" },
+    "share": { "id": "n9d0Hm43JCPK", "file": "assets/icons/share.png" },
+    "sparkles": { "id": "tXnn29SmwOlM", "file": "assets/icons/sparkles.png" },
+    "rocket": { "id": "8Cpx9JrEbpOM", "file": "assets/icons/rocket.png" },
+    "java": { "id": "Pd2x9GWu9ovX", "file": "assets/icons/java.png" },
+    "html5": { "id": "v8RpPQUwv0N8", "file": "assets/icons/html5.png" },
+    "github": { "id": "AZOZNnY73haj", "file": "assets/icons/github.png" },
+    "email": { "id": "LPcVDft9Isqt", "file": "assets/icons/email.png" }
+  }
+}

@@ -11,16 +11,29 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* Page-specific: error hero */
-    .error-container { text-align: center; padding: 100px 0; }
+    .error-container { text-align: center; padding: 70px 0 90px; }
+    .error-illustration {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 20px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(37, 99, 235, 0.2));
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
     .error-container h1 {
-      font-size: 80px;
-      margin-bottom: 20px;
+      font-size: 72px;
+      margin-bottom: 12px;
       background: linear-gradient(to right, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      line-height: 1;
     }
-    .error-container p { font-size: 18px; margin-bottom: 30px; color: var(--muted); }
+    .error-container p { font-size: 18px; margin-bottom: 28px; color: var(--muted); }
     .error-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   </style>
 </head>
@@ -30,22 +43,23 @@
     <div class="logo">Hey<span>Nuo</span></div>
       <div class="nav-right">
         <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles" title="Quick Search (Ctrl+K)">
-          <span class="nav-search-icon" aria-hidden="true">🔍</span>
+          <span class="nav-search-icon" aria-hidden="true"><img src="assets/icons/search.png" alt="" width="16" height="16"></span>
           <span class="nav-search-text">Search...</span>
           <kbd class="nav-search-kbd">Ctrl K</kbd>
         </button>
         <div class="nav-links" id="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
-        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">☰</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme"><img src="assets/icons/moon.png" alt="Toggle theme" width="20" height="20" class="theme-icon"></button>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false"><img src="assets/icons/menu.png" alt="Menu" width="22" height="22"></button>
       </div>
   </nav></header>
   <div class="container">
     <main class="error-container">
+      <img src="assets/icons/astronaut.png" alt="Lost in space" class="error-illustration" width="130" height="130">
       <h1>404</h1>
-      <p>Oops! The page you're looking for doesn't exist.</p>
+      <p>Oops! The page you're looking for doesn't exist or has moved.</p>
       <div class="error-actions">
-        <a href="index.html" class="btn btn-primary">Go Home</a>
-        <a href="contact.html" class="btn btn-secondary">Contact Me</a>
+        <a href="index.html" class="btn btn-primary"><img src="assets/icons/rocket.png" alt="" class="btn-icon" width="16" height="16"> Go Home</a>
+        <a href="contact.html" class="btn btn-secondary"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16"> Contact Me</a>
       </div>
     </main>
     <footer>
@@ -54,7 +68,7 @@
           <a href="index.html">Home</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
-          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
         </div>
         <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
       </div>

@@ -175,7 +175,11 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('heynuo-theme', theme);
   const btn = $.get('#theme-toggle');
-  if (btn) btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  if (btn) {
+    btn.innerHTML = theme === 'dark'
+      ? '<img src="assets/icons/sun.png" alt="Light mode" width="20" height="20" class="theme-icon">'
+      : '<img src="assets/icons/moon.png" alt="Dark mode" width="20" height="20" class="theme-icon">';
+  }
 }
 
 function initThemeToggle() {
@@ -187,7 +191,10 @@ function initThemeToggle() {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
-    showToast(next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode', next === 'dark' ? '🌙' : '☀️');
+    showToast(
+      next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
+      next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
+    );
   });
 }
 
@@ -443,15 +450,21 @@ const Articles = {
 
     const isBookmarked = Bookmarks.has(post.link);
 
+    let catIcon = '';
+    const catLower = (post.category || '').toLowerCase();
+    if (catLower.includes('java')) catIcon = '<img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14"> ';
+    else if (catLower.includes('web')) catIcon = '<img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> ';
+    else if (catLower.includes('research') || catLower.includes('islam')) catIcon = '<img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> ';
+
     const article = document.createElement('article');
     article.className = 'card reveal revealed';
     article.innerHTML = `
       <div class="card-body">
-        <span class="category">${escapeHTML(post.category)}</span>
+        <span class="category">${catIcon}${escapeHTML(post.category)}</span>
         ${(dateFormatted || post.readTime) ? `
         <div class="card-meta">
-          ${dateFormatted ? `<span>📅 ${escapeHTML(dateFormatted)}</span>` : ''}
-          ${post.readTime ? `<span>⏱ ${escapeHTML(post.readTime)}</span>` : ''}
+          ${dateFormatted ? `<span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> ${escapeHTML(dateFormatted)}</span>` : ''}
+          ${post.readTime ? `<span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> ${escapeHTML(post.readTime)}</span>` : ''}
         </div>` : ''}
         <h3><a href="${escapeHTML(post.link)}" ${targetAttr}>${highlightedTitle}</a></h3>
         <p>${highlightedExcerpt}</p>
@@ -461,9 +474,9 @@ const Articles = {
         <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
         <div class="card-actions">
           <button type="button" class="card-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}" title="${isBookmarked ? 'Remove bookmark' : 'Save article'}" aria-label="Bookmark article">
-            <span>${isBookmarked ? '★' : '☆'}</span> ${isBookmarked ? 'Saved' : 'Save'}
+            <img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> <span>${isBookmarked ? 'Saved' : 'Save'}</span>
           </button>
-          <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link">🔗 Share</button>
+          <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link"><img src="assets/icons/share.png" alt="" class="btn-icon" width="14" height="14"> Share</button>
         </div>
       </div>
     `;
@@ -624,7 +637,7 @@ const Articles = {
         const title = bookmarkBtn.dataset.title;
         const isNowBookmarked = Bookmarks.toggle(url, title);
         bookmarkBtn.classList.toggle('bookmarked', isNowBookmarked);
-        bookmarkBtn.innerHTML = `<span>${isNowBookmarked ? '★' : '☆'}</span> ${isNowBookmarked ? 'Saved' : 'Save'}`;
+        bookmarkBtn.innerHTML = `<img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> <span>${isNowBookmarked ? 'Saved' : 'Save'}</span>`;
         bookmarkBtn.title = isNowBookmarked ? 'Remove bookmark' : 'Save article';
         if (state.activeCategory === 'saved') {
           this.renderCards();
@@ -638,7 +651,7 @@ const Articles = {
         const fullUrl = new URL(relUrl, window.location.origin).href;
         try {
           await navigator.clipboard.writeText(fullUrl);
-          showToast('Article link copied to clipboard!', '🔗');
+          showToast('Article link copied to clipboard!', '<img src="assets/icons/share.png" width="16" height="16" alt="">');
         } catch {
           showToast('Could not copy link', '⚠️');
         }
