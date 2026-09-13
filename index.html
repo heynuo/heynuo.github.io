@@ -113,6 +113,7 @@
 
       <!-- ===== Hero ===== -->
       <section class="hero">
+        <canvas class="hero-particles-canvas" id="heroParticlesCanvas" aria-hidden="true"></canvas>
         <div class="hero-ambient-glow" aria-hidden="true"></div>
         <div class="hero-grid">
           <div class="hero-content">
@@ -121,10 +122,23 @@
               ✦ Open for collaboration &amp; deep research
             </div>
 
+            <div class="hero-typing-wrapper">
+              <span>Writing &amp; researching on</span>
+              <span class="hero-rotator" id="heroRotator" data-phrases='["Java OOP Architecture", "Authentic Theological Studies", "Modern Vanilla Web Dev", "High-Performance Clean Code"]'>Java OOP Architecture</span>
+              <span class="typing-cursor">|</span>
+            </div>
+
             <h1>Modern Notes &amp; <span>Research Blog</span></h1>
 
             <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.
             </p>
+
+            <div class="hero-quick-topics">
+              <span class="quick-topics-label">Browse:</span>
+              <button type="button" class="quick-topic-pill" data-category="Java"><img src="assets/icons/java.png" alt="" width="14" height="14"> Java OOP</button>
+              <button type="button" class="quick-topic-pill" data-category="Research"><img src="assets/icons/quran.png" alt="" width="14" height="14"> Ruqyah &amp; Research</button>
+              <button type="button" class="quick-topic-pill" data-category="Web Dev"><img src="assets/icons/html5.png" alt="" width="14" height="14"> Web Dev</button>
+            </div>
 
             <div class="hero-buttons">
               <a href="#articles" class="btn btn-primary">Explore Articles ↓</a>
@@ -314,6 +328,23 @@
             fast content delivery.</p>
         </article>
       </section>
+
+      <!-- ===== Digital Dispatch Newsletter ===== -->
+      <section class="dispatch-section" aria-label="Subscribe to digital notes">
+        <div class="dispatch-card">
+          <div class="dispatch-grid">
+            <div class="dispatch-info">
+              <span class="dispatch-badge">📬 Digital Dispatch</span>
+              <h3>Stay in the Knowledge Loop</h3>
+              <p>Occasional high-signal notes on Java architecture, authentic theological research, and modern web development. Zero spam, ever.</p>
+            </div>
+            <form class="dispatch-form" id="dispatchForm">
+              <input type="email" class="dispatch-input" id="dispatchEmail" placeholder="Enter your email address..." required aria-label="Your email address">
+              <button type="submit" class="btn btn-primary"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16"> Subscribe</button>
+            </form>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -323,6 +354,7 @@
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
+          <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
         </div>
         <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
       </div>
@@ -340,6 +372,25 @@
   </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-TYJNKZE5LL"></script>

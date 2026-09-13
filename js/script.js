@@ -711,6 +711,18 @@ const Articles = {
     $.setText(announcer, `${count} article${count !== 1 ? 's' : ''} found`);
   },
 
+  setCategory(category) {
+    if (!this.elements || !this.elements.filters) return;
+    const btn = $.get(`.filter-btn[data-category="${category}"]`, this.elements.filters);
+    if (btn) {
+      btn.click();
+    } else {
+      state.activeCategory = category;
+      this.renderCards();
+      this.syncUrl();
+    }
+  },
+
   destroy() {
     clearTimeout(this.debounceTimer);
   }
@@ -1365,6 +1377,419 @@ function initAnnouncementBanner() {
   });
 }
 
+// ---------- Hero Dynamic Canvas Particles ----------
+function initHeroParticles() {
+  const canvas = $.get('#heroParticlesCanvas');
+  if (!canvas) return;
+
+  if (prefersReducedMotion()) {
+    canvas.style.display = 'none';
+    return;
+  }
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let particles = [];
+  let animId = null;
+  let isVisible = true;
+  const mouse = { x: null, y: null, radius: 110 };
+
+  const PARTICLE_COUNT = 38;
+  const CONNECT_DISTANCE = 90;
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = rect.width;
+    height = rect.height;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  class Particle {
+    constructor() {
+      this.reset(true);
+    }
+    reset(initial = false) {
+      this.x = Math.random() * width;
+      this.y = initial ? Math.random() * height : height + 10;
+      this.vx = (Math.random() - 0.5) * 0.45;
+      this.vy = -(Math.random() * 0.35 + 0.15);
+      this.radius = Math.random() * 1.8 + 1.2;
+      this.baseAlpha = Math.random() * 0.35 + 0.25;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius && dist > 0) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          this.x -= (dx / dist) * force * 1.8;
+          this.y -= (dy / dist) * force * 1.8;
+        }
+      }
+
+      if (this.x < -10) this.x = width + 10;
+      else if (this.x > width + 10) this.x = -10;
+      if (this.y < -10) this.reset(false);
+    }
+    draw(colorRgb) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${colorRgb}, ${this.baseAlpha})`;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function getColorRgb() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDark ? '96, 165, 250' : '37, 99, 235';
+  }
+
+  function render() {
+    if (!isVisible) return;
+    ctx.clearRect(0, 0, width, height);
+    const colorRgb = getColorRgb();
+
+    // Connecting lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < CONNECT_DISTANCE) {
+          const alpha = (1 - dist / CONNECT_DISTANCE) * 0.2;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(${colorRgb}, ${alpha})`;
+          ctx.lineWidth = 0.85;
+          ctx.stroke();
+        }
+      }
+    }
+
+    particles.forEach(p => {
+      p.update();
+      p.draw(colorRgb);
+    });
+
+    animId = requestAnimationFrame(render);
+  }
+
+  const heroSection = canvas.closest('.hero');
+  if (heroSection) {
+    $.on(heroSection, 'mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+
+    $.on(heroSection, 'mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          render();
+        } else if (!isVisible && animId) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      }, { threshold: 0.05 });
+      observer.observe(heroSection);
+    }
+  }
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      resize();
+      initParticles();
+    }, 150);
+  }, { passive: true });
+
+  resize();
+  initParticles();
+  render();
+}
+
+// ---------- Hero Dynamic Rotator / Typewriter ----------
+function initHeroRotator() {
+  const el = $.get('#heroRotator');
+  if (!el) return;
+
+  let phrases = [];
+  try {
+    phrases = JSON.parse(el.dataset.phrases || '[]');
+  } catch {
+    phrases = ["Java OOP Architecture", "Authentic Theological Studies", "Modern Vanilla Web Dev"];
+  }
+  if (!phrases.length) return;
+
+  if (prefersReducedMotion()) return;
+
+  let phraseIdx = 0;
+  let charIdx = phrases[0].length;
+  let isDeleting = true;
+  let typingDelay = 2400;
+
+  function typeStep() {
+    const currentPhrase = phrases[phraseIdx];
+
+    if (isDeleting) {
+      charIdx--;
+      el.textContent = currentPhrase.substring(0, charIdx);
+      if (charIdx <= 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        typingDelay = 400;
+      } else {
+        typingDelay = 26;
+      }
+    } else {
+      charIdx++;
+      el.textContent = currentPhrase.substring(0, charIdx);
+      if (charIdx >= currentPhrase.length) {
+        isDeleting = true;
+        typingDelay = 2500;
+      } else {
+        typingDelay = 55 + Math.random() * 25;
+      }
+    }
+
+    setTimeout(typeStep, typingDelay);
+  }
+
+  setTimeout(typeStep, typingDelay);
+}
+
+// ---------- Quick Topic Navigation ----------
+function initQuickTopicPills() {
+  const pills = $.getAll('.quick-topic-pill');
+  if (!pills.length) return;
+
+  pills.forEach(pill => {
+    $.on(pill, 'click', () => {
+      const category = pill.dataset.category;
+      if (!category) return;
+
+      if (Articles && typeof Articles.setCategory === 'function') {
+        Articles.setCategory(category);
+      }
+
+      const articlesSection = $.get('#articles');
+      if (articlesSection) {
+        articlesSection.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      }
+    });
+  });
+}
+
+// ---------- Digital Dispatch / Newsletter Form ----------
+function initDispatchForm() {
+  const form = $.get('#dispatchForm');
+  const input = $.get('#dispatchEmail');
+  if (!form || !input) return;
+
+  const SUB_KEY = 'heynuo-newsletter-subscribed';
+  const savedSub = localStorage.getItem(SUB_KEY);
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  if (savedSub && submitBtn) {
+    submitBtn.innerHTML = '✓ Subscribed';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.85';
+  }
+
+  $.on(form, 'submit', (e) => {
+    e.preventDefault();
+    const email = (input.value || '').trim();
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Please enter a valid email address.', '⚠️');
+      input.focus();
+      return;
+    }
+
+    if (submitBtn) {
+      submitBtn.innerHTML = 'Subscribing...';
+      submitBtn.disabled = true;
+    }
+
+    setTimeout(() => {
+      localStorage.setItem(SUB_KEY, email);
+      if (submitBtn) {
+        submitBtn.innerHTML = '✓ Subscribed!';
+        submitBtn.style.background = 'var(--success, #10b981)';
+        submitBtn.style.borderColor = 'var(--success, #10b981)';
+      }
+      input.value = '';
+      showToast('Subscribed! Welcome to the knowledge loop.', '📬');
+    }, 450);
+  });
+}
+
+// ---------- Keyboard Shortcuts Modal & Global Hotkeys ----------
+function initShortcutsModal() {
+  let backdrop = $.get('#shortcutsModal');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'shortcuts-modal-backdrop';
+    backdrop.id = 'shortcutsModal';
+    backdrop.setAttribute('aria-hidden', 'true');
+    backdrop.setAttribute('role', 'dialog');
+    backdrop.setAttribute('aria-modal', 'true');
+    backdrop.setAttribute('aria-labelledby', 'shortcutsTitle');
+    backdrop.innerHTML = `
+      <div class="shortcuts-modal">
+        <div class="shortcuts-header">
+          <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+          <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+        </div>
+        <div class="shortcuts-list">
+          <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(backdrop);
+  }
+
+  const openBtns = $.getAll('#shortcutHelpBtn');
+  const closeBtn = $.get('#shortcutsClose', backdrop);
+
+  function openModal() {
+    backdrop.classList.add('active');
+    backdrop.setAttribute('aria-hidden', 'false');
+    closeBtn?.focus();
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('active');
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
+
+  openBtns.forEach(btn => $.on(btn, 'click', openModal));
+  if (closeBtn) $.on(closeBtn, 'click', closeModal);
+
+  $.on(backdrop, 'click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+
+  $.on(document, 'keydown', (e) => {
+    const activeEl = document.activeElement;
+    const isInput = activeEl && (
+      activeEl.tagName === 'INPUT' ||
+      activeEl.tagName === 'TEXTAREA' ||
+      activeEl.tagName === 'SELECT' ||
+      activeEl.isContentEditable
+    );
+
+    if (e.key === 'Escape') {
+      if (backdrop.classList.contains('active')) {
+        e.preventDefault();
+        closeModal();
+        return;
+      }
+    }
+
+    if (isInput) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+      e.preventDefault();
+      if (backdrop.classList.contains('active')) {
+        closeModal();
+      } else {
+        openModal();
+      }
+      return;
+    }
+
+    if (e.key === 't' || e.key === 'T') {
+      e.preventDefault();
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      showToast(
+        next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
+        next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
+      );
+      return;
+    }
+
+    if (e.key === 'h' || e.key === 'H') {
+      if (!Page.isHome()) {
+        window.location.href = 'index.html';
+      } else {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      }
+      return;
+    }
+
+    if (e.key === 'a' || e.key === 'A') {
+      if (Page.getCurrentPage() !== 'about.html') {
+        window.location.href = 'about.html';
+      }
+      return;
+    }
+
+    if (e.key === 'c' || e.key === 'C') {
+      if (Page.getCurrentPage() !== 'contact.html') {
+        window.location.href = 'contact.html';
+      }
+      return;
+    }
+  });
+}
+
+// ---------- 3D Tilt Micro-Interaction ----------
+function initTiltEffect() {
+  if (prefersReducedMotion()) return;
+  const boxes = $.getAll('.card-showcase-box, .featured-banner');
+  boxes.forEach(box => {
+    $.on(box, 'mousemove', (e) => {
+      const rect = box.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -4;
+      const rotateY = ((x - centerX) / centerX) * 4;
+      box.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+    });
+    $.on(box, 'mouseleave', () => {
+      box.style.transform = '';
+    });
+  });
+}
+
 // ---------- Initialization ----------
 function init() {
   initTheme();
@@ -1376,7 +1801,12 @@ function init() {
   initScrollToTop();
   initSkipLink();
   initReadingProgress();
-  if (Page.isHome()) Articles.init();
+  if (Page.isHome()) {
+    Articles.init();
+    initHeroParticles();
+    initHeroRotator();
+    initQuickTopicPills();
+  }
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
   initCodeCopyButtons();
   initArticleSuite();
@@ -1384,6 +1814,9 @@ function init() {
   CommandPalette.init();
   initScrollReveal();
   initCopyEmail();
+  initDispatchForm();
+  initShortcutsModal();
+  initTiltEffect();
 
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }
