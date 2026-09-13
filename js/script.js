@@ -590,27 +590,132 @@ const Articles = {
   setupSearch() {
     if (!this.elements.search) return;
 
-    // Search input with debounce
+    const wrapper = $.get('#searchWrapper');
+    const clearBtn = $.get('#searchClear');
+    const matchCount = $.get('#searchMatchCount');
+    const dropdown = $.get('#searchDropdown');
+    const suggestChips = $.getAll('.search-suggest-chip');
+    let selectedIndex = -1;
+
+    const updateMatchCount = (count, hasTerm) => {
+      if (!matchCount) return;
+      if (hasTerm) {
+        matchCount.textContent = `${count} found`;
+        matchCount.classList.add('visible');
+      } else {
+        matchCount.textContent = '';
+        matchCount.classList.remove('visible');
+      }
+    };
+
+    const renderDropdown = (query) => {
+      if (!dropdown) return;
+      const term = (query || '').trim().toLowerCase();
+
+      if (!term) {
+        dropdown.innerHTML = `
+          <div class="search-drop-header">⚡ Featured Guides &amp; Research</div>
+          ${state.posts.map((p, idx) => `
+            <a href="${escapeHTML(p.link)}" class="search-drop-item" data-index="${idx}">
+              <img src="${escapeHTML(p.banner || 'assets/banners/hero-banner.jpg')}" alt="" class="search-drop-thumb">
+              <div class="search-drop-info">
+                <div class="search-drop-title">${escapeHTML(p.title)}</div>
+                <div class="search-drop-meta">
+                  <span class="search-drop-badge">${escapeHTML(p.category)}</span>
+                  <span>${escapeHTML(p.readTime || '')}</span>
+                </div>
+              </div>
+            </a>
+          `).join('')}
+          <div class="search-drop-footer">
+            <span>Tip: Press <kbd>/</kbd> anytime to search</span>
+            <span>ESC to close</span>
+          </div>
+        `;
+        dropdown.classList.add('active');
+        selectedIndex = -1;
+        return;
+      }
+
+      const matches = state.posts.filter(p => p.searchText.includes(term));
+
+      if (matches.length === 0) {
+        dropdown.innerHTML = `
+          <div style="padding: 16px; text-align: center; color: var(--muted); font-size: 13.5px;">
+            <p style="margin-bottom: 4px; font-weight: 700; color: var(--text);">No matching articles for "${escapeHTML(query)}"</p>
+            <p style="margin: 0; font-size: 12px;">Try searching for <strong>Java</strong>, <strong>Ruqyah</strong>, or <strong>Web Dev</strong>.</p>
+          </div>
+        `;
+        dropdown.classList.add('active');
+        selectedIndex = -1;
+        return;
+      }
+
+      dropdown.innerHTML = `
+        <div class="search-drop-header">${matches.length} article${matches.length !== 1 ? 's' : ''} matching "${escapeHTML(query)}"</div>
+        ${matches.map((p, idx) => {
+          const highlightedTitle = this.highlightMatch(p.title, query);
+          return `
+            <a href="${escapeHTML(p.link)}" class="search-drop-item" data-index="${idx}">
+              <img src="${escapeHTML(p.banner || 'assets/banners/hero-banner.jpg')}" alt="" class="search-drop-thumb">
+              <div class="search-drop-info">
+                <div class="search-drop-title">${highlightedTitle}</div>
+                <div class="search-drop-meta">
+                  <span class="search-drop-badge">${escapeHTML(p.category)}</span>
+                  <span>${escapeHTML(p.readTime || '')}</span>
+                </div>
+              </div>
+            </a>
+          `;
+        }).join('')}
+        <div class="search-drop-footer">
+          <span>↑↓ navigate • ↵ open</span>
+          <span>ESC to close</span>
+        </div>
+      `;
+      dropdown.classList.add('active');
+      selectedIndex = -1;
+    };
+
+    const closeDropdown = () => {
+      if (dropdown) dropdown.classList.remove('active');
+      selectedIndex = -1;
+    };
+
+    // Search input typing with debounce
     $.on(this.elements.search, 'input', (e) => {
+      const val = e.target.value;
+      const hasVal = !!val.trim();
+
+      if (wrapper) wrapper.classList.toggle('has-query', hasVal);
+      if (clearBtn) clearBtn.classList.toggle('visible', hasVal);
+
       clearTimeout(this.debounceTimer);
       this.debounceTimer = setTimeout(() => {
-        state.searchTerm = e.target.value;
+        state.searchTerm = val;
         this.renderCards();
         this.syncUrl();
-        // Show/hide clear button
-        const clearBtn = $.get('#searchClear');
-        if (clearBtn) clearBtn.classList.toggle('visible', !!e.target.value);
+        const filtered = this.getFilteredPosts();
+        updateMatchCount(filtered.length, hasVal);
+        renderDropdown(val);
       }, CONFIG.searchDebounceMs);
     });
 
-    // Clear button
-    const clearBtn = $.get('#searchClear');
+    // Open dropdown on focus
+    $.on(this.elements.search, 'focus', () => {
+      renderDropdown(this.elements.search.value);
+    });
+
+    // Clear button click
     if (clearBtn) {
       $.on(clearBtn, 'click', () => {
         if (this.elements.search) {
           this.elements.search.value = '';
           state.searchTerm = '';
           clearBtn.classList.remove('visible');
+          if (wrapper) wrapper.classList.remove('has-query');
+          updateMatchCount(0, false);
+          closeDropdown();
           this.renderCards();
           this.syncUrl();
           this.elements.search.focus();
@@ -618,12 +723,83 @@ const Articles = {
       });
     }
 
+    // Keyboard navigation in search and dropdown
+    $.on(this.elements.search, 'keydown', (e) => {
+      const items = dropdown?.querySelectorAll('.search-drop-item');
+
+      if (e.key === 'ArrowDown') {
+        if (items && items.length) {
+          e.preventDefault();
+          selectedIndex = (selectedIndex + 1) % items.length;
+          items.forEach((item, idx) => item.classList.toggle('selected', idx === selectedIndex));
+          items[selectedIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (items && items.length) {
+          e.preventDefault();
+          selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+          items.forEach((item, idx) => item.classList.toggle('selected', idx === selectedIndex));
+          items[selectedIndex]?.scrollIntoView({ block: 'nearest' });
+        }
+      } else if (e.key === 'Enter') {
+        if (items && selectedIndex >= 0 && items[selectedIndex]) {
+          e.preventDefault();
+          items[selectedIndex].click();
+        } else {
+          closeDropdown();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeDropdown();
+        if (this.elements.search.value) {
+          this.elements.search.value = '';
+          state.searchTerm = '';
+          clearBtn?.classList.remove('visible');
+          wrapper?.classList.remove('has-query');
+          updateMatchCount(0, false);
+          this.renderCards();
+          this.syncUrl();
+        }
+        this.elements.search.blur();
+      }
+    });
+
+    // Close dropdown on click outside
+    $.on(document, 'click', (e) => {
+      if (wrapper && !wrapper.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+
+    // Trending topic suggestion chips
+    suggestChips.forEach(chip => {
+      $.on(chip, 'click', () => {
+        const query = chip.dataset.search;
+        if (!query) return;
+        this.elements.search.value = query;
+        state.searchTerm = query;
+        if (wrapper) wrapper.classList.add('has-query');
+        if (clearBtn) clearBtn.classList.add('visible');
+        this.renderCards();
+        this.syncUrl();
+        const filtered = this.getFilteredPosts();
+        updateMatchCount(filtered.length, true);
+        closeDropdown();
+
+        const articlesSection = $.get('#articles');
+        if (articlesSection) {
+          articlesSection.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+        }
+      });
+    });
+
     // Keyboard shortcut: press "/" to focus search
     $.on(document, 'keydown', (e) => {
       if (e.key === '/' && document.activeElement !== this.elements.search &&
           !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
         e.preventDefault();
         this.elements.search?.focus();
+        this.elements.search?.select();
       }
     });
   },

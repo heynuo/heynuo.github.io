@@ -229,12 +229,24 @@
       <section id="articles">
         <h2 class="section-title"><img src="assets/icons/books.png" alt="" class="inline-title-icon" width="26" height="26"> Latest <span>Articles</span></h2>
         <div class="toolbar">
-          <div class="search-wrapper">
+          <div class="search-wrapper" id="searchWrapper">
             <span class="search-icon" aria-hidden="true"><img src="assets/icons/search.png" alt="" width="18" height="18"></span>
-            <input type="search" id="searchInput" class="search-box" placeholder="Search articles… (or press /)"
-              autocomplete="off" aria-label="Search articles">
-            <button class="search-clear" id="searchClear" aria-label="Clear search">✕</button>
+            <input type="search" id="searchInput" class="search-box" placeholder="Search guides, topics, keywords… (or press /)"
+              autocomplete="off" aria-label="Search articles" spellcheck="false">
+            <span class="search-match-count" id="searchMatchCount"></span>
+            <kbd class="search-kbd" id="searchKbd">/</kbd>
+            <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" title="Clear search (Esc)">✕</button>
+            <div class="search-dropdown" id="searchDropdown" role="listbox" aria-label="Search suggestions"></div>
           </div>
+
+          <div class="search-suggest-tags">
+            <span class="suggest-label">Trending:</span>
+            <button type="button" class="search-suggest-chip" data-search="Java OOP">#JavaOOP</button>
+            <button type="button" class="search-suggest-chip" data-search="Ruqyah">#Ruqyah</button>
+            <button type="button" class="search-suggest-chip" data-search="Web Dev">#WebDev</button>
+            <button type="button" class="search-suggest-chip" data-search="GitHub Pages">#GitHubPages</button>
+          </div>
+
           <div class="filter-row">
             <div id="filter-buttons" role="tablist" aria-label="Article categories">
               <!-- Filter buttons rendered by js/script.js -->
