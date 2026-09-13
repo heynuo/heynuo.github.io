@@ -44,7 +44,13 @@ const POSTS = Object.freeze([
     date: "2026-06-02",
     readTime: "8 min read",
     tags: ["OOP", "Java", "Beginners"],
-    banner: "assets/banners/java-oop.jpg"
+    banner: "assets/banners/java-oop.jpg",
+    takeaways: [
+      "Master classes, objects, constructors, and field encapsulation with getters/setters",
+      "Understand the 4 OOP pillars: Encapsulation, Inheritance, Polymorphism, Abstraction",
+      "Real-world code examples and memory model breakdowns (Stack vs. Heap)",
+      "Clean code conventions and practical exercises for beginners"
+    ]
   },
   {
     title: "Jinn & Islamic Theology",
@@ -54,7 +60,13 @@ const POSTS = Object.freeze([
     date: "2026-06-02",
     readTime: "15 min read",
     tags: ["Islam", "Quran", "Research"],
-    banner: "assets/banners/ruqyah-theology.jpg"
+    banner: "assets/banners/ruqyah-theology.jpg",
+    takeaways: [
+      "Authentic theology of the unseen world rooted strictly in Qur'an & Sahih Hadith",
+      "Distinguishing valid Ruqyah Shariyah from prohibited superstitious practices",
+      "The foundational healing verses: Ayat al-Kursi, Al-Fatihah, and Al-Mu'awwidhat",
+      "Prophetic morning & evening adhkar, daily spiritual protection, and wellness"
+    ]
   },
   {
     title: "Modern Web Development Guide",
@@ -64,7 +76,13 @@ const POSTS = Object.freeze([
     date: "2026-06-02",
     readTime: "10 min read",
     tags: ["HTML", "CSS", "GitHub Pages"],
-    banner: "assets/banners/web-dev.jpg"
+    banner: "assets/banners/web-dev.jpg",
+    takeaways: [
+      "Semantic HTML5 architecture and accessible landmark navigation",
+      "Modern CSS design system with CSS layers (@layer), custom properties, and fluid typography",
+      "Clean Vanilla JavaScript patterns with zero third-party framework bloat",
+      "One-click free custom domain hosting and automated deployment on GitHub Pages"
+    ]
   }
 ]);
 
@@ -188,12 +206,49 @@ function applyTheme(theme) {
 function initThemeToggle() {
   const btn = $.get('#theme-toggle');
   if (!btn) return;
-  $.on(btn, 'click', () => {
+  $.on(btn, 'click', (e) => {
     btn.classList.add('rotating');
     setTimeout(() => btn.classList.remove('rotating'), 400);
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
+
+    if (!document.startViewTransition || prefersReducedMotion()) {
+      applyTheme(next);
+      showToast(
+        next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
+        next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
+      );
+      return;
+    }
+
+    const rect = btn.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      applyTheme(next);
+    });
+
+    transition.ready.then(() => {
+      document.documentElement.animate(
+        {
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ]
+        },
+        {
+          duration: 480,
+          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+          pseudoElement: '::view-transition-new(root)'
+        }
+      );
+    });
+
     showToast(
       next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
       next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
@@ -485,6 +540,7 @@ const Articles = {
       <div class="card-footer">
         <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
         <div class="card-actions">
+          <button type="button" class="card-preview-btn" data-link="${escapeHTML(post.link)}" title="Quick Key Takeaways" aria-label="Quick Key Takeaways">⚡ Preview</button>
           <button type="button" class="card-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}" title="${isBookmarked ? 'Remove bookmark' : 'Save article'}" aria-label="Bookmark article">
             <img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> <span>${isBookmarked ? 'Saved' : 'Save'}</span>
           </button>
@@ -594,6 +650,7 @@ const Articles = {
       this.renderCards();
       this.syncUrl();
       localStorage.setItem('activeCategory', state.activeCategory);
+      if (typeof updateQuickTopicPills === 'function') updateQuickTopicPills(state.activeCategory);
     });
 
     // Keyboard navigation for tabs
@@ -696,6 +753,7 @@ const Articles = {
     state.activeCategory = validCategories.has(requested) ? requested : 'all';
     state.searchTerm = params.get('q') || '';
     if (this.elements.search) this.elements.search.value = state.searchTerm;
+    if (typeof updateQuickTopicPills === 'function') updateQuickTopicPills(state.activeCategory);
   },
 
   announceResults(count) {
@@ -720,6 +778,7 @@ const Articles = {
       state.activeCategory = category;
       this.renderCards();
       this.syncUrl();
+      if (typeof updateQuickTopicPills === 'function') updateQuickTopicPills(state.activeCategory);
     }
   },
 
@@ -1585,6 +1644,14 @@ function initHeroRotator() {
 }
 
 // ---------- Quick Topic Navigation ----------
+function updateQuickTopicPills(category) {
+  const pills = $.getAll('.quick-topic-pill');
+  if (!pills.length) return;
+  pills.forEach(pill => {
+    pill.classList.toggle('active', pill.dataset.category === category);
+  });
+}
+
 function initQuickTopicPills() {
   const pills = $.getAll('.quick-topic-pill');
   if (!pills.length) return;
@@ -1790,6 +1857,144 @@ function initTiltEffect() {
   });
 }
 
+// ---------- Animated Numbers Counter ----------
+function initAnimatedCounters() {
+  const counters = $.getAll('.counter-num');
+  if (!counters.length) return;
+
+  if (prefersReducedMotion()) return;
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          if (isNaN(target)) return;
+
+          const duration = 1200;
+          const start = performance.now();
+
+          function updateCount(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeOut = 1 - Math.pow(2, -10 * progress);
+            const current = Math.floor(easeOut * target);
+            el.textContent = current;
+
+            if (progress < 1) {
+              requestAnimationFrame(updateCount);
+            } else {
+              el.textContent = target;
+            }
+          }
+
+          requestAnimationFrame(updateCount);
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    counters.forEach(c => observer.observe(c));
+  }
+}
+
+// ---------- Article Quick Preview Modal ----------
+function initArticlePreviewModal() {
+  let backdrop = $.get('#previewModalBackdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'previewModalBackdrop';
+    backdrop.className = 'preview-modal-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    backdrop.setAttribute('role', 'dialog');
+    backdrop.setAttribute('aria-modal', 'true');
+    backdrop.innerHTML = '<div class="preview-modal" id="previewModalContent"></div>';
+    document.body.appendChild(backdrop);
+  }
+
+  const modalContent = backdrop.querySelector('#previewModalContent');
+
+  function openPreview(post) {
+    if (!post) return;
+
+    const takeawaysHtml = (post.takeaways || []).map(t => `<li>${escapeHTML(t)}</li>`).join('');
+
+    modalContent.innerHTML = `
+      ${post.banner ? `
+        <div class="preview-modal-banner">
+          <img src="${escapeHTML(post.banner)}" alt="${escapeHTML(post.title)}" width="600" height="338">
+          <button type="button" class="preview-modal-close" id="previewModalClose" aria-label="Close preview">✕</button>
+        </div>
+      ` : '<button type="button" class="preview-modal-close" id="previewModalClose" style="top:12px;right:12px;" aria-label="Close preview">✕</button>'}
+      <div class="preview-modal-content">
+        <div class="preview-modal-meta">
+          <span class="category">${escapeHTML(post.category)}</span>
+          <span style="color:var(--muted); font-size:13px;">${escapeHTML(post.readTime || '')}</span>
+        </div>
+        <h2 class="preview-modal-title">${escapeHTML(post.title)}</h2>
+        <p class="preview-modal-desc">${escapeHTML(post.excerpt)}</p>
+
+        <div class="preview-modal-takeaways-title">⚡ What You'll Learn:</div>
+        <ul class="preview-modal-takeaways">
+          ${takeawaysHtml}
+        </ul>
+
+        <div class="preview-modal-actions">
+          <a href="${escapeHTML(post.link)}" class="btn btn-primary">Read Full Guide →</a>
+          <button type="button" class="btn btn-secondary preview-bookmark-btn" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}">
+            ${Bookmarks.has(post.link) ? '★ Saved' : '☆ Save for Later'}
+          </button>
+        </div>
+      </div>
+    `;
+
+    backdrop.classList.add('active');
+    backdrop.setAttribute('aria-hidden', 'false');
+    const closeBtn = modalContent.querySelector('#previewModalClose');
+    closeBtn?.focus();
+
+    $.on(closeBtn, 'click', closePreview);
+
+    const bkmBtn = modalContent.querySelector('.preview-bookmark-btn');
+    if (bkmBtn) {
+      $.on(bkmBtn, 'click', () => {
+        const added = Bookmarks.toggle(post.link, post.title);
+        bkmBtn.textContent = added ? '★ Saved' : '☆ Save for Later';
+        if (Articles && typeof Articles.renderCards === 'function') {
+          Articles.renderCards();
+        }
+      });
+    }
+  }
+
+  function closePreview() {
+    backdrop.classList.remove('active');
+    backdrop.setAttribute('aria-hidden', 'true');
+  }
+
+  $.on(backdrop, 'click', (e) => {
+    if (e.target === backdrop) closePreview();
+  });
+
+  $.on(document, 'keydown', (e) => {
+    if (e.key === 'Escape' && backdrop.classList.contains('active')) {
+      e.preventDefault();
+      closePreview();
+    }
+  });
+
+  $.on(document, 'click', (e) => {
+    const btn = e.target.closest('.card-preview-btn');
+    if (!btn) return;
+    const link = btn.dataset.link;
+    const post = POSTS.find(p => p.link === link);
+    if (post) {
+      openPreview(post);
+    }
+  });
+}
+
 // ---------- Initialization ----------
 function init() {
   initTheme();
@@ -1806,6 +2011,7 @@ function init() {
     initHeroParticles();
     initHeroRotator();
     initQuickTopicPills();
+    initAnimatedCounters();
   }
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
   initCodeCopyButtons();
@@ -1817,6 +2023,7 @@ function init() {
   initDispatchForm();
   initShortcutsModal();
   initTiltEffect();
+  initArticlePreviewModal();
 
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }
