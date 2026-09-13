@@ -1025,6 +1025,114 @@ function initContactForm() {
   }
 }
 
+// ---------- Contact Page Enhancements (Subject Pills, Char Counter, FAQ) ----------
+function initContactEnhancements() {
+  // 1. Topic Pills
+  const subjectInput = $.get('#subject');
+  const messageInput = $.get('#message');
+  const pills = $.getAll('.quick-subject-pill');
+  if (pills.length && subjectInput) {
+    pills.forEach(pill => {
+      $.on(pill, 'click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        subjectInput.value = pill.dataset.topic || pill.textContent.trim();
+        subjectInput.style.borderColor = 'var(--primary)';
+        setTimeout(() => { subjectInput.style.borderColor = ''; }, 600);
+        messageInput?.focus();
+        showToast(`Selected topic: ${pill.textContent.trim()}`, '⚡');
+      });
+    });
+  }
+
+  // 2. Live Character Counter
+  if (messageInput) {
+    const charCount = $.get('#charCount');
+    const charBar = $.get('#charBar');
+    const maxChars = 500;
+
+    const updateCounter = () => {
+      const len = messageInput.value.length;
+      if (charCount) charCount.textContent = len;
+      if (charBar) {
+        const pct = Math.min((len / maxChars) * 100, 100);
+        charBar.style.width = `${pct}%`;
+        charBar.classList.toggle('warning', len >= 400 && len < 480);
+        charBar.classList.toggle('danger', len >= 480);
+      }
+    };
+
+    $.on(messageInput, 'input', updateCounter);
+    updateCounter();
+  }
+
+  // 3. FAQ Accordion
+  const faqQuestions = $.getAll('.faq-question');
+  faqQuestions.forEach(btn => {
+    $.on(btn, 'click', () => {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isActive = item.classList.contains('active');
+
+      // Close other open items
+      $.getAll('.faq-item').forEach(other => {
+        if (other !== item) {
+          other.classList.remove('active');
+          const q = other.querySelector('.faq-question');
+          if (q) q.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Toggle current item
+      item.classList.toggle('active', !isActive);
+      btn.setAttribute('aria-expanded', (!isActive).toString());
+    });
+  });
+}
+
+// ---------- About Page Enhancements (Skill Meters & Bio Copy) ----------
+function initAboutPage() {
+  const skillFills = $.getAll('.skill-meter-fill');
+  if (skillFills.length) {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fill = entry.target;
+            const pct = fill.dataset.pct || '0';
+            fill.style.width = `${pct}%`;
+            obs.unobserve(fill);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      skillFills.forEach(fill => observer.observe(fill));
+    } else {
+      skillFills.forEach(fill => {
+        fill.style.width = `${fill.dataset.pct || '0'}%`;
+      });
+    }
+  }
+
+  const copyBioBtn = $.get('#copyBioBtn');
+  const bioText = $.get('#bioText');
+  if (copyBioBtn && bioText) {
+    $.on(copyBioBtn, 'click', async () => {
+      const text = bioText.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('Short bio copied to clipboard!', '📋');
+        copyBioBtn.textContent = '✅ Copied!';
+        setTimeout(() => {
+          copyBioBtn.textContent = '📋 Copy Bio';
+        }, 2000);
+      } catch {
+        showToast('Failed to copy bio', '⚠️');
+      }
+    });
+  }
+}
+
 // ---------- IDE-Style Code Blocks & Copy Buttons ----------
 function initCodeCopyButtons() {
   const preBlocks = document.querySelectorAll('.prose pre');
@@ -1127,8 +1235,12 @@ function initArticleSuite() {
         <button type="button" class="tool-btn" id="btnToggleToc" title="Jump to section" aria-label="Table of contents">
           <span>📖</span> Contents
         </button>
+        <button type="button" class="tool-btn" id="btnFocusMode" title="Toggle distraction-free focus mode" aria-label="Focus mode">
+          <span>🎯</span> Focus
+        </button>
       </div>
       <div class="article-toolbar-right">
+        <span class="reading-time-left" id="readingTimeLeft">⏱ reading</span>
         <span class="font-size-label">Text:</span>
         <button type="button" class="tool-btn-sm" id="btnFontDec" title="Decrease font size" aria-label="Smaller text">A−</button>
         <button type="button" class="tool-btn-sm" id="btnFontInc" title="Increase font size" aria-label="Larger text">A+</button>
@@ -1191,6 +1303,63 @@ function initArticleSuite() {
       showToast('Could not copy link', '⚠️');
     }
   });
+
+  // Wire up Focus Mode
+  const focusBtn = $.get('#btnFocusMode');
+  let exitBar = $.get('#focusModeExitBar');
+  if (!exitBar) {
+    exitBar = document.createElement('div');
+    exitBar.id = 'focusModeExitBar';
+    exitBar.className = 'focus-mode-exit-bar';
+    exitBar.innerHTML = `<button type="button" class="btn btn-primary btn-sm" id="btnExitFocus">✕ Exit Focus Mode</button>`;
+    document.body.appendChild(exitBar);
+
+    $.on($.get('#btnExitFocus', exitBar), 'click', () => {
+      document.body.classList.remove('reading-focus-mode');
+      showToast('Focus Mode exited', '📖');
+    });
+  }
+
+  $.on(focusBtn, 'click', () => {
+    const isFocus = document.body.classList.toggle('reading-focus-mode');
+    if (isFocus) {
+      showToast('Focus Mode on! Press Esc or Exit button to return.', '🎯');
+    } else {
+      showToast('Focus Mode exited', '📖');
+    }
+  });
+
+  $.on(document, 'keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('reading-focus-mode')) {
+      document.body.classList.remove('reading-focus-mode');
+      showToast('Focus Mode exited', '📖');
+    }
+  });
+
+  // Calculate and update Reading Time Left dynamically
+  const proseText = prose.innerText || prose.textContent || '';
+  const totalWords = proseText.trim().split(/\s+/).filter(Boolean).length;
+  const wordsPerMinute = 200;
+  const totalMinutes = Math.max(1, Math.ceil(totalWords / wordsPerMinute));
+  const readingTimeEl = $.get('#readingTimeLeft');
+  if (readingTimeEl) {
+    readingTimeEl.textContent = `⏱ ~${totalMinutes}m left`;
+    const updateTimeRemaining = () => {
+      const rect = prose.getBoundingClientRect();
+      const proseTop = rect.top + window.scrollY;
+      const proseHeight = rect.height;
+      const scrollPos = window.scrollY - proseTop + window.innerHeight * 0.4;
+      const progress = Math.min(Math.max(scrollPos / proseHeight, 0), 1);
+      const remainingMinutes = Math.max(0, Math.ceil(totalMinutes * (1 - progress)));
+      if (progress >= 0.95) {
+        readingTimeEl.textContent = '🎉 Done!';
+      } else {
+        readingTimeEl.textContent = `⏱ ~${remainingMinutes || 1}m left`;
+      }
+    };
+    window.addEventListener('scroll', updateTimeRemaining, { passive: true });
+    updateTimeRemaining();
+  }
 
   // 3. Generate Table of Contents from h2 and h3 headings in .prose
   const headings = Array.from(prose.querySelectorAll('h2, h3'));
@@ -2190,6 +2359,8 @@ function init() {
     initAnimatedCounters();
   }
   if (Page.getCurrentPage() === 'contact.html') initContactForm();
+  initContactEnhancements();
+  initAboutPage();
   initCodeCopyButtons();
   initArticleSuite();
   initArticleNav();

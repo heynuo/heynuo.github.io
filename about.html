@@ -57,13 +57,18 @@
   <div class="container">
     <main id="main-content">
       <section class="hero about-hero">
+        <div class="hero-ambient-glow" aria-hidden="true"></div>
         <div class="hero-content">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            ✦ Developer, Researcher &amp; Creator
+          </div>
           <h1>About <span>Me</span></h1>
           <p class="hero-subtitle">Developer · Researcher · Content Creator</p>
-          <p class="hero-description">Assalamu Alaikum! I'm HeyNuo — passionate about sharing knowledge through code, authentic Islamic research, and clean educational content.</p>
+          <p class="hero-description">Assalamu Alaikum! I'm HeyNuo — passionate about sharing knowledge through clean code, authentic Islamic research, and high-performance educational web guides.</p>
           <div class="hero-buttons">
-            <a href="index.html#articles" class="btn btn-primary">View My Articles</a>
-            <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
+            <a href="index.html#articles" class="btn btn-primary">View My Articles ↓</a>
+            <a href="contact.html" class="btn btn-secondary">Get In Touch →</a>
           </div>
         </div>
       </section>
@@ -73,11 +78,11 @@
         <div class="about">
           <article class="about-box">
             <h2><img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="24" height="24"> My Journey</h2>
-            <p>I'm a developer and researcher dedicated to creating valuable educational content. My journey spans <strong>Java programming</strong>, <strong>web development</strong>, and <strong>Islamic research</strong> — all driven by a passion for authentic knowledge sharing.</p>
+            <p>I'm a developer and researcher dedicated to creating valuable educational content. My journey spans <strong>Java programming</strong>, <strong>modern web development</strong>, and <strong>Islamic research</strong> — all driven by a passion for authentic knowledge sharing.</p>
           </article>
           <article class="about-box">
             <h2><img src="assets/icons/books.png" alt="" class="inline-title-icon" width="24" height="24"> This Website</h2>
-            <p>This is my digital notebook: a place where I document tutorials, share research findings, and build resources like the <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer">Ruqyah Shariyah Guide</a>.</p>
+            <p>This is my digital notebook: a place where I document tutorials, share research findings, and build open resources like the <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer">Ruqyah Shariyah Guide</a>.</p>
           </article>
         </div>
       </section>
@@ -89,45 +94,77 @@
             <span class="category"><img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14"> Java</span>
             <h3><img src="assets/icons/java.png" alt="" class="inline-title-icon" width="22" height="22"> Java Development</h3>
             <p>Object-Oriented Programming, Data Structures, Algorithms, and practical projects.</p>
-            <ul class="skill-list">
-              <li>OOP Principles</li>
-              <li>Design Patterns</li>
-              <li>Problem Solving</li>
-              <li>Code Documentation</li>
-            </ul>
+            <div class="skill-meter-list">
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>OOP Principles</span><span class="skill-meter-num">95%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="95" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Design Patterns</span><span class="skill-meter-num">90%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="90" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Code Architecture</span><span class="skill-meter-num">92%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="92" style="width: 0%;"></div></div>
+              </div>
+            </div>
           </article>
           <article class="card">
             <span class="category"><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span>
             <h3><img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="22" height="22"> Web Development</h3>
-            <p>Clean, responsive websites built with pure HTML, CSS & JavaScript.</p>
-            <ul class="skill-list">
-              <li>HTML5 & CSS3</li>
-              <li>JavaScript (ES6+)</li>
-              <li>GitHub Pages</li>
-              <li>SEO Best Practices</li>
-            </ul>
+            <p>Clean, responsive websites built with pure HTML, CSS &amp; JavaScript.</p>
+            <div class="skill-meter-list">
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>HTML5 &amp; CSS3 Layouts</span><span class="skill-meter-num">98%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Vanilla JavaScript (ES6+)</span><span class="skill-meter-num">94%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="94" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Performance &amp; Accessibility</span><span class="skill-meter-num">96%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="96" style="width: 0%;"></div></div>
+              </div>
+            </div>
           </article>
           <article class="card">
             <span class="category"><img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> Research</span>
             <h3><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="22" height="22"> Islamic Research</h3>
             <p>Authentic research on Quran, Hadith, Tawheed, and contemporary issues.</p>
-            <ul class="skill-list">
-              <li>Quranic Studies</li>
-              <li>Hadith-Referenced Research</li>
-              <li>Islamic Theology</li>
-              <li>Ruqyah Shariyah</li>
-            </ul>
+            <div class="skill-meter-list">
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Qur'anic Commentary</span><span class="skill-meter-num">92%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="92" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Hadith Verification</span><span class="skill-meter-num">94%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="94" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Ruqyah Shariyah</span><span class="skill-meter-num">98%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+              </div>
+            </div>
           </article>
           <article class="card">
             <span class="category"><img src="assets/icons/open-book.png" alt="" class="badge-icon" width="14" height="14"> Content</span>
             <h3><img src="assets/icons/open-book.png" alt="" class="inline-title-icon" width="22" height="22"> Content Creation</h3>
             <p>Educational tutorials, guides, and research articles for learners worldwide.</p>
-            <ul class="skill-list">
-              <li>Technical Writing</li>
-              <li>Clear Explanations</li>
-              <li>SEO Optimization</li>
-              <li>Community Focus</li>
-            </ul>
+            <div class="skill-meter-list">
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Technical Writing</span><span class="skill-meter-num">96%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="96" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Diagrams &amp; Visuals</span><span class="skill-meter-num">90%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="90" style="width: 0%;"></div></div>
+              </div>
+              <div class="skill-meter">
+                <div class="skill-meter-head"><span>Educational Clarity</span><span class="skill-meter-num">98%</span></div>
+                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+              </div>
+            </div>
           </article>
         </div>
       </section>
@@ -143,6 +180,37 @@
           <div class="tech-pill"><span class="icon">📖</span> Quranic Studies</div>
           <div class="tech-pill"><span class="icon">✍️</span> Technical Writing</div>
           <div class="tech-pill"><span class="icon">🚀</span> GitHub Pages</div>
+        </div>
+      </section>
+
+      <!-- Journey & Milestones Timeline -->
+      <section class="section-spacing">
+        <h2 class="section-title">Journey &amp; <span>Milestones</span></h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2024</span>
+              <h3>Java OOP &amp; Core Architecture</h3>
+              <p>Deep-dived into OOP design patterns, data structures, and clean modular code in Java, setting the foundation for reusable engineering.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2025</span>
+              <h3>Ruqyah Shariyah Theological Reference</h3>
+              <p>Authored and compiled the authentic 25+ Qur'anic healing verses reference with audio recitation, sahih hadith sources, and spiritual wellness guidance.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card">
+              <span class="timeline-date">2026</span>
+              <h3>HeyNuo Knowledge Hub Launch</h3>
+              <p>Built and published this high-performance, accessible, static documentation platform on GitHub Pages with zero framework bloat.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -167,6 +235,20 @@
               <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Guide Banner" width="600" height="375" loading="lazy">
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- Quick Bio & Speaker Widget -->
+      <section class="section-spacing">
+        <div class="bio-card">
+          <div class="bio-card-header">
+            <div>
+              <span class="bio-badge">📋 Short Bio</span>
+              <h3 style="margin:6px 0 0; font-family:var(--font-display); font-size:17px;">For Collaborations &amp; Introductions</h3>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" id="copyBioBtn" title="Copy bio to clipboard">📋 Copy Bio</button>
+          </div>
+          <p class="bio-text" id="bioText">HeyNuo is a developer and researcher passionate about clean Java OOP architecture, authentic Islamic theological research, and lightweight, high-performance web development.</p>
         </div>
       </section>
 
