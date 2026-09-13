@@ -43,7 +43,8 @@ const POSTS = Object.freeze([
     link: "java-oop.html",
     date: "2026-06-02",
     readTime: "8 min read",
-    tags: ["OOP", "Java", "Beginners"]
+    tags: ["OOP", "Java", "Beginners"],
+    banner: "assets/banners/java-oop.jpg"
   },
   {
     title: "Jinn & Islamic Theology",
@@ -52,7 +53,8 @@ const POSTS = Object.freeze([
     link: "jinn-islamic-theology.html",
     date: "2026-06-02",
     readTime: "15 min read",
-    tags: ["Islam", "Quran", "Research"]
+    tags: ["Islam", "Quran", "Research"],
+    banner: "assets/banners/ruqyah-theology.jpg"
   },
   {
     title: "Modern Web Development Guide",
@@ -61,7 +63,8 @@ const POSTS = Object.freeze([
     link: "web-dev-guide.html",
     date: "2026-06-02",
     readTime: "10 min read",
-    tags: ["HTML", "CSS", "GitHub Pages"]
+    tags: ["HTML", "CSS", "GitHub Pages"],
+    banner: "assets/banners/web-dev.jpg"
   }
 ]);
 
@@ -456,11 +459,20 @@ const Articles = {
     else if (catLower.includes('web')) catIcon = '<img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> ';
     else if (catLower.includes('research') || catLower.includes('islam')) catIcon = '<img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> ';
 
+    const bannerHtml = post.banner ? `
+      <div class="card-banner-box">
+        <img src="${escapeHTML(post.banner)}" alt="${escapeHTML(post.title)}" class="card-banner-img" loading="lazy" width="600" height="338">
+        <div class="card-banner-overlay"></div>
+        <span class="card-banner-category">${catIcon}${escapeHTML(post.category)}</span>
+      </div>
+    ` : '';
+
     const article = document.createElement('article');
     article.className = 'card reveal revealed';
     article.innerHTML = `
+      ${bannerHtml}
       <div class="card-body">
-        <span class="category">${catIcon}${escapeHTML(post.category)}</span>
+        ${!post.banner ? `<span class="category">${catIcon}${escapeHTML(post.category)}</span>` : ''}
         ${(dateFormatted || post.readTime) ? `
         <div class="card-meta">
           ${dateFormatted ? `<span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> ${escapeHTML(dateFormatted)}</span>` : ''}
@@ -998,7 +1010,7 @@ function initArticleSuite() {
 // ---------- Scroll Reveal ----------
 function initScrollReveal() {
   if (prefersReducedMotion()) return;
-  const elements = document.querySelectorAll('.card, .about-box, .featured-project, .hero-stat');
+  const elements = document.querySelectorAll('.card, .about-box, .featured-project, .featured-banner, .hero-stat, .hero-showcase, .article-hero-banner');
   elements.forEach(el => el.classList.add('reveal'));
 
   if ('IntersectionObserver' in window) {
@@ -1017,19 +1029,46 @@ function initScrollReveal() {
   }
 }
 
-// ---------- Copy Email Feature ----------
+// ---------- Obfuscated Email & Copy Feature ----------
+function getContactEmail(el) {
+  if (el?.dataset?.user && el?.dataset?.domain) {
+    return `${el.dataset.user}@${el.dataset.domain}`;
+  }
+  if (el?.dataset?.email) {
+    return el.dataset.email;
+  }
+  try {
+    return atob('emFoaXJ1ZGRpbjQ0MDQ0QGdtYWlsLmNvbQ==');
+  } catch (_) {
+    return '';
+  }
+}
+
 function initCopyEmail() {
   const emailBtns = document.querySelectorAll('.copy-email-btn');
   emailBtns.forEach(btn => {
     $.on(btn, 'click', (e) => {
       e.preventDefault();
-      const email = btn.dataset.email || 'zahiruddin44044@gmail.com';
+      const email = getContactEmail(btn);
+      if (!email) return;
       navigator.clipboard?.writeText(email).then(() => {
         showToast(`Copied ${email} to clipboard!`, '✉️');
       }).catch(() => {
         showToast(`Email: ${email}`, '✉️');
       });
     });
+  });
+
+  // Dynamically assemble email mailto links and text to prevent raw bot scraping
+  const emailLinks = document.querySelectorAll('.dynamic-email-link');
+  emailLinks.forEach(link => {
+    const email = getContactEmail(link);
+    if (!email) return;
+    link.href = `mailto:${email}`;
+    const textEl = link.querySelector('.dynamic-email-text');
+    if (textEl) {
+      textEl.textContent = email;
+    }
   });
 }
 
@@ -1308,10 +1347,29 @@ function initArticleNav() {
   }
 }
 
+// ---------- Top Announcement Banner ----------
+function initAnnouncementBanner() {
+  const banner = $.get('#announcementBanner');
+  const closeBtn = $.get('#announcementClose');
+  if (!banner || !closeBtn) return;
+
+  if (sessionStorage.getItem('heynuo-announcement-dismissed') === 'true') {
+    banner.style.display = 'none';
+    return;
+  }
+
+  $.on(closeBtn, 'click', () => {
+    banner.classList.add('dismissed');
+    sessionStorage.setItem('heynuo-announcement-dismissed', 'true');
+    setTimeout(() => { banner.style.display = 'none'; }, 350);
+  });
+}
+
 // ---------- Initialization ----------
 function init() {
   initTheme();
   initThemeToggle();
+  initAnnouncementBanner();
   initMobileMenu();
   initActiveNav();
   initSmoothScroll();

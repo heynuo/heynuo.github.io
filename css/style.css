@@ -3,8 +3,8 @@
    Google Fonts · Theme Toggle · Glassmorphism
    ============================================ */
 
-/* ---------- GOOGLE FONTS ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+/* ---------- GOOGLE FONTS ----------
+   Loaded via <link> tags in HTML <head> to eliminate render-blocking @import waterfall */
 
 /* ---------- CSS LAYERS ---------- */
 @layer reset, base, components, utilities;
@@ -418,6 +418,36 @@
 
   [data-theme="dark"] .theme-toggle:hover {
     background: rgba(59, 130, 246, 0.15);
+  }
+
+  /* Nav Icon Button (GitHub profile) */
+  .nav-icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-default);
+    flex-shrink: 0;
+    line-height: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-decoration: none;
+  }
+
+  .nav-icon-btn:hover {
+    background: rgba(37, 99, 235, 0.1);
+    border-color: rgba(37, 99, 235, 0.35);
+    transform: translateY(-2px) scale(1.08);
+  }
+
+  [data-theme="dark"] .nav-icon-btn:hover {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: rgba(59, 130, 246, 0.4);
   }
 
   .menu-btn {
@@ -2833,6 +2863,442 @@
     .contact-link,
     .filter-btn {
       background: var(--card-bg);
+    }
+  }
+
+  /* ============================================
+     NEW: Top Announcement Banner
+     ============================================ */
+  .announcement-banner {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, rgba(8, 145, 178, 0.12) 50%, rgba(139, 92, 246, 0.12) 100%);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+    z-index: calc(var(--z-nav) + 5);
+    font-size: 13.5px;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] .announcement-banner {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, rgba(8, 145, 178, 0.18) 50%, rgba(139, 92, 246, 0.18) 100%);
+    border-bottom-color: rgba(59, 130, 246, 0.25);
+  }
+
+  .announcement-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 24px;
+    text-align: center;
+    flex-wrap: wrap;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .announcement-pill {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  }
+
+  .announcement-message {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .announcement-cta {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .announcement-cta:hover {
+    color: var(--secondary);
+    transform: translateX(3px);
+  }
+
+  .announcement-close {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+  }
+
+  .announcement-close:hover {
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="dark"] .announcement-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .announcement-banner.dismissed {
+    transform: translateY(-100%);
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border: none;
+  }
+
+  /* ============================================
+     NEW: Hero 2-Column Grid & Visual Showcase
+     ============================================ */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--space-3xl);
+    text-align: left;
+    position: relative;
+    z-index: 2;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: var(--space-2xl);
+    }
+    .hero-content {
+      margin: 0 auto;
+    }
+    .hero-buttons {
+      justify-content: center;
+    }
+    .hero-stats {
+      justify-content: center;
+    }
+  }
+
+  /* Hero ambient glow effects */
+  .hero-ambient-glow {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(8, 145, 178, 0.12) 40%, rgba(139, 92, 246, 0.08) 70%, transparent 80%);
+    filter: blur(60px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: ambientFloat 8s ease-in-out infinite alternate;
+  }
+
+  [data-theme="dark"] .hero-ambient-glow {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.28) 0%, rgba(56, 189, 248, 0.18) 45%, rgba(168, 85, 247, 0.12) 75%, transparent 85%);
+    filter: blur(80px);
+  }
+
+  @keyframes ambientFloat {
+    0% { transform: translateY(-50%) scale(0.92) rotate(0deg); }
+    100% { transform: translateY(-46%) scale(1.08) rotate(15deg); }
+  }
+
+  /* Hero Showcase Card */
+  .hero-showcase {
+    position: relative;
+    border-radius: 28px;
+    padding: 10px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 0 30px rgba(37, 99, 235, 0.1);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+    animation: heroFloat 6s ease-in-out infinite;
+  }
+
+  [data-theme="dark"] .hero-showcase {
+    background: rgba(17, 24, 39, 0.65);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 35px rgba(59, 130, 246, 0.18);
+  }
+
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (hover: hover) {
+    .hero-showcase:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 30px 70px rgba(37, 99, 235, 0.2);
+    }
+  }
+
+  .hero-showcase-inner {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+  }
+
+  .hero-showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .hero-showcase:hover .hero-showcase-img {
+    transform: scale(1.04);
+  }
+
+  .hero-showcase-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+  }
+
+  /* Floating pill badges on hero showcase */
+  .hero-floating-pill {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 30px;
+    background: rgba(15, 23, 42, 0.82);
+    color: #f8fafc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-display);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .hero-pill-top {
+    top: 14px;
+    right: 14px;
+    animation: badgeBob 4s ease-in-out infinite alternate;
+  }
+
+  .hero-pill-bottom {
+    bottom: 14px;
+    left: 14px;
+    animation: badgeBob 4s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes badgeBob {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+  }
+
+  /* ============================================
+     NEW: Article Card Banner Header
+     ============================================ */
+  .card-banner-box {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 16px;
+    background: var(--border);
+  }
+
+  .card-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+  }
+
+  .card:hover .card-banner-img {
+    transform: scale(1.06);
+    filter: brightness(1.05);
+  }
+
+  .card-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.5) 100%);
+    pointer-events: none;
+  }
+
+  .card-banner-category {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 2;
+  }
+
+  /* ============================================
+     NEW: Upgraded Featured Banner Showcase
+     ============================================ */
+  .featured-banner {
+    position: relative;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(37, 99, 235, 0.06) 50%, rgba(16, 185, 129, 0.06) 100%);
+    border: 1.5px solid rgba(245, 158, 11, 0.35);
+    border-radius: 28px;
+    padding: 34px;
+    margin: 40px 0 var(--space-4xl);
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 40px rgba(245, 158, 11, 0.08);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  [data-theme="dark"] .featured-banner {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(17, 24, 39, 0.85) 50%, rgba(16, 185, 129, 0.08) 100%);
+    border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3), 0 0 30px rgba(245, 158, 11, 0.08);
+  }
+
+  .featured-banner-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 32px;
+  }
+
+  @media (max-width: 860px) {
+    .featured-banner-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .featured-banner-preview {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .featured-banner-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .featured-banner:hover .featured-banner-preview img {
+    transform: scale(1.05);
+  }
+
+  .featured-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0 24px;
+  }
+
+  .featured-highlight-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  /* ============================================
+     NEW: Article Page Hero Banner
+     ============================================ */
+  .article-hero-banner {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 35px;
+    border-radius: 24px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .article-hero-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ============================================
+     NEW: Button Shimmer & Micro-Animations
+     ============================================ */
+  .btn-primary, .project-btn {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after, .project-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      60deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 70%
+    );
+    transform: rotate(30deg) translateX(-100%);
+    transition: transform 0.75s ease-in-out;
+  }
+
+  @media (hover: hover) {
+    .btn-primary:hover::after, .project-btn:hover::after {
+      transform: rotate(30deg) translateX(100%);
     }
   }
 

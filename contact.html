@@ -19,11 +19,12 @@
   <meta name="twitter:title" content="Contact Me - HeyNuo | Get In Touch">
   <meta name="twitter:description" content="Reach out for collaborations, questions, or just to say hello!">
   <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
-  <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
 
-  <!-- Google Fonts Preconnect -->
+  <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + contact page components -->
   <link rel="stylesheet" href="css/style.css">
@@ -46,6 +47,7 @@
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
         </div>
+        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile" title="GitHub @heynuo"><img src="assets/icons/github.png" alt="" width="19" height="19"></a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme"><img src="assets/icons/moon.png" alt="Toggle theme" width="20" height="20" class="theme-icon"></button>
         <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false"><img src="assets/icons/menu.png" alt="Menu" width="22" height="22"></button>
       </div>
@@ -91,14 +93,14 @@
           <h2><img src="assets/icons/share.png" alt="" class="inline-title-icon" width="24" height="24"> Other Ways to Reach Me</h2>
           <div class="contact-links">
             <div style="display:flex; gap:8px; align-items:center;">
-              <a href="mailto:zahiruddin44044@gmail.com" class="contact-link" style="flex:1;">
+              <a href="#" class="contact-link dynamic-email-link" data-user="zahiruddin44044" data-domain="gmail.com" style="flex:1;">
                 <span class="contact-icon"><img src="assets/icons/email.png" alt="" width="22" height="22"></span>
                 <div>
                   <div class="contact-label">Email</div>
-                  <div class="contact-value">zahiruddin44044@gmail.com</div>
+                  <div class="contact-value dynamic-email-text"><span class="email-user">zahiruddin44044</span><span class="email-at"> [at] </span><span class="email-domain">gmail.com</span></div>
                 </div>
               </a>
-              <button type="button" class="btn btn-secondary copy-email-btn" data-email="zahiruddin44044@gmail.com" title="Copy email address" style="padding:12px 16px; border-radius:12px;"><img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> Copy</button>
+              <button type="button" class="btn btn-secondary copy-email-btn" data-user="zahiruddin44044" data-domain="gmail.com" title="Copy email address" style="padding:12px 16px; border-radius:12px;"><img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> Copy</button>
             </div>
             <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="contact-link">
               <span class="contact-icon"><img src="assets/icons/github.png" alt="" width="22" height="22"></span>

@@ -32,14 +32,15 @@
   <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png"
+  <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
 
-  <!-- Google Fonts Preconnect -->
+  <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + home page components -->
   <link rel="stylesheet" href="css/style.css">
@@ -72,6 +73,16 @@
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
+  <!-- Top Announcement Banner -->
+  <aside class="announcement-banner" id="announcementBanner" aria-label="Announcement">
+    <div class="announcement-inner">
+      <span class="announcement-pill">✨ FEATURED</span>
+      <span class="announcement-message">Explore the comprehensive <strong>Ruqyah &amp; Quranic Healing Reference</strong> with authentic verses and audio recitation.</span>
+      <a href="jinn-islamic-theology.html" class="announcement-cta">Read Guide →</a>
+      <button type="button" class="announcement-close" id="announcementClose" aria-label="Close announcement">✕</button>
+    </div>
+  </aside>
+
   <header>
     <nav class="container">
       <div class="logo">Hey<span>Nuo</span></div>
@@ -89,6 +100,7 @@
           <a href="contact.html">Contact</a>
         </div>
 
+        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile" title="GitHub @heynuo"><img src="assets/icons/github.png" alt="" width="19" height="19"></a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode"
           title="Toggle theme"><img src="assets/icons/moon.png" alt="Toggle theme" width="20" height="20" class="theme-icon"></button>
         <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false"><img src="assets/icons/menu.png" alt="Menu" width="22" height="22"></button>
@@ -101,43 +113,62 @@
 
       <!-- ===== Hero ===== -->
       <section class="hero">
-        <div class="hero-content">
-          <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            ✦ Open for collaboration &amp; deep research
-          </div>
+        <div class="hero-ambient-glow" aria-hidden="true"></div>
+        <div class="hero-grid">
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="hero-badge-dot"></span>
+              ✦ Open for collaboration &amp; deep research
+            </div>
 
-          <h1>Modern Notes &amp; <span>Research Blog</span></h1>
+            <h1>Modern Notes &amp; <span>Research Blog</span></h1>
 
-          <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.
-          </p>
+            <p>A clean personal website where I share study notes, Java tutorials, Islamic research, and web dev projects.
+            </p>
 
-          <div class="hero-buttons">
-            <a href="#articles" class="btn btn-primary">Explore Articles ↓</a>
-            <a href="about.html" class="btn btn-secondary">About Me →</a>
-          </div>
+            <div class="hero-buttons">
+              <a href="#articles" class="btn btn-primary">Explore Articles ↓</a>
+              <a href="about.html" class="btn btn-secondary">About Me →</a>
+            </div>
 
-          <!-- Quick Stats -->
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-icon"><img src="assets/icons/books.png" alt="Guides" class="hero-stat-img" width="28" height="28"></span>
-              <div class="hero-stat-info">
-                <div class="hero-stat-value">3 In-Depth Guides</div>
-                <div class="hero-stat-label">Java · Research · Web Dev</div>
+            <!-- Quick Stats -->
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-icon"><img src="assets/icons/books.png" alt="Guides" class="hero-stat-img" width="28" height="28"></span>
+                <div class="hero-stat-info">
+                  <div class="hero-stat-value">3 In-Depth Guides</div>
+                  <div class="hero-stat-label">Java · Research · Web Dev</div>
+                </div>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-icon"><img src="assets/icons/quran.png" alt="Ruqyah" class="hero-stat-img" width="28" height="28"></span>
+                <div class="hero-stat-info">
+                  <div class="hero-stat-value">Ruqyah Reference</div>
+                  <div class="hero-stat-label">Authentic Quranic Healing</div>
+                </div>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-icon"><img src="assets/icons/lightning.png" alt="Fast" class="hero-stat-img" width="28" height="28"></span>
+                <div class="hero-stat-info">
+                  <div class="hero-stat-value">100% Static &amp; Fast</div>
+                  <div class="hero-stat-label">No trackers · Instant load</div>
+                </div>
               </div>
             </div>
-            <div class="hero-stat">
-              <span class="hero-stat-icon"><img src="assets/icons/quran.png" alt="Ruqyah" class="hero-stat-img" width="28" height="28"></span>
-              <div class="hero-stat-info">
-                <div class="hero-stat-value">Ruqyah Reference</div>
-                <div class="hero-stat-label">Authentic Quranic Healing</div>
-              </div>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-icon"><img src="assets/icons/lightning.png" alt="Fast" class="hero-stat-img" width="28" height="28"></span>
-              <div class="hero-stat-info">
-                <div class="hero-stat-value">100% Static &amp; Fast</div>
-                <div class="hero-stat-label">No trackers · Instant load</div>
+          </div>
+
+          <!-- Hero Visual Banner Showcase -->
+          <div class="hero-visual-col">
+            <div class="hero-showcase">
+              <div class="hero-showcase-inner">
+                <img src="assets/banners/hero-banner.jpg" alt="HeyNuo Developer &amp; Knowledge Space Banner" class="hero-showcase-img" fetchpriority="high" width="800" height="500">
+                <div class="hero-showcase-overlay"></div>
+                <div class="hero-floating-pill hero-pill-top">
+                  <span>✦</span> Digital Hub &amp; Notes
+                </div>
+                <div class="hero-floating-pill hero-pill-bottom">
+                  <span>⚡</span> Clean Code &amp; Research
+                </div>
               </div>
             </div>
           </div>
@@ -146,24 +177,33 @@
 
       <!-- ===== Featured Resource ===== -->
       <section aria-label="Featured Resource">
-        <div class="featured-project">
-          <article class="project-card">
-            <div class="project-info">
-              <div class="project-featured-badge"><img src="assets/icons/star.png" alt="" width="14" height="14" class="btn-icon"> Featured Resource</div>
-              <h3><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="24" height="24"> <span>Ruqyah Shariyah</span> Guide</h3>
-              <p>Comprehensive Quranic healing reference – all essential verses for protection, jinn expulsion, love,
-                and more.</p>
-              <div class="project-tags">
-                <span class="project-tag">Quran</span>
-                <span class="project-tag">Islamic</span>
-                <span class="project-tag">Protection</span>
+        <div class="featured-banner">
+          <div class="featured-banner-grid">
+            <div class="featured-banner-info">
+              <div class="project-featured-badge"><img src="assets/icons/star.png" alt="" width="14" height="14" class="btn-icon"> Featured Flagship Resource</div>
+              <h2 style="font-size:clamp(1.35rem, 3vw, 1.85rem); margin: 14px 0 10px; font-family: var(--font-display);"><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="26" height="26"> <span>Ruqyah Shariyah</span> Comprehensive Guide</h2>
+              <p style="color:var(--muted); line-height:1.7; font-size:15px; margin-bottom:12px;">Complete, authentic Qur'anic healing reference — all essential verses for protection, jinn expulsion, spiritual remedies, and peace of heart.</p>
+              
+              <div class="featured-highlights">
+                <span class="featured-highlight-item">📖 25+ Qur'anic Verses</span>
+                <span class="featured-highlight-item">🎧 Audio Recitation Included</span>
+                <span class="featured-highlight-item">🛡️ Hadith &amp; Sunnah Sourced</span>
+              </div>
+
+              <div class="hero-buttons" style="justify-content:flex-start; margin-top:0;">
+                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                  <img src="assets/icons/open-book.png" alt="" width="18" height="18" class="btn-icon"> Open Interactive Guide →
+                </a>
+                <a href="jinn-islamic-theology.html" class="btn btn-secondary">
+                  Read Theology Article →
+                </a>
               </div>
             </div>
-            <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer"
-              class="project-btn">
-              <img src="assets/icons/open-book.png" alt="" width="18" height="18" class="btn-icon"> Open Ruqyah Guide →
-            </a>
-          </article>
+
+            <div class="featured-banner-preview">
+              <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Spiritual Guide Banner" width="600" height="375" loading="lazy">
+            </div>
+          </div>
         </div>
       </section>
 
@@ -187,8 +227,12 @@
         <div class="cards" id="cards-container">
           <!-- Static fallback for SEO &amp; no-JS visitors; replaced by js/script.js -->
           <article class="card">
+            <div class="card-banner-box">
+              <img src="assets/banners/java-oop.jpg" alt="Java OOP Crash Course" class="card-banner-img" loading="lazy" width="600" height="338">
+              <div class="card-banner-overlay"></div>
+              <span class="card-banner-category"><img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14"> Java</span>
+            </div>
             <div class="card-body">
-              <span class="category"><img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14"> Java</span>
               <div class="card-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> Jun 2, 2026</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> 8 min read</span></div>
               <h3><a href="java-oop.html">Java OOP Crash Course</a></h3>
               <p>Learn object-oriented programming with Java – classes, inheritance, polymorphism, and real-world examples.</p>
@@ -207,8 +251,12 @@
             </div>
           </article>
           <article class="card">
+            <div class="card-banner-box">
+              <img src="assets/banners/ruqyah-theology.jpg" alt="Jinn &amp; Islamic Theology" class="card-banner-img" loading="lazy" width="600" height="338">
+              <div class="card-banner-overlay"></div>
+              <span class="card-banner-category"><img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> Research</span>
+            </div>
             <div class="card-body">
-              <span class="category"><img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> Research</span>
               <div class="card-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> Jun 2, 2026</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> 15 min read</span></div>
               <h3><a href="jinn-islamic-theology.html">Jinn &amp; Islamic Theology</a></h3>
               <p>Authentic research on Jinn, sihr, and Islamic theology from Quran &amp; Sunnah.</p>
@@ -227,8 +275,12 @@
             </div>
           </article>
           <article class="card">
+            <div class="card-banner-box">
+              <img src="assets/banners/web-dev.jpg" alt="Modern Web Development Guide" class="card-banner-img" loading="lazy" width="600" height="338">
+              <div class="card-banner-overlay"></div>
+              <span class="card-banner-category"><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span>
+            </div>
             <div class="card-body">
-              <span class="category"><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span>
               <div class="card-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> Jun 2, 2026</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> 10 min read</span></div>
               <h3><a href="web-dev-guide.html">Modern Web Development Guide</a></h3>
               <p>Build beautiful websites with HTML, CSS, JavaScript, and deploy for free on GitHub Pages.</p>
