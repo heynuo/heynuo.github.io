@@ -2534,6 +2534,7 @@ function initFeaturedResource() {
       const wasPlaying = !audioEl.paused && !audioEl.ended;
       audioEl.src = v.audio;
       audioEl.load();
+      audioEl.playbackRate = speeds[speedIdx];
       if (autoPlay || wasPlaying) {
         audioEl.play().then(() => updatePlayState(true)).catch(() => updatePlayState(false));
       } else {
@@ -2607,7 +2608,27 @@ function initFeaturedResource() {
     $.on(scrubTrack, 'click', seekAudio);
   }
 
-  // 9. Loop & Mute Controls
+  // 9. Loop, Mute & Playback Speed Controls
+  const speedBtn = $.get('#samplerSpeedBtn');
+  const speeds = [1, 1.25, 0.75];
+  let speedIdx = 0;
+
+  if (speedBtn && audioEl) {
+    $.on(speedBtn, 'click', () => {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      const newSpeed = speeds[speedIdx];
+      audioEl.playbackRate = newSpeed;
+      speedBtn.textContent = `${newSpeed}x`;
+      if (newSpeed === 0.75) {
+        showToast('Playback speed: 0.75x (Slow Tajweed)', '🐢');
+      } else if (newSpeed === 1.25) {
+        showToast('Playback speed: 1.25x', '⚡');
+      } else {
+        showToast('Playback speed: 1x (Normal)', '▶');
+      }
+    });
+  }
+
   if (loopBtn && audioEl) {
     $.on(loopBtn, 'click', () => {
       audioEl.loop = !audioEl.loop;
