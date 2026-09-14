@@ -1,0 +1,1096 @@
+/* ==========================================================================
+   QURAN AUTO-LISTENING AUDIO PLAYER (Standalone & Modular)
+   Material You Glassmorphism Design System
+   Inspired by Metrolist Fugue & Modern Web Audio Standards
+   ========================================================================== */
+
+:root {
+  --qp-primary: #10B981;             /* Quranic Emerald Green */
+  --qp-primary-light: #34D399;       /* Bright Mint Glow */
+  --qp-primary-dark: #065F46;        /* Deep Forest */
+  --qp-primary-glow: rgba(16, 185, 129, 0.28);
+
+  --qp-gold: #F59E0B;                /* Radiant Scripture Gold */
+  --qp-gold-glow: rgba(245, 158, 11, 0.32);
+
+  --qp-cyan: #06B6D4;                /* Celestial Cyan */
+  --qp-violet: #8B5CF6;              /* Spiritual Amethyst */
+
+  --qp-bg-dark: #0A0D14;
+  --qp-bg-player: rgba(12, 16, 26, 0.88);
+  --qp-bg-card: rgba(20, 26, 42, 0.78);
+  --qp-bg-elevated: #131A2A;
+  --qp-bg-pill: rgba(14, 19, 31, 0.92);
+
+  --qp-text-main: #F8FAFC;
+  --qp-text-secondary: #94A3B8;
+  --qp-text-muted: #64748B;
+
+  --qp-border: rgba(255, 255, 255, 0.08);
+  --qp-border-active: rgba(16, 185, 129, 0.5);
+
+  --qp-radius-xs: 6px;
+  --qp-radius-sm: 10px;
+  --qp-radius-md: 16px;
+  --qp-radius-lg: 24px;
+  --qp-radius-full: 9999px;
+
+  --qp-font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --qp-font-arabic: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+  --qp-font-mono: 'Space Grotesk', 'Roboto Mono', monospace;
+
+  --qp-bar-height: 84px;
+  --qp-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --qp-transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Ensure bottom page content is not obscured when player bar is docked */
+body.has-qp-docked {
+  padding-bottom: calc(var(--qp-bar-height) + 16px) !important;
+}
+
+body.has-qp-minimized {
+  padding-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   1. DOCKED STICKY BOTTOM PLAYER BAR
+   ========================================================================== */
+.qp-player-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--qp-bar-height);
+  background: var(--qp-bg-player);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border-top: 1px solid var(--qp-border);
+  z-index: 9990;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.65), 0 -1px 0 var(--qp-primary-glow);
+  display: flex;
+  align-items: center;
+  transition: transform var(--qp-transition-spring), opacity var(--qp-transition), box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.qp-player-bar.is-hidden {
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Top animated gradient spectrum line when reciting */
+.qp-player-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    var(--qp-primary) 0%,
+    var(--qp-gold) 25%,
+    var(--qp-cyan) 50%,
+    var(--qp-primary-light) 75%,
+    var(--qp-primary) 100%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.qp-player-bar.is-playing::before {
+  opacity: 1;
+  animation: qpSpectrumLine 3s linear infinite;
+}
+
+@keyframes qpSpectrumLine {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.qp-player-bar.is-playing {
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.7), 0 -2px 0 var(--qp-primary-light), 0 -6px 24px var(--qp-primary-glow);
+}
+
+.qp-inner {
+  display: grid;
+  grid-template-columns: 290px 1fr 280px;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Left: Surah Artwork & Titles */
+.qp-track-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.qp-cover-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--qp-radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 10px var(--qp-primary-glow);
+  cursor: pointer;
+  transition: transform var(--qp-transition);
+}
+
+.qp-cover-wrap:hover {
+  transform: scale(1.06);
+}
+
+.qp-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Equalizer Bars Overlay */
+.qp-eq-bars {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 13, 20, 0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding: 8px 6px;
+  opacity: 0;
+  transition: opacity var(--qp-transition);
+}
+
+.qp-player-bar.is-playing .qp-eq-bars {
+  opacity: 1;
+}
+
+.qp-eq-bar {
+  width: 3.5px;
+  background: linear-gradient(to top, var(--qp-primary), var(--qp-gold));
+  border-radius: 2px;
+  animation: qpEqBounce 1s ease-in-out infinite alternate;
+}
+
+.qp-eq-bar:nth-child(1) { height: 14px; animation-duration: 0.75s; }
+.qp-eq-bar:nth-child(2) { height: 22px; animation-duration: 1.15s; }
+.qp-eq-bar:nth-child(3) { height: 16px; animation-duration: 0.9s; }
+.qp-eq-bar:nth-child(4) { height: 12px; animation-duration: 1.05s; }
+
+@keyframes qpEqBounce {
+  0%   { transform: scaleY(0.2); }
+  100% { transform: scaleY(1); }
+}
+
+.qp-track-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.qp-surah-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.qp-surah-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 4px;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: var(--qp-radius-xs);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--qp-primary-light);
+  font-family: var(--qp-font-mono);
+}
+
+.qp-surah-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--qp-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.2px;
+}
+
+.qp-surah-arabic {
+  font-family: var(--qp-font-arabic);
+  font-size: 1.05rem;
+  color: var(--qp-gold);
+  margin-left: 2px;
+}
+
+.qp-reciter-name {
+  font-size: 0.78rem;
+  color: var(--qp-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.qp-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--qp-primary-light);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Center: Controls & Scrubber */
+.qp-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.qp-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.qp-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--qp-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--qp-transition);
+  padding: 0;
+}
+
+.qp-btn:hover {
+  color: var(--qp-primary-light);
+  background: rgba(16, 185, 129, 0.12);
+  transform: scale(1.08);
+}
+
+.qp-btn:active {
+  transform: scale(0.92);
+}
+
+.qp-btn.is-active {
+  color: var(--qp-primary-light);
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.qp-btn-dot {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--qp-primary-light);
+  opacity: 0;
+  transition: opacity var(--qp-transition);
+}
+
+.qp-btn.is-active .qp-btn-dot {
+  opacity: 1;
+}
+
+/* Play/Pause Button */
+.qp-play-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--qp-primary) 0%, #059669 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 18px var(--qp-primary-glow);
+  border: none;
+  cursor: pointer;
+  transition: all var(--qp-transition);
+  flex-shrink: 0;
+}
+
+.qp-play-btn:hover {
+  background: linear-gradient(135deg, var(--qp-primary-light) 0%, #10B981 100%);
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px var(--qp-primary-glow), 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.qp-play-btn:active {
+  transform: scale(0.94);
+}
+
+.qp-play-btn svg {
+  fill: #ffffff;
+}
+
+/* Scrubber / Progress Bar */
+.qp-progress-wrap {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qp-time {
+  font-family: var(--qp-font-mono);
+  font-size: 0.76rem;
+  color: var(--qp-text-muted);
+  min-width: 40px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.qp-time-curr {
+  text-align: right;
+}
+
+.qp-progress-bar {
+  flex: 1;
+  position: relative;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--qp-radius-full);
+  cursor: pointer;
+  transition: height var(--qp-transition);
+}
+
+.qp-progress-bar:hover {
+  height: 8px;
+}
+
+.qp-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--qp-primary), var(--qp-primary-light), var(--qp-gold));
+  background-size: 200% 100%;
+  border-radius: var(--qp-radius-full);
+  width: 0%;
+  transition: width 0.08s linear;
+}
+
+.qp-player-bar.is-playing .qp-progress-fill {
+  animation: qpShimmer 3s linear infinite;
+}
+
+@keyframes qpShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.qp-progress-thumb {
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px var(--qp-primary), 0 0 16px var(--qp-primary-light);
+  transition: transform var(--qp-transition);
+}
+
+.qp-progress-bar:hover .qp-progress-thumb {
+  transform: translateY(-50%) scale(1);
+}
+
+/* Right: Volume, Speed, Minimize, Queue, Fullscreen */
+.qp-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.qp-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qp-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 78px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--qp-radius-full);
+  outline: none;
+  cursor: pointer;
+  transition: opacity var(--qp-transition);
+}
+
+.qp-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--qp-primary-light);
+  box-shadow: 0 0 6px var(--qp-primary-glow);
+  cursor: pointer;
+  transition: transform var(--qp-transition);
+}
+
+.qp-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.qp-icon-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--qp-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--qp-text-secondary);
+  cursor: pointer;
+  transition: all var(--qp-transition);
+  padding: 0;
+}
+
+.qp-icon-btn:hover {
+  color: var(--qp-primary-light);
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.35);
+  transform: scale(1.06);
+}
+
+.qp-icon-btn:active {
+  transform: scale(0.94);
+}
+
+.qp-speed-btn {
+  font-family: var(--qp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--qp-text-secondary);
+  min-width: 34px;
+}
+
+.qp-badge-count {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--qp-primary);
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Minimize button highlight */
+.qp-minimize-btn {
+  color: var(--qp-gold);
+  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.qp-minimize-btn:hover {
+  color: #ffffff;
+  background: rgba(245, 158, 11, 0.22);
+  border-color: var(--qp-gold);
+}
+
+.qp-mobile-play-btn {
+  display: none;
+}
+
+
+/* ==========================================================================
+   2. MINIMIZED FLOATING PILL / AUDIO ORB
+   ========================================================================== */
+.qp-minimized-pill {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9995;
+  background: var(--qp-bg-pill);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--qp-border);
+  border-radius: var(--qp-radius-full);
+  padding: 6px 14px 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all var(--qp-transition-spring);
+  transform: translateY(120px) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  max-width: 320px;
+}
+
+.qp-minimized-pill.is-active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.qp-minimized-pill:hover {
+  border-color: var(--qp-border-active);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.7), 0 0 25px var(--qp-primary-glow);
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Pulsing audio ring when reciting in minimized state */
+.qp-pill-artwork {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.qp-pill-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qp-minimized-pill.is-playing .qp-pill-artwork::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--qp-primary-light);
+  animation: qpPulseRing 1.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes qpPulseRing {
+  0%   { transform: scale(0.95); opacity: 0.9; }
+  70%  { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.qp-pill-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.qp-pill-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--qp-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qp-pill-subtitle {
+  font-size: 0.68rem;
+  color: var(--qp-primary-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.qp-pill-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.qp-pill-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--qp-text-main);
+  cursor: pointer;
+  transition: all var(--qp-transition);
+}
+
+.qp-pill-btn:hover {
+  background: var(--qp-primary);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.qp-pill-btn-play {
+  background: var(--qp-primary);
+  color: #ffffff;
+}
+
+
+/* ==========================================================================
+   3. FULLSCREEN NOW-PLAYING MODAL
+   ========================================================================== */
+.qp-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 8, 14, 0.96);
+  backdrop-filter: blur(36px);
+  -webkit-backdrop-filter: blur(36px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background-image:
+    radial-gradient(ellipse at 25% 20%, rgba(16, 185, 129, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, rgba(245, 158, 11, 0.16) 0%, transparent 55%);
+}
+
+.qp-modal-overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.qp-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--qp-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--qp-text-main);
+  cursor: pointer;
+  transition: all var(--qp-transition);
+}
+
+.qp-modal-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.08);
+}
+
+.qp-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 580px;
+  width: 90%;
+  padding: 28px;
+  animation: qpModalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes qpModalIn {
+  from { transform: scale(0.92) translateY(24px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.qp-modal-art-wrap {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.qp-modal-art {
+  width: 280px;
+  height: 280px;
+  border-radius: var(--qp-radius-lg);
+  object-fit: cover;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 45px var(--qp-primary-glow);
+  animation: qpArtFloat 6s ease-in-out infinite;
+}
+
+@keyframes qpArtFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.qp-modal-arabic {
+  font-family: var(--qp-font-arabic);
+  font-size: 2.4rem;
+  color: var(--qp-gold);
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 20px var(--qp-gold-glow);
+}
+
+.qp-modal-title {
+  font-family: var(--qp-font-heading);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--qp-text-main);
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.qp-modal-reciter {
+  font-size: 1.05rem;
+  color: var(--qp-primary-light);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.qp-modal-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.qp-modal-chip {
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--qp-border);
+  color: var(--qp-text-secondary);
+}
+
+/* Modal Waveform Canvas / Equalizer */
+.qp-modal-waveform {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 48px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+
+.qp-modal-wave-bar {
+  flex: 1;
+  background: linear-gradient(to top, var(--qp-primary), var(--qp-gold));
+  border-radius: 2px;
+  opacity: 0.35;
+  transition: height 0.15s ease, opacity 0.2s ease;
+  min-height: 4px;
+}
+
+.qp-modal-overlay.is-playing .qp-modal-wave-bar {
+  opacity: 0.9;
+  animation: qpWavePulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes qpWavePulse {
+  0%   { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+.qp-modal-controls {
+  width: 100%;
+  max-width: 480px;
+}
+
+
+/* ==========================================================================
+   4. SLIDE-OVER QUEUE / SURAH DRAWER
+   ========================================================================== */
+.qp-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 9997;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--qp-transition);
+}
+
+.qp-drawer-overlay.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.qp-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 440px;
+  background: var(--qp-bg-elevated);
+  border-left: 1px solid var(--qp-border);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.7);
+  transform: translateX(100%);
+  transition: transform var(--qp-transition-spring);
+}
+
+.qp-drawer.is-open {
+  transform: translateX(0);
+}
+
+.qp-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--qp-border);
+}
+
+.qp-drawer-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qp-drawer-title {
+  font-family: var(--qp-font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--qp-text-main);
+}
+
+.qp-search-wrap {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--qp-border);
+}
+
+.qp-search-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--qp-border);
+  border-radius: var(--qp-radius-sm);
+  color: var(--qp-text-main);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color var(--qp-transition);
+}
+
+.qp-search-input:focus {
+  border-color: var(--qp-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.qp-surah-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 16px;
+  scroll-behavior: smooth;
+}
+
+.qp-surah-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.qp-surah-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.qp-surah-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--qp-radius-sm);
+  cursor: pointer;
+  transition: all var(--qp-transition);
+  margin-bottom: 4px;
+}
+
+.qp-surah-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.qp-surah-item.is-active {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.qp-item-number {
+  min-width: 28px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--qp-radius-xs);
+  font-family: var(--qp-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--qp-text-secondary);
+}
+
+.qp-surah-item.is-active .qp-item-number {
+  background: var(--qp-primary);
+  color: #ffffff;
+}
+
+.qp-item-info {
+  flex: 1;
+  overflow: hidden;
+}
+
+.qp-item-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--qp-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qp-item-meta {
+  font-size: 0.75rem;
+  color: var(--qp-text-muted);
+}
+
+.qp-item-arabic {
+  font-family: var(--qp-font-arabic);
+  font-size: 1.15rem;
+  color: var(--qp-gold);
+}
+
+
+/* ==========================================================================
+   5. RESUME / AUTOPLAY TOAST BANNER
+   ========================================================================== */
+.qp-toast-banner {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  z-index: 10010;
+  background: var(--qp-bg-elevated);
+  border: 1px solid var(--qp-primary-light);
+  border-radius: var(--qp-radius-full);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--qp-primary-glow);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--qp-transition-spring);
+}
+
+.qp-toast-banner.is-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.qp-toast-btn {
+  background: var(--qp-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--qp-radius-full);
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--qp-transition);
+}
+
+.qp-toast-btn:hover {
+  transform: scale(1.05);
+}
+
+
+/* ==========================================================================
+   6. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .qp-inner {
+    grid-template-columns: 240px 1fr 200px;
+    gap: 16px;
+    padding: 0 16px;
+  }
+  .qp-volume-wrap {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --qp-bar-height: 74px;
+  }
+  .qp-inner {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+  }
+  .qp-center {
+    display: none;
+  }
+  .qp-right {
+    gap: 6px;
+  }
+  .qp-right .qp-mobile-play-btn {
+    display: flex;
+  }
+  .qp-minimized-pill {
+    bottom: 16px;
+    right: 16px;
+    max-width: calc(100vw - 32px);
+  }
+  .qp-modal-art {
+    width: 220px;
+    height: 220px;
+  }
+  .qp-modal-arabic {
+    font-size: 1.9rem;
+  }
+  .qp-modal-title {
+    font-size: 1.4rem;
+  }
+}

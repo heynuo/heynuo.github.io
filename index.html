@@ -44,6 +44,8 @@
 
   <!-- Shared stylesheet: global styles + home page components -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Persistent Quran Auto-Listening Audio Player -->
+  <link rel="stylesheet" href="css/quran-player.css">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -606,6 +608,11 @@
         <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
         <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
         <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
         <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
       </div>
     </div>
@@ -621,6 +628,8 @@
 
   <!-- Shared script: search/filter, mobile menu, active nav, scroll-to-top, skip link -->
   <script src="js/script.js"></script>
+  <!-- Persistent Quran Auto-Listening Player Engine -->
+  <script src="js/quran-player.js" defer></script>
 </body>
 
 </html>
