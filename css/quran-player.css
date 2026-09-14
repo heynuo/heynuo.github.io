@@ -1,6 +1,6 @@
 /* ==========================================================================
    QURAN AUTO-LISTENING AUDIO PLAYER (Standalone & Modular)
-   Material You Glassmorphism Design System
+   Material You Floating Glassmorphism Design System
    Inspired by Metrolist Fugue & Modern Web Audio Standards
    ========================================================================== */
 
@@ -8,46 +8,46 @@
   --qp-primary: #10B981;             /* Quranic Emerald Green */
   --qp-primary-light: #34D399;       /* Bright Mint Glow */
   --qp-primary-dark: #065F46;        /* Deep Forest */
-  --qp-primary-glow: rgba(16, 185, 129, 0.28);
+  --qp-primary-glow: rgba(16, 185, 129, 0.32);
 
-  --qp-gold: #F59E0B;                /* Radiant Scripture Gold */
-  --qp-gold-glow: rgba(245, 158, 11, 0.32);
+  --qp-gold: #F59E0B;                /* Scripture Radiant Gold */
+  --qp-gold-glow: rgba(245, 158, 11, 0.35);
 
   --qp-cyan: #06B6D4;                /* Celestial Cyan */
   --qp-violet: #8B5CF6;              /* Spiritual Amethyst */
-  --qp-red: #EF4444;                 /* Favorite Rose */
+  --qp-red: #F43F5E;                 /* Favorite Rose */
 
   --qp-bg-dark: #0A0D14;
-  --qp-bg-player: rgba(12, 16, 26, 0.90);
-  --qp-bg-card: rgba(20, 26, 42, 0.82);
-  --qp-bg-elevated: #131A2A;
-  --qp-bg-pill: rgba(14, 19, 31, 0.94);
+  --qp-bg-player: rgba(13, 17, 26, 0.90);
+  --qp-bg-card: rgba(20, 26, 42, 0.85);
+  --qp-bg-elevated: #141A29;
+  --qp-bg-pill: rgba(14, 19, 31, 0.95);
 
   --qp-text-main: #F8FAFC;
   --qp-text-secondary: #94A3B8;
   --qp-text-muted: #64748B;
 
-  --qp-border: rgba(255, 255, 255, 0.08);
-  --qp-border-active: rgba(16, 185, 129, 0.5);
+  --qp-border: rgba(255, 255, 255, 0.09);
+  --qp-border-active: rgba(16, 185, 129, 0.55);
 
   --qp-radius-xs: 6px;
   --qp-radius-sm: 10px;
   --qp-radius-md: 16px;
-  --qp-radius-lg: 24px;
+  --qp-radius-lg: 22px;
   --qp-radius-full: 9999px;
 
   --qp-font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --qp-font-arabic: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
   --qp-font-mono: 'Space Grotesk', 'Roboto Mono', monospace;
 
-  --qp-bar-height: 84px;
-  --qp-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --qp-bar-height: 82px;
+  --qp-transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   --qp-transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Ensure bottom page content is not obscured when player bar is docked */
+/* Ensure bottom page content is never hidden under the floating player */
 body.has-qp-docked {
-  padding-bottom: calc(var(--qp-bar-height) + 18px) !important;
+  padding-bottom: calc(var(--qp-bar-height) + 36px) !important;
 }
 
 body.has-qp-minimized {
@@ -55,49 +55,54 @@ body.has-qp-minimized {
 }
 
 /* ==========================================================================
-   1. DOCKED STICKY BOTTOM PLAYER BAR
+   1. FLOATING DOCKED GLASSMORPHISM PLAYER BAR
    ========================================================================== */
 .qp-player-bar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  max-width: 1240px;
+  margin: 0 auto;
   height: var(--qp-bar-height);
   background: var(--qp-bg-player);
-  backdrop-filter: blur(28px) saturate(170%);
-  -webkit-backdrop-filter: blur(28px) saturate(170%);
-  border-top: 1px solid var(--qp-border);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border: 1px solid var(--qp-border);
+  border-radius: var(--qp-radius-lg);
   z-index: 9990;
-  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.65), 0 -1px 0 var(--qp-primary-glow);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
   display: flex;
   align-items: center;
   transition: transform var(--qp-transition-spring), opacity var(--qp-transition), box-shadow 0.3s ease;
   user-select: none;
+  overflow: visible;
 }
 
 .qp-player-bar.is-hidden {
-  transform: translateY(110%);
+  transform: translateY(140%);
   opacity: 0;
   pointer-events: none;
 }
 
-/* Top animated gradient spectrum line when reciting */
+/* Glowing animated gradient spectrum top-line when reciting */
 .qp-player-bar::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: -1px;
+  left: 20px;
+  right: 20px;
   height: 2px;
   background: linear-gradient(90deg,
     var(--qp-primary) 0%,
-    var(--qp-gold) 25%,
-    var(--qp-cyan) 50%,
-    var(--qp-primary-light) 75%,
+    var(--qp-gold) 30%,
+    var(--qp-cyan) 60%,
+    var(--qp-primary-light) 85%,
     var(--qp-primary) 100%
   );
   background-size: 200% 100%;
   opacity: 0;
+  border-radius: 999px;
   transition: opacity 0.4s ease;
 }
 
@@ -112,32 +117,34 @@ body.has-qp-minimized {
 }
 
 .qp-player-bar.is-playing {
-  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.7), 0 -2px 0 var(--qp-primary-light), 0 -6px 24px var(--qp-primary-glow);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75), 0 0 25px var(--qp-primary-glow), 0 0 0 1px rgba(16, 185, 129, 0.35);
 }
 
 .qp-inner {
   display: grid;
-  grid-template-columns: 310px 1fr 310px;
+  grid-template-columns: 310px 1fr auto;
   align-items: center;
   gap: 16px;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 18px;
+  box-sizing: border-box;
 }
 
-/* Left: Surah Artwork & Titles */
+/* --------------------------------------------------------------------------
+   Left Column: Surah Cover & Info
+   -------------------------------------------------------------------------- */
 .qp-track-block {
   display: flex;
   align-items: center;
   gap: 12px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .qp-cover-wrap {
   position: relative;
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   border-radius: var(--qp-radius-sm);
   overflow: hidden;
   flex-shrink: 0;
@@ -154,13 +161,14 @@ body.has-qp-minimized {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 /* Equalizer Bars Overlay */
 .qp-eq-bars {
   position: absolute;
   inset: 0;
-  background: rgba(10, 13, 20, 0.6);
+  background: rgba(10, 13, 20, 0.65);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -194,8 +202,9 @@ body.has-qp-minimized {
 .qp-track-info {
   display: flex;
   flex-direction: column;
+  gap: 3px;
   overflow: hidden;
-  cursor: pointer;
+  min-width: 0;
 }
 
 .qp-surah-title-row {
@@ -212,52 +221,66 @@ body.has-qp-minimized {
   min-width: 22px;
   height: 18px;
   padding: 0 4px;
-  background: rgba(16, 185, 129, 0.18);
-  border: 1px solid rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: var(--qp-radius-xs);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
   color: var(--qp-primary-light);
   font-family: var(--qp-font-mono);
+  flex-shrink: 0;
 }
 
 .qp-surah-title {
   font-weight: 700;
-  font-size: 0.92rem;
+  font-size: 0.90rem;
   color: var(--qp-text-main);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: -0.2px;
+  cursor: pointer;
+}
+
+.qp-surah-title:hover {
+  color: var(--qp-primary-light);
 }
 
 .qp-surah-arabic {
   font-family: var(--qp-font-arabic);
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   color: var(--qp-gold);
   margin-left: 2px;
+  flex-shrink: 0;
 }
 
-.qp-reciter-name {
-  font-size: 0.76rem;
-  color: var(--qp-text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.qp-track-subrow {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
-.qp-reciter-tag {
-  color: var(--qp-primary-light);
+/* Reciter selector chip in left info */
+.qp-reciter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--qp-radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--qp-border);
+  font-size: 0.70rem;
+  font-weight: 600;
+  color: var(--qp-text-secondary);
   cursor: pointer;
-  text-decoration: underline dotted;
-  transition: color var(--qp-transition);
+  transition: all var(--qp-transition);
+  white-space: nowrap;
 }
 
-.qp-reciter-tag:hover {
-  color: #ffffff;
+.qp-reciter-chip:hover {
+  color: var(--qp-primary-light);
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
 }
 
 .qp-auto-badge {
@@ -267,26 +290,32 @@ body.has-qp-minimized {
   font-size: 0.62rem;
   padding: 1px 5px;
   border-radius: 999px;
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.14);
   color: var(--qp-primary-light);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(16, 185, 129, 0.28);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 
-/* Favorite Star / Heart Button */
+/* Favorite Heart button */
 .qp-fav-btn {
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 4px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--qp-text-muted);
   transition: all var(--qp-transition);
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .qp-fav-btn:hover {
@@ -306,24 +335,35 @@ body.has-qp-minimized {
   100% { transform: scale(1); }
 }
 
-/* Center: Controls & Scrubber */
+/* --------------------------------------------------------------------------
+   Center Column: Playback Controls & Scrubber
+   -------------------------------------------------------------------------- */
 .qp-center {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .qp-controls {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
 }
 
+/* Strictly Circular Icon Buttons */
 .qp-btn {
   position: relative;
   width: 36px;
   height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   color: var(--qp-text-secondary);
   display: flex;
@@ -334,6 +374,8 @@ body.has-qp-minimized {
   cursor: pointer;
   transition: all var(--qp-transition);
   padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .qp-btn:hover {
@@ -368,10 +410,15 @@ body.has-qp-minimized {
   opacity: 1;
 }
 
-/* Play/Pause Button */
+/* Center Play/Pause Button */
 .qp-play-btn {
   width: 46px;
   height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+  max-width: 46px;
+  max-height: 46px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--qp-primary) 0%, #059669 100%);
   color: #ffffff;
@@ -383,12 +430,14 @@ body.has-qp-minimized {
   cursor: pointer;
   transition: all var(--qp-transition);
   flex-shrink: 0;
+  box-sizing: border-box;
+  padding: 0;
 }
 
 .qp-play-btn:hover {
   background: linear-gradient(135deg, var(--qp-primary-light) 0%, #10B981 100%);
   transform: scale(1.08);
-  box-shadow: 0 6px 24px var(--qp-primary-glow), 0 0 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 24px var(--qp-primary-glow), 0 0 14px rgba(16, 185, 129, 0.45);
 }
 
 .qp-play-btn:active {
@@ -399,23 +448,23 @@ body.has-qp-minimized {
   fill: #ffffff;
 }
 
-/* Scrubber / Progress Bar */
+/* Scrubber Timeline */
 .qp-progress-wrap {
   width: 100%;
-  max-width: 540px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   position: relative;
 }
 
 .qp-time {
   font-family: var(--qp-font-mono);
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: var(--qp-text-muted);
-  min-width: 40px;
+  min-width: 38px;
   text-align: center;
   font-variant-numeric: tabular-nums;
+  user-select: none;
 }
 
 .qp-time-curr {
@@ -433,7 +482,7 @@ body.has-qp-minimized {
 }
 
 .qp-progress-bar:hover {
-  height: 8px;
+  height: 7px;
 }
 
 .qp-progress-fill {
@@ -474,7 +523,7 @@ body.has-qp-minimized {
   transform: translateY(-50%) scale(1);
 }
 
-/* Scrubber Hover Timestamp Tooltip */
+/* Hover Preview Timestamp Tooltip */
 .qp-scrubber-tooltip {
   position: absolute;
   bottom: 16px;
@@ -497,18 +546,21 @@ body.has-qp-minimized {
   opacity: 1;
 }
 
-/* Right: Volume, Speed, Reciter, Sleep Timer, Queue, Fullscreen, Minimize */
+/* --------------------------------------------------------------------------
+   Right Column: Volume & Primary Tools
+   -------------------------------------------------------------------------- */
 .qp-right {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 7px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .qp-volume-wrap {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
 
 .qp-volume-slider {
@@ -539,10 +591,16 @@ body.has-qp-minimized {
   transform: scale(1.3);
 }
 
+/* Strictly Circular Action Buttons */
 .qp-icon-btn {
   position: relative;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  max-width: 36px;
+  max-height: 36px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -553,6 +611,8 @@ body.has-qp-minimized {
   cursor: pointer;
   transition: all var(--qp-transition);
   padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .qp-icon-btn:hover {
@@ -571,7 +631,6 @@ body.has-qp-minimized {
   font-size: 0.72rem;
   font-weight: 700;
   color: var(--qp-text-secondary);
-  min-width: 32px;
 }
 
 .qp-badge-count {
@@ -592,7 +651,7 @@ body.has-qp-minimized {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* Sleep Timer Button & Live Countdown Badge */
+/* Sleep Timer Active State */
 .qp-timer-btn.is-active {
   color: var(--qp-gold);
   border-color: rgba(245, 158, 11, 0.35);
@@ -618,29 +677,10 @@ body.has-qp-minimized {
   display: block;
 }
 
-/* Reciter Selector Pill */
-.qp-reciter-btn {
-  padding: 0 10px;
-  width: auto;
-  height: 32px;
-  border-radius: var(--qp-radius-full);
-  gap: 5px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--qp-text-secondary);
-  border: 1px solid var(--qp-border);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.qp-reciter-btn:hover {
-  color: var(--qp-primary-light);
-  border-color: var(--qp-border-active);
-}
-
-/* Minimize button highlight */
+/* Minimize Button */
 .qp-minimize-btn {
   color: var(--qp-gold);
-  border-color: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.28);
   background: rgba(245, 158, 11, 0.06);
 }
 
@@ -654,11 +694,10 @@ body.has-qp-minimized {
   display: none;
 }
 
-/* Dropdown Menu (Reciter & Sleep Timer) */
+/* Dropdown Menus (Reciter & Sleep Timer) */
 .qp-dropdown-menu {
   position: absolute;
   bottom: calc(var(--qp-bar-height) + 12px);
-  right: 20px;
   background: var(--qp-bg-elevated);
   border: 1px solid var(--qp-border);
   border-radius: var(--qp-radius-md);
@@ -679,6 +718,16 @@ body.has-qp-minimized {
 @keyframes qpDropdownIn {
   from { opacity: 0; transform: translateY(10px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#qpReciterMenu {
+  left: 20px;
+  right: auto;
+}
+
+#qpTimerMenu {
+  right: 60px;
+  left: auto;
 }
 
 .qp-dropdown-header {
@@ -723,22 +772,22 @@ body.has-qp-minimized {
   right: 24px;
   z-index: 9995;
   background: var(--qp-bg-pill);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid var(--qp-border);
   border-radius: var(--qp-radius-full);
   padding: 6px 14px 6px 8px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.3);
   cursor: grab;
   transition: all var(--qp-transition-spring);
   transform: translateY(120px) scale(0.9);
   opacity: 0;
   pointer-events: none;
   user-select: none;
-  max-width: 340px;
+  max-width: 320px;
   touch-action: none;
 }
 
@@ -760,7 +809,6 @@ body.has-qp-minimized {
   box-shadow: 0 16px 42px rgba(0, 0, 0, 0.7), 0 0 25px var(--qp-primary-glow);
 }
 
-/* Pulsing audio ring when reciting in minimized state */
 .qp-pill-artwork {
   position: relative;
   width: 38px;
@@ -797,7 +845,7 @@ body.has-qp-minimized {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-width: 110px;
+  min-width: 100px;
   cursor: pointer;
 }
 
@@ -1246,7 +1294,7 @@ body.has-qp-minimized {
 /* Mini Notification Toast */
 .qp-notify-toast {
   position: fixed;
-  bottom: calc(var(--qp-bar-height) + 16px);
+  bottom: calc(var(--qp-bar-height) + 32px);
   left: 24px;
   z-index: 10005;
   background: var(--qp-bg-elevated);
@@ -1274,20 +1322,26 @@ body.has-qp-minimized {
 /* ==========================================================================
    6. RESPONSIVE BREAKPOINTS
    ========================================================================== */
-@media (max-width: 1100px) {
+@media (max-width: 1080px) {
   .qp-inner {
-    grid-template-columns: 260px 1fr 240px;
+    grid-template-columns: 240px 1fr auto;
     gap: 12px;
-    padding: 0 16px;
+    padding: 0 14px;
   }
   .qp-volume-wrap {
     display: none;
   }
 }
 
-@media (max-width: 820px) {
+@media (max-width: 860px) {
   :root {
     --qp-bar-height: 74px;
+  }
+  .qp-player-bar {
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    border-radius: var(--qp-radius-md);
   }
   .qp-inner {
     grid-template-columns: 1fr auto;
@@ -1297,7 +1351,7 @@ body.has-qp-minimized {
     display: none;
   }
   .qp-right {
-    gap: 5px;
+    gap: 6px;
   }
   .qp-right .qp-mobile-play-btn {
     display: flex;

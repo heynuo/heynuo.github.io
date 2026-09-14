@@ -248,8 +248,12 @@
               <span class="qp-surah-title" id="qpSurahTitle">Al-Fatihah</span>
               <span class="qp-surah-arabic" id="qpSurahArabic">الفَاتِحَة</span>
             </div>
-            <div class="qp-reciter-name">
-              <span class="qp-reciter-tag" id="qpReciterTag" title="Click to switch Reciter">${reciter.short}</span>
+            <div class="qp-track-subrow">
+              <button class="qp-reciter-chip" id="qpReciterChip" title="Switch Reciter (القراء)" aria-label="Select Reciter">
+                <span>🎙️</span>
+                <span id="qpReciterChipText">${reciter.short}</span>
+                <span style="font-size:0.65rem; opacity:0.6; margin-left:1px;">▾</span>
+              </button>
               <span class="qp-auto-badge" id="qpAutoBadge" title="Continuous Auto-Listening">Auto</span>
             </div>
           </div>
@@ -340,27 +344,12 @@
           <!-- Speed Switcher -->
           <button class="qp-icon-btn qp-speed-btn" id="qpSpeedBtn" title="Recitation Speed" aria-label="Playback speed">1.0x</button>
 
-          <!-- Reciter Selector Button -->
-          <button class="qp-reciter-btn" id="qpReciterBtn" title="Select Reciter" aria-label="Select Reciter">
-            <span>🎙️</span>
-            <span id="qpReciterBtnText">${reciter.short.split(' ')[1] || 'Mishary'}</span>
-          </button>
-
           <!-- Sleep Timer Button -->
           <button class="qp-icon-btn qp-timer-btn" id="qpTimerBtn" title="Sleep Timer (Tadabbur)" aria-label="Sleep timer">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
             <span class="qp-timer-badge" id="qpTimerBadge">30m</span>
-          </button>
-
-          <!-- Download MP3 -->
-          <button class="qp-icon-btn" id="qpDownloadBtn" title="Download Surah MP3" aria-label="Download Surah">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
           </button>
 
           <!-- Queue Drawer Toggle -->
@@ -520,6 +509,13 @@
               </svg>
               <span class="qp-btn-dot"></span>
             </button>
+            <button class="qp-btn" id="qpModalDownloadBtn" title="Download Surah MP3" aria-label="Download Surah MP3">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -592,15 +588,18 @@
     dom.toast = document.getElementById('qpToastBanner');
     dom.notifyToast = document.getElementById('qpNotifyToast');
 
-    // Menus
+    // Menus & Chips
     dom.reciterMenu = document.getElementById('qpReciterMenu');
     dom.timerMenu = document.getElementById('qpTimerMenu');
+    dom.reciterChip = document.getElementById('qpReciterChip');
+    dom.reciterChipText = document.getElementById('qpReciterChipText');
     dom.reciterBtn = document.getElementById('qpReciterBtn');
     dom.reciterBtnText = document.getElementById('qpReciterBtnText');
     dom.reciterTag = document.getElementById('qpReciterTag');
     dom.timerBtn = document.getElementById('qpTimerBtn');
     dom.timerBadge = document.getElementById('qpTimerBadge');
-    dom.downloadBtn = document.getElementById('qpDownloadBtn');
+    dom.modalDownloadBtn = document.getElementById('qpModalDownloadBtn');
+    dom.downloadBtn = document.getElementById('qpDownloadBtn') || dom.modalDownloadBtn;
     dom.favBtn = document.getElementById('qpFavBtn');
     dom.favIcon = document.getElementById('qpFavIcon');
 
@@ -886,6 +885,7 @@
     showNotification(`Reciter set to ${reciter.short}`, '🎙️');
 
     // Update UI tags
+    if (dom.reciterChipText) dom.reciterChipText.textContent = reciter.short;
     if (dom.reciterBtnText) dom.reciterBtnText.textContent = reciter.short.split(' ')[1] || reciter.short;
     if (dom.reciterTag) dom.reciterTag.textContent = reciter.short;
     if (dom.modalReciter) dom.modalReciter.textContent = reciter.name;
@@ -1440,20 +1440,32 @@
     dom.speedBtn.addEventListener('click', cycleSpeed);
     dom.muteBtn.addEventListener('click', toggleMute);
     dom.favBtn.addEventListener('click', toggleFavoriteCurrent);
-    dom.downloadBtn.addEventListener('click', downloadCurrentSurah);
+    if (dom.downloadBtn) dom.downloadBtn.addEventListener('click', downloadCurrentSurah);
+    if (dom.modalDownloadBtn) dom.modalDownloadBtn.addEventListener('click', downloadCurrentSurah);
     dom.volumeSlider.addEventListener('input', (e) => setVolume(parseFloat(e.target.value)));
 
     // Reciter Selector Dropdown
-    dom.reciterBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dom.reciterMenu.classList.toggle('is-open');
-      dom.timerMenu.classList.remove('is-open');
-    });
-    dom.reciterTag.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dom.reciterMenu.classList.toggle('is-open');
-      dom.timerMenu.classList.remove('is-open');
-    });
+    if (dom.reciterChip) {
+      dom.reciterChip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dom.reciterMenu.classList.toggle('is-open');
+        dom.timerMenu.classList.remove('is-open');
+      });
+    }
+    if (dom.reciterBtn) {
+      dom.reciterBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dom.reciterMenu.classList.toggle('is-open');
+        dom.timerMenu.classList.remove('is-open');
+      });
+    }
+    if (dom.reciterTag) {
+      dom.reciterTag.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dom.reciterMenu.classList.toggle('is-open');
+        dom.timerMenu.classList.remove('is-open');
+      });
+    }
     dom.reciterMenu.addEventListener('click', (e) => {
       const item = e.target.closest('.qp-dropdown-item');
       if (!item) return;
@@ -1481,10 +1493,10 @@
 
     // Dismiss dropdowns on outside click
     document.addEventListener('click', (e) => {
-      if (dom.reciterMenu && !dom.reciterMenu.contains(e.target) && e.target !== dom.reciterBtn && e.target !== dom.reciterTag) {
+      if (dom.reciterMenu && !dom.reciterMenu.contains(e.target) && !e.target.closest('#qpReciterChip') && !e.target.closest('#qpReciterBtn') && !e.target.closest('#qpReciterTag')) {
         dom.reciterMenu.classList.remove('is-open');
       }
-      if (dom.timerMenu && !dom.timerMenu.contains(e.target) && !dom.timerBtn.contains(e.target)) {
+      if (dom.timerMenu && !dom.timerMenu.contains(e.target) && !e.target.closest('#qpTimerBtn')) {
         dom.timerMenu.classList.remove('is-open');
       }
     });
