@@ -194,33 +194,232 @@
       </section>
 
       <!-- ===== Featured Resource ===== -->
-      <section aria-label="Featured Resource">
-        <div class="featured-banner">
+      <section aria-label="Featured Resource" class="featured-resource-section">
+        <div class="featured-banner" id="featuredRuqyahBanner">
+          <div class="featured-ambient-glow" id="featuredAmbientGlow" aria-hidden="true"></div>
           <div class="featured-banner-grid">
+            
+            <!-- Left Info Column -->
             <div class="featured-banner-info">
-              <div class="project-featured-badge"><img src="assets/icons/star.png" alt="" width="14" height="14" class="btn-icon"> Featured Flagship Resource</div>
-              <h2 style="font-size:clamp(1.35rem, 3vw, 1.85rem); margin: 14px 0 10px; font-family: var(--font-display);"><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="26" height="26"> <span>Ruqyah Shariyah</span> Comprehensive Guide</h2>
-              <p style="color:var(--muted); line-height:1.7; font-size:15px; margin-bottom:12px;">Complete, authentic Qur'anic healing reference — all essential verses for protection, jinn expulsion, spiritual remedies, and peace of heart.</p>
-              
-              <div class="featured-highlights">
-                <span class="featured-highlight-item">📖 25+ Qur'anic Verses</span>
-                <span class="featured-highlight-item">🎧 Audio Recitation Included</span>
-                <span class="featured-highlight-item">🛡️ Hadith &amp; Sunnah Sourced</span>
+              <div class="featured-header-row">
+                <div class="project-featured-badge">
+                  <span class="pulse-beacon" aria-hidden="true"></span>
+                  <img src="assets/icons/star.png" alt="" width="14" height="14" class="btn-icon">
+                  Flagship Web Application
+                </div>
+                <div class="featured-pill-tag">
+                  <span class="badge-dot-green"></span> Live v2.4 · Free &amp; Open
+                </div>
               </div>
 
-              <div class="hero-buttons" style="justify-content:flex-start; margin-top:0;">
-                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">
-                  <img src="assets/icons/open-book.png" alt="" width="18" height="18" class="btn-icon"> Open Interactive Guide →
+              <h2 class="featured-banner-title">
+                <img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="28" height="28">
+                <span>Ruqyah Shariyah</span> Comprehensive Guide
+              </h2>
+
+              <p class="featured-banner-desc">
+                An authentic, interactive spiritual sanctuary for Qur'anic healing, divine protection, and jinn expulsion. Fully referenced from Sahih Hadith &amp; the Holy Qur'an with synchronized Arabic vocalization, translations, and audio.
+              </p>
+
+              <!-- Curated Remedies Topic Chips -->
+              <div class="featured-topic-row">
+                <span class="topic-row-label">Curated Remedies:</span>
+                <div class="featured-topic-pills">
+                  <button type="button" class="featured-topic-pill" data-target-verse="0" title="Ayat al-Kursi · Supreme Protection Before Sleep">🛡️ Night Shield</button>
+                  <button type="button" class="featured-topic-pill" data-target-verse="1" title="Surah Al-Fatihah · Spiritual &amp; Physical Cure">🌿 Cure &amp; Anxiety</button>
+                  <button type="button" class="featured-topic-pill" data-target-verse="2" title="Surah Al-Ikhlas · One-Third of the Qur'an">💎 Pure Tawheed</button>
+                  <button type="button" class="featured-topic-pill" data-target-verse="3" title="Surah Al-Falaq &amp; An-Nas · Refuge from Envy &amp; Evil Eye">🧿 Ayn &amp; Sihr Refuge</button>
+                </div>
+              </div>
+              
+              <div class="featured-highlights">
+                <div class="featured-highlight-item" title="25+ Categorized Healing Passages">
+                  <span class="featured-highlight-icon">📖</span>
+                  <div>
+                    <strong>25+ Verses</strong>
+                    <small>Arabic + English + Tajweed</small>
+                  </div>
+                </div>
+                <div class="featured-highlight-item" title="High-fidelity audio by Sheikh Mishary Alafasy">
+                  <span class="featured-highlight-icon">🎧</span>
+                  <div>
+                    <strong>Studio Audio</strong>
+                    <small>Mishary Alafasy Reciter</small>
+                  </div>
+                </div>
+                <div class="featured-highlight-item" title="Sahih al-Bukhari, Muslim &amp; Abu Dawud references">
+                  <span class="featured-highlight-icon">🛡️</span>
+                  <div>
+                    <strong>Sunnah Sourced</strong>
+                    <small>Authentic Hadith Citations</small>
+                  </div>
+                </div>
+                <div class="featured-highlight-item" title="Zero ads, works offline on mobile &amp; desktop">
+                  <span class="featured-highlight-icon">⚡</span>
+                  <div>
+                    <strong>Offline PWA</strong>
+                    <small>Zero Trackers · Instant Load</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="featured-actions">
+                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn" id="openRuqyahAppBtn">
+                  <img src="assets/icons/open-book.png" alt="" width="18" height="18" class="btn-icon">
+                  <span>Open Interactive Guide</span>
+                  <span class="btn-arrow" aria-hidden="true">→</span>
                 </a>
                 <a href="jinn-islamic-theology.html" class="btn btn-secondary">
                   Read Theology Article →
                 </a>
+                <button type="button" class="featured-share-btn" id="shareRuqyahBtn" aria-label="Copy Guide Link" title="Copy Ruqyah Guide link">
+                  <img src="assets/icons/share.png" alt="" width="16" height="16">
+                </button>
               </div>
             </div>
 
-            <div class="featured-banner-preview">
-              <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Spiritual Guide Banner" width="600" height="375" loading="lazy">
+            <!-- Right Interactive Showcase Column -->
+            <div class="featured-banner-preview-col">
+              <!-- Showcase View Mode Toggle Pills -->
+              <div class="preview-mode-switch" role="tablist" aria-label="Showcase View">
+                <button type="button" class="preview-mode-tab active" id="tabAppPreview" role="tab" aria-selected="true" aria-controls="panelAppPreview">
+                  🖼️ App Showcase
+                </button>
+                <button type="button" class="preview-mode-tab" id="tabLiveSampler" role="tab" aria-selected="false" aria-controls="panelLiveSampler">
+                  🎧 Live Audio &amp; Verses
+                </button>
+              </div>
+
+              <!-- Panel 1: Visual Image Banner & Floating Glass Badges -->
+              <div class="preview-tab-panel active" id="panelAppPreview" role="tabpanel" aria-labelledby="tabAppPreview">
+                <div class="featured-banner-preview">
+                  <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Spiritual Guide Banner" width="600" height="375" loading="lazy" class="preview-main-img">
+                  
+                  <!-- Floating Glass Badges -->
+                  <div class="preview-floating-badge badge-top-left">
+                    <span class="badge-dot-green"></span> Verified PWA
+                  </div>
+                  <div class="preview-floating-badge badge-top-right">
+                    <div class="preview-mini-waves" aria-hidden="true">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                    <span>Audio Synced</span>
+                  </div>
+                  <div class="preview-floating-badge badge-bottom-left">
+                    <span>🛡️ Protection Fortress</span>
+                  </div>
+
+                  <!-- Hover launch overlay button -->
+                  <div class="preview-hover-overlay">
+                    <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="preview-launch-btn">
+                      <img src="assets/icons/rocket.png" alt="" width="16" height="16">
+                      Launch Full Guide ↗
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Showcase Highlights Ribbon -->
+                <div class="preview-features-ribbon" aria-label="Key Web App Features">
+                  <span class="ribbon-item">⚡ Instant Search</span>
+                  <span class="ribbon-item">🎧 Audio Reciter</span>
+                  <span class="ribbon-item">📖 Tajweed &amp; Translit</span>
+                  <span class="ribbon-item">📱 Offline Ready</span>
+                </div>
+              </div>
+
+              <!-- Panel 2: Live Interactive Verse & Audio Sampler -->
+              <div class="preview-tab-panel" id="panelLiveSampler" role="tabpanel" aria-labelledby="tabLiveSampler">
+                <div class="featured-sampler-card">
+                  <div class="sampler-header">
+                    <div class="sampler-title-row">
+                      <span class="sampler-icon">✨</span>
+                      <div>
+                        <h4 class="sampler-title" id="samplerTitle">Ayat al-Kursi (2:255)</h4>
+                        <span class="sampler-meta" id="samplerMeta">Surah Al-Baqarah · Greatest Verse of Protection</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Verse Selector Chips (4 Verses) -->
+                  <div class="sampler-chip-row" role="radiogroup" aria-label="Select Verse to Preview">
+                    <button type="button" class="sampler-chip active" data-verse="0" role="radio" aria-checked="true">Ayat al-Kursi (2:255)</button>
+                    <button type="button" class="sampler-chip" data-verse="1" role="radio" aria-checked="false">Al-Fatihah (1:1-7)</button>
+                    <button type="button" class="sampler-chip" data-verse="2" role="radio" aria-checked="false">Al-Ikhlas (112)</button>
+                    <button type="button" class="sampler-chip" data-verse="3" role="radio" aria-checked="false">Al-Falaq (113)</button>
+                  </div>
+
+                  <!-- Verse Arabic & English Display -->
+                  <div class="sampler-display">
+                    <!-- Tool buttons: Font resize, Transliteration toggle, Copy -->
+                    <div class="sampler-tools-row">
+                      <div class="sampler-font-controls">
+                        <button type="button" class="sampler-tool-btn" id="samplerFontDec" title="Smaller font size">A-</button>
+                        <button type="button" class="sampler-tool-btn" id="samplerFontInc" title="Larger font size">A+</button>
+                        <button type="button" class="sampler-tool-btn active" id="samplerTranslitToggle" title="Toggle transliteration">🔤 Translit</button>
+                      </div>
+                      <button type="button" class="sampler-tool-btn sampler-copy-verse-btn" id="samplerCopyVerseBtn" title="Copy verse & translation">
+                        📋 Copy
+                      </button>
+                    </div>
+
+                    <div class="sampler-arabic" id="samplerArabic" dir="rtl" lang="ar">
+                      اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ
+                    </div>
+
+                    <div class="sampler-translit" id="samplerTranslit">
+                      "Allāhu lā ilāha illā Huwa, Al-Ḥayyul-Qayyūm. Lā ta'khudhuhū sinatuw-wa lā nawm, lahū mā fis-samāwāti wa mā fil-arḍ..."
+                    </div>
+
+                    <div class="sampler-translation" id="samplerTranslation">
+                      "Allah! There is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep..."
+                    </div>
+                  </div>
+
+                  <!-- Audio Timeline Scrubber -->
+                  <div class="sampler-scrubber-container">
+                    <div class="sampler-scrubber-track" id="samplerScrubTrack" role="slider" aria-label="Audio scrubber" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <div class="sampler-scrub-fill" id="samplerScrubFill"></div>
+                      <div class="sampler-scrub-thumb" id="samplerScrubThumb"></div>
+                    </div>
+                    <div class="sampler-time-row">
+                      <span id="samplerCurrentTime">0:00</span>
+                      <span id="samplerDuration">0:00</span>
+                    </div>
+                  </div>
+
+                  <!-- Player Controls -->
+                  <div class="sampler-player" id="samplerPlayer">
+                    <div class="sampler-player-left">
+                      <button type="button" class="sampler-play-btn" id="samplerPlayBtn" aria-label="Play recitation">
+                        <span class="play-icon" id="playIcon">▶</span>
+                        <span id="playBtnText">Play Recitation</span>
+                      </button>
+                      
+                      <div class="sampler-audio-indicator" id="samplerAudioIndicator" aria-hidden="true">
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                        <span class="wave-bar"></span>
+                      </div>
+                    </div>
+
+                    <div class="sampler-player-right">
+                      <button type="button" class="sampler-ctrl-btn" id="samplerLoopBtn" title="Toggle repeat/loop verse" aria-pressed="false">🔁</button>
+                      <button type="button" class="sampler-ctrl-btn" id="samplerMuteBtn" title="Toggle mute" aria-pressed="false">🔊</button>
+                      <div class="sampler-reciter-tag">
+                        🎙️ Mishary Alafasy
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Hidden native audio element -->
+                  <audio id="samplerAudioElement" preload="none" src="https://everyayah.com/data/Alafasy_128kbps/002255.mp3"></audio>
+                </div>
+              </div>
+
             </div>
+
           </div>
         </div>
       </section>

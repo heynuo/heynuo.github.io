@@ -2340,6 +2340,346 @@ function initArticlePreviewModal() {
   });
 }
 
+// ---------- Featured Flagship Resource Showcase ----------
+function initFeaturedResource() {
+  const banner = $.get('#featuredRuqyahBanner');
+  if (!banner) return;
+
+  // 1. Mouse-following radial glow spotlight
+  $.on(banner, 'mousemove', (e) => {
+    const rect = banner.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    banner.style.setProperty('--feat-x', `${x}px`);
+    banner.style.setProperty('--feat-y', `${y}px`);
+  });
+
+  // 2. Share / Copy Link button
+  const shareBtn = $.get('#shareRuqyahBtn');
+  if (shareBtn) {
+    $.on(shareBtn, 'click', async () => {
+      const url = 'https://heynuo.github.io/heynuo.github.io-ruqyah-guide/';
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(url);
+          showToast('Ruqyah Guide link copied to clipboard!', '✨');
+        } else {
+          const temp = document.createElement('input');
+          temp.value = url;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          document.body.removeChild(temp);
+          showToast('Ruqyah Guide link copied to clipboard!', '✨');
+        }
+      } catch (err) {
+        showToast('Link: ' + url, '🔗');
+      }
+    });
+  }
+
+  // 3. Showcase Tab Switching (App Showcase vs Live Audio & Verses)
+  const tabApp = $.get('#tabAppPreview');
+  const tabSampler = $.get('#tabLiveSampler');
+  const panelApp = $.get('#panelAppPreview');
+  const panelSampler = $.get('#panelLiveSampler');
+
+  function switchTab(activeTab, activePanel, inactiveTab, inactivePanel) {
+    if (!activeTab || !activePanel) return;
+    activeTab.classList.add('active');
+    activeTab.setAttribute('aria-selected', 'true');
+    activePanel.classList.add('active');
+    activePanel.removeAttribute('hidden');
+
+    if (inactiveTab && inactivePanel) {
+      inactiveTab.classList.remove('active');
+      inactiveTab.setAttribute('aria-selected', 'false');
+      inactivePanel.classList.remove('active');
+      inactivePanel.setAttribute('hidden', '');
+    }
+  }
+
+  function activateSamplerTab() {
+    switchTab(tabSampler, panelSampler, tabApp, panelApp);
+  }
+
+  if (tabApp && tabSampler && panelApp && panelSampler) {
+    $.on(tabApp, 'click', () => {
+      switchTab(tabApp, panelApp, tabSampler, panelSampler);
+    });
+
+    $.on(tabSampler, 'click', activateSamplerTab);
+  }
+
+  // 4. Live Verse & Audio Sampler Data
+  const verses = [
+    {
+      title: 'Ayat al-Kursi (2:255)',
+      meta: 'Surah Al-Baqarah · Greatest Verse of Protection',
+      arabic: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ',
+      translit: 'Allāhu lā ilāha illā Huwa, Al-Ḥayyul-Qayyūm. Lā ta\'khudhuhū sinatuw-wa lā nawm, lahū mā fis-samāwāti wa mā fil-arḍ. Man dhal-ladhī yashfa\'u \'indahū illā bi-idhnih. Ya\'lamu mā bayna aydīhim wa mā khalfahum wa lā yuḥīṭūna bi-shay\'im-min \'ilmihī illā bimā shā\'. Wasi\'a kursiyyuhus-samāwāti wal-arḍ, wa lā ya\'ūduhū ḥifẓuhumā, wa Huwal-\'Aliyyul-\'Aẓīm.',
+      translation: '"Allah! There is no deity except Him, the Ever-Living, the Sustainer of all existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth... And He is the Most High, the Most Great."',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/002255.mp3',
+      hadithBadge: '🛡️ "Recite it when you go to bed, and you will be protected by Allah till morning." (Bukhari)'
+    },
+    {
+      title: 'Surah Al-Fatihah (1:1-7)',
+      meta: 'The Opener · Ash-Shifa (The Ultimate Spiritual Cure)',
+      arabic: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ ۝ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ۝ الرَّحْمَٰنِ الرَّحِيمِ ۝ مَالِكِ يَوْمِ الدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ۝ صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
+      translit: 'Bismillāhir-Raḥmānir-Raḥīm. Al-ḥamdu lillāhi Rabbil-\'ālamīn. Ar-Raḥmānir-Raḥīm. Māliki yawmid-dīn. Iyyāka na\'budu wa iyyāka nasta\'īn. Ihdinaṣ-ṣirāṭal-mustaqīm. Ṣirāṭalladhīna an\'amta \'alayhim, ghayril-maghḍūbi \'alayhim walāḍ-ḍāllīn.',
+      translation: '"In the name of Allah, the Entirely Merciful, the Especially Merciful. [All] praise is due to Allah, Lord of the worlds... Guide us to the straight path - The path of those upon whom You have bestowed favor..."',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/001001.mp3',
+      hadithBadge: '🌿 "How did you know that it is a Ruqyah (cure)?" (Sahih al-Bukhari 5736)'
+    },
+    {
+      title: 'Surah Al-Ikhlas (112:1-4)',
+      meta: 'The Sincerity · Equal to One-Third of the Qur\'an',
+      arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',
+      translit: 'Qul Huwallāhu Aḥad. Allāhuṣ-Ṣamad. Lam yalid wa lam yūlad. Wa lam yakul-lahū kufuwan aḥad.',
+      translation: '"Say, \'He is Allah, [who is] One, Allah, the Eternal Refuge. He neither begets nor is born, nor is there to Him any equivalent.\'"',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/112001.mp3',
+      hadithBadge: '💎 "By Him in Whose Hand my soul is, it is equivalent to one third of the Qur\'an." (Bukhari)'
+    },
+    {
+      title: 'Surah Al-Falaq & An-Nas (113-114)',
+      meta: 'The Mu\'awwidhatayn · Divine Shield from Magic & Evil Eye',
+      arabic: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ',
+      translit: 'Qul a\'ūdhu bi-Rabbil-falaq. Min sharri mā khalaq. Wa min sharri ghāsiqin idhā waqab. Wa min sharrin-naffāthāti fil-\'uqad. Wa min sharri ḥāsidin idhā ḥasad.',
+      translation: '"Say, \'I seek refuge in the Lord of daybreak from the evil of that which He created... and from the evil of the blowers in knots, and from the evil of an envier when he envies.\'"',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/113001.mp3',
+      hadithBadge: '🧿 "No person seeking refuge has sought refuge with anything like these two." (Abu Dawud)'
+    }
+  ];
+
+  let currentVerseIndex = 0;
+  let currentFontSize = 19;
+  const audioEl = $.get('#samplerAudioElement');
+  const playBtn = $.get('#samplerPlayBtn');
+  const playIcon = $.get('#playIcon');
+  const playBtnText = $.get('#playBtnText');
+  const playerContainer = $.get('#samplerPlayer');
+  const titleEl = $.get('#samplerTitle');
+  const metaEl = $.get('#samplerMeta');
+  const arabicEl = $.get('#samplerArabic');
+  const translitEl = $.get('#samplerTranslit');
+  const transEl = $.get('#samplerTranslation');
+  const chips = $.getAll('.sampler-chip');
+
+  // Scrubber & time elements
+  const scrubTrack = $.get('#samplerScrubTrack');
+  const scrubFill = $.get('#samplerScrubFill');
+  const scrubThumb = $.get('#samplerScrubThumb');
+  const curTimeEl = $.get('#samplerCurrentTime');
+  const durationEl = $.get('#samplerDuration');
+  const loopBtn = $.get('#samplerLoopBtn');
+  const muteBtn = $.get('#samplerMuteBtn');
+
+  // Font & translit controls
+  const fontDecBtn = $.get('#samplerFontDec');
+  const fontIncBtn = $.get('#samplerFontInc');
+  const translitToggle = $.get('#samplerTranslitToggle');
+  const copyVerseBtn = $.get('#samplerCopyVerseBtn');
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return '0:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  }
+
+  function updatePlayState(isPlaying) {
+    if (!playBtn) return;
+    if (isPlaying) {
+      if (playIcon) playIcon.textContent = '⏸';
+      if (playBtnText) playBtnText.textContent = 'Pause';
+      if (playerContainer) playerContainer.classList.add('is-playing');
+    } else {
+      if (playIcon) playIcon.textContent = '▶';
+      if (playBtnText) playBtnText.textContent = 'Play Recitation';
+      if (playerContainer) playerContainer.classList.remove('is-playing');
+    }
+  }
+
+  function updateScrubber() {
+    if (!audioEl || !audioEl.duration) return;
+    const progress = (audioEl.currentTime / audioEl.duration) * 100;
+    if (scrubFill) scrubFill.style.width = `${progress}%`;
+    if (scrubThumb) scrubThumb.style.left = `${progress}%`;
+    if (curTimeEl) curTimeEl.textContent = formatTime(audioEl.currentTime);
+    if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
+  }
+
+  function loadVerse(index, autoPlay = false) {
+    if (!verses[index]) return;
+    currentVerseIndex = index;
+    const v = verses[index];
+
+    if (titleEl) titleEl.textContent = v.title;
+    if (metaEl) metaEl.textContent = v.meta;
+    if (arabicEl) arabicEl.textContent = v.arabic;
+    if (translitEl) translitEl.textContent = v.translit;
+    if (transEl) transEl.textContent = v.translation;
+
+    chips.forEach((c, idx) => {
+      const isSelected = idx === index;
+      c.classList.toggle('active', isSelected);
+      c.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+    });
+
+    if (scrubFill) scrubFill.style.width = '0%';
+    if (scrubThumb) scrubThumb.style.left = '0%';
+    if (curTimeEl) curTimeEl.textContent = '0:00';
+
+    if (audioEl) {
+      const wasPlaying = !audioEl.paused && !audioEl.ended;
+      audioEl.src = v.audio;
+      audioEl.load();
+      if (autoPlay || wasPlaying) {
+        audioEl.play().then(() => updatePlayState(true)).catch(() => updatePlayState(false));
+      } else {
+        updatePlayState(false);
+      }
+    }
+  }
+
+  // 5. Verse Chip Selector
+  chips.forEach((chip) => {
+    $.on(chip, 'click', () => {
+      const idx = parseInt(chip.dataset.verse, 10);
+      if (!isNaN(idx) && idx !== currentVerseIndex) {
+        loadVerse(idx, true);
+      }
+    });
+  });
+
+  // 6. Curated Healing Topic Pills (Left column triggers)
+  const topicPills = $.getAll('.featured-topic-pill');
+  topicPills.forEach((pill) => {
+    $.on(pill, 'click', () => {
+      const targetIdx = parseInt(pill.dataset.targetVerse, 10);
+      if (!isNaN(targetIdx)) {
+        activateSamplerTab();
+        loadVerse(targetIdx, true);
+        const v = verses[targetIdx];
+        if (v && v.hadithBadge) {
+          showToast(v.hadithBadge, '✨', 4000);
+        }
+      }
+    });
+  });
+
+  // 7. Audio Play / Pause
+  if (playBtn && audioEl) {
+    $.on(playBtn, 'click', () => {
+      if (audioEl.paused || audioEl.ended) {
+        audioEl.play()
+          .then(() => updatePlayState(true))
+          .catch((err) => {
+            console.warn('Audio play prevented:', err);
+            showToast('Tap again to enable audio playback', '🎧');
+          });
+      } else {
+        audioEl.pause();
+        updatePlayState(false);
+      }
+    });
+
+    $.on(audioEl, 'timeupdate', updateScrubber);
+    $.on(audioEl, 'loadedmetadata', () => {
+      if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
+    });
+    $.on(audioEl, 'ended', () => updatePlayState(false));
+    $.on(audioEl, 'pause', () => updatePlayState(false));
+    $.on(audioEl, 'play', () => updatePlayState(true));
+  }
+
+  // 8. Audio Scrubbing
+  if (scrubTrack && audioEl) {
+    const seekAudio = (e) => {
+      const rect = scrubTrack.getBoundingClientRect();
+      const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (audioEl.duration) {
+        audioEl.currentTime = pos * audioEl.duration;
+        updateScrubber();
+      }
+    };
+
+    $.on(scrubTrack, 'click', seekAudio);
+  }
+
+  // 9. Loop & Mute Controls
+  if (loopBtn && audioEl) {
+    $.on(loopBtn, 'click', () => {
+      audioEl.loop = !audioEl.loop;
+      loopBtn.classList.toggle('active', audioEl.loop);
+      loopBtn.setAttribute('aria-pressed', audioEl.loop ? 'true' : 'false');
+      showToast(audioEl.loop ? 'Verse repeat enabled 🔁' : 'Verse repeat off', '🔁');
+    });
+  }
+
+  if (muteBtn && audioEl) {
+    $.on(muteBtn, 'click', () => {
+      audioEl.muted = !audioEl.muted;
+      muteBtn.textContent = audioEl.muted ? '🔇' : '🔊';
+      muteBtn.classList.toggle('active', audioEl.muted);
+      muteBtn.setAttribute('aria-pressed', audioEl.muted ? 'true' : 'false');
+    });
+  }
+
+  // 10. Font Size & Transliteration Controls
+  if (fontDecBtn && fontIncBtn && arabicEl) {
+    $.on(fontDecBtn, 'click', () => {
+      if (currentFontSize > 15) {
+        currentFontSize -= 2;
+        arabicEl.style.fontSize = `${currentFontSize}px`;
+      }
+    });
+
+    $.on(fontIncBtn, 'click', () => {
+      if (currentFontSize < 32) {
+        currentFontSize += 2;
+        arabicEl.style.fontSize = `${currentFontSize}px`;
+      }
+    });
+  }
+
+  if (translitToggle && translitEl) {
+    $.on(translitToggle, 'click', () => {
+      const isHidden = translitEl.hasAttribute('hidden');
+      if (isHidden) {
+        translitEl.removeAttribute('hidden');
+        translitToggle.classList.add('active');
+      } else {
+        translitEl.setAttribute('hidden', '');
+        translitToggle.classList.remove('active');
+      }
+    });
+  }
+
+  if (copyVerseBtn) {
+    $.on(copyVerseBtn, 'click', async () => {
+      const v = verses[currentVerseIndex];
+      if (!v) return;
+      const textToCopy = `${v.title}\n\n${v.arabic}\n\nTransliteration:\n${v.translit}\n\nTranslation:\n${v.translation}\n\nReference: ${v.meta}\nSource: HeyNuo Ruqyah Guide`;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(textToCopy);
+        } else {
+          const temp = document.createElement('textarea');
+          temp.value = textToCopy;
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          document.body.removeChild(temp);
+        }
+        showToast(`${v.title} copied to clipboard!`, '📋');
+      } catch (err) {
+        showToast('Could not copy verse', '⚠️');
+      }
+    });
+  }
+}
+
 // ---------- Initialization ----------
 function init() {
   initTheme();
@@ -2371,6 +2711,7 @@ function init() {
   initShortcutsModal();
   initTiltEffect();
   initArticlePreviewModal();
+  initFeaturedResource();
 
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }
