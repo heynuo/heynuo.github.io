@@ -311,6 +311,7 @@
           <div class="qp-progress-wrap" id="qpProgressWrap">
             <span class="qp-time qp-time-curr" id="qpTimeCurr">00:00</span>
             <div class="qp-progress-bar" id="qpProgressBar" role="slider" aria-label="Timeline" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="qp-progress-buffer" id="qpProgressBuffer"></div>
               <div class="qp-progress-fill" id="qpProgressFill">
                 <span class="qp-progress-thumb"></span>
               </div>
@@ -474,31 +475,34 @@
           <div class="qp-progress-wrap" style="max-width: 100%; margin-bottom: 18px;">
             <span class="qp-time qp-time-curr" id="qpModalTimeCurr">00:00</span>
             <div class="qp-progress-bar" id="qpModalProgressBar" role="slider" aria-label="Timeline">
+              <div class="qp-progress-buffer" id="qpModalProgressBuffer"></div>
               <div class="qp-progress-fill" id="qpModalProgressFill"></div>
             </div>
             <span class="qp-time qp-time-total" id="qpModalTimeTotal">--:--</span>
           </div>
 
-          <div class="qp-controls" style="justify-content: center; gap: 20px;">
-            <button class="qp-btn" id="qpModalShuffleBtn" title="Shuffle" aria-label="Toggle shuffle">
+          <div class="qp-controls" style="justify-content: center; gap: 14px;">
+            <button class="qp-btn" id="qpModalShuffleBtn" title="Shuffle (S)" aria-label="Toggle shuffle">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                 <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/>
               </svg>
               <span class="qp-btn-dot"></span>
             </button>
-            <button class="qp-btn" id="qpModalPrevBtn" title="Previous Surah" aria-label="Previous Surah">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <button class="qp-btn" id="qpModalPrevBtn" title="Previous Surah (←)" aria-label="Previous Surah">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <rect x="4" y="5" width="2.5" height="14" rx="1.25"></rect>
                 <polygon points="20,5 8.5,12 20,19"></polygon>
               </svg>
             </button>
-            <button class="qp-play-btn" id="qpModalPlayBtn" style="width: 56px; height: 56px;" title="Play / Pause" aria-label="Play or Pause">
+            <button class="qp-btn qp-skip-btn" id="qpModalRewindBtn" title="Rewind 10s (J)" aria-label="Rewind 10 seconds">-10s</button>
+            <button class="qp-play-btn" id="qpModalPlayBtn" style="width: 54px; height: 54px;" title="Play / Pause (Space)" aria-label="Play or Pause">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
                 <polygon points="7,4 20,12 7,20"></polygon>
               </svg>
             </button>
-            <button class="qp-btn" id="qpModalNextBtn" title="Next Surah" aria-label="Next Surah">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <button class="qp-btn qp-skip-btn" id="qpModalForwardBtn" title="Fast Forward 10s (L)" aria-label="Fast forward 10 seconds">+10s</button>
+            <button class="qp-btn" id="qpModalNextBtn" title="Next Surah (→)" aria-label="Next Surah">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                 <polygon points="4,5 15.5,12 4,19"></polygon>
                 <rect x="17.5" y="5" width="2.5" height="14" rx="1.25"></rect>
               </svg>
@@ -538,9 +542,14 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
           <span class="qp-drawer-title">The Holy Quran Playlist (114)</span>
         </div>
-        <button class="qp-icon-btn" id="qpDrawerCloseBtn" aria-label="Close playlist drawer">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </button>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button class="qp-drawer-chip-btn" id="qpJumpPlayingBtn" title="Jump to playing Surah">
+            <span>🎯</span><span>Playing</span>
+          </button>
+          <button class="qp-icon-btn" id="qpDrawerCloseBtn" aria-label="Close playlist drawer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
       </div>
 
       <!-- Quick Category Tabs -->
@@ -553,7 +562,9 @@
       </div>
 
       <div class="qp-search-wrap">
+        <svg class="qp-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input type="text" class="qp-search-input" id="qpSearchInput" placeholder="Search Surahs (e.g. Yasin, Rahman, Mulk, 36)..." aria-label="Search Surahs" />
+        <button class="qp-search-clear" id="qpSearchClear" title="Clear search">✕</button>
       </div>
       <div class="qp-surah-list" id="qpSurahList"></div>
     `;
@@ -622,6 +633,7 @@
     dom.timeCurr = document.getElementById('qpTimeCurr');
     dom.timeTotal = document.getElementById('qpTimeTotal');
     dom.progressBar = document.getElementById('qpProgressBar');
+    dom.progressBuffer = document.getElementById('qpProgressBuffer');
     dom.progressFill = document.getElementById('qpProgressFill');
     dom.progressWrap = document.getElementById('qpProgressWrap');
     dom.scrubberTooltip = document.getElementById('qpScrubberTooltip');
@@ -655,8 +667,11 @@
     dom.modalTimeCurr = document.getElementById('qpModalTimeCurr');
     dom.modalTimeTotal = document.getElementById('qpModalTimeTotal');
     dom.modalProgressBar = document.getElementById('qpModalProgressBar');
+    dom.modalProgressBuffer = document.getElementById('qpModalProgressBuffer');
     dom.modalProgressFill = document.getElementById('qpModalProgressFill');
     dom.modalPlayBtn = document.getElementById('qpModalPlayBtn');
+    dom.modalRewindBtn = document.getElementById('qpModalRewindBtn');
+    dom.modalForwardBtn = document.getElementById('qpModalForwardBtn');
     dom.modalPrevBtn = document.getElementById('qpModalPrevBtn');
     dom.modalNextBtn = document.getElementById('qpModalNextBtn');
     dom.modalRepeatBtn = document.getElementById('qpModalRepeatBtn');
@@ -665,7 +680,9 @@
 
     // Drawer elements
     dom.drawerCloseBtn = document.getElementById('qpDrawerCloseBtn');
+    dom.jumpPlayingBtn = document.getElementById('qpJumpPlayingBtn');
     dom.searchInput = document.getElementById('qpSearchInput');
+    dom.searchClear = document.getElementById('qpSearchClear');
     dom.surahList = document.getElementById('qpSurahList');
 
     // Toast
@@ -976,14 +993,51 @@
       item.setAttribute('role', 'button');
       item.setAttribute('tabindex', '0');
       item.innerHTML = `
-        <span class="qp-item-number">${surah.id}</span>
+        ${isCurr && isPlaying ? `
+          <div class="qp-item-playing-icon" title="Now Reciting">
+            <span></span><span></span><span></span>
+          </div>
+        ` : `<span class="qp-item-number">${surah.id}</span>`}
         <div class="qp-item-info">
-          <div class="qp-item-title">${surah.name} (${surah.meaning}) ${isFav ? '⭐' : ''}</div>
+          <div class="qp-item-title">${surah.name} <span style="font-size:0.75rem; opacity:0.65; font-weight:normal;">(${surah.meaning})</span></div>
           <div class="qp-item-meta">${surah.type} &bull; ${surah.ayahs} Ayahs</div>
         </div>
         <span class="qp-item-arabic">${surah.arabic}</span>
+        <div class="qp-item-actions">
+          <button class="qp-item-action-btn ${isFav ? 'is-fav' : ''}" data-fav-id="${surah.id}" title="${isFav ? 'Remove from favorites' : 'Add to favorites'}" aria-label="Favorite Surah">
+            ${isFav ? '★' : '☆'}
+          </button>
+          <button class="qp-item-action-btn" data-dl-id="${surah.id}" title="Download Surah MP3" aria-label="Download Surah">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </button>
+        </div>
       `;
-      item.addEventListener('click', () => {
+      item.addEventListener('click', (e) => {
+        const favBtn = e.target.closest('[data-fav-id]');
+        if (favBtn) {
+          e.stopPropagation();
+          const sId = parseInt(favBtn.getAttribute('data-fav-id'), 10);
+          if (favorites.has(sId)) {
+            favorites.delete(sId);
+            showNotification(`Removed Surah ${surah.name} from Favorites`, '🤍');
+          } else {
+            favorites.add(sId);
+            showNotification(`Added Surah ${surah.name} to Favorites`, '❤️');
+          }
+          localStorage.setItem(STORAGE_KEYS.FAVORITES, JSON.stringify(Array.from(favorites)));
+          updateFavoriteUI();
+          renderSurahList(dom.searchInput ? dom.searchInput.value : '');
+          return;
+        }
+
+        const dlBtn = e.target.closest('[data-dl-id]');
+        if (dlBtn) {
+          e.stopPropagation();
+          const sId = parseInt(dlBtn.getAttribute('data-dl-id'), 10);
+          downloadSurahById(sId);
+          return;
+        }
+
         loadAndPlay(idx);
         closeDrawer();
       });
@@ -999,18 +1053,38 @@
     }
   }
 
+  function scrollToPlayingSurah() {
+    if (!dom.surahList) return;
+    const activeEl = dom.surahList.querySelector('.qp-surah-item.is-active');
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    } else {
+      activeCategory = 'all';
+      if (dom.drawer) {
+        dom.drawer.querySelectorAll('.qp-queue-tab').forEach(t => t.classList.toggle('is-active', t.getAttribute('data-category') === 'all'));
+      }
+      if (dom.searchInput) dom.searchInput.value = '';
+      if (dom.searchClear) dom.searchClear.classList.remove('is-visible');
+      renderSurahList('');
+      setTimeout(() => {
+        const el = dom.surahList.querySelector('.qp-surah-item.is-active');
+        if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 100);
+    }
+  }
+
   // =========================================================================
   // 13. DIRECT MP3 DOWNLOAD
   // =========================================================================
-  function downloadCurrentSurah() {
-    const surah = SURAHS[currentIndex];
+  function downloadSurahById(surahId) {
+    const surah = SURAHS.find(s => s.id === surahId);
     const reciter = getCurrentReciter();
     if (!surah) return;
 
     const url = getAudioUrl(surah.id, reciter.id);
     const filename = `Surah_${String(surah.id).padStart(3, '0')}_${surah.name}_${reciter.short.replace(/\s+/g, '_')}.mp3`;
 
-    showNotification(`Preparing download: ${surah.name}`, '📥');
+    showNotification(`Downloading Surah ${surah.name} (${reciter.short})`, '📥');
 
     const link = document.createElement('a');
     link.href = url;
@@ -1019,6 +1093,11 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  function downloadCurrentSurah() {
+    const surah = SURAHS[currentIndex];
+    if (surah) downloadSurahById(surah.id);
   }
 
   // =========================================================================
@@ -1200,7 +1279,10 @@
     volume = Math.max(0, Math.min(1, val));
     audio.volume = volume;
     localStorage.setItem(STORAGE_KEYS.VOLUME, volume);
-    if (dom.volumeSlider) dom.volumeSlider.value = volume;
+    if (dom.volumeSlider) {
+      dom.volumeSlider.value = volume;
+      dom.volumeSlider.style.setProperty('--vol-fill', `${(volume * 100).toFixed(1)}%`);
+    }
     updateMuteIcon();
   }
 
@@ -1219,6 +1301,27 @@
       audio.currentTime = frac * audio.duration;
       updateTimeDisplay();
     }
+  }
+
+  function seekRelative(sec) {
+    if (!audio.duration || isNaN(audio.duration)) return;
+    const target = Math.max(0, Math.min(audio.duration, audio.currentTime + sec));
+    audio.currentTime = target;
+    updateTimeDisplay();
+    showNotification(sec > 0 ? `+${sec}s ⏩` : `${sec}s ⏪`, '⏱️');
+  }
+
+  function updateBufferDisplay() {
+    if (!audio.duration || audio.duration <= 0) return;
+    try {
+      const buffered = audio.buffered;
+      if (buffered && buffered.length > 0) {
+        const bufferedEnd = buffered.end(buffered.length - 1);
+        const percent = Math.min(100, (bufferedEnd / audio.duration) * 100);
+        if (dom.progressBuffer) dom.progressBuffer.style.width = `${percent}%`;
+        if (dom.modalProgressBuffer) dom.modalProgressBuffer.style.width = `${percent}%`;
+      }
+    } catch (e) {}
   }
 
   // =========================================================================
@@ -1428,7 +1531,11 @@
       updatePlayIcons();
     });
 
-    audio.addEventListener('loadedmetadata', updateTimeDisplay);
+    audio.addEventListener('loadedmetadata', () => {
+      updateTimeDisplay();
+      updateBufferDisplay();
+    });
+    audio.addEventListener('progress', updateBufferDisplay);
 
     // Player bar buttons
     dom.playBtn.addEventListener('click', togglePlay);
@@ -1528,6 +1635,8 @@
     dom.modalNextBtn.addEventListener('click', nextTrack);
     dom.modalRepeatBtn.addEventListener('click', cycleRepeatMode);
     dom.modalShuffleBtn.addEventListener('click', toggleShuffle);
+    if (dom.modalRewindBtn) dom.modalRewindBtn.addEventListener('click', () => seekRelative(-10));
+    if (dom.modalForwardBtn) dom.modalForwardBtn.addEventListener('click', () => seekRelative(10));
     dom.modalReciterPill.addEventListener('click', () => {
       closeModal();
       dom.reciterMenu.classList.add('is-open');
@@ -1537,7 +1646,22 @@
     dom.queueBtn.addEventListener('click', openDrawer);
     dom.drawerCloseBtn.addEventListener('click', closeDrawer);
     dom.drawerOverlay.addEventListener('click', closeDrawer);
-    dom.searchInput.addEventListener('input', (e) => renderSurahList(e.target.value));
+    if (dom.jumpPlayingBtn) dom.jumpPlayingBtn.addEventListener('click', scrollToPlayingSurah);
+
+    if (dom.searchInput) {
+      dom.searchInput.addEventListener('input', (e) => {
+        renderSurahList(e.target.value);
+        if (dom.searchClear) dom.searchClear.classList.toggle('is-visible', Boolean(e.target.value));
+      });
+    }
+    if (dom.searchClear && dom.searchInput) {
+      dom.searchClear.addEventListener('click', () => {
+        dom.searchInput.value = '';
+        renderSurahList('');
+        dom.searchClear.classList.remove('is-visible');
+        dom.searchInput.focus();
+      });
+    }
 
     // Category Tabs in Queue
     const categoryTabs = dom.drawer.querySelectorAll('.qp-queue-tab');
@@ -1605,13 +1729,30 @@
           e.preventDefault();
           togglePlay();
           break;
+        case 'k':
+        case 'K':
+          e.preventDefault();
+          togglePlay();
+          break;
         case 'ArrowRight':
           e.preventDefault();
-          nextTrack();
+          if (e.shiftKey) seekRelative(10);
+          else nextTrack();
           break;
         case 'ArrowLeft':
           e.preventDefault();
-          prevTrack();
+          if (e.shiftKey) seekRelative(-10);
+          else prevTrack();
+          break;
+        case 'l':
+        case 'L':
+          e.preventDefault();
+          seekRelative(10);
+          break;
+        case 'j':
+        case 'J':
+          e.preventDefault();
+          seekRelative(-10);
           break;
         case 'ArrowUp':
           e.preventDefault();
@@ -1625,11 +1766,6 @@
         case 'M':
           e.preventDefault();
           toggleMute();
-          break;
-        case 'l':
-        case 'L':
-          e.preventDefault();
-          cycleRepeatMode();
           break;
         case 's':
         case 'S':
@@ -1652,6 +1788,16 @@
           e.preventDefault();
           if (dom.modal && dom.modal.classList.contains('is-open')) closeModal();
           else openModal();
+          break;
+        case 'r':
+        case 'R':
+          e.preventDefault();
+          if (dom.reciterMenu) dom.reciterMenu.classList.toggle('is-open');
+          break;
+        case 't':
+        case 'T':
+          e.preventDefault();
+          if (dom.timerMenu) dom.timerMenu.classList.toggle('is-open');
           break;
         case 'Escape':
           closeModal();
@@ -1688,6 +1834,7 @@
     updateMuteIcon();
     updateFavoriteUI();
     if (dom.speedBtn) dom.speedBtn.textContent = `${playbackSpeed}x`;
+    if (dom.volumeSlider) dom.volumeSlider.style.setProperty('--vol-fill', `${(volume * 100).toFixed(1)}%`);
 
     // Load track
     loadTrack(currentIndex, wasPlayingBeforeNav, savedTime);

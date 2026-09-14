@@ -485,6 +485,18 @@ body.has-qp-minimized {
   height: 7px;
 }
 
+.qp-progress-buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--qp-radius-full);
+  width: 0%;
+  pointer-events: none;
+  transition: width 0.25s ease-out;
+}
+
 .qp-progress-fill {
   position: absolute;
   top: 0;
@@ -568,7 +580,7 @@ body.has-qp-minimized {
   appearance: none;
   width: 72px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.16);
+  background: linear-gradient(to right, var(--qp-primary-light) 0%, var(--qp-primary-light) var(--vol-fill, 85%), rgba(255, 255, 255, 0.16) var(--vol-fill, 85%), rgba(255, 255, 255, 0.16) 100%);
   border-radius: var(--qp-radius-full);
   outline: none;
   cursor: pointer;
@@ -581,14 +593,27 @@ body.has-qp-minimized {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--qp-primary-light);
-  box-shadow: 0 0 6px var(--qp-primary-glow);
+  background: #ffffff;
+  border: 2px solid var(--qp-primary);
+  box-shadow: 0 0 8px var(--qp-primary-glow);
   cursor: pointer;
   transition: transform var(--qp-transition);
 }
 
 .qp-volume-slider::-webkit-slider-thumb:hover {
   transform: scale(1.3);
+}
+
+/* Modal Skip Buttons (-10s / +10s) */
+.qp-skip-btn {
+  font-family: var(--qp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--qp-text-secondary);
+}
+
+.qp-skip-btn:hover {
+  color: var(--qp-primary-light);
 }
 
 /* Strictly Circular Action Buttons */
@@ -1144,26 +1169,85 @@ body.has-qp-minimized {
   box-shadow: 0 2px 8px var(--qp-primary-glow);
 }
 
+.qp-drawer-chip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--qp-radius-full);
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--qp-primary-light);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--qp-transition);
+}
+
+.qp-drawer-chip-btn:hover {
+  background: var(--qp-primary);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--qp-primary-glow);
+}
+
 .qp-search-wrap {
+  position: relative;
   padding: 12px 20px;
   border-bottom: 1px solid var(--qp-border);
+  display: flex;
+  align-items: center;
+}
+
+.qp-search-icon {
+  position: absolute;
+  left: 32px;
+  color: var(--qp-text-muted);
+  pointer-events: none;
 }
 
 .qp-search-input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 10px 36px 10px 36px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--qp-border);
-  border-radius: var(--qp-radius-sm);
+  border-radius: var(--qp-radius-full);
   color: var(--qp-text-main);
   font-size: 0.88rem;
   outline: none;
-  transition: border-color var(--qp-transition);
+  transition: all var(--qp-transition);
 }
 
 .qp-search-input:focus {
   border-color: var(--qp-primary);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 12px var(--qp-primary-glow);
+}
+
+.qp-search-clear {
+  position: absolute;
+  right: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--qp-text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all var(--qp-transition);
+}
+
+.qp-search-clear:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.qp-search-clear.is-visible {
+  display: flex;
 }
 
 .qp-surah-list {
@@ -1221,6 +1305,35 @@ body.has-qp-minimized {
   color: #ffffff;
 }
 
+/* Animated Soundwave Icon in Queue list */
+.qp-item-playing-icon {
+  min-width: 28px;
+  height: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2.5px;
+  padding-bottom: 4px;
+  background: rgba(16, 185, 129, 0.25);
+  border-radius: var(--qp-radius-xs);
+}
+
+.qp-item-playing-icon span {
+  width: 2.5px;
+  background: var(--qp-primary-light);
+  border-radius: 1px;
+  animation: qpBarWave 0.8s ease-in-out infinite alternate;
+}
+
+.qp-item-playing-icon span:nth-child(1) { height: 7px; animation-delay: 0s; }
+.qp-item-playing-icon span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+.qp-item-playing-icon span:nth-child(3) { height: 9px; animation-delay: 0.4s; }
+
+@keyframes qpBarWave {
+  0%   { height: 3px; }
+  100% { height: 15px; }
+}
+
 .qp-item-info {
   flex: 1;
   overflow: hidden;
@@ -1244,6 +1357,49 @@ body.has-qp-minimized {
   font-family: var(--qp-font-arabic);
   font-size: 1.15rem;
   color: var(--qp-gold);
+}
+
+/* Row Action Buttons in Queue (Favorite, Download) */
+.qp-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0.65;
+  transition: opacity var(--qp-transition);
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.qp-surah-item:hover .qp-item-actions {
+  opacity: 1;
+}
+
+.qp-item-action-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--qp-border);
+  color: var(--qp-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--qp-transition);
+  font-size: 0.78rem;
+}
+
+.qp-item-action-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--qp-primary-light);
+  border-color: rgba(16, 185, 129, 0.4);
+  transform: scale(1.12);
+}
+
+.qp-item-action-btn.is-fav {
+  color: var(--qp-gold);
+  border-color: rgba(245, 158, 11, 0.4);
 }
 
 
