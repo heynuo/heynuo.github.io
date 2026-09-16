@@ -23,7 +23,7 @@
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + article components -->
   <link rel="stylesheet" href="css/style.css">
@@ -44,6 +44,8 @@
         </button>
         <div class="nav-links" id="nav-links">
           <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
         </div>
@@ -81,8 +83,8 @@
               🛡️ <strong>Protection from evil Jinn &amp; Sihr:</strong> Recite Ayat-ul-Kursi (2:255) after every prayer, morning/evening adhkar, and Surah Al-Ikhlas, Al-Falaq, An-Nas three times. The Prophet ﷺ said: “Whoever recites the last two verses of Surah Al-Baqarah at night, they suffice him.” (Bukhari)
             </div>
             <div>
-              <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn" style="padding:9px 18px; font-size:13.5px; display:inline-flex;">
-                📖 Open Interactive Ruqyah Guide Web App →
+              <a href="ruqyah.html" class="project-btn" style="padding:9px 18px; font-size:13.5px; display:inline-flex;">
+                📖 Open Interactive Ruqyah Guide (with Audio) →
               </a>
             </div>
           </div>
@@ -109,13 +111,13 @@
           <!-- SECTION 1 -->
           <h3>1️⃣ Fundamental & Foundational Surahs and Verses</h3>
           <p><em>Essential for everyone to know and practice first</em></p>
-          <div class="verses-table-wrapper"><table class="verses-table"><thead><tr><th>Reference</th><th>Name / Note</th></tr></thead><tbody>
-            <tr><td>Al-Fatiha (1:1–7)</td><td>The Opening</td></tr>
-            <tr><td>Al-Baqarah (2:255)</td><td>Ayatul Kursi</td></tr>
-            <tr><td>Al-Ikhlas (112:1–4)</td><td>Sincerity</td></tr>
-            <tr><td>Al-Falaq (113:1–5)</td><td>The Daybreak</td></tr>
-            <tr><td>An-Nas (114:1–6)</td><td>Mankind</td></tr>
-            <tr><td>Bismillah</td><td>First verse of Al-Fatihah or standalone phrase</td></tr>
+          <div class="verses-table-wrapper"><table class="verses-table"><thead><tr><th>Reference</th><th>Name / Note</th><th>Audio Recitation</th></tr></thead><tbody>
+            <tr><td>Al-Fatiha (1:1–7)</td><td>The Opening (Ash-Shifa)</td><td><button type="button" class="btn btn-secondary btn-sm" onclick="if(window.QuranPlayer){window.QuranPlayer.playSurah(1);}">🎧 Listen Surah 1</button></td></tr>
+            <tr><td>Al-Baqarah (2:255)</td><td>Ayat al-Kursi (Greatest Verse of Protection)</td><td><button type="button" class="btn btn-secondary btn-sm" onclick="if(window.QuranPlayer){window.QuranPlayer.playSurah(2);}">🎧 Listen Surah 2</button></td></tr>
+            <tr><td>Al-Ikhlas (112:1–4)</td><td>Sincerity (1/3rd of Quran)</td><td><button type="button" class="btn btn-secondary btn-sm" onclick="if(window.QuranPlayer){window.QuranPlayer.playSurah(112);}">🎧 Listen Surah 112</button></td></tr>
+            <tr><td>Al-Falaq (113:1–5)</td><td>The Daybreak (Shield from Sihr &amp; Ayn)</td><td><button type="button" class="btn btn-secondary btn-sm" onclick="if(window.QuranPlayer){window.QuranPlayer.playSurah(113);}">🎧 Listen Surah 113</button></td></tr>
+            <tr><td>An-Nas (114:1–6)</td><td>Mankind (Refuge from Whispers &amp; Waswas)</td><td><button type="button" class="btn btn-secondary btn-sm" onclick="if(window.QuranPlayer){window.QuranPlayer.playSurah(114);}">🎧 Listen Surah 114</button></td></tr>
+            <tr><td>Bismillah</td><td>Foundational Divine Shield</td><td><span style="color:var(--muted); font-size:12px;">Daily Adhkar</span></td></tr>
           </tbody></table></div>
           <p>✨ <em>These verses form the foundation of daily Ruqyah. Recite them every day.</em></p>
 

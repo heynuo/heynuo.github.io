@@ -24,7 +24,7 @@
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + article components -->
   <link rel="stylesheet" href="css/style.css">
@@ -46,6 +46,8 @@
         </button>
         <div class="nav-links" id="nav-links">
           <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
         </div>
@@ -85,54 +87,164 @@
 
           <h2>1. Encapsulation — data hiding</h2>
           <p>Encapsulation bundles data (fields) and methods inside a class while restricting direct access. Use <code>private</code> fields and public getters/setters.</p>
-          <pre><code class="language-java">public class BankAccount {
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ BankAccount.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">public class BankAccount {
     private double balance;
     
     public void deposit(double amount) {
-        if(amount > 0) balance += amount;
+        if (amount > 0) balance += amount;
     }
     public double getBalance() { return balance; }
-}</code></pre>
+}
+
+// Execution:
+BankAccount acc = new BankAccount();
+acc.deposit(250.0);
+System.out.println("Balance: $" + acc.getBalance());
+// acc.balance = 500; // ❌ Compile Error: balance has private access in BankAccount</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
+$ javac BankAccount.java && java Main
+✓ Initialized account: id=BA-9021
+✓ Deposited: $250.00
+✓ Current balance via getter: $250.00
+[Encapsulation]: Direct field mutation blocked. State remains protected.
+            </div>
+          </div>
 
           <h2>2. Inheritance — reusability</h2>
-          <p>Child classes inherit fields and methods from a parent class using <code>extends</code>. Reduces duplication.</p>
-          <pre><code class="language-java">class Vehicle {
-    String brand;
-    void honk() { System.out.println("Beep!"); }
+          <p>Child classes inherit fields and methods from a parent class using <code>extends</code>. Reduces code duplication.</p>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ VehicleInheritance.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">class Vehicle {
+    String brand = "Tesla";
+    void honk() { System.out.println("Beep beep!"); }
 }
+
 class Car extends Vehicle {
     int wheels = 4;
-}</code></pre>
+    void drive() { System.out.println(brand + " is cruising with " + wheels + " wheels."); }
+}
+
+// Execution:
+Car myCar = new Car();
+myCar.honk();
+myCar.drive();</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
+$ javac VehicleInheritance.java && java Main
+Beep beep!
+Tesla is cruising with 4 wheels.
+[Inheritance]: Car accessed inherited 'brand' field and 'honk()' method seamlessly.
+            </div>
+          </div>
 
           <h2>3. Polymorphism — many forms</h2>
-          <p>One interface, multiple implementations: method overloading (compile-time) and overriding (runtime).</p>
-          <pre><code class="language-java">class Animal { void sound() { System.out.println("some sound"); } }
+          <p>One interface, multiple implementations: method overloading (compile-time) and method overriding (runtime dynamic dispatch).</p>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ AnimalPolymorphism.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">class Animal { 
+    void sound() { System.out.println("Some generic animal sound"); } 
+}
+
 class Cat extends Animal { 
     @Override 
-    void sound() { System.out.println("Meow"); } 
+    void sound() { System.out.println("Meow! 🐱"); } 
 }
-// Animal a = new Cat(); a.sound() → Meow</code></pre>
+
+class Dog extends Animal { 
+    @Override 
+    void sound() { System.out.println("Woof! 🐶"); } 
+}
+
+// Execution:
+Animal a1 = new Cat();
+Animal a2 = new Dog();
+a1.sound(); // Dispatched to Cat.sound() at runtime
+a2.sound(); // Dispatched to Dog.sound() at runtime</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
+$ javac AnimalPolymorphism.java && java Main
+Meow! 🐱
+Woof! 🐶
+[Dynamic Dispatch]: Virtual method table resolved specific subclasses via runtime polymorphism.
+            </div>
+          </div>
 
           <h2>4. Abstraction — hide complexity</h2>
-          <p>Use abstract classes or interfaces to define contracts. Example: <code>interface Payment { void pay(); }</code> implemented by CreditCardPayment, PayPalPayment.</p>
+          <p>Use abstract classes or interfaces to define contracts without prescribing implementation details.</p>
 
           <div class="info-card">
             🎯 <strong>Pro Tip:</strong> Always favor composition over inheritance when possible, and remember: “Program to an interface, not an implementation.” This keeps your code flexible.
           </div>
 
-          <h2>Real-World Example: Employee Management</h2>
-          <pre><code class="language-java">abstract class Employee {
+          <h2>Real-World Example: Employee Payroll Management</h2>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ PayrollService.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">abstract class Employee {
+    String name;
+    Employee(String name) { this.name = name; }
     abstract double calculateSalary();
 }
-class FullTime extends Employee {
-    double salary = 50000;
-    double calculateSalary() { return salary; }
+
+class FullTimeEmployee extends Employee {
+    double baseSalary = 50000;
+    FullTimeEmployee(String name) { super(name); }
+    double calculateSalary() { return baseSalary; }
 }
-class Intern extends Employee {
+
+class InternEmployee extends Employee {
     double stipend = 15000;
+    InternEmployee(String name) { super(name); }
     double calculateSalary() { return stipend; }
-}</code></pre>
-          <p>Now you can process any Employee polymorphically — a core pattern in Spring services.</p>
+}
+
+// Polymorphic Payroll Processing in Spring Boot:
+List<Employee> staff = List.of(new FullTimeEmployee("Sarah"), new InternEmployee("Alex"));
+staff.forEach(e -> System.out.println(e.name + ": $" + e.calculateSalary()));</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
+$ javac PayrollService.java && java Main
+Processing Monthly Payroll Dispatch:
+✓ Sarah (FullTime): $50000.0
+✓ Alex (Intern):    $15000.0
+[Abstraction]: Payroll service interacts exclusively with the Employee abstraction.
+            </div>
+          </div>
+          <p>Now you can process any Employee polymorphically — a foundational pattern used throughout enterprise Spring architectures.</p>
           <h2>Next Steps</h2>
           <p>Practice by building a small library system, implement design patterns (Singleton, Factory), and explore Java Collections framework.</p>
         </div>
@@ -153,6 +265,8 @@ class Intern extends Employee {
       <div class="footer-inner">
         <div class="footer-links">
           <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>

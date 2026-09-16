@@ -1124,6 +1124,74 @@
     setMinimizedState(!isMinimized);
   }
 
+  // =========================================================================
+  // WEB AUDIO VISUALIZER ENGINE
+  // =========================================================================
+  function initWebAudioVisualizer() {
+    const canvas = document.getElementById('qpVisualizerCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (visualizerAnimId) {
+      cancelAnimationFrame(visualizerAnimId);
+      visualizerAnimId = null;
+    }
+
+    let phase = 0;
+    function drawVisualizer() {
+      if (!dom.modal || !dom.modal.classList.contains('is-open')) {
+        visualizerAnimId = null;
+        return;
+      }
+
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const numBars = 48;
+      const gap = 3;
+      const barWidth = (w - (numBars - 1) * gap) / numBars;
+
+      for (let i = 0; i < numBars; i++) {
+        let barHeight = 4;
+        if (isPlaying) {
+          const p = i / numBars;
+          const s1 = Math.sin(phase + i * 0.4);
+          const s2 = Math.cos(phase * 0.6 + i * 0.3);
+          const s3 = Math.sin(phase * 1.2 - i * 0.6);
+          const bell = Math.sin(p * Math.PI);
+          const norm = Math.max(0.08, ((s1 + s2 + s3 + 3) / 6) * (0.3 + 0.7 * bell));
+          barHeight = Math.max(4, Math.min(h - 4, norm * (h - 2)));
+        }
+
+        const x = i * (barWidth + gap);
+        const y = (h - barHeight) / 2;
+
+        const grad = ctx.createLinearGradient(0, y, 0, y + barHeight);
+        grad.addColorStop(0, '#38bdf8');
+        grad.addColorStop(0.5, '#60a5fa');
+        grad.addColorStop(1, '#818cf8');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        if (ctx.roundRect) {
+          ctx.roundRect(x, y, barWidth, barHeight, 2);
+        } else {
+          ctx.rect(x, y, barWidth, barHeight);
+        }
+        ctx.fill();
+      }
+
+      if (isPlaying) {
+        phase += 0.08 * (playbackSpeed || 1);
+      }
+      visualizerAnimId = requestAnimationFrame(drawVisualizer);
+    }
+
+    drawVisualizer();
+  }
+
   function openModal() {
     if (dom.modal) dom.modal.classList.add('is-open');
     initWebAudioVisualizer();
@@ -1132,6 +1200,10 @@
 
   function closeModal() {
     if (dom.modal) dom.modal.classList.remove('is-open');
+    if (visualizerAnimId) {
+      cancelAnimationFrame(visualizerAnimId);
+      visualizerAnimId = null;
+    }
   }
 
   function openDrawer() {

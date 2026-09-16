@@ -23,7 +23,7 @@
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + article components -->
   <link rel="stylesheet" href="css/style.css">
@@ -45,6 +45,8 @@
         </button>
         <div class="nav-links" id="nav-links">
           <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
         </div>
@@ -79,23 +81,68 @@
 &lt;/article&gt;</code></pre>
 
           <h2>🎨 2. Modern CSS Techniques</h2>
-          <p>Leverage Flexbox, CSS Grid, custom properties (variables), and container queries. Here’s a responsive card grid:</p>
-          <div class="demo-grid">
-            <div class="demo-card">Flexible</div>
-            <div class="demo-card">Grid</div>
-            <div class="demo-card">Responsive</div>
-          </div>
-          <pre><code class="language-css">.cards {
+          <p>Leverage Flexbox, CSS Grid, custom properties (variables), and modern CSS layers. Here’s a responsive card grid:</p>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>🎨 layout.css</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">CSS Rules</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Visual Preview</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-css">.cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.demo-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none; background: var(--bg); color: var(--text);">
+              <div class="code-demo-output-title"><span>👁️ Live Grid Render</span></div>
+              <div class="demo-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 8px;">
+                <div class="demo-card" style="padding: 12px; border-radius: 8px; text-align: center; border: 1px solid var(--border); background: var(--card-bg);">⚡ Flexible</div>
+                <div class="demo-card" style="padding: 12px; border-radius: 8px; text-align: center; border: 1px solid var(--border); background: var(--card-bg);">📐 CSS Grid</div>
+                <div class="demo-card" style="padding: 12px; border-radius: 8px; text-align: center; border: 1px solid var(--border); background: var(--card-bg);">📱 Responsive</div>
+              </div>
+            </div>
+          </div>
 
           <h2>⚡ 3. Vanilla JavaScript Interactivity</h2>
-          <p>No build steps — use modern ES6+ for DOM manipulation, event handling, and dynamic content. Example: dark mode toggle (optional, extendable).</p>
-          <pre><code class="language-javascript">document.querySelector('#theme-toggle')?.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
+          <p>No build steps — use modern ES6+ for DOM manipulation, smooth event handling, and dynamic theme switching.</p>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>⚡ app.js</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">JavaScript Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-javascript">const toggleBtn = document.querySelector('#theme-toggle');
+
+toggleBtn?.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  console.log(`[ThemeEngine]: Switched to ${next} mode seamlessly.`);
 });</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ Browser Console Output</span></div>
+[Event Attached]: #theme-toggle listener active
+> Click event dispatched
+[ThemeEngine]: Switched to dark mode seamlessly.
+[Storage]: Cached 'heynuo-theme' -> 'dark' in localStorage.
+            </div>
+          </div>
 
           <div class="info-card success">
             🚀 <strong>Performance tip:</strong> Use debounced search, lazy loading images, and `prefers-reduced-motion` media queries for inclusive experiences — exactly as implemented in HeyNuo’s global script.
@@ -132,6 +179,8 @@
       <div class="footer-inner">
         <div class="footer-links">
           <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>

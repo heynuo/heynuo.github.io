@@ -1139,8 +1139,46 @@ function initCodeCopyButtons() {
   preBlocks.forEach(pre => {
     if (pre.closest('.code-block-wrapper')) return;
 
-    // Detect or infer programming language
     const codeEl = pre.querySelector('code');
+
+    // If pre is inside an interactive demo box, add copy button to demo box header instead of double wrapping
+    const demoBox = pre.closest('.code-demo-box');
+    if (demoBox) {
+      const demoHeader = demoBox.querySelector('.code-demo-header');
+      if (demoHeader && !demoHeader.querySelector('.code-demo-copy-btn')) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'code-demo-copy-btn';
+        copyBtn.type = 'button';
+        copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+        copyBtn.innerHTML = `<span class="copy-icon">📋</span> <span class="copy-text">Copy</span>`;
+
+        const tabs = demoHeader.querySelector('.code-demo-tabs');
+        if (tabs) {
+          tabs.parentNode.insertBefore(copyBtn, tabs.nextSibling);
+        } else {
+          demoHeader.appendChild(copyBtn);
+        }
+
+        $.on(copyBtn, 'click', async () => {
+          const code = codeEl?.textContent || pre.textContent;
+          try {
+            await navigator.clipboard.writeText(code);
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = `<span class="copy-icon">✓</span> <span class="copy-text">Copied!</span>`;
+            showToast('Code copied to clipboard!', '📋');
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.innerHTML = `<span class="copy-icon">📋</span> <span class="copy-text">Copy</span>`;
+            }, 2000);
+          } catch {
+            showToast('Failed to copy', '⚠️');
+          }
+        });
+      }
+      return;
+    }
+
+    // Detect or infer programming language
     let lang = 'Code';
     if (codeEl) {
       const classList = Array.from(codeEl.classList);
@@ -1213,10 +1251,18 @@ function initArticleSuite() {
   const prose = $.get('.prose', articleEnhanced);
   if (!prose) return;
 
-  // 1. Restore font size if saved
+  // 1. Restore font size and reading comfort preferences
   const savedFontSize = localStorage.getItem('heynuo-font-size');
   if (savedFontSize) {
     prose.style.fontSize = savedFontSize;
+  }
+  const savedReadingTheme = localStorage.getItem('heynuo-reading-theme');
+  if (savedReadingTheme) {
+    document.documentElement.setAttribute('data-reading-theme', savedReadingTheme);
+  }
+  const savedFont = localStorage.getItem('heynuo-reading-font');
+  if (savedFont === 'serif') {
+    document.body.classList.add('reading-font-serif');
   }
 
   // 2. Inject Article Reading Toolbar if not already in HTML
@@ -1241,6 +1287,12 @@ function initArticleSuite() {
       </div>
       <div class="article-toolbar-right">
         <span class="reading-time-left" id="readingTimeLeft">⏱ reading</span>
+        <div class="article-reading-modes" role="group" aria-label="Reading comfort theme">
+          <button type="button" class="theme-pill-btn active" data-theme-mode="default" title="Default Theme">Default</button>
+          <button type="button" class="theme-pill-btn" data-theme-mode="sepia" title="Sepia Eye Comfort Mode">📜 Sepia</button>
+          <button type="button" class="theme-pill-btn" data-theme-mode="slate" title="Slate Night Mode">🌑 Slate</button>
+        </div>
+        <button type="button" class="tool-btn-sm" id="btnToggleFont" title="Toggle Serif / Sans typography" aria-label="Toggle typography">Serif</button>
         <span class="font-size-label">Text:</span>
         <button type="button" class="tool-btn-sm" id="btnFontDec" title="Decrease font size" aria-label="Smaller text">A−</button>
         <button type="button" class="tool-btn-sm" id="btnFontInc" title="Increase font size" aria-label="Larger text">A+</button>
@@ -1249,6 +1301,62 @@ function initArticleSuite() {
     const header = $.get('.article-header', articleEnhanced) || prose;
     header.parentNode.insertBefore(toolbar, header.nextSibling);
   }
+
+  // Wire up reading comfort theme pills
+  const themePills = $.getAll('.theme-pill-btn', toolbar);
+  const currentMode = document.documentElement.getAttribute('data-reading-theme') || 'default';
+  themePills.forEach(pill => {
+    pill.classList.toggle('active', pill.dataset.themeMode === currentMode);
+    $.on(pill, 'click', () => {
+      themePills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const mode = pill.dataset.themeMode;
+      if (mode === 'default') {
+        document.documentElement.removeAttribute('data-reading-theme');
+        localStorage.removeItem('heynuo-reading-theme');
+        showToast('Default theme restored', '✨');
+      } else {
+        document.documentElement.setAttribute('data-reading-theme', mode);
+        localStorage.setItem('heynuo-reading-theme', mode);
+        showToast(mode === 'sepia' ? 'Sepia reading mode active 📜' : 'Slate night mode active 🌑', mode === 'sepia' ? '📜' : '🌑');
+      }
+    });
+  });
+
+  // Wire up font family toggle (Sans vs Serif)
+  const fontToggleBtn = $.get('#btnToggleFont', toolbar);
+  if (fontToggleBtn) {
+    const isSerif = document.body.classList.contains('reading-font-serif');
+    fontToggleBtn.textContent = isSerif ? 'Sans' : 'Serif';
+    $.on(fontToggleBtn, 'click', () => {
+      const nowSerif = document.body.classList.toggle('reading-font-serif');
+      fontToggleBtn.textContent = nowSerif ? 'Sans' : 'Serif';
+      localStorage.setItem('heynuo-reading-font', nowSerif ? 'serif' : 'sans');
+      showToast(nowSerif ? 'Editorial serif font active 🖋️' : 'Clean sans-serif font active 🔤', '🔤');
+    });
+  }
+
+  // Wire up interactive code demo tabs
+  $.getAll('.code-demo-box', articleEnhanced).forEach(demoBox => {
+    const tabs = demoBox.querySelectorAll('.code-demo-tab');
+    const codePane = demoBox.querySelector('.code-demo-code');
+    const outputPane = demoBox.querySelector('.code-demo-output');
+
+    tabs.forEach(tab => {
+      $.on(tab, 'click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const view = tab.dataset.view;
+        if (view === 'output') {
+          if (codePane) codePane.style.display = 'none';
+          if (outputPane) outputPane.style.display = 'block';
+        } else {
+          if (codePane) codePane.style.display = 'block';
+          if (outputPane) outputPane.style.display = 'none';
+        }
+      });
+    });
+  });
 
   // Wire up article bookmark button
   const bookmarkArticleBtn = $.get('#btnBookmarkArticle');
@@ -1296,6 +1404,19 @@ function initArticleSuite() {
   // Bind share button
   const shareBtn = $.get('#btnShareArticle');
   $.on(shareBtn, 'click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: `Check out this guide on HeyNuo: ${document.title}`,
+          url: window.location.href
+        });
+        showToast('Shared successfully!', '✨');
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
     try {
       await navigator.clipboard.writeText(window.location.href);
       showToast('Article link copied to clipboard!', '🔗');
@@ -1378,12 +1499,13 @@ function initArticleSuite() {
           h.id = id;
         }
         const isH3 = h.tagName.toLowerCase() === 'h3';
-        return `<li class="${isH3 ? 'toc-h3' : 'toc-h2'}"><a href="#${id}" class="toc-link">${escapeHTML(h.textContent.replace(/^[\d\s.\u20E3\uFE0F\uD83D\uDD1F-]+\s*/, ''))}</a></li>`;
+        return `<li class="${isH3 ? 'toc-h3' : 'toc-h2'}"><a href="#${id}" class="toc-link" data-target-id="${id}">${escapeHTML(h.textContent.replace(/^[\d\s.\u20E3\uFE0F\uD83D\uDD1F-]+\s*/, ''))}</a></li>`;
       }).join('');
 
       tocBox.innerHTML = `
-        <div class="toc-header">
-          <span class="toc-title">📖 Quick Navigation</span>
+        <div class="toc-header" id="tocHeader" role="button" tabindex="0" aria-expanded="true" aria-controls="tocList" title="Click to collapse/expand Table of Contents">
+          <span class="toc-title">📖 Table of Contents</span>
+          <span class="toc-chevron" aria-hidden="true">▼</span>
         </div>
         <ul class="toc-list" id="tocList">
           ${itemsHtml}
@@ -1391,28 +1513,63 @@ function initArticleSuite() {
       `;
 
       toolbar.parentNode.insertBefore(tocBox, toolbar.nextSibling);
+
+      const tocHeader = tocBox.querySelector('#tocHeader');
+      const toggleToc = () => {
+        const isExpanded = tocHeader.getAttribute('aria-expanded') === 'true';
+        tocHeader.setAttribute('aria-expanded', (!isExpanded).toString());
+        tocBox.classList.toggle('is-collapsed', isExpanded);
+      };
+      $.on(tocHeader, 'click', toggleToc);
+      $.on(tocHeader, 'keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleToc();
+        }
+      });
     }
 
-    // Toggle TOC button
+    // Toggle TOC button in toolbar
     const toggleTocBtn = $.get('#btnToggleToc');
     if (toggleTocBtn) {
       $.on(toggleTocBtn, 'click', () => {
         if (tocBox) {
           const isHidden = tocBox.style.display === 'none';
           tocBox.style.display = isHidden ? 'block' : 'none';
+          if (isHidden) {
+            tocBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
       });
     }
 
-    // Scrollspy with IntersectionObserver
+    // Smooth scrolling with navbar offset compensation
     const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+    tocLinks.forEach(link => {
+      $.on(link, 'click', (e) => {
+        const targetId = link.dataset.targetId || link.getAttribute('href')?.replace('#', '');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          const navOffset = 84;
+          const bodyTop = document.body.getBoundingClientRect().top;
+          const elTop = targetEl.getBoundingClientRect().top;
+          const targetY = elTop - bodyTop - navOffset;
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+          history.pushState(null, '', `#${targetId}`);
+        }
+      });
+    });
+
+    // Scrollspy with IntersectionObserver
     if ('IntersectionObserver' in window && tocLinks.length) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const id = entry.target.id;
             tocLinks.forEach(link => {
-              link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+              const matches = (link.dataset.targetId === id) || (link.getAttribute('href') === `#${id}`);
+              link.classList.toggle('active', matches);
             });
           }
         });
@@ -1628,48 +1785,301 @@ const CommandPalette = {
     else this.open();
   },
 
+  getStaticActions() {
+    return [
+      {
+        id: 'act-theme',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Toggle Dark / Light Mode',
+        subtitle: 'Switch theme appearance with smooth transition',
+        icon: '🌓',
+        kbd: 'T',
+        tag: 'Theme',
+        run: () => {
+          const btn = $.get('#theme-toggle');
+          if (btn) btn.click();
+        }
+      },
+      {
+        id: 'act-quran-toggle',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Play / Pause Quran Player',
+        subtitle: 'Continuous auto-listening reciter dock',
+        icon: '🎵',
+        kbd: 'Space',
+        tag: 'Audio',
+        run: () => {
+          if (window.QuranPlayer && typeof window.QuranPlayer.togglePlay === 'function') {
+            window.QuranPlayer.togglePlay();
+          } else {
+            showToast('Quran Player is available across the site', '🎧');
+          }
+        }
+      },
+      {
+        id: 'act-quran-drawer',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Browse 114 Surahs Playlist',
+        subtitle: 'Open Surah drawer catalog with search & reciters',
+        icon: '📖',
+        kbd: 'Q',
+        tag: 'Audio',
+        run: () => {
+          if (window.QuranPlayer && typeof window.QuranPlayer.openDrawer === 'function') {
+            window.QuranPlayer.openDrawer();
+          }
+        }
+      },
+      {
+        id: 'act-ruqyah-sampler',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Play Ruqyah Ayat al-Kursi',
+        subtitle: 'Recite supreme healing & night protection verse',
+        icon: '🛡️',
+        tag: 'Ruqyah',
+        run: () => {
+          const liveTab = $.get('#tabLiveSampler');
+          if (liveTab) liveTab.click();
+          const playBtn = $.get('#samplerPlayBtn');
+          if (playBtn) {
+            playBtn.click();
+            const banner = $.get('#featuredRuqyahBanner');
+            if (banner) banner.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            window.location.href = 'index.html#featuredRuqyahBanner';
+          }
+        }
+      },
+      {
+        id: 'act-shortcuts',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'View Keyboard Shortcuts',
+        subtitle: 'Cheat sheet of hotkeys for audio, theme & search',
+        icon: '⌨️',
+        kbd: '?',
+        tag: 'Shortcuts',
+        run: () => {
+          const btn = $.get('#shortcutHelpBtn');
+          if (btn) btn.click();
+          else {
+            const modal = $.get('#shortcutsModal');
+            if (modal) {
+              modal.classList.add('active');
+              modal.setAttribute('aria-hidden', 'false');
+            }
+          }
+        }
+      },
+      {
+        id: 'act-reading-sepia',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Apply Sepia Reading Comfort Mode',
+        subtitle: 'Warm parchment tone for relaxed eye comfort',
+        icon: '📜',
+        tag: 'Theme',
+        run: () => {
+          document.documentElement.setAttribute('data-reading-theme', 'sepia');
+          localStorage.setItem('heynuo-reading-theme', 'sepia');
+          showToast('Sepia reading mode active 📜', '📜');
+        }
+      },
+      {
+        id: 'act-reading-slate',
+        section: '⚡ Quick Actions',
+        type: 'action',
+        title: 'Apply Slate Night Reading Mode',
+        subtitle: 'Deep charcoal contrast for low-light night reading',
+        icon: '🌑',
+        tag: 'Theme',
+        run: () => {
+          document.documentElement.setAttribute('data-reading-theme', 'slate');
+          localStorage.setItem('heynuo-reading-theme', 'slate');
+          showToast('Slate night mode active 🌑', '🌑');
+        }
+      }
+    ];
+  },
+
+  getStaticPages() {
+    return [
+      {
+        id: 'pg-home',
+        section: '📄 Pages & Tools',
+        type: 'page',
+        title: 'Home Page',
+        subtitle: 'Digital Hub, Notes, Ruqyah Sanctuary & Articles',
+        icon: '🏠',
+        kbd: 'H',
+        tag: 'Page',
+        link: 'index.html'
+      },
+      {
+        id: 'pg-about',
+        section: '📄 Pages & Tools',
+        type: 'page',
+        title: 'About Me',
+        subtitle: 'Developer bio, technology stack, timeline & skills',
+        icon: '👤',
+        kbd: 'A',
+        tag: 'Page',
+        link: 'about.html'
+      },
+      {
+        id: 'pg-contact',
+        section: '📄 Pages & Tools',
+        type: 'page',
+        title: 'Contact & FAQ',
+        subtitle: 'Send message, direct email, FAQs & social links',
+        icon: '📬',
+        kbd: 'C',
+        tag: 'Page',
+        link: 'contact.html'
+      },
+      {
+        id: 'pg-ruqyah-app',
+        section: '📄 Pages & Tools',
+        type: 'page',
+        title: 'Ruqyah Shariyah Full Web Application',
+        subtitle: 'Standalone PWA guide with 25+ categorized healing verses',
+        icon: '✨',
+        tag: 'Web App',
+        link: 'https://heynuo.github.io/heynuo.github.io-ruqyah-guide/',
+        external: true
+      }
+    ];
+  },
+
+  getArticleItems() {
+    return POSTS.map((p, i) => ({
+      id: `art-${i}`,
+      section: '📚 Guides & Research',
+      type: 'article',
+      title: p.title,
+      subtitle: p.excerpt,
+      icon: p.category === 'Java' ? '☕' : (p.category === 'Research' ? '📖' : '🌐'),
+      tag: p.category,
+      link: p.link,
+      tags: p.tags,
+      post: p
+    }));
+  },
+
   search(query) {
     const q = (query || '').toLowerCase().trim();
-    const allPosts = POSTS;
+    const actions = this.getStaticActions();
+    const pages = this.getStaticPages();
+    const articles = this.getArticleItems();
 
-    this.items = allPosts.filter(post => {
-      if (!q) return true;
-      const text = `${post.title} ${post.excerpt} ${post.category} ${(post.tags || []).join(' ')}`.toLowerCase();
-      return text.includes(q);
-    });
+    if (!q) {
+      this.items = [
+        ...actions.slice(0, 4),
+        ...pages,
+        ...articles
+      ];
+    } else {
+      const matchItem = (item) => {
+        const text = `${item.title} ${item.subtitle || ''} ${item.tag || ''} ${(item.tags || []).join(' ')}`.toLowerCase();
+        return text.includes(q);
+      };
+      const matchedArticles = articles.filter(matchItem);
+      const matchedActions = actions.filter(matchItem);
+      const matchedPages = pages.filter(matchItem);
+
+      this.items = [
+        ...matchedActions,
+        ...matchedPages,
+        ...matchedArticles
+      ];
+    }
 
     this.selectedIndex = 0;
     this.renderResults(q);
   },
 
+  saveSearchHistory(query) {
+    if (!query || !query.trim()) return;
+    try {
+      let history = JSON.parse(localStorage.getItem('heynuo-search-history')) || [];
+      history = [query.trim(), ...history.filter(item => item.toLowerCase() !== query.trim().toLowerCase())].slice(0, 5);
+      localStorage.setItem('heynuo-search-history', JSON.stringify(history));
+    } catch {}
+  },
+
+  getSearchHistory() {
+    try {
+      return JSON.parse(localStorage.getItem('heynuo-search-history')) || [];
+    } catch {
+      return [];
+    }
+  },
+
   renderResults(query) {
     if (!this.resultsContainer) return;
 
-    if (this.items.length === 0) {
-      this.resultsContainer.innerHTML = `
-        <div class="cmd-palette-empty">
-          <p>No results found for "<strong>${escapeHTML(query)}</strong>"</p>
-          <p style="font-size:12.5px; margin-top:4px;">Try searching for Java, OOP, Quran, or Web Dev</p>
+    const history = this.getSearchHistory();
+    let historyHtml = '';
+    if (!query && history.length > 0) {
+      historyHtml = `
+        <div class="cmd-palette-history-row">
+          <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase;">Recent:</span>
+          ${history.map(item => `<button type="button" class="cmd-history-chip" data-query="${escapeHTML(item)}">🕒 ${escapeHTML(item)}</button>`).join('')}
         </div>
       `;
+    }
+
+    if (this.items.length === 0) {
+      this.resultsContainer.innerHTML = `
+        ${historyHtml}
+        <div class="cmd-palette-empty">
+          <p>No results found for "<strong>${escapeHTML(query)}</strong>"</p>
+          <p style="font-size:12.5px; margin-top:4px;">Try searching for Java, OOP, Quran, Theme, or Web Dev</p>
+        </div>
+      `;
+      this.bindHistoryChips();
       return;
     }
 
-    this.resultsContainer.innerHTML = this.items.map((post, idx) => {
+    let lastSection = null;
+    const itemsHtml = this.items.map((item, idx) => {
       const isSelected = idx === this.selectedIndex;
-      const titleHighlighted = Articles && Articles.highlightMatch
-        ? Articles.highlightMatch(post.title, query)
-        : escapeHTML(post.title);
+      let sectionHtml = '';
+      if (item.section !== lastSection) {
+        lastSection = item.section;
+        sectionHtml = `<div class="cmd-palette-section-title">${escapeHTML(item.section)}</div>`;
+      }
+
+      const titleHighlighted = (query && Articles && Articles.highlightMatch)
+        ? Articles.highlightMatch(item.title, query)
+        : escapeHTML(item.title);
+
+      const kbdHtml = item.kbd ? `<kbd class="cmd-palette-item-kbd">${escapeHTML(item.kbd)}</kbd>` : '';
+
       return `
-        <a href="${escapeHTML(post.link)}" class="cmd-palette-item ${isSelected ? 'is-selected' : ''}" data-index="${idx}" role="option" aria-selected="${isSelected}">
-          <div class="cmd-palette-item-main">
-            <span class="cmd-palette-item-title">${titleHighlighted}</span>
-            <span class="cmd-palette-item-desc">${escapeHTML(post.excerpt)}</span>
+        ${sectionHtml}
+        <button type="button" class="cmd-palette-item ${isSelected ? 'is-selected' : ''}" data-index="${idx}" role="option" aria-selected="${isSelected}">
+          <div class="cmd-palette-item-left">
+            <span class="cmd-palette-item-icon" aria-hidden="true">${item.icon || '✦'}</span>
+            <div class="cmd-palette-item-main">
+              <span class="cmd-palette-item-title">${titleHighlighted}</span>
+              <span class="cmd-palette-item-desc">${escapeHTML(item.subtitle || '')}</span>
+            </div>
           </div>
-          <span class="cmd-palette-item-tag">${escapeHTML(post.category)}</span>
-        </a>
+          <div class="cmd-palette-item-right">
+            ${kbdHtml}
+            <span class="cmd-palette-item-tag">${escapeHTML(item.tag || '')}</span>
+          </div>
+        </button>
       `;
     }).join('');
+
+    this.resultsContainer.innerHTML = `${historyHtml}${itemsHtml}`;
+    this.bindHistoryChips();
 
     // Click handling on results
     const itemEls = this.resultsContainer.querySelectorAll('.cmd-palette-item');
@@ -1680,7 +2090,24 @@ const CommandPalette = {
         this.updateSelection();
       });
       $.on(el, 'click', () => {
-        this.close();
+        const idx = parseInt(el.dataset.index, 10);
+        this.selectedIndex = idx;
+        if (query) this.saveSearchHistory(query);
+        this.selectCurrent();
+      });
+    });
+  },
+
+  bindHistoryChips() {
+    const chips = this.resultsContainer.querySelectorAll('.cmd-history-chip');
+    chips.forEach(chip => {
+      $.on(chip, 'click', (e) => {
+        e.preventDefault();
+        const q = chip.dataset.query;
+        if (this.input) {
+          this.input.value = q;
+          this.search(q);
+        }
       });
     });
   },
@@ -1710,9 +2137,21 @@ const CommandPalette = {
 
   selectCurrent() {
     if (this.items.length > 0 && this.items[this.selectedIndex]) {
-      const post = this.items[this.selectedIndex];
+      const item = this.items[this.selectedIndex];
+      if (this.input && this.input.value) {
+        this.saveSearchHistory(this.input.value);
+      }
       this.close();
-      window.location.href = post.link;
+
+      if (typeof item.run === 'function') {
+        item.run();
+      } else if (item.link) {
+        if (item.external) {
+          window.open(item.link, '_blank', 'noopener,noreferrer');
+        } else {
+          window.location.href = item.link;
+        }
+      }
     }
   }
 };
@@ -2082,6 +2521,9 @@ function initShortcutsModal() {
         <div class="shortcuts-list">
           <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
           <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+          <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
           <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
           <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
           <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
@@ -2441,13 +2883,31 @@ function initFeaturedResource() {
       hadithBadge: '💎 "By Him in Whose Hand my soul is, it is equivalent to one third of the Qur\'an." (Bukhari)'
     },
     {
-      title: 'Surah Al-Falaq & An-Nas (113-114)',
-      meta: 'The Mu\'awwidhatayn · Divine Shield from Magic & Evil Eye',
+      title: 'Surah Al-Falaq (113:1-5)',
+      meta: 'The Daybreak · Shield from Sorcery & Envy',
       arabic: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ',
       translit: 'Qul a\'ūdhu bi-Rabbil-falaq. Min sharri mā khalaq. Wa min sharri ghāsiqin idhā waqab. Wa min sharrin-naffāthāti fil-\'uqad. Wa min sharri ḥāsidin idhā ḥasad.',
       translation: '"Say, \'I seek refuge in the Lord of daybreak from the evil of that which He created... and from the evil of the blowers in knots, and from the evil of an envier when he envies.\'"',
       audio: 'https://everyayah.com/data/Alafasy_128kbps/113001.mp3',
       hadithBadge: '🧿 "No person seeking refuge has sought refuge with anything like these two." (Abu Dawud)'
+    },
+    {
+      title: 'Surah An-Nas (114:1-6)',
+      meta: 'Mankind · Ultimate Refuge from Whispers & Waswas',
+      arabic: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۝ مَلِكِ النَّاسِ ۝ إِلَٰهِ النَّاسِ ۝ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ۝ مِنَ الْجِنَّةِ وَالنَّاسِ',
+      translit: 'Qul a\'ūdhu bi-Rabbin-nās. Malikin-nās. Ilāhin-nās. Min sharril-waswāsil-khannās. Alladhī yuwaswisu fī ṣudūrin-nās. Minal-jinnati wan-nās.',
+      translation: '"Say, \'I seek refuge in the Lord of mankind, The Sovereign of mankind, The God of mankind, From the evil of the retreating whisperer who whispers into the breasts of mankind, from among the jinn and mankind.\'"',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/114001.mp3',
+      hadithBadge: '🕊️ "These two (Al-Falaq & An-Nas) are sufficient for you against everything when recited morning and evening." (Tirmidhi)'
+    },
+    {
+      title: 'Amanar-Rasul (Al-Baqarah 2:285–286)',
+      meta: 'Surah Al-Baqarah · Sufficient Divine Shield Before Sleep',
+      arabic: 'آمَنَ الرَّسُولُ بِمَا أُنزِلَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝ لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا',
+      translit: 'Āmanar-Rasūlu bimā unzila ilayhi mir-Rabbihī wal-mu\'minūn. Kullun āmana billāhi wa malā\'ikatihī wa kutubihī wa rusulih, lā nufarriqu bayna aḥadim-mir-rusulih. Wa qālū sami\'nā wa aṭa\'nā, ghufrānaka Rabbanā wa ilaykal-maṣīr...',
+      translation: '"The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers... Whoever recites the last two verses of Surah Al-Baqarah at night, they will suffice him."',
+      audio: 'https://everyayah.com/data/Alafasy_128kbps/002285.mp3',
+      hadithBadge: '✨ "Whoever recites the last two verses of Surah Al-Baqarah at night, they will suffice him (protect him against all evil)." (Sahih al-Bukhari 5009)'
     }
   ];
 
@@ -2472,13 +2932,102 @@ function initFeaturedResource() {
   const curTimeEl = $.get('#samplerCurrentTime');
   const durationEl = $.get('#samplerDuration');
   const loopBtn = $.get('#samplerLoopBtn');
+  const loopCountEl = $.get('#samplerLoopCount');
+  const autoNextBtn = $.get('#samplerAutoNextBtn');
   const muteBtn = $.get('#samplerMuteBtn');
+  const volumeSlider = $.get('#samplerVolumeSlider');
+  const visualizerCanvas = $.get('#samplerVisualizerCanvas');
+
+  // Repetition & Playback Engine State
+  const REPEAT_MODES = [
+    { label: '1x', count: 1, text: 'Single play (1x)' },
+    { label: '3x', count: 3, text: 'Sunnah repetition: 3 times' },
+    { label: '7x', count: 7, text: 'Prophetic protection: 7 times' },
+    { label: '∞', count: Infinity, text: 'Continuous repeat (∞)' }
+  ];
+  let repeatModeIdx = 0;
+  let currentRepeatCycle = 1;
+  let autoNextVerse = false;
+
+  const speeds = [1, 1.25, 1.5, 0.75];
+  let speedIdx = 0;
 
   // Font & translit controls
   const fontDecBtn = $.get('#samplerFontDec');
   const fontIncBtn = $.get('#samplerFontInc');
   const translitToggle = $.get('#samplerTranslitToggle');
   const copyVerseBtn = $.get('#samplerCopyVerseBtn');
+
+  // Dynamic Audio Visualizer Engine
+  let visualizerCtx = visualizerCanvas ? visualizerCanvas.getContext('2d') : null;
+  let visualizerAnimId = null;
+  let wavePhase = 0;
+
+  function renderVisualizer() {
+    if (!visualizerCanvas || !visualizerCtx) return;
+    const w = visualizerCanvas.width;
+    const h = visualizerCanvas.height;
+    visualizerCtx.clearRect(0, 0, w, h);
+
+    const isPlaying = audioEl && !audioEl.paused && !audioEl.ended;
+    const barCount = 36;
+    const gap = 3;
+    const barWidth = (w - (barCount - 1) * gap) / barCount;
+
+    for (let i = 0; i < barCount; i++) {
+      let barHeight = 4;
+      if (isPlaying) {
+        const p = i / barCount;
+        const s1 = Math.sin(wavePhase + i * 0.45);
+        const s2 = Math.cos(wavePhase * 0.8 + i * 0.25);
+        const s3 = Math.sin(wavePhase * 1.4 - i * 0.7);
+        const bell = Math.sin(p * Math.PI);
+        const norm = Math.max(0.12, ((s1 + s2 + s3 + 3) / 6) * (0.4 + 0.6 * bell));
+        barHeight = Math.max(4, Math.min(h - 6, norm * (h - 4)));
+      }
+
+      const x = i * (barWidth + gap);
+      const y = (h - barHeight) / 2;
+
+      const grad = visualizerCtx.createLinearGradient(0, y, 0, y + barHeight);
+      grad.addColorStop(0, '#fbbf24');
+      grad.addColorStop(0.5, '#f59e0b');
+      grad.addColorStop(1, '#d97706');
+
+      visualizerCtx.fillStyle = grad;
+      visualizerCtx.beginPath();
+      if (visualizerCtx.roundRect) {
+        visualizerCtx.roundRect(x, y, barWidth, barHeight, 2);
+      } else {
+        visualizerCtx.rect(x, y, barWidth, barHeight);
+      }
+      visualizerCtx.fill();
+    }
+
+    if (isPlaying) {
+      wavePhase += 0.08 * (speeds[speedIdx] || 1);
+      visualizerAnimId = requestAnimationFrame(renderVisualizer);
+    } else {
+      visualizerAnimId = null;
+    }
+  }
+
+  function startVisualizer() {
+    if (!visualizerAnimId) {
+      visualizerAnimId = requestAnimationFrame(renderVisualizer);
+    }
+  }
+
+  function stopVisualizer() {
+    if (visualizerAnimId) {
+      cancelAnimationFrame(visualizerAnimId);
+      visualizerAnimId = null;
+    }
+    renderVisualizer();
+  }
+
+  // Initial draw of standby bars
+  renderVisualizer();
 
   function formatTime(seconds) {
     if (isNaN(seconds) || seconds < 0) return '0:00';
@@ -2493,10 +3042,12 @@ function initFeaturedResource() {
       if (playIcon) playIcon.textContent = '⏸';
       if (playBtnText) playBtnText.textContent = 'Pause';
       if (playerContainer) playerContainer.classList.add('is-playing');
+      startVisualizer();
     } else {
       if (playIcon) playIcon.textContent = '▶';
       if (playBtnText) playBtnText.textContent = 'Play Recitation';
       if (playerContainer) playerContainer.classList.remove('is-playing');
+      stopVisualizer();
     }
   }
 
@@ -2529,6 +3080,9 @@ function initFeaturedResource() {
     if (scrubFill) scrubFill.style.width = '0%';
     if (scrubThumb) scrubThumb.style.left = '0%';
     if (curTimeEl) curTimeEl.textContent = '0:00';
+
+    currentRepeatCycle = 1;
+    if (loopCountEl) loopCountEl.textContent = REPEAT_MODES[repeatModeIdx].label;
 
     if (audioEl) {
       const wasPlaying = !audioEl.paused && !audioEl.ended;
@@ -2589,7 +3143,35 @@ function initFeaturedResource() {
     $.on(audioEl, 'loadedmetadata', () => {
       if (durationEl) durationEl.textContent = formatTime(audioEl.duration);
     });
-    $.on(audioEl, 'ended', () => updatePlayState(false));
+    $.on(audioEl, 'ended', () => {
+      const target = REPEAT_MODES[repeatModeIdx];
+      if (target.count === Infinity) {
+        audioEl.currentTime = 0;
+        audioEl.play().then(() => updatePlayState(true)).catch(() => updatePlayState(false));
+        return;
+      }
+
+      if (currentRepeatCycle < target.count) {
+        currentRepeatCycle++;
+        if (loopCountEl) loopCountEl.textContent = `${target.label} (${currentRepeatCycle}/${target.count})`;
+        showToast(`Repeating verse (${currentRepeatCycle} of ${target.count})`, '🔁');
+        audioEl.currentTime = 0;
+        audioEl.play().then(() => updatePlayState(true)).catch(() => updatePlayState(false));
+        return;
+      }
+
+      // Repetition cycle completed for this verse
+      currentRepeatCycle = 1;
+      if (loopCountEl) loopCountEl.textContent = target.label;
+
+      if (autoNextVerse) {
+        showToast('Advancing to next healing verse...', '⏭');
+        const nextIdx = (currentVerseIndex + 1) % verses.length;
+        loadVerse(nextIdx, true);
+      } else {
+        updatePlayState(false);
+      }
+    });
     $.on(audioEl, 'pause', () => updatePlayState(false));
     $.on(audioEl, 'play', () => updatePlayState(true));
   }
@@ -2608,10 +3190,8 @@ function initFeaturedResource() {
     $.on(scrubTrack, 'click', seekAudio);
   }
 
-  // 9. Loop, Mute & Playback Speed Controls
+  // 9. Loop, Auto-Next, Mute & Playback Speed Controls
   const speedBtn = $.get('#samplerSpeedBtn');
-  const speeds = [1, 1.25, 0.75];
-  let speedIdx = 0;
 
   if (speedBtn && audioEl) {
     $.on(speedBtn, 'click', () => {
@@ -2622,19 +3202,34 @@ function initFeaturedResource() {
       if (newSpeed === 0.75) {
         showToast('Playback speed: 0.75x (Slow Tajweed)', '🐢');
       } else if (newSpeed === 1.25) {
-        showToast('Playback speed: 1.25x', '⚡');
+        showToast('Playback speed: 1.25x (Paced)', '⚡');
+      } else if (newSpeed === 1.5) {
+        showToast('Playback speed: 1.5x (Fast)', '⚡');
       } else {
         showToast('Playback speed: 1x (Normal)', '▶');
       }
     });
   }
 
-  if (loopBtn && audioEl) {
+  if (loopBtn) {
     $.on(loopBtn, 'click', () => {
-      audioEl.loop = !audioEl.loop;
-      loopBtn.classList.toggle('active', audioEl.loop);
-      loopBtn.setAttribute('aria-pressed', audioEl.loop ? 'true' : 'false');
-      showToast(audioEl.loop ? 'Verse repeat enabled 🔁' : 'Verse repeat off', '🔁');
+      repeatModeIdx = (repeatModeIdx + 1) % REPEAT_MODES.length;
+      currentRepeatCycle = 1;
+      const target = REPEAT_MODES[repeatModeIdx];
+      if (loopCountEl) loopCountEl.textContent = target.label;
+      loopBtn.classList.toggle('active', repeatModeIdx > 0);
+      loopBtn.setAttribute('aria-pressed', repeatModeIdx > 0 ? 'true' : 'false');
+      showToast(target.text, '🔁');
+      if (audioEl) audioEl.loop = false;
+    });
+  }
+
+  if (autoNextBtn) {
+    $.on(autoNextBtn, 'click', () => {
+      autoNextVerse = !autoNextVerse;
+      autoNextBtn.classList.toggle('active', autoNextVerse);
+      autoNextBtn.setAttribute('aria-pressed', autoNextVerse ? 'true' : 'false');
+      showToast(autoNextVerse ? 'Auto-Next enabled: verses will play in sequence' : 'Auto-Next disabled', '⏭');
     });
   }
 
@@ -2644,6 +3239,22 @@ function initFeaturedResource() {
       muteBtn.textContent = audioEl.muted ? '🔇' : '🔊';
       muteBtn.classList.toggle('active', audioEl.muted);
       muteBtn.setAttribute('aria-pressed', audioEl.muted ? 'true' : 'false');
+      if (volumeSlider) {
+        volumeSlider.value = audioEl.muted ? 0 : (audioEl.volume || 1);
+      }
+    });
+  }
+
+  if (volumeSlider && audioEl) {
+    $.on(volumeSlider, 'input', (e) => {
+      const val = parseFloat(e.target.value);
+      audioEl.volume = val;
+      audioEl.muted = (val === 0);
+      if (muteBtn) {
+        muteBtn.textContent = (val === 0) ? '🔇' : '🔊';
+        muteBtn.classList.toggle('active', val === 0);
+        muteBtn.setAttribute('aria-pressed', val === 0 ? 'true' : 'false');
+      }
     });
   }
 
