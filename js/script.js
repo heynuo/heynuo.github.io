@@ -262,9 +262,18 @@ function initMobileMenu() {
   const navLinks = $.get(CONFIG.selectors.navLinks);
   if (!menuBtn || !navLinks) return;
 
+  // Create or retrieve backdrop element
+  let backdrop = document.querySelector('.nav-backdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.className = 'nav-backdrop';
+    document.body.appendChild(backdrop);
+  }
+
   const toggleMenu = (force) => {
     const isOpen = force !== undefined ? force : !navLinks.classList.contains('show');
     navLinks.classList.toggle('show', isOpen);
+    backdrop.classList.toggle('show', isOpen);
     menuBtn.setAttribute('aria-expanded', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
 
@@ -276,6 +285,7 @@ function initMobileMenu() {
   };
 
   $.on(menuBtn, 'click', () => toggleMenu());
+  $.on(backdrop, 'click', () => toggleMenu(false));
 
   $.getAll('a', navLinks).forEach(link => {
     $.on(link, 'click', () => toggleMenu(false));
@@ -519,6 +529,14 @@ const Articles = {
         <img src="${escapeHTML(post.banner)}" alt="${escapeHTML(post.title)}" class="card-banner-img" loading="lazy" width="600" height="338">
         <div class="card-banner-overlay"></div>
         <span class="card-banner-category">${catIcon}${escapeHTML(post.category)}</span>
+        <div class="card-banner-actions">
+          <button type="button" class="card-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}" title="${isBookmarked ? 'Remove bookmark' : 'Save article'}" aria-label="Bookmark article">
+            <img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> <span>${isBookmarked ? 'Saved' : 'Save'}</span>
+          </button>
+          <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link">
+            <img src="assets/icons/share.png" alt="" class="btn-icon" width="14" height="14"> <span>Share</span>
+          </button>
+        </div>
       </div>
     ` : '';
 
@@ -539,13 +557,7 @@ const Articles = {
       </div>
       <div class="card-footer">
         <a href="${escapeHTML(post.link)}" ${targetAttr} class="read-more">Read More →</a>
-        <div class="card-actions">
-          <button type="button" class="card-preview-btn" data-link="${escapeHTML(post.link)}" title="Quick Key Takeaways" aria-label="Quick Key Takeaways">⚡ Preview</button>
-          <button type="button" class="card-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-url="${escapeHTML(post.link)}" data-title="${escapeHTML(post.title)}" title="${isBookmarked ? 'Remove bookmark' : 'Save article'}" aria-label="Bookmark article">
-            <img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> <span>${isBookmarked ? 'Saved' : 'Save'}</span>
-          </button>
-          <button type="button" class="card-share-btn" data-url="${escapeHTML(post.link)}" title="Copy article link" aria-label="Copy article link"><img src="assets/icons/share.png" alt="" class="btn-icon" width="14" height="14"> Share</button>
-        </div>
+        <button type="button" class="card-preview-btn" data-link="${escapeHTML(post.link)}" title="Quick Key Takeaways" aria-label="Quick Key Takeaways">⚡ Preview</button>
       </div>
     `;
     return article;

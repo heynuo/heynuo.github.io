@@ -96,6 +96,9 @@
 
     // Otherwise stop and create new audio
     stopCurrentAudio();
+    if (window.QuranPlayer && typeof window.QuranPlayer.pause === 'function') {
+      try { window.QuranPlayer.pause(); } catch (e) {}
+    }
 
     playingCardId = cardId;
     playingAyahIndex = ayahIndex;
