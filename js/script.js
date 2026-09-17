@@ -1217,20 +1217,6 @@ function initContactEnhancements() {
       btn.setAttribute('aria-expanded', (!isActive).toString());
     });
   });
-
-  // 6. Interactive Card Spotlight Tracking (Linear / Vercel effect)
-  const spotlightCards = $.getAll('.contact-card, .channel-card, .presence-card, .sidebar-featured-box, .expect-card, .faq-item');
-  spotlightCards.forEach(card => {
-    $.on(card, 'mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-    });
-    $.on(card, 'mouseleave', () => {
-      card.style.removeProperty('--mouse-x');
-      card.style.removeProperty('--mouse-y');
-    });
-  });
 }
 
 // ---------- About Page Enhancements (Skill Meters & Bio Copy) ----------
@@ -2794,6 +2780,19 @@ function initTiltEffect() {
   });
 }
 
+// ---------- Interactive Card Spotlight Tracker (Linear / Vercel effect) ----------
+function initSpotlightEffect() {
+  if (prefersReducedMotion()) return;
+  const spotlightSelector = '.card, .featured-banner, .value-card, .about-box, .dispatch-card, .hero-stat, .contact-card, .channel-card, .presence-card, .sidebar-featured-box, .expect-card, .faq-item';
+  document.addEventListener('mousemove', (e) => {
+    const card = e.target.closest(spotlightSelector);
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  }, { passive: true });
+}
+
 // ---------- Animated Numbers Counter ----------
 function initAnimatedCounters() {
   const counters = $.getAll('.counter-num');
@@ -3495,6 +3494,7 @@ function init() {
   initDispatchForm();
   initShortcutsModal();
   initTiltEffect();
+  initSpotlightEffect();
   initArticlePreviewModal();
   initFeaturedResource();
 
