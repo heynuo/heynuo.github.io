@@ -37,8 +37,8 @@ const state = {
 // ✅ REAL ARTICLE LINKS (trimmed, no trailing spaces)
 const POSTS = Object.freeze([
   {
-    title: "Java OOP Crash Course",
-    excerpt: "Learn object-oriented programming with Java – classes, inheritance, polymorphism, and real-world examples.",
+    title: "Java OOP Tutorial: Classes, Objects & Inheritance",
+    excerpt: "Learn Java OOP with clear examples of classes, objects, inheritance, polymorphism, and encapsulation. A practical beginner-friendly guide.",
     category: "Java",
     link: "java-oop.html",
     date: "2026-06-02",
@@ -53,8 +53,8 @@ const POSTS = Object.freeze([
     ]
   },
   {
-    title: "Jinn & Islamic Theology",
-    excerpt: "Authentic research on Jinn, sihr, and Islamic theology from Quran & Sunnah.",
+    title: "Jinn in Islamic Theology: Meaning, Types & Quran",
+    excerpt: "Explore jinn in Islamic theology: Quranic references, creation, types, free will, and differences from angels in clear, referenced notes.",
     category: "Research",
     link: "jinn-islamic-theology.html",
     date: "2026-06-02",
@@ -69,8 +69,8 @@ const POSTS = Object.freeze([
     ]
   },
   {
-    title: "Modern Web Development Guide",
-    excerpt: "Build beautiful websites with HTML, CSS, JavaScript, and deploy for free on GitHub Pages.",
+    title: "Pure HTML, CSS & JavaScript Web Development Guide",
+    excerpt: "Build a fast, clean website with pure HTML, CSS, and JavaScript. Learn semantic markup, responsive design, performance, and accessibility.",
     category: "Web Dev",
     link: "web-dev-guide.html",
     date: "2026-06-02",
@@ -1037,30 +1037,39 @@ function initContactForm() {
   }
 }
 
-// ---------- Contact Page Enhancements (Subject Pills, Char Counter, FAQ) ----------
+// ---------- Contact Page Enhancements (Subject Pills, Char Counter, Presence Clock, Drafts, FAQ) ----------
 function initContactEnhancements() {
   // 1. Topic Pills
   const subjectInput = $.get('#subject');
   const messageInput = $.get('#message');
   const pills = $.getAll('.quick-subject-pill');
+  const topicHint = $.get('#topicHint');
+
   if (pills.length && subjectInput) {
     pills.forEach(pill => {
       $.on(pill, 'click', () => {
         pills.forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
-        subjectInput.value = pill.dataset.topic || pill.textContent.trim();
+        const topicText = pill.dataset.topic || pill.textContent.trim();
+        subjectInput.value = topicText;
         subjectInput.style.borderColor = 'var(--primary)';
         setTimeout(() => { subjectInput.style.borderColor = ''; }, 600);
+        if (topicHint) {
+          topicHint.textContent = `Selected: ${pill.textContent.trim()}`;
+        }
         messageInput?.focus();
-        showToast(`Selected topic: ${pill.textContent.trim()}`, '⚡');
+        showToast(`Topic selected: ${pill.textContent.trim()}`, '⚡');
       });
     });
   }
 
-  // 2. Live Character Counter
+  // 2. Live Character Counter & Draft Preservation
   if (messageInput) {
     const charCount = $.get('#charCount');
     const charBar = $.get('#charBar');
+    const clearDraftBtn = $.get('#clearDraftBtn');
+    const nameInput = $.get('#name');
+    const emailInput = $.get('#email');
     const maxChars = 500;
 
     const updateCounter = () => {
@@ -1074,11 +1083,119 @@ function initContactEnhancements() {
       }
     };
 
-    $.on(messageInput, 'input', updateCounter);
+    // Restore draft if present
+    try {
+      const savedDraft = localStorage.getItem('heynuo_contact_draft');
+      if (savedDraft) {
+        const data = JSON.parse(savedDraft);
+        if (data.name && nameInput && !nameInput.value) nameInput.value = data.name;
+        if (data.email && emailInput && !emailInput.value) emailInput.value = data.email;
+        if (data.subject && subjectInput && !subjectInput.value) subjectInput.value = data.subject;
+        if (data.message && !messageInput.value) messageInput.value = data.message;
+        updateCounter();
+      }
+    } catch (_) {}
+
+    const saveDraft = () => {
+      try {
+        localStorage.setItem('heynuo_contact_draft', JSON.stringify({
+          name: nameInput?.value || '',
+          email: emailInput?.value || '',
+          subject: subjectInput?.value || '',
+          message: messageInput.value || ''
+        }));
+      } catch (_) {}
+    };
+
+    $.on(messageInput, 'input', () => {
+      updateCounter();
+      saveDraft();
+    });
+    if (nameInput) $.on(nameInput, 'input', saveDraft);
+    if (emailInput) $.on(emailInput, 'input', saveDraft);
+    if (subjectInput) $.on(subjectInput, 'input', saveDraft);
+
     updateCounter();
+
+    // Clear Draft handler
+    if (clearDraftBtn) {
+      $.on(clearDraftBtn, 'click', (e) => {
+        e.preventDefault();
+        if (messageInput.value || subjectInput?.value || nameInput?.value) {
+          if (confirm('Clear your current message draft?')) {
+            if (messageInput) messageInput.value = '';
+            if (subjectInput) subjectInput.value = '';
+            if (nameInput) nameInput.value = '';
+            if (emailInput) emailInput.value = '';
+            pills.forEach(p => p.classList.remove('active'));
+            if (topicHint) topicHint.textContent = 'Auto-tailors your subject line';
+            updateCounter();
+            try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+            showToast('Draft cleared', '🗑️');
+          }
+        }
+      });
+    }
+
+    // Clear saved draft on form submit
+    const form = $.get('#contact-form');
+    if (form) {
+      $.on(form, 'submit', () => {
+        try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+      });
+    }
   }
 
-  // 3. FAQ Accordion
+  // 3. Keyboard Shortcut (Ctrl+Enter or Cmd+Enter to send)
+  const contactForm = $.get('#contact-form');
+  if (contactForm) {
+    $.on(contactForm, 'keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        contactForm.requestSubmit ? contactForm.requestSubmit() : contactForm.submit();
+      }
+    });
+  }
+
+  // 4. Live Presence Clock (Dhaka UTC+6)
+  const clockEl = $.get('#presenceClock');
+  const statusEl = $.get('#presenceStatus');
+  if (clockEl || statusEl) {
+    const updateClock = () => {
+      try {
+        const now = new Date();
+        if (clockEl) {
+          clockEl.textContent = now.toLocaleTimeString('en-US', {
+            timeZone: 'Asia/Dhaka',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+        }
+        if (statusEl) {
+          const hour = parseInt(new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Dhaka',
+            hour: 'numeric',
+            hour12: false
+          }).format(now), 10);
+
+          const isOnline = hour >= 8 && hour < 23;
+          if (isOnline) {
+            statusEl.className = 'presence-status-badge online';
+            statusEl.innerHTML = '<span class="presence-badge-pulse"></span> Usually Active / Fast Response';
+          } else {
+            statusEl.className = 'presence-status-badge offline';
+            statusEl.innerHTML = '<span class="presence-badge-pulse"></span> Away / Resting (Replies in morning)';
+          }
+        }
+      } catch (_) {}
+    };
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  // 5. FAQ Accordion
   const faqQuestions = $.getAll('.faq-question');
   faqQuestions.forEach(btn => {
     $.on(btn, 'click', () => {
@@ -1098,6 +1215,20 @@ function initContactEnhancements() {
       // Toggle current item
       item.classList.toggle('active', !isActive);
       btn.setAttribute('aria-expanded', (!isActive).toString());
+    });
+  });
+
+  // 6. Interactive Card Spotlight Tracking (Linear / Vercel effect)
+  const spotlightCards = $.getAll('.contact-card, .channel-card, .presence-card, .sidebar-featured-box, .expect-card, .faq-item');
+  spotlightCards.forEach(card => {
+    $.on(card, 'mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    });
+    $.on(card, 'mouseleave', () => {
+      card.style.removeProperty('--mouse-x');
+      card.style.removeProperty('--mouse-y');
     });
   });
 }
@@ -1638,6 +1769,13 @@ function initCopyEmail() {
       if (!email) return;
       navigator.clipboard?.writeText(email).then(() => {
         showToast(`Copied ${email} to clipboard!`, '✉️');
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = '<span>✓ Copied!</span>';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = origHtml;
+          btn.classList.remove('copied');
+        }, 2000);
       }).catch(() => {
         showToast(`Email: ${email}`, '✉️');
       });
@@ -3342,7 +3480,10 @@ function init() {
     initQuickTopicPills();
     initAnimatedCounters();
   }
-  if (Page.getCurrentPage() === 'contact.html') initContactForm();
+  if (Page.getCurrentPage() === 'contact.html') {
+    initContactForm();
+    initHeroParticles();
+  }
   initContactEnhancements();
   initAboutPage();
   initCodeCopyButtons();

@@ -26,8 +26,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Shared stylesheet: global styles + contact page components -->
+  <!-- Shared stylesheet: global styles + components -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Dedicated Contact Page Modern Stylesheet -->
+  <link rel="stylesheet" href="css/contact.css">
   <!-- Persistent Quran Auto-Listening Audio Player -->
   <link rel="stylesheet" href="css/quran-player.css">
 </head>
@@ -49,7 +51,7 @@
           <a href="quran.html">Quran</a>
           <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
-          <a href="contact.html">Contact</a>
+          <a href="contact.html" class="active" aria-current="page">Contact</a>
         </div>
         <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile" title="GitHub @heynuo"><img src="assets/icons/github.png" alt="" width="19" height="19"></a>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme"><img src="assets/icons/moon.png" alt="Toggle theme" width="20" height="20" class="theme-icon"></button>
@@ -60,124 +62,308 @@
 
   <div class="container">
     <main id="main-content">
+      <!-- ===== Hero ===== -->
       <section class="hero contact-hero">
-        <div class="hero-content">
-          <h1>Let's <span>Connect</span></h1>
-          <p class="hero-description">Have a question, collaboration idea, or just want to say hello? I'd love to hear from you! Fill out the form below or reach out directly.</p>
+        <canvas class="hero-particles-canvas" id="heroParticlesCanvas" aria-hidden="true"></canvas>
+        <div class="hero-ambient-glow" aria-hidden="true"></div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          ✦ Open for Academic Inquiries &amp; Collaborations
+        </div>
+        <h1>Let's <span>Connect</span></h1>
+        <p class="hero-description">
+          Have a question about Java architectures, authentic Islamic research, or clean frontend development? Send a message below or reach out via direct channels.
+        </p>
+
+        <!-- Availability / Quick Context Chips -->
+        <div class="contact-stat-chips">
+          <div class="contact-stat-chip">
+            <span class="chip-icon">⏱️</span>
+            <span>Response: <strong>24–48 Hours</strong></span>
+          </div>
+          <div class="contact-stat-chip">
+            <span class="chip-icon">📍</span>
+            <span>Base: <strong>Dhaka (UTC+6)</strong></span>
+          </div>
+          <div class="contact-stat-chip">
+            <span class="chip-icon">🛡️</span>
+            <span>Privacy: <strong>100% Direct &amp; Confidential</strong></span>
+          </div>
         </div>
       </section>
 
-      <section class="contact-grid">
-        <article class="about-box">
-          <h2><img src="assets/icons/email.png" alt="" class="inline-title-icon" width="24" height="24"> Send a Message</h2>
-          
+      <!-- ===== Main Interactive Contact Grid ===== -->
+      <div class="contact-layout-grid">
+
+        <!-- Column 1: Interactive Message Console -->
+        <article class="contact-card">
+          <div class="contact-card-header">
+            <div class="contact-card-title-wrap">
+              <div class="contact-header-badge" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <h2>Send a Message</h2>
+            </div>
+            <p class="contact-card-sub">Messages are delivered straight to my personal inbox with zero third-party tracking.</p>
+          </div>
+
           <!-- Quick Subject Topic Selector -->
-          <div class="contact-quick-subjects">
-            <span class="quick-subject-title">⚡ Quick Topic Selector:</span>
-            <div class="quick-subject-pills">
-              <button type="button" class="quick-subject-pill" data-topic="☕ Java OOP &amp; Architecture">☕ Java OOP</button>
-              <button type="button" class="quick-subject-pill" data-topic="📖 Ruqyah &amp; Islamic Research">📖 Ruqyah Research</button>
-              <button type="button" class="quick-subject-pill" data-topic="🌐 Web Development &amp; Design">🌐 Web Dev</button>
-              <button type="button" class="quick-subject-pill" data-topic="🤝 Collaboration &amp; Project Inquiry">🤝 Collaboration</button>
-              <button type="button" class="quick-subject-pill" data-topic="👋 General Feedback / Say Hello">👋 Just Saying Hi</button>
+          <div class="contact-topics-section">
+            <div class="contact-topics-header">
+              <span class="contact-topics-title">
+                <span>⚡</span> Quick Topic Selector:
+              </span>
+              <span class="contact-topics-hint" id="topicHint">Auto-tailors your subject line</span>
+            </div>
+            <div class="contact-pills-row">
+              <button type="button" class="quick-subject-pill" data-topic="☕ Java OOP &amp; Architecture">
+                <span>☕</span> Java OOP
+              </button>
+              <button type="button" class="quick-subject-pill" data-topic="📖 Ruqyah &amp; Islamic Research">
+                <span>📖</span> Ruqyah Research
+              </button>
+              <button type="button" class="quick-subject-pill" data-topic="🌐 Web Development &amp; Design">
+                <span>🌐</span> Web Dev
+              </button>
+              <button type="button" class="quick-subject-pill" data-topic="🤝 Collaboration &amp; Project Inquiry">
+                <span>🤝</span> Collaboration
+              </button>
+              <button type="button" class="quick-subject-pill" data-topic="👋 General Feedback / Say Hello">
+                <span>👋</span> Just Saying Hi
+              </button>
             </div>
           </div>
 
-          <!-- Using a dummy endpoint – replace with your own Formspree or FormSubmit URL -->
-          <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" required class="form-input" placeholder="Your name">
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required class="form-input" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-              <label for="subject">Subject</label>
-              <input type="text" id="subject" name="subject" required class="form-input" placeholder="How can I help?">
-            </div>
-            <div class="form-group">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <label for="message" style="margin-bottom:0;">Message</label>
-                <div class="char-counter-wrapper">
-                  <span id="charCount">0</span>/500
-                  <div class="char-counter-bar"><div class="char-counter-fill" id="charBar"></div></div>
+          <!-- The Form -->
+          <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+            <div class="form-field-group">
+              
+              <!-- Name & Email Two-Column Grid -->
+              <div class="form-row-2col">
+                <div class="form-field">
+                  <div class="form-field-header">
+                    <label for="name">Your Name <span class="required-mark" aria-hidden="true">*</span></label>
+                  </div>
+                  <div class="input-with-icon">
+                    <span class="input-leading-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </span>
+                    <input type="text" id="name" name="name" required class="form-input-styled" placeholder="e.g. Alex Rahman" autocomplete="name">
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <div class="form-field-header">
+                    <label for="email">Email Address <span class="required-mark" aria-hidden="true">*</span></label>
+                  </div>
+                  <div class="input-with-icon">
+                    <span class="input-leading-icon" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                      </svg>
+                    </span>
+                    <input type="email" id="email" name="email" required class="form-input-styled" placeholder="name@example.com" autocomplete="email">
+                  </div>
                 </div>
               </div>
-              <textarea id="message" name="message" rows="5" maxlength="500" required class="form-textarea" placeholder="Your message..."></textarea>
+
+              <!-- Subject Field -->
+              <div class="form-field">
+                <div class="form-field-header">
+                  <label for="subject">Subject <span class="required-mark" aria-hidden="true">*</span></label>
+                </div>
+                <div class="input-with-icon">
+                  <span class="input-leading-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </span>
+                  <input type="text" id="subject" name="subject" required class="form-input-styled" placeholder="How can I help you today?">
+                </div>
+              </div>
+
+              <!-- Message Field -->
+              <div class="form-field">
+                <div class="form-field-header">
+                  <label for="message">Message <span class="required-mark" aria-hidden="true">*</span></label>
+                </div>
+                <textarea id="message" name="message" rows="5" maxlength="500" required class="form-textarea-styled" placeholder="Write your message here..."></textarea>
+                
+                <div class="message-meta-bar">
+                  <div class="char-counter-pill">
+                    <span><span id="charCount">0</span> / 500</span>
+                    <div class="char-bar-track" aria-hidden="true">
+                      <div class="char-bar-fill" id="charBar"></div>
+                    </div>
+                  </div>
+                  <button type="button" class="clear-draft-btn" id="clearDraftBtn" title="Reset your message">Clear Draft</button>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" class="contact-submit-btn" id="contactSubmitBtn">
+                <span>Send Message</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+
+              <div class="form-shortcut-hint">
+                <span>💡 Shortcut: Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to submit quickly</span>
+              </div>
+
+              <!-- Status notice -->
+              <div id="form-status" role="status" aria-live="polite"></div>
+
             </div>
-            <button type="submit" class="btn btn-primary btn-full"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16"> Send Message</button>
-            <p id="form-status" role="status" aria-live="polite"></p>
           </form>
         </article>
 
-        <article class="about-box">
-          <h2><img src="assets/icons/share.png" alt="" class="inline-title-icon" width="24" height="24"> Other Ways to Reach Me</h2>
-          <div class="contact-links">
-            <div style="display:flex; gap:8px; align-items:center;">
-              <a href="#" class="contact-link dynamic-email-link" data-user="zahiruddin44044" data-domain="gmail.com" style="flex:1;">
-                <span class="contact-icon"><img src="assets/icons/email.png" alt="" width="22" height="22"></span>
-                <div>
-                  <div class="contact-label">Email</div>
-                  <div class="contact-value dynamic-email-text"><span class="email-user">zahiruddin44044</span><span class="email-at"> [at] </span><span class="email-domain">gmail.com</span></div>
-                </div>
-              </a>
-              <button type="button" class="btn btn-secondary copy-email-btn" data-user="zahiruddin44044" data-domain="gmail.com" title="Copy email address" style="padding:12px 16px; border-radius:12px;"><img src="assets/icons/bookmark.png" alt="" class="btn-icon" width="14" height="14"> Copy</button>
-            </div>
-            <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="contact-link">
-              <span class="contact-icon"><img src="assets/icons/github.png" alt="" width="22" height="22"></span>
-              <div>
-                <div class="contact-label">GitHub</div>
-                <div class="contact-value">@heynuo</div>
+        <!-- Column 2: Direct Channels, Presence & Trust -->
+        <aside class="contact-sidebar">
+
+          <!-- 1. Presence & Local Time Clock -->
+          <div class="presence-card">
+            <div class="presence-card-top">
+              <span class="presence-location">
+                <span>📍</span> Dhaka, Bangladesh
+              </span>
+              <div class="presence-status-badge online" id="presenceStatus">
+                <span class="presence-badge-pulse"></span>
+                <span>Usually Active / Fast Response</span>
               </div>
-            </a>
-            <div class="contact-highlight">
-              <div class="contact-highlight-title"><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="20" height="20"> Ruqyah Guide</div>
-              <div class="contact-highlight-text">Questions about the Ruqyah Shariyah resource?</div>
-              <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="contact-highlight-link">Open Guide →</a>
+            </div>
+            <div class="presence-clock-box">
+              <span class="presence-clock" id="presenceClock">--:--:-- --</span>
+              <span class="presence-timezone">UTC+6</span>
             </div>
           </div>
-        </article>
-      </section>
 
-      <section class="section-spacing">
+          <!-- 2. Direct Email Card -->
+          <div class="channel-card">
+            <div class="channel-card-header">
+              <div class="channel-icon-wrap" aria-hidden="true">
+                <img src="assets/icons/email.png" alt="" width="20" height="20">
+              </div>
+              <h3 class="channel-title">Direct Personal Email</h3>
+            </div>
+            <p class="channel-desc">
+              Prefer writing through your own email client? Send a message directly to my address.
+            </p>
+            <div class="channel-actions">
+              <button type="button" class="channel-action-btn primary copy-email-btn" data-user="zahiruddin44044" data-domain="gmail.com" title="Copy email address to clipboard">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy Email</span>
+              </button>
+              <a href="#" class="channel-action-btn secondary dynamic-email-link" data-user="zahiruddin44044" data-domain="gmail.com" title="Open in default mail client">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Open Mail App</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 3. GitHub Hub Card -->
+          <div class="channel-card">
+            <div class="channel-card-header">
+              <div class="channel-icon-wrap" aria-hidden="true">
+                <img src="assets/icons/github.png" alt="" width="20" height="20">
+              </div>
+              <h3 class="channel-title">GitHub Profile &amp; Discussions</h3>
+            </div>
+            <p class="channel-desc">
+              For public bug reports, documentation suggestions, or code issues, explore the GitHub repository.
+            </p>
+            <div class="channel-actions">
+              <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="channel-action-btn primary">
+                <img src="assets/icons/github.png" alt="" width="15" height="15">
+                <span>GitHub @heynuo ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- 4. Featured Ruqyah Reference -->
+          <div class="sidebar-featured-box">
+            <span class="sidebar-featured-badge">✨ Featured Guide</span>
+            <h3 class="sidebar-featured-title">Authentic Ruqyah Guide</h3>
+            <p class="sidebar-featured-text">
+              Looking for Quranic healing verses, Arabic text, and audio recitation? Explore the full reference.
+            </p>
+            <a href="ruqyah.html" class="sidebar-featured-link">
+              <span>Open Ruqyah Guide</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <!-- 5. Privacy Commitment -->
+          <div class="privacy-assurance-box">
+            <span class="shield-icon" aria-hidden="true">🛡️</span>
+            <div>
+              <strong>Confidential &amp; Tracker-Free</strong>: Your email is used exclusively to answer your inquiry. No marketing sequences, no data resale, zero third-party cookies.
+            </div>
+          </div>
+
+        </aside>
+      </div>
+
+      <!-- ===== What to Expect (4-Pillar Grid) ===== -->
+      <section class="expect-section">
         <h2 class="section-title">What to <span>Expect</span></h2>
-        <div class="about">
-          <article class="about-box">
-            <h2>⏱️ Response Time</h2>
-            <p>I aim to respond to all messages within <strong>24-48 hours</strong>. For urgent inquiries, please mention "URGENT" in your subject line.</p>
-          </article>
-          <article class="about-box">
-            <h2>💬 What I Can Help With</h2>
-            <ul>
-              <li>Questions about Java tutorials</li>
-              <li>Islamic research inquiries</li>
-              <li>Web development guidance</li>
-              <li>Collaboration opportunities</li>
-              <li>Feedback on content</li>
-            </ul>
-          </article>
+        <div class="expect-grid">
+          <div class="expect-card">
+            <div class="expect-icon-box">⏱️</div>
+            <h3>24–48h Turnaround</h3>
+            <p>I read every message and respond thoughtfully. For urgent matters, write "URGENT" in your subject line.</p>
+          </div>
+          <div class="expect-card">
+            <div class="expect-icon-box">👤</div>
+            <h3>Direct Human Replies</h3>
+            <p>No canned bots or automated filters. You correspond directly with the author of this knowledge hub.</p>
+          </div>
+          <div class="expect-card">
+            <div class="expect-icon-box">🤝</div>
+            <h3>Broad Topic Scope</h3>
+            <p>Happy to discuss Java Spring architectures, Islamic research methodologies, or static frontend engineering.</p>
+          </div>
+          <div class="expect-card">
+            <div class="expect-icon-box">🔒</div>
+            <h3>Respect &amp; Privacy</h3>
+            <p>Complete confidentiality. Your contact information is never shared or stored in marketing CRM software.</p>
+          </div>
         </div>
       </section>
 
-      <!-- Frequently Asked Questions Accordion -->
-      <section class="section-spacing">
+      <!-- ===== Frequently Asked Questions Accordion ===== -->
+      <section class="faq-section">
         <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
-        <div class="faq-accordion">
+        <div class="faq-card-container">
           <div class="faq-item">
             <button type="button" class="faq-question" aria-expanded="false">
-              <span>Are all articles and research guides free to read?</span>
-              <span class="faq-icon">+</span>
+              <span>Are all articles, guides, and research free to read?</span>
+              <span class="faq-icon-box" aria-hidden="true">+</span>
             </button>
             <div class="faq-answer">
-              <p>Yes, 100% free and open-source. All guides, Islamic theology references, and Java architecture patterns are publicly accessible for educational benefit.</p>
+              <p>Yes, 100% free and open-source. All tutorials, Islamic theology references, and Java architecture patterns are publicly accessible for educational benefit.</p>
             </div>
           </div>
           <div class="faq-item">
             <button type="button" class="faq-question" aria-expanded="false">
               <span>Can I use the code examples in my own projects?</span>
-              <span class="faq-icon">+</span>
+              <span class="faq-icon-box" aria-hidden="true">+</span>
             </button>
             <div class="faq-answer">
               <p>Absolutely! The code examples are published under the MIT license, meaning you can freely learn from, copy, and modify them for personal or commercial projects.</p>
@@ -186,7 +372,7 @@
           <div class="faq-item">
             <button type="button" class="faq-question" aria-expanded="false">
               <span>How can I suggest a topic or report an errata?</span>
-              <span class="faq-icon">+</span>
+              <span class="faq-icon-box" aria-hidden="true">+</span>
             </button>
             <div class="faq-answer">
               <p>You can send a message via this form, or open an issue/PR directly on the official GitHub repository at <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">github.com/heynuo</a>.</p>
@@ -195,19 +381,22 @@
           <div class="faq-item">
             <button type="button" class="faq-question" aria-expanded="false">
               <span>What is the best way to collaborate or invite you to speak?</span>
-              <span class="faq-icon">+</span>
+              <span class="faq-icon-box" aria-hidden="true">+</span>
             </button>
             <div class="faq-answer">
-              <p>Select the "🤝 Collaboration" subject pill above or send a direct note using the email button on this page with details about your event or project.</p>
+              <p>Select the "🤝 Collaboration" topic pill above or send a direct note using the email button on this page with details about your project or event.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="hero cta-section">
-        <p class="cta-text">Or just want to say hi? I read every message and appreciate you reaching out. 🤲</p>
-        <div class="hero-buttons">
-          <a href="index.html" class="btn btn-secondary">← Back to Home</a>
+      <!-- ===== Bottom Warm CTA Card ===== -->
+      <section class="contact-bottom-cta">
+        <p>Or just looking around? Explore educational notes across the website. 🤲</p>
+        <div class="contact-bottom-links">
+          <a href="index.html" class="btn btn-secondary">🏠 Back to Home</a>
+          <a href="java-oop.html" class="btn btn-secondary">☕ Java OOP Tutorial</a>
+          <a href="quran.html" class="btn btn-secondary">📖 Quran Library</a>
         </div>
       </section>
     </main>
