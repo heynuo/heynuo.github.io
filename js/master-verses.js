@@ -20,13 +20,15 @@
 (function () {
   'use strict';
 
-  // Reciter Configuration from Al-Islam Quran Audio Engine
+  // Reciter Configuration (Multi-Provider: EveryAyah & Al-Islam Tilawat CDN)
   const RECITERS = {
-    ashiq: { name: 'Qari Muhammad Ashiq', folder: 'ashiq' },
-    feroz: { name: 'Qari Feroz', folder: 'feroz' },
-    rashid: { name: 'Qari Rashid', folder: 'rashid' },
-    aiman: { name: 'Qari Aiman', folder: 'aiman' },
-    'idir-iken': { name: 'Qari Idir Iken', folder: 'idir-iken' }
+    alafasy: { name: 'Mishary Rashid Alafasy', provider: 'everyayah', folder: 'Alafasy_128kbps' },
+    abdulbasit: { name: 'Qari Abdul Basit (Murattal)', provider: 'everyayah', folder: 'Abdul_Basit_Murattal_192kbps' },
+    ashiq: { name: 'Qari Muhammad Ashiq', provider: 'alislam', folder: 'ashiq' },
+    feroz: { name: 'Qari Feroz', provider: 'alislam', folder: 'feroz' },
+    rashid: { name: 'Qari Rashid', provider: 'alislam', folder: 'rashid' },
+    aiman: { name: 'Qari Aiman', provider: 'alislam', folder: 'aiman' },
+    'idir-iken': { name: 'Qari Idir Iken', provider: 'alislam', folder: 'idir-iken' }
   };
 
   // Additional Top-10 / Cross-Referenced Verses (from publication & review)
@@ -114,7 +116,7 @@
   ];
 
   // State Management
-  let currentReciter = localStorage.getItem('mv_reciter') || 'ashiq';
+  let currentReciter = localStorage.getItem('mv_reciter') || 'alafasy';
   let favorites = JSON.parse(localStorage.getItem('mv_favorites') || '[]');
   let activeCategory = 'all';
   let activeSource = 'all';
@@ -133,6 +135,11 @@
   let playingVerseId = null;
   let playingAyahIndex = 0;
   let isAudioPlaying = false;
+  let isSeeking = false;
+  let isBuffering = false;
+  let isMuted = localStorage.getItem('mv_muted') === 'true';
+  let currentVolume = parseFloat(localStorage.getItem('mv_volume'));
+  if (isNaN(currentVolume)) currentVolume = 1.0;
 
   // DOM Elements
   const cardsGridEl = document.getElementById('mvCardsGrid');
@@ -182,6 +189,10 @@
   const audioBarCloseBtn = document.getElementById('mvAudioBarCloseBtn');
   const audioSpeedBtn = document.getElementById('mvAudioSpeedBtn');
   const audioLoopBtn = document.getElementById('mvAudioLoopBtn');
+  const audioMuteBtn = document.getElementById('mvAudioMuteBtn');
+  const audioVolumeSlider = document.getElementById('mvAudioVolumeSlider');
+  const audioVolumePct = document.getElementById('mvAudioVolumePct');
+  const audioVolumeCluster = document.getElementById('mvAudioVolumeCluster');
   const audioProgressSlider = document.getElementById('mvAudioProgress');
   const audioCurrentTimeEl = document.getElementById('mvAudioCurrentTime');
   const audioDurationEl = document.getElementById('mvAudioDuration');
@@ -198,22 +209,37 @@
 
   // Format Seconds to M:SS
   function formatTime(s) {
-    if (isNaN(s) || s < 0) return '0:00';
+    if (isNaN(s) || s < 0 || !isFinite(s)) return '0:00';
     const mins = Math.floor(s / 60);
     const secs = Math.floor(s % 60);
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 
-  // Audio URL Generator (Al-Islam Tilawat CDN)
+  // Audio URL Generator (Multi-Provider: EveryAyah & Al-Islam Tilawat CDN)
   function getAudioUrl(surah, ayah, reciterKey = currentReciter) {
-    const folder = (RECITERS[reciterKey] || RECITERS.ashiq).folder;
+    const reciter = RECITERS[reciterKey] || RECITERS.alafasy || RECITERS.ashiq;
     const sPad = String(surah).padStart(3, '0');
     const aPad = String(ayah).padStart(3, '0');
-    return `https://files.alislam.cloud/audio/tilawat/${folder}/${sPad}-${aPad}-AR.mp3`;
+    if (reciter.provider === 'everyayah') {
+      return `https://everyayah.com/data/${reciter.folder}/${sPad}${aPad}.mp3`;
+    }
+    return `https://files.alislam.cloud/audio/tilawat/${reciter.folder}/${sPad}-${aPad}-AR.mp3`;
+  }
+
+  // Fallback Audio URL Generator with Dual-CDN Redundancy
+  function getFallbackAudioUrl(surah, ayah, reciterKey = currentReciter) {
+    const sPad = String(surah).padStart(3, '0');
+    const aPad = String(ayah).padStart(3, '0');
+    const reciter = RECITERS[reciterKey];
+    if (reciter && reciter.provider === 'everyayah') {
+      return `https://files.alislam.cloud/audio/tilawat/ashiq/${sPad}-${aPad}-AR.mp3`;
+    }
+    return `https://everyayah.com/data/Alafasy_128kbps/${sPad}${aPad}.mp3`;
   }
 
   // Find any verse (canonical or bonus)
   function findVerseItem(idOrRef) {
+    if (idOrRef === null || idOrRef === undefined) return null;
     if (typeof idOrRef === 'number' || (!isNaN(Number(idOrRef)) && !String(idOrRef).includes(':') && !String(idOrRef).startsWith('bonus-'))) {
       const numId = Number(idOrRef);
       const found = MASTER_VERSES_DATA.find(v => v.id === numId);
@@ -226,48 +252,121 @@
     return MASTER_VERSES_DATA.find(v => v.verseRange === idOrRef || `${v.surah}:${v.startAyah}` === idOrRef);
   }
 
-  // Stop Current Audio
-  function stopCurrentAudio() {
+  // Cleanup current audio object cleanly without DOM exceptions
+  function cleanupAudio() {
     if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
       currentAudio.onended = null;
       currentAudio.ontimeupdate = null;
       currentAudio.onerror = null;
+      currentAudio.onloadedmetadata = null;
+      currentAudio.onloadstart = null;
+      currentAudio.onwaiting = null;
+      currentAudio.onplaying = null;
+      currentAudio.oncanplay = null;
+      try {
+        currentAudio.pause();
+      } catch (e) {}
+      currentAudio.removeAttribute('src');
+      try {
+        currentAudio.load();
+      } catch (e) {}
       currentAudio = null;
     }
+    isBuffering = false;
+  }
+
+  // Stop Current Audio and close player bar
+  function stopCurrentAudio() {
+    cleanupAudio();
     isAudioPlaying = false;
+    isBuffering = false;
     playingVerseId = null;
+    playingAyahIndex = 0;
     updateAllAudioUI();
     if (audioBarEl) audioBarEl.classList.remove('is-visible');
-    if (audioBarDiscEl) audioBarDiscEl.classList.remove('is-spinning');
-    if (audioProgressSlider) audioProgressSlider.value = 0;
+    if (audioBarDiscEl) {
+      audioBarDiscEl.classList.remove('is-spinning', 'is-buffering');
+    }
+    if (audioProgressSlider) {
+      audioProgressSlider.value = 0;
+      audioProgressSlider.style.setProperty('--progress-pct', '0%');
+    }
     if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = '0:00';
     if (audioDurationEl) audioDurationEl.textContent = '0:00';
+  }
+
+  // Helper to determine list of verses currently in context
+  function getActiveVerseList() {
+    const filtered = getFilteredItems();
+    if (filtered && filtered.length > 0) {
+      if (playingVerseId !== null && filtered.some(v => String(v.id) === String(playingVerseId))) {
+        return filtered;
+      }
+      if (!playingVerseId) {
+        return filtered;
+      }
+    }
+    return MASTER_VERSES_DATA;
+  }
+
+  // Update Media Session (Hardware keys, lock screen & notification controls)
+  function updateMediaSession(item) {
+    if (!('mediaSession' in navigator) || !item) return;
+    try {
+      const reciterName = RECITERS[currentReciter]?.name || 'Holy Quran Recitation';
+      const ayahNum = item.audioVerses ? item.audioVerses[playingAyahIndex] : item.startAyah;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: `${item.surahName} (${item.verseRange})`,
+        artist: `${reciterName} • Ayah ${ayahNum}`,
+        album: 'Master Compilation of Quranic Verses (108 Verses)',
+        artwork: [
+          { src: 'assets/banners/quran-cover.jpg', sizes: '512x512', type: 'image/jpeg' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', () => {
+        if (playingVerseId !== null) togglePlayVerse(playingVerseId);
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
+        if (playingVerseId !== null) togglePlayVerse(playingVerseId);
+      });
+      navigator.mediaSession.setActionHandler('previoustrack', playPrevAyah);
+      navigator.mediaSession.setActionHandler('nexttrack', playNextAyah);
+    } catch (e) {}
   }
 
   // Play Ayah Sequence
   function playVerse(verseId, ayahIndex = 0) {
     const item = findVerseItem(verseId);
-    if (!item || !item.audioVerses || !item.audioVerses.length) return;
+    if (!item || !item.audioVerses || !item.audioVerses.length) {
+      showToast('Verse recitation audio data not found', '⚠️');
+      return;
+    }
 
     if (ayahIndex < 0) ayahIndex = 0;
     if (ayahIndex >= item.audioVerses.length) ayahIndex = item.audioVerses.length - 1;
 
-    // Resume if already paused on same verse and same ayah
-    if (playingVerseId === verseId && playingAyahIndex === ayahIndex && currentAudio) {
+    // Check if resume is possible on same verse and same ayah
+    if (String(playingVerseId) === String(verseId) && playingAyahIndex === ayahIndex && currentAudio) {
       if (currentAudio.paused) {
         currentAudio.playbackRate = currentSpeed;
+        currentAudio.muted = isMuted;
+        currentAudio.volume = isMuted ? 0 : currentVolume;
         currentAudio.play().then(() => {
           isAudioPlaying = true;
+          isBuffering = false;
           updateAllAudioUI();
           updateAudioBar(item);
-        }).catch(handleAudioError);
+        }).catch(err => {
+          if (err && err.name === 'AbortError') return;
+          handleAudioError(err);
+        });
         return;
       }
     }
 
-    stopCurrentAudio();
+    // Clean up existing audio instance without flashing bar
+    cleanupAudio();
 
     // Pause global background quran player if active
     if (window.QuranPlayer && typeof window.QuranPlayer.pause === 'function') {
@@ -276,32 +375,112 @@
 
     playingVerseId = verseId;
     playingAyahIndex = ayahIndex;
+    isBuffering = true;
     const currentAyahNum = item.audioVerses[ayahIndex];
-    const url = getAudioUrl(item.surah, currentAyahNum);
+    const url = getAudioUrl(item.surah, currentAyahNum, currentReciter);
+    let triedFallback = false;
 
-    currentAudio = new Audio(url);
-    currentAudio.preload = 'auto';
-    currentAudio.playbackRate = currentSpeed;
+    // Immediately present player bar with accurate metadata
+    updateAudioBar(item);
+    if (audioBarEl) audioBarEl.classList.add('is-visible');
+    if (audioProgressSlider) {
+      audioProgressSlider.value = 0;
+      audioProgressSlider.style.setProperty('--progress-pct', '0%');
+    }
+    if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = '0:00';
+    if (audioDurationEl) audioDurationEl.textContent = '0:00';
+    updateAllAudioUI();
 
-    currentAudio.play().then(() => {
-      isAudioPlaying = true;
-      updateAllAudioUI();
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.playbackRate = currentSpeed;
+    audio.muted = isMuted;
+    audio.volume = isMuted ? 0 : currentVolume;
+    currentAudio = audio;
+
+    audio.onloadstart = function () {
+      if (audio !== currentAudio) return;
+      isBuffering = true;
       updateAudioBar(item);
-    }).catch(err => {
-      console.warn('Playback error:', err);
-      handleAudioError(err);
-    });
-
-    currentAudio.ontimeupdate = function () {
-      if (!currentAudio || isNaN(currentAudio.duration)) return;
-      const pct = (currentAudio.currentTime / currentAudio.duration) * 100;
-      if (audioProgressSlider) audioProgressSlider.value = pct;
-      if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = formatTime(currentAudio.currentTime);
-      if (audioDurationEl) audioDurationEl.textContent = formatTime(currentAudio.duration);
+      updateAllAudioUI();
     };
 
-    // Auto-advance / Loop
-    currentAudio.onended = function () {
+    audio.onwaiting = function () {
+      if (audio !== currentAudio) return;
+      isBuffering = true;
+      updateAudioBar(item);
+      updateAllAudioUI();
+    };
+
+    audio.oncanplay = function () {
+      if (audio !== currentAudio) return;
+      isBuffering = false;
+      updateAudioBar(item);
+      updateAllAudioUI();
+    };
+
+    audio.onplaying = function () {
+      if (audio !== currentAudio) return;
+      isBuffering = false;
+      isAudioPlaying = true;
+      updateAudioBar(item);
+      updateAllAudioUI();
+    };
+
+    audio.onloadedmetadata = function () {
+      if (audio !== currentAudio) return;
+      if (audioDurationEl && !isNaN(audio.duration) && audio.duration > 0) {
+        audioDurationEl.textContent = formatTime(audio.duration);
+      }
+      audio.playbackRate = currentSpeed;
+      audio.muted = isMuted;
+      audio.volume = isMuted ? 0 : currentVolume;
+    };
+
+    audio.ontimeupdate = function () {
+      if (audio !== currentAudio || isSeeking || isNaN(audio.duration) || audio.duration <= 0) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      if (audioProgressSlider) {
+        audioProgressSlider.value = pct;
+        audioProgressSlider.style.setProperty('--progress-pct', `${pct}%`);
+      }
+      if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = formatTime(audio.currentTime);
+      if (audioDurationEl && (audioDurationEl.textContent === '0:00' || audioDurationEl.textContent === '')) {
+        audioDurationEl.textContent = formatTime(audio.duration);
+      }
+    };
+
+    const tryFallbackOrError = function (err) {
+      if (audio !== currentAudio) return;
+      if (!triedFallback) {
+        triedFallback = true;
+        console.warn('Primary recitation stream failed, trying fallback CDN for Surah', item.surah, 'Ayah', currentAyahNum);
+        const fallbackUrl = getFallbackAudioUrl(item.surah, currentAyahNum, currentReciter);
+        audio.src = fallbackUrl;
+        audio.load();
+        audio.play().then(() => {
+          if (audio !== currentAudio) return;
+          isAudioPlaying = true;
+          isBuffering = false;
+          updateAllAudioUI();
+          updateAudioBar(item);
+        }).catch(fErr => {
+          if (audio !== currentAudio) return;
+          if (fErr && fErr.name === 'AbortError') return;
+          handleAudioError(fErr);
+        });
+      } else {
+        handleAudioError(err);
+      }
+    };
+
+    audio.onerror = function (e) {
+      if (audio !== currentAudio) return;
+      tryFallbackOrError(e);
+    };
+
+    audio.onended = function () {
+      if (audio !== currentAudio) return;
       if (isLooping) {
         // Repeat this specific verse from first ayah
         playVerse(verseId, 0);
@@ -309,75 +488,197 @@
       }
 
       if (playingAyahIndex < item.audioVerses.length - 1) {
+        // Advance to next Ayah in this verse
         playVerse(verseId, playingAyahIndex + 1);
       } else {
         // Finished all ayahs of this item
-        if (autoAdvanceContinuous && typeof verseId === 'number') {
-          // Play next item in list
-          const nextItem = MASTER_VERSES_DATA.find(v => v.id === verseId + 1);
-          if (nextItem) {
+        if (autoAdvanceContinuous) {
+          const list = getActiveVerseList();
+          const currentIdx = list.findIndex(v => String(v.id) === String(playingVerseId));
+          if (currentIdx !== -1 && currentIdx < list.length - 1) {
+            const nextItem = list[currentIdx + 1];
             playVerse(nextItem.id, 0);
+            setTimeout(() => {
+              const card = document.getElementById(`verse-${nextItem.id}`);
+              if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 140);
             return;
           }
         }
         stopCurrentAudio();
-        showToast(`Completed recitation for ${item.surahName} (${item.verseRange})`, '🎵');
+        showToast(`Completed recitation: ${item.surahName} (${item.verseRange})`, '🎵');
       }
     };
 
-    currentAudio.onerror = function (e) {
-      handleAudioError(e);
-    };
+    audio.src = url;
+    audio.play().then(() => {
+      if (audio !== currentAudio) return;
+      isAudioPlaying = true;
+      isBuffering = false;
+      updateAllAudioUI();
+      updateAudioBar(item);
+    }).catch(err => {
+      if (audio !== currentAudio) return;
+      if (err && err.name === 'AbortError') return;
+      tryFallbackOrError(err);
+    });
   }
 
   function togglePlayVerse(verseId) {
-    if (playingVerseId === verseId && isAudioPlaying) {
-      if (currentAudio) currentAudio.pause();
-      isAudioPlaying = false;
-      updateAllAudioUI();
-      if (audioBarDiscEl) audioBarDiscEl.classList.remove('is-spinning');
+    if (String(playingVerseId) === String(verseId)) {
+      if (isAudioPlaying) {
+        if (currentAudio) currentAudio.pause();
+        isAudioPlaying = false;
+        isBuffering = false;
+        updateAllAudioUI();
+        if (audioBarDiscEl) audioBarDiscEl.classList.remove('is-spinning');
+      } else if (currentAudio) {
+        currentAudio.playbackRate = currentSpeed;
+        currentAudio.muted = isMuted;
+        currentAudio.volume = isMuted ? 0 : currentVolume;
+        currentAudio.play().then(() => {
+          isAudioPlaying = true;
+          isBuffering = false;
+          updateAllAudioUI();
+          const item = findVerseItem(playingVerseId);
+          if (item) updateAudioBar(item);
+        }).catch(err => {
+          if (err && err.name === 'AbortError') return;
+          handleAudioError(err);
+        });
+      } else {
+        playVerse(verseId, playingAyahIndex || 0);
+      }
     } else {
       playVerse(verseId, 0);
     }
   }
 
   function playNextAyah() {
-    if (!playingVerseId) return;
+    if (playingVerseId === null) {
+      const list = getActiveVerseList();
+      if (list && list.length) playVerse(list[0].id, 0);
+      return;
+    }
     const item = findVerseItem(playingVerseId);
     if (!item) return;
 
     if (playingAyahIndex < item.audioVerses.length - 1) {
       playVerse(playingVerseId, playingAyahIndex + 1);
-    } else if (typeof playingVerseId === 'number' && playingVerseId < MASTER_VERSES_DATA.length) {
-      const nextItem = MASTER_VERSES_DATA.find(v => v.id === playingVerseId + 1);
-      if (nextItem) playVerse(nextItem.id, 0);
+    } else {
+      const list = getActiveVerseList();
+      const currentIdx = list.findIndex(v => String(v.id) === String(playingVerseId));
+      if (currentIdx !== -1 && currentIdx < list.length - 1) {
+        const nextItem = list[currentIdx + 1];
+        playVerse(nextItem.id, 0);
+        setTimeout(() => {
+          const card = document.getElementById(`verse-${nextItem.id}`);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 140);
+      } else if (currentIdx === -1 && typeof playingVerseId === 'number' && playingVerseId < MASTER_VERSES_DATA.length) {
+        const nextItem = MASTER_VERSES_DATA.find(v => v.id === playingVerseId + 1);
+        if (nextItem) playVerse(nextItem.id, 0);
+      } else {
+        showToast('Reached the end of the verses collection', '🏁');
+      }
     }
   }
 
   function playPrevAyah() {
-    if (!playingVerseId) return;
+    if (playingVerseId === null) return;
     const item = findVerseItem(playingVerseId);
     if (!item) return;
 
+    if (currentAudio && currentAudio.currentTime > 2) {
+      currentAudio.currentTime = 0;
+      if (audioProgressSlider) {
+        audioProgressSlider.value = 0;
+        audioProgressSlider.style.setProperty('--progress-pct', '0%');
+      }
+      if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = '0:00';
+      return;
+    }
+
     if (playingAyahIndex > 0) {
       playVerse(playingVerseId, playingAyahIndex - 1);
-    } else if (typeof playingVerseId === 'number' && playingVerseId > 1) {
-      const prevItem = MASTER_VERSES_DATA.find(v => v.id === playingVerseId - 1);
-      if (prevItem) playVerse(prevItem.id, 0);
+    } else {
+      const list = getActiveVerseList();
+      const currentIdx = list.findIndex(v => String(v.id) === String(playingVerseId));
+      if (currentIdx > 0) {
+        const prevItem = list[currentIdx - 1];
+        playVerse(prevItem.id, 0);
+        setTimeout(() => {
+          const card = document.getElementById(`verse-${prevItem.id}`);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 140);
+      } else if (currentIdx === -1 && typeof playingVerseId === 'number' && playingVerseId > 1) {
+        const prevItem = MASTER_VERSES_DATA.find(v => v.id === playingVerseId - 1);
+        if (prevItem) playVerse(prevItem.id, 0);
+      } else {
+        showToast('At the first verse', '⏮');
+      }
     }
   }
 
   function handleAudioError(e) {
     isAudioPlaying = false;
+    isBuffering = false;
     updateAllAudioUI();
     showToast('Recitation audio stream temporarily unavailable for this Ayah', '⚠️');
+  }
+
+  function toggleMute() {
+    isMuted = !isMuted;
+    localStorage.setItem('mv_muted', String(isMuted));
+    if (currentAudio) {
+      currentAudio.muted = isMuted;
+      currentAudio.volume = isMuted ? 0 : currentVolume;
+    }
+    updateMuteUI();
+    showToast(isMuted ? 'Muted' : `Volume ${Math.round(currentVolume * 100)}%`, isMuted ? '🔇' : '🔊');
+  }
+
+  function updateMuteUI() {
+    if (audioMuteBtn) {
+      if (isMuted || currentVolume === 0) {
+        audioMuteBtn.innerHTML = '🔇';
+        audioMuteBtn.classList.add('is-muted');
+        audioMuteBtn.setAttribute('title', 'Unmute (M)');
+        audioMuteBtn.setAttribute('aria-label', 'Unmute');
+      } else if (currentVolume < 0.45) {
+        audioMuteBtn.innerHTML = '🔈';
+        audioMuteBtn.classList.remove('is-muted');
+        audioMuteBtn.setAttribute('title', 'Mute (M)');
+        audioMuteBtn.setAttribute('aria-label', 'Mute');
+      } else if (currentVolume < 0.8) {
+        audioMuteBtn.innerHTML = '🔉';
+        audioMuteBtn.classList.remove('is-muted');
+        audioMuteBtn.setAttribute('title', 'Mute (M)');
+        audioMuteBtn.setAttribute('aria-label', 'Mute');
+      } else {
+        audioMuteBtn.innerHTML = '🔊';
+        audioMuteBtn.classList.remove('is-muted');
+        audioMuteBtn.setAttribute('title', 'Mute (M)');
+        audioMuteBtn.setAttribute('aria-label', 'Mute');
+      }
+    }
+    if (audioVolumeSlider) {
+      const displayVal = isMuted ? 0 : currentVolume;
+      audioVolumeSlider.value = displayVal;
+      const pct = Math.round(displayVal * 100);
+      audioVolumeSlider.style.setProperty('--vol-pct', `${pct}%`);
+      if (audioVolumePct) audioVolumePct.textContent = `${pct}%`;
+    }
   }
 
   // Update Persistent Bottom Audio Bar
   function updateAudioBar(item) {
     if (!audioBarEl) return;
     audioBarEl.classList.add('is-visible');
-    if (audioBarDiscEl) audioBarDiscEl.classList.add('is-spinning');
+    if (audioBarDiscEl) {
+      audioBarDiscEl.classList.toggle('is-spinning', isAudioPlaying);
+      audioBarDiscEl.classList.toggle('is-buffering', isBuffering);
+    }
     if (audioBarTitleEl) {
       audioBarTitleEl.textContent = `${item.surahName} (${item.verseRange})`;
     }
@@ -385,32 +686,47 @@
       const ayahNum = item.audioVerses[playingAyahIndex];
       const totalAyahs = item.audioVerses.length;
       const reciterName = RECITERS[currentReciter]?.name || 'Qari';
-      audioBarSubEl.textContent = `Ayah ${ayahNum} (${playingAyahIndex + 1} of ${totalAyahs}) • ${reciterName}`;
+      audioBarSubEl.innerHTML = `<span class="mv-sub-ayah">Ayah ${ayahNum} (${playingAyahIndex + 1}/${totalAyahs})</span> <span class="mv-sub-dot">•</span> <span class="mv-sub-reciter">🎙️ ${reciterName}</span>`;
     }
     if (audioBarPlayBtn) {
-      audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
+      if (isBuffering) {
+        audioBarPlayBtn.innerHTML = '⏳';
+        audioBarPlayBtn.classList.add('is-loading');
+      } else {
+        audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
+        audioBarPlayBtn.classList.remove('is-loading');
+      }
+      audioBarPlayBtn.setAttribute('title', isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
+      audioBarPlayBtn.setAttribute('aria-label', isAudioPlaying ? 'Pause' : 'Play');
     }
     if (audioSpeedBtn) {
       audioSpeedBtn.textContent = `${currentSpeed}x`;
+      audioSpeedBtn.classList.toggle('is-active', currentSpeed !== 1.0);
     }
     if (audioLoopBtn) {
       audioLoopBtn.innerHTML = isLooping ? '🔂 Repeat' : '🔁 Next';
       audioLoopBtn.classList.toggle('is-active', isLooping);
     }
+    updateMuteUI();
+    updateMediaSession(item);
   }
 
   // Update UI Elements during Audio Playback
   function updateAllAudioUI() {
-    // Card buttons
+    // Card and table drawer buttons
     document.querySelectorAll('.mv-play-recite-btn').forEach(btn => {
       const vId = btn.getAttribute('data-verse-id');
       const match = (String(vId) === String(playingVerseId) && isAudioPlaying);
+      const isCardBuffering = (String(vId) === String(playingVerseId) && isBuffering);
       if (match) {
         btn.classList.add('is-active');
-        btn.innerHTML = '<span>⏸</span> Pause';
+        btn.innerHTML = '<span>⏸</span> <span>Pause</span><span class="mv-playing-wave" aria-hidden="true"><span></span><span></span><span></span></span>';
+      } else if (isCardBuffering) {
+        btn.classList.add('is-active');
+        btn.innerHTML = '<span>⏳</span> <span>Loading...</span>';
       } else {
         btn.classList.remove('is-active');
-        btn.innerHTML = '<span>▶</span> Listen';
+        btn.innerHTML = '<span>▶</span> <span>Listen</span>';
       }
     });
 
@@ -424,18 +740,38 @@
       }
     });
 
-    // Table rows
-    document.querySelectorAll('.mv-table-play-btn').forEach(btn => {
-      const vId = btn.getAttribute('data-verse-id');
-      if (String(vId) === String(playingVerseId) && isAudioPlaying) {
-        btn.innerHTML = '⏸';
-      } else {
-        btn.innerHTML = '▶';
+    // Table rows play button & active row highlight
+    document.querySelectorAll('.mv-canonical-table tbody tr[data-verse-id]').forEach(row => {
+      const vId = row.getAttribute('data-verse-id');
+      const isMatch = (String(vId) === String(playingVerseId) && isAudioPlaying);
+      row.classList.toggle('is-playing-row', isMatch);
+      const btn = row.querySelector('.mv-table-play-btn');
+      if (btn) {
+        btn.innerHTML = isMatch ? '⏸' : '▶';
+        btn.classList.toggle('is-active', isMatch);
       }
     });
 
+    // Persistent bar play button
     if (audioBarPlayBtn) {
-      audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
+      if (isBuffering) {
+        audioBarPlayBtn.innerHTML = '⏳';
+        audioBarPlayBtn.classList.add('is-loading');
+      } else {
+        audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
+        audioBarPlayBtn.classList.remove('is-loading');
+      }
+      audioBarPlayBtn.setAttribute('title', isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
+      audioBarPlayBtn.setAttribute('aria-label', isAudioPlaying ? 'Pause' : 'Play');
+    }
+
+    // Modal play button if open
+    const mPlay = document.getElementById('modalPlayBtn');
+    if (mPlay && bonusModalEl && bonusModalEl.classList.contains('is-active')) {
+      const modalVerseId = mPlay.getAttribute('data-verse-id');
+      const match = (String(modalVerseId) === String(playingVerseId) && isAudioPlaying);
+      mPlay.classList.toggle('is-active', match);
+      mPlay.innerHTML = `<span>${match ? '⏸' : '▶'}</span> <span>${match ? 'Pause' : 'Listen'}</span>`;
     }
   }
 
@@ -605,7 +941,7 @@
 
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; border-top:1px solid var(--border); padding-top:18px;">
         <div style="display:flex; gap:10px;">
-          <button type="button" class="mv-play-recite-btn ${isPlaying ? 'is-active' : ''}" id="modalPlayBtn">
+          <button type="button" class="mv-play-recite-btn ${isPlaying ? 'is-active' : ''}" id="modalPlayBtn" data-verse-id="${item.id}">
             <span>${isPlaying ? '⏸' : '▶'}</span> <span>${isPlaying ? 'Pause' : 'Listen'}</span>
           </button>
           <button type="button" class="mv-action-icon-btn" id="modalCopyBtn" title="Copy Ayah">📋</button>
@@ -627,7 +963,6 @@
     if (mPlay) {
       mPlay.addEventListener('click', () => {
         togglePlayVerse(item.id);
-        openBonusModal(item);
       });
     }
 
@@ -645,7 +980,9 @@
     if (mFav) {
       mFav.addEventListener('click', () => {
         toggleFavorite(item.id);
-        openBonusModal(item);
+        const isFavNow = favorites.includes(item.id);
+        mFav.classList.toggle('is-bookmarked', isFavNow);
+        mFav.innerHTML = isFavNow ? '★' : '☆';
       });
     }
   }
@@ -1090,7 +1427,8 @@
     document.querySelectorAll('.mv-verses-grid-container .mv-play-recite-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         togglePlayVerse(id);
       });
     });
@@ -1098,7 +1436,8 @@
     document.querySelectorAll('.mv-verses-grid-container .mv-copy-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         const item = findVerseItem(id);
         if (item) copyVerse(item);
       });
@@ -1107,7 +1446,8 @@
     document.querySelectorAll('.mv-verses-grid-container .mv-share-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         const item = findVerseItem(id);
         if (item) shareVerse(item);
       });
@@ -1116,7 +1456,8 @@
     document.querySelectorAll('.mv-verses-grid-container .mv-bookmark-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         toggleFavorite(id);
       });
     });
@@ -1127,7 +1468,8 @@
     document.querySelectorAll('.mv-table-play-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         togglePlayVerse(id);
       });
     });
@@ -1135,7 +1477,8 @@
     document.querySelectorAll('.mv-table-expand-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         expandedTableRowId = (expandedTableRowId === id) ? null : id;
         render();
       });
@@ -1144,7 +1487,8 @@
     document.querySelectorAll('.mv-master-table-wrapper .mv-copy-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         const item = findVerseItem(id);
         if (item) copyVerse(item);
       });
@@ -1153,7 +1497,8 @@
     document.querySelectorAll('.mv-master-table-wrapper .mv-share-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         const item = findVerseItem(id);
         if (item) shareVerse(item);
       });
@@ -1162,8 +1507,18 @@
     document.querySelectorAll('.mv-master-table-wrapper .mv-bookmark-action-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const id = Number(btn.getAttribute('data-verse-id'));
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
         toggleFavorite(id);
+      });
+    });
+
+    document.querySelectorAll('.mv-master-table-wrapper .mv-play-recite-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rawId = btn.getAttribute('data-verse-id');
+        const id = (rawId && isNaN(Number(rawId))) ? rawId : Number(rawId);
+        togglePlayVerse(id);
       });
     });
   }
@@ -1341,10 +1696,17 @@
 
   // Setup Bottom Audio Bar Controls & Scrubber
   function setupAudioBar() {
+    updateMuteUI();
+
     if (audioBarPlayBtn) {
       audioBarPlayBtn.addEventListener('click', () => {
-        if (playingVerseId) {
+        if (playingVerseId !== null) {
           togglePlayVerse(playingVerseId);
+        } else {
+          const list = getActiveVerseList();
+          if (list && list.length) {
+            playVerse(list[0].id, 0);
+          }
         }
       });
     }
@@ -1361,14 +1723,42 @@
       audioBarCloseBtn.addEventListener('click', stopCurrentAudio);
     }
 
+    if (audioMuteBtn) {
+      audioMuteBtn.addEventListener('click', toggleMute);
+    }
+
+    // Volume Slider & Flyout Control
+    if (audioVolumeSlider) {
+      const initialVol = isMuted ? 0 : currentVolume;
+      audioVolumeSlider.value = initialVol;
+      const initialPct = Math.round(initialVol * 100);
+      audioVolumeSlider.style.setProperty('--vol-pct', `${initialPct}%`);
+      if (audioVolumePct) audioVolumePct.textContent = `${initialPct}%`;
+
+      audioVolumeSlider.addEventListener('input', () => {
+        const val = parseFloat(audioVolumeSlider.value);
+        currentVolume = val;
+        isMuted = (val === 0);
+        localStorage.setItem('mv_volume', String(currentVolume));
+        localStorage.setItem('mv_muted', String(isMuted));
+        if (currentAudio) {
+          currentAudio.volume = isMuted ? 0 : currentVolume;
+          currentAudio.muted = isMuted;
+        }
+        updateMuteUI();
+      });
+    }
+
     if (audioSpeedBtn) {
       audioSpeedBtn.textContent = `${currentSpeed}x`;
+      audioSpeedBtn.classList.toggle('is-active', currentSpeed !== 1.0);
       audioSpeedBtn.addEventListener('click', () => {
         const speeds = [0.75, 1.0, 1.25, 1.5];
         let idx = speeds.indexOf(currentSpeed);
         currentSpeed = speeds[(idx + 1) % speeds.length];
         localStorage.setItem('mv_speed', String(currentSpeed));
         audioSpeedBtn.textContent = `${currentSpeed}x`;
+        audioSpeedBtn.classList.toggle('is-active', currentSpeed !== 1.0);
         if (currentAudio) currentAudio.playbackRate = currentSpeed;
         showToast(`Recitation speed: ${currentSpeed}x`, '⚡');
       });
@@ -1387,11 +1777,32 @@
     }
 
     if (audioProgressSlider) {
-      audioProgressSlider.addEventListener('input', () => {
-        if (currentAudio && !isNaN(currentAudio.duration)) {
-          currentAudio.currentTime = (audioProgressSlider.value / 100) * currentAudio.duration;
+      const onSeekStart = () => {
+        isSeeking = true;
+      };
+      const onSeekInput = () => {
+        const val = parseFloat(audioProgressSlider.value);
+        audioProgressSlider.style.setProperty('--progress-pct', `${val}%`);
+        if (currentAudio && !isNaN(currentAudio.duration) && currentAudio.duration > 0) {
+          const previewTime = (val / 100) * currentAudio.duration;
+          if (audioCurrentTimeEl) audioCurrentTimeEl.textContent = formatTime(previewTime);
         }
-      });
+      };
+      const onSeekEnd = () => {
+        if (currentAudio && !isNaN(currentAudio.duration) && currentAudio.duration > 0) {
+          const val = parseFloat(audioProgressSlider.value);
+          currentAudio.currentTime = (val / 100) * currentAudio.duration;
+          audioProgressSlider.style.setProperty('--progress-pct', `${val}%`);
+        }
+        isSeeking = false;
+      };
+
+      audioProgressSlider.addEventListener('mousedown', onSeekStart);
+      audioProgressSlider.addEventListener('touchstart', onSeekStart, { passive: true });
+      audioProgressSlider.addEventListener('input', onSeekInput);
+      audioProgressSlider.addEventListener('change', onSeekEnd);
+      audioProgressSlider.addEventListener('mouseup', onSeekEnd);
+      audioProgressSlider.addEventListener('touchend', onSeekEnd, { passive: true });
     }
   }
 
@@ -1448,8 +1859,8 @@
         if (playingVerseId !== null) {
           togglePlayVerse(playingVerseId);
         } else {
-          const first = getFilteredItems()[0];
-          if (first) playVerse(first.id, 0);
+          const list = getActiveVerseList();
+          if (list && list.length) playVerse(list[0].id, 0);
         }
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
@@ -1457,6 +1868,35 @@
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
         playPrevAyah();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        let newVol = Math.min(1.0, currentVolume + 0.1);
+        currentVolume = Math.round(newVol * 10) / 10;
+        isMuted = false;
+        localStorage.setItem('mv_volume', String(currentVolume));
+        localStorage.setItem('mv_muted', 'false');
+        if (currentAudio) {
+          currentAudio.volume = currentVolume;
+          currentAudio.muted = false;
+        }
+        updateMuteUI();
+        showToast(`Volume: ${Math.round(currentVolume * 100)}%`, '🔊');
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        let newVol = Math.max(0.0, currentVolume - 0.1);
+        currentVolume = Math.round(newVol * 10) / 10;
+        isMuted = (currentVolume === 0);
+        localStorage.setItem('mv_volume', String(currentVolume));
+        localStorage.setItem('mv_muted', String(isMuted));
+        if (currentAudio) {
+          currentAudio.volume = currentVolume;
+          currentAudio.muted = isMuted;
+        }
+        updateMuteUI();
+        showToast(`Volume: ${Math.round(currentVolume * 100)}%`, isMuted ? '🔇' : '🔉');
+      } else if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        toggleMute();
       } else if (e.key === 'r' || e.key === 'R') {
         e.preventDefault();
         discoverRandomAyah();
@@ -1488,7 +1928,7 @@
         } else if (pdfViewerWrap && pdfViewerWrap.classList.contains('active')) {
           pdfViewerWrap.classList.remove('active');
           if (pdfToggleBtn) pdfToggleBtn.innerHTML = '<span>📑</span> View PDF In-Browser';
-        } else {
+        } else if (audioBarEl && audioBarEl.classList.contains('is-visible')) {
           stopCurrentAudio();
         }
       } else if (e.key === '+' || e.key === '=') {

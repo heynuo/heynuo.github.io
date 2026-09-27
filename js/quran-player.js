@@ -8,8 +8,9 @@
 (function () {
   'use strict';
 
-  // Prevent duplicate initialization
+  // Prevent duplicate initialization or running on dedicated verses player page
   if (window.QuranPlayerInstance) return;
+  if (document.querySelector('.mv-page') || window.location.pathname.includes('quran-verses')) return;
 
   // =========================================================================
   // 1. COMPLETE 114 SURAHS CATALOG METADATA

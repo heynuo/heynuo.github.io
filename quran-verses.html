@@ -43,7 +43,6 @@
   <!-- Core stylesheets -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/master-verses.css">
-  <link rel="stylesheet" href="css/quran-player.css">
 </head>
 
 <body>
@@ -431,6 +430,8 @@
             <div class="mv-select-wrap" title="Select audio voice for recitation playback">
               <label for="mvReciterSelect">🎙️ Voice:</label>
               <select id="mvReciterSelect" class="mv-custom-select" aria-label="Select recitation voice">
+                <option value="alafasy">Mishary Rashid Alafasy</option>
+                <option value="abdulbasit">Qari Abdul Basit (Murattal)</option>
                 <option value="ashiq">Qari Muhammad Ashiq</option>
                 <option value="feroz">Qari Feroz</option>
                 <option value="rashid">Qari Rashid</option>
@@ -583,8 +584,14 @@
 
   <!-- Persistent Floating Audio Player Bar -->
   <div class="mv-persistent-audio-bar" id="mvAudioBar" role="region" aria-label="Quranic audio player">
+    <!-- Media Info -->
     <div class="mv-audio-bar-media">
-      <div class="mv-audio-bar-disc" id="mvAudioBarDisc" aria-hidden="true">🎵</div>
+      <div class="mv-audio-bar-disc" id="mvAudioBarDisc" aria-hidden="true" title="Holy Quran Tilawat">
+        <span class="mv-disc-emoji">🎵</span>
+        <div class="mv-disc-wave" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
       <div class="mv-audio-bar-meta">
         <h5 id="mvAudioBarTitle">Al-Baqarah (2:255)</h5>
         <p id="mvAudioBarSub">Ayah 255 • Qari Muhammad Ashiq</p>
@@ -594,21 +601,38 @@
     <!-- Audio Scrubber & Timeline -->
     <div class="mv-audio-scrubber-wrap">
       <span class="mv-audio-time" id="mvAudioCurrentTime">0:00</span>
-      <input type="range" class="mv-audio-slider" id="mvAudioProgress" min="0" max="100" value="0" step="0.1" aria-label="Audio playback progress">
+      <div class="mv-audio-slider-box">
+        <input type="range" class="mv-audio-slider" id="mvAudioProgress" min="0" max="100" value="0" step="0.1" aria-label="Audio playback progress">
+      </div>
       <span class="mv-audio-time" id="mvAudioDuration">0:00</span>
     </div>
 
+    <!-- Actions & Controls -->
     <div class="mv-audio-bar-actions">
       <!-- Speed Toggle -->
-      <button type="button" class="mv-audio-tool-btn" id="mvAudioSpeedBtn" title="Change recitation speed (0.75x, 1.0x, 1.25x, 1.5x)">1.0x</button>
+      <button type="button" class="mv-audio-tool-btn" id="mvAudioSpeedBtn" title="Change recitation speed (0.75x, 1.0x, 1.25x, 1.5x)" aria-label="Recitation speed">1.0x</button>
       
       <!-- Loop Toggle -->
       <button type="button" class="mv-audio-tool-btn" id="mvAudioLoopBtn" title="Toggle repeat current verse" aria-label="Toggle repeat verse">🔁 Next</button>
 
-      <button type="button" class="mv-audio-bar-btn" id="mvAudioBarPrevBtn" title="Previous Ayah (Left Arrow)" aria-label="Previous Ayah">⏮</button>
-      <button type="button" class="mv-audio-bar-btn primary-toggle" id="mvAudioBarPlayBtn" aria-label="Play or pause recitation (Space)">▶</button>
-      <button type="button" class="mv-audio-bar-btn" id="mvAudioBarNextBtn" title="Next Ayah (Right Arrow)" aria-label="Next Ayah">⏭</button>
-      <button type="button" class="mv-audio-bar-dismiss" id="mvAudioBarCloseBtn" aria-label="Close audio player" title="Close player">✕</button>
+      <!-- Volume & Mute Cluster -->
+      <div class="mv-audio-volume-cluster" id="mvAudioVolumeCluster">
+        <button type="button" class="mv-audio-bar-btn" id="mvAudioMuteBtn" title="Mute / Unmute (M)" aria-label="Mute or Unmute">🔊</button>
+        <div class="mv-audio-volume-flyout" id="mvAudioVolumeFlyout">
+          <input type="range" class="mv-audio-volume-slider" id="mvAudioVolumeSlider" min="0" max="1" step="0.05" value="1" aria-label="Recitation volume level">
+          <span class="mv-audio-volume-pct" id="mvAudioVolumePct">100%</span>
+        </div>
+      </div>
+
+      <!-- Playback Controls Cluster -->
+      <div class="mv-audio-nav-group">
+        <button type="button" class="mv-audio-bar-btn" id="mvAudioBarPrevBtn" title="Previous Ayah (Left Arrow)" aria-label="Previous Ayah">⏮</button>
+        <button type="button" class="mv-audio-bar-btn primary-toggle" id="mvAudioBarPlayBtn" aria-label="Play or pause recitation (Space)" title="Play or pause recitation (Space)">▶</button>
+        <button type="button" class="mv-audio-bar-btn" id="mvAudioBarNextBtn" title="Next Ayah (Right Arrow)" aria-label="Next Ayah">⏭</button>
+      </div>
+
+      <!-- Dismiss Button -->
+      <button type="button" class="mv-audio-bar-dismiss" id="mvAudioBarCloseBtn" aria-label="Close audio player" title="Close player (Esc)">✕</button>
     </div>
   </div>
 
@@ -634,6 +658,7 @@
       <div class="mv-shortcuts-table">
         <div class="mv-shortcut-row"><kbd>Space</kbd> <span>Play / Pause active recitation</span></div>
         <div class="mv-shortcut-row"><kbd>→</kbd> / <kbd>←</kbd> <span>Next / Previous Ayah recitation</span></div>
+        <div class="mv-shortcut-row"><kbd>M</kbd> <span>Mute / Unmute audio</span></div>
         <div class="mv-shortcut-row"><kbd>Ctrl</kbd> + <kbd>K</kbd> or <kbd>/</kbd> <span>Focus search bar</span></div>
         <div class="mv-shortcut-row"><kbd>R</kbd> <span>Discover a random Ayah</span></div>
         <div class="mv-shortcut-row"><kbd>F</kbd> <span>Filter Bookmarked / Saved verses</span></div>
@@ -670,7 +695,6 @@
 
   <!-- Scripts -->
   <script src="js/script.js" defer></script>
-  <script src="js/quran-player.js" defer></script>
   <script src="js/master-verses-data.js"></script>
   <script src="js/master-verses.js" defer></script>
 </body>
