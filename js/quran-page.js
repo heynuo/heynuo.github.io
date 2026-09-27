@@ -135,6 +135,20 @@
 
   const QURAN_PDFS = [
     {
+      id: 'master-quran-verses-pdf',
+      title: 'Master Compilation of Quranic Verses (108 Verses)',
+      arabic: 'جامع الآيات القرآنية الكريمة من 62 كتاباً',
+      desc: 'Master compilation of 108 unique Quranic verse references extracted and deduplicated across 62 classical Islamic books and manuscripts covering 44 Surahs. Features Ruqyah healing, Tawheed, protection, and Ism-e-Azam.',
+      script: 'Vector Reference PDF',
+      pages: '13 Pages • 108 Verses',
+      size: '92 KB',
+      badge: '✨ New • 108 Verses PDF',
+      downloadUrl: 'assets/pdf/quran_verses_master_compilation.pdf',
+      mirrorUrl: 'assets/pdf/quran_verses_master_compilation.pdf',
+      previewUrl: 'quran-verses.html#pdf-document',
+      publisher: 'HeyNuo Multi-Agent Research'
+    },
+    {
       id: 'quran-translit',
       title: 'Quran Complete English Transliteration',
       arabic: 'القرآن الكريم بالحروف اللاتينية والترجمة',
