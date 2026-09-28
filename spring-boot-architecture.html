@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="index, follow">
+  <title>Spring Boot Enterprise Architecture: Clean REST APIs &amp; DTOs | HeyNuo</title>
+  <meta name="description" content="Master production-grade Spring Boot architecture: 3-tier layering, request validation with Bean Validation, clean DTO mapping, and global exception handling.">
+  <meta name="keywords" content="Spring Boot architecture, Spring Boot REST API, Java enterprise design, Spring Boot 3, DTO pattern, RestControllerAdvice, Bean Validation, HeyNuo">
+  <meta name="author" content="HeyNuo">
+  <link rel="canonical" href="https://heynuo.github.io/spring-boot-architecture.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Spring Boot Enterprise Architecture: Clean REST APIs &amp; DTOs | HeyNuo">
+  <meta property="og:description" content="Master production-grade Spring Boot architecture: 3-tier layering, request validation with Bean Validation, clean DTO mapping, and global exception handling.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://heynuo.github.io/spring-boot-architecture.html">
+  <meta property="og:image" content="https://heynuo.github.io/assets/banners/spring-boot.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="HeyNuo">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Spring Boot Enterprise Architecture: Clean REST APIs &amp; DTOs | HeyNuo">
+  <meta name="twitter:description" content="Master production-grade Spring Boot architecture: 3-tier layering, request validation, and global exception handling.">
+  <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/spring-boot.jpg">
+
+  <!-- Favicon, Manifest & RSS -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
+
+  <!-- Google Fonts Preconnect & Stylesheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared stylesheet: global styles + article components -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Persistent Quran Auto-Listening Audio Player -->
+  <link rel="stylesheet" href="css/quran-player.css">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Spring Boot Enterprise Architecture: Clean REST APIs & DTOs",
+    "description": "Master production-grade Spring Boot architecture: 3-tier layering, request validation with Bean Validation, clean DTO mapping, and global exception handling.",
+    "image": "https://heynuo.github.io/assets/banners/spring-boot.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "HeyNuo",
+      "url": "https://heynuo.github.io/about.html"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "HeyNuo"
+    },
+    "datePublished": "2026-09-28",
+    "dateModified": "2026-09-28",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://heynuo.github.io/spring-boot-architecture.html"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header>
+    <nav class="container">
+      <div class="logo">Hey<span>Nuo</span></div>
+
+      <div class="nav-right">
+        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles" title="Quick Search (Ctrl+K)">
+          <span class="nav-search-icon" aria-hidden="true">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <span class="nav-search-text">Search...</span>
+          <kbd class="nav-search-kbd">Ctrl K</kbd>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="quran-verses.html">108 Verses</a>
+          <a href="ruqyah.html">Ruqyah</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </div>
+
+        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile" title="GitHub @heynuo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+        </a>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+          <svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <main id="main-content" class="article-enhanced">
+      <div class="breadcrumb">
+        <a href="index.html">🏠 Home</a> / <a href="java-oop.html">☕ Java</a> / <span>Spring Boot Architecture</span>
+      </div>
+
+      <article>
+        <div class="article-header">
+          <h1>Spring Boot Enterprise Architecture: Clean REST APIs &amp; DTOs</h1>
+          <div class="article-meta">
+            <span>👤 HeyNuo</span>
+            <span>📅 September 28, 2026</span>
+            <span>☕ Java &amp; Spring Boot</span>
+            <span>⏱ 8 min read</span>
+          </div>
+        </div>
+
+        <div class="article-hero-banner">
+          <img src="assets/banners/spring-boot.jpg" alt="Spring Boot Enterprise Architecture Banner" width="1200" height="675" fetchpriority="high">
+        </div>
+
+        <div class="prose">
+          <p>Writing a quick <code>@RestController</code> that returns a database entity is fine for a weekend prototype. But in enterprise systems handling millions of financial requests or concurrent users, that approach breaks down fast: entities leak database columns to the public web, business rules scatter across HTTP endpoints, and unhandled exceptions return raw stack traces.</p>
+
+          <p>This guide walks through the architectural patterns used across production Spring Boot 3 applications: <strong>strict 3-tier layering</strong>, <strong>isolated Request/Response DTOs</strong>, <strong>declarative validation</strong>, and <strong>centralized exception management</strong>.</p>
+
+          <nav class="article-toc-box" aria-label="Table of contents" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin: 1.5rem 0;">
+            <div class="toc-title" style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text);">📑 Table of Contents</div>
+            <ol class="toc-list" style="margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><a href="#layered-architecture">1. The 3-Tier Layered Architecture</a></li>
+              <li><a href="#dto-pattern">2. Decoupling with DTOs &amp; Bean Validation</a></li>
+              <li><a href="#controller-service-demo">3. Production Code: Order Management API</a></li>
+              <li><a href="#global-exception-handling">4. Centralized Exception Handling (`@RestControllerAdvice`)</a></li>
+              <li><a href="#hands-on-challenge">5. Hands-On Challenge: Idempotent Payment Processor</a></li>
+              <li><a href="#spring-roadmap">6. Next Steps: Spring Data JPA &amp; Microservices Roadmap</a></li>
+            </ol>
+          </nav>
+
+          <div class="info-card">
+            💡 <strong>Core Principle:</strong> A controller should only speak HTTP (status codes, headers, parameter extraction). A service should only speak domain logic (business invariants, calculations). A repository should only speak data access.
+          </div>
+
+          <h2 id="layered-architecture">1. The 3-Tier Layered Architecture</h2>
+          <p>Every maintainable Spring Boot application adheres to strict unidirectional dependency flow:</p>
+          <div class="about" style="margin: 1.5rem 0;">
+            <article class="about-box">
+              <h3>🌐 1. Web Layer (`@RestController`)</h3>
+              <p>Accepts HTTP requests, validates incoming JSON DTOs with <code>@Valid</code>, and returns standardized <code>ResponseEntity&lt;T&gt;</code> payloads.</p>
+            </article>
+            <article class="about-box">
+              <h3>⚙️ 2. Business Layer (`@Service`)</h3>
+              <p>Coordinates transactions (<code>@Transactional</code>), enforces business constraints, and orchestrates domain entity operations.</p>
+            </article>
+            <article class="about-box">
+              <h3>🗄️ 3. Persistence Layer (`@Repository`)</h3>
+              <p>Interfaces extending <code>JpaRepository</code> that translate entity queries into optimized SQL. Never expose entities outside this boundary!</p>
+            </article>
+          </div>
+
+          <h2 id="dto-pattern">2. Decoupling with DTOs &amp; Bean Validation</h2>
+          <p>Never return or accept JPA Entities (e.g. <code>UserEntity</code>) directly in controllers. Doing so causes:</p>
+          <ul>
+            <li><strong>Over-posting attacks:</strong> Malicious clients can update internal fields like <code>isAdmin</code> or <code>accountBalance</code>.</li>
+            <li><strong>Infinite JSON recursion:</strong> Bidirectional JPA relationships (<code>@OneToMany</code>) trigger <code>StackOverflowError</code> during Jackson serialization.</li>
+            <li><strong>Tight coupling:</strong> Database schema migrations instantly break client applications.</li>
+          </ul>
+
+          <h2 id="controller-service-demo">3. Production Code: Order Management API</h2>
+          <p>Below is a clean implementation demonstrating input validation, mapping, and response encapsulation:</p>
+
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ OrderController.java &amp; OrderService.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">// 1. Immutable Request DTO with Jakarta Validation
+public record CreateOrderRequest(
+    @NotBlank(message = "Customer ID is required")
+    String customerId,
+
+    @NotNull(message = "Order total cannot be null")
+    @DecimalMin(value = "0.01", message = "Order total must be at least $0.01")
+    BigDecimal totalAmount,
+
+    @NotEmpty(message = "Order must contain at least one item SKU")
+    List<String> itemSkus
+) {}
+
+// 2. Controller Layer
+@RestController
+@RequestMapping("/api/v1/orders")
+public class OrderController {
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody CreateOrderRequest request) {
+        OrderResponse response = orderService.processOrder(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}
+
+// 3. Service Layer with Business Rules
+@Service
+public class OrderService {
+    @Transactional
+    public OrderResponse processOrder(CreateOrderRequest req) {
+        // Business Invariant Check
+        if (req.totalAmount().compareTo(new BigDecimal("10000.00")) > 0) {
+            throw new HighValueOrderReviewException("Orders over $10,000 require fraud review");
+        }
+        String orderId = "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return new OrderResponse(orderId, req.customerId(), "CONFIRMED", req.totalAmount());
+    }
+}</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ HTTP Dispatch Console</span></div>
+POST /api/v1/orders HTTP/1.1
+Content-Type: application/json
+{
+  "customerId": "CUST-9402",
+  "totalAmount": 149.99,
+  "itemSkus": ["SKU-JAVA-BOOK", "SKU-SPRING-PRO"]
+}
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+{
+  "orderId": "ORD-5B8A1E92",
+  "customerId": "CUST-9402",
+  "status": "CONFIRMED",
+  "totalAmount": 149.99
+}
+[Architecture]: DTO successfully validated, transaction committed, clean response returned.
+            </div>
+          </div>
+
+          <h2 id="global-exception-handling">4. Centralized Exception Handling (`@RestControllerAdvice`)</h2>
+          <p>Instead of wrapping every controller method in messy <code>try/catch</code> blocks, enterprise Spring Boot applications use an intercepting advice layer:</p>
+
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ GlobalExceptionHandler.java</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Verified Error Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    // Catch Bean Validation errors (@Valid)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(err -> 
+            fieldErrors.put(err.getField(), err.getDefaultMessage())
+        );
+
+        Map<String, Object> body = Map.of(
+            "timestamp", Instant.now(),
+            "status", HttpStatus.BAD_REQUEST.value(),
+            "error", "Validation Failed",
+            "fieldErrors", fieldErrors
+        );
+        return ResponseEntity.badRequest().body(body);
+    }
+
+    // Catch Domain Exceptions
+    @ExceptionHandler(HighValueOrderReviewException.class)
+    public ResponseEntity<Map<String, Object>> handleHighValue(HighValueOrderReviewException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of(
+            "timestamp", Instant.now(),
+            "status", 422,
+            "message", ex.getMessage()
+        ));
+    }
+}</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ Intercepted Error Response</span></div>
+POST /api/v1/orders with empty customerId & negative amount:
+HTTP/1.1 400 Bad Request
+{
+  "timestamp": "2026-09-28T15:20:00Z",
+  "status": 400,
+  "error": "Validation Failed",
+  "fieldErrors": {
+    "customerId": "Customer ID is required",
+    "totalAmount": "Order total must be at least $0.01"
+  }
+}
+[Security & Observability]: Internal stack trace suppressed; client receives actionable JSON error.
+            </div>
+          </div>
+
+          <h2 id="hands-on-challenge">5. Hands-On Challenge: Idempotent Payment Processor</h2>
+          <div class="info-card">
+            🎯 <strong>Challenge Prompt:</strong> Design a payment processing endpoint that prevents duplicate charge requests when a network glitch causes the mobile app to retry. Requirements:
+            <ul>
+              <li>Extract an <code>Idempotency-Key</code> HTTP header using <code>@RequestHeader</code>.</li>
+              <li>Verify if the key has been processed in a distributed cache (e.g. Redis). If yes, return the previous response with <code>200 OK</code> immediately without re-charging.</li>
+              <li>If novel, execute the charge and record the key.</li>
+            </ul>
+          </div>
+
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ IdempotentPaymentService.java (Challenge Solution)</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Solution Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Verified Execution</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">@Service
+public class PaymentProcessingService {
+    private final ConcurrentMap<String, PaymentReceipt> idempotencyStore = new ConcurrentHashMap<>();
+
+    public PaymentReceipt processPayment(String idempotencyKey, PaymentRequest req) {
+        // Fast path: Idempotent replay protection
+        if (idempotencyStore.containsKey(idempotencyKey)) {
+            System.out.println("⚠️ Duplicate request detected for key: " + idempotencyKey);
+            return idempotencyStore.get(idempotencyKey);
+        }
+
+        // Execute payment gateway transaction
+        PaymentReceipt receipt = new PaymentReceipt(
+            "TX-" + UUID.randomUUID().toString().substring(0, 8),
+            req.amount(),
+            "SUCCESS",
+            Instant.now()
+        );
+
+        idempotencyStore.put(idempotencyKey, receipt);
+        return receipt;
+    }
+}
+
+// Verification:
+PaymentProcessingService service = new PaymentProcessingService();
+PaymentRequest req = new PaymentRequest(new BigDecimal("75.00"), "CARD-9012");
+String key = "req-uuid-9901-alpha";
+
+PaymentReceipt first = service.processPayment(key, req);
+PaymentReceipt second = service.processPayment(key, req); // Replay attack or retry
+
+System.out.println("First call TX ID:  " + first.transactionId());
+System.out.println("Second call TX ID: " + second.transactionId());
+System.out.println("Instances identical: " + (first == second));</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+✓ Executing charge for novel key: req-uuid-9901-alpha -> TX-7B32F190 ($75.00)
+⚠️ Duplicate request detected for key: req-uuid-9901-alpha
+First call TX ID:  TX-7B32F190
+Second call TX ID: TX-7B32F190
+Instances identical: true
+[Enterprise Resilience]: Customer was charged exactly once despite multiple retry submissions.
+            </div>
+          </div>
+
+          <h2 id="spring-roadmap">6. Next Steps: Spring Data JPA &amp; Microservices Roadmap</h2>
+          <p>Now that you understand clean REST layering, continue your backend engineering path:</p>
+          <div class="about" style="margin: 1.5rem 0;">
+            <article class="about-box">
+              <h3>🗄️ 1. Spring Data JPA &amp; Auditing</h3>
+              <p>Automate <code>@CreatedDate</code> and <code>@LastModifiedDate</code>, and implement soft deletes with SQL indexes.</p>
+            </article>
+            <article class="about-box">
+              <h3>🔒 2. Spring Security 6 &amp; JWT</h3>
+              <p>Stateless authentication using signed RS256 JWT tokens and granular role-based authorization (<code>@PreAuthorize</code>).</p>
+            </article>
+            <article class="about-box">
+              <h3>⚡ 3. Redis Caching</h3>
+              <p>Accelerate read-heavy REST endpoints using <code>@Cacheable</code> and automatic cache eviction on mutations.</p>
+            </article>
+          </div>
+
+          <p>Ready to connect your Spring Boot APIs to a modern, zero-dependency frontend? Read our <a href="web-dev-guide.html">Pure HTML, CSS &amp; JavaScript Web Development Guide</a>, or strengthen your object-oriented foundations with the <a href="java-oop.html">Java OOP Tutorial</a>.</p>
+        </div>
+
+        <!-- Next / Previous Article Navigation -->
+        <nav class="article-pagination-nav" aria-label="Article navigation" style="display: flex; justify-content: space-between; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;">
+          <a href="java-oop.html" class="btn btn-secondary" style="flex: 1; text-align: left; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">← Previous Article</small>
+            <span>☕ Java OOP Tutorial</span>
+          </a>
+          <a href="web-dev-guide.html" class="btn btn-secondary" style="flex: 1; text-align: right; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">Next Article →</small>
+            <span>🌐 Pure HTML, CSS &amp; JS Web Dev</span>
+          </a>
+        </nav>
+
+        <!-- Related internal links -->
+        <div class="related-links">
+          <a href="java-oop.html" class="related-card">☕ Java OOP Tutorial: Classes &amp; Inheritance</a>
+          <a href="web-dev-guide.html" class="related-card">🌐 Pure HTML, CSS &amp; JS Web Dev Guide</a>
+          <a href="jinn-islamic-theology.html" class="related-card">📖 Jinn in Islamic Theology</a>
+          <a href="ruqyah.html" class="related-card">🛡️ Ruqyah &amp; Quranic Healing Guide</a>
+        </div>
+
+        <div style="margin-top: 2.5rem; text-align: center;">
+          <a href="index.html#articles" class="btn btn-secondary">← Back to all articles</a>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="quran.html">Quran</a>
+          <a href="quran-verses.html">108 Verses</a>
+          <a href="ruqyah.html">Ruqyah</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy &amp; Sources</a>
+          <a href="rss.xml">RSS</a>
+          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px; margin-right:4px;" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg> GitHub
+          </a>
+          <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
+        </div>
+        <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
+      </div>
+    </footer>
+  </div>
+
+  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
+    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
+      <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path class="progress-ring-circle" id="scrollProgressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+    </svg>
+    <span class="scroll-arrow">↑</span>
+  </button>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-toggle-row">
+        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
+          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
+          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+        </label>
+        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared script: mobile menu, active nav, scroll-to-top, skip link -->
+  <script src="js/script.js"></script>
+  <!-- Persistent Quran Auto-Listening Player Engine -->
+  <script src="js/quran-player.js" defer></script>
+</body>
+</html>

@@ -4,7 +4,7 @@
 
 Add-Type -AssemblyName System.Web
 
-$content = [System.IO.File]::ReadAllText("js\ruqyah-data.js", [System.Text.Encoding]::UTF8)
+$content = [System.IO.File]::ReadAllText("js\data\ruqyah-data.js", [System.Text.Encoding]::UTF8)
 $jsonStart = $content.IndexOf("[")
 $jsonEnd = $content.LastIndexOf("]")
 $jsonStr = $content.Substring($jsonStart, $jsonEnd - $jsonStart + 1)

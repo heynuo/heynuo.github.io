@@ -519,6 +519,14 @@
     border-color: rgba(59, 130, 246, 0.4);
   }
 
+  .nav-svg-icon,
+  .theme-svg-icon {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
   .menu-btn {
     display: none;
     background: none;
@@ -5137,6 +5145,8 @@
     overflow: hidden;
     background: var(--card-bg);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    content-visibility: auto;
+    contain-intrinsic-size: 0 320px;
   }
 
   .code-demo-header {

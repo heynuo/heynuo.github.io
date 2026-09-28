@@ -9,6 +9,15 @@
     <atom:link href="https://heynuo.github.io/rss.xml" rel="self" type="application/rss+xml" />
 
     <item>
+      <title>Spring Boot Enterprise Architecture: Controllers, Validation &amp; Microservice Resilience</title>
+      <link>https://heynuo.github.io/spring-boot-architecture.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/spring-boot-architecture.html</guid>
+      <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Master production-grade Spring Boot 3 enterprise application architecture: REST controllers, Jakarta Bean Validation records, global exception advice, and idempotent payment processing.</description>
+      <category>Java</category>
+    </item>
+
+    <item>
       <title>Ruqyah Shari'yah Guide — 60 Authentic Quranic Healing &amp; Protection Verses</title>
       <link>https://heynuo.github.io/ruqyah.html</link>
       <guid isPermaLink="true">https://heynuo.github.io/ruqyah.html</guid>

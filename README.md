@@ -54,43 +54,54 @@
 
 ```text
 heynuo.github.io/
-├── index.html                  # Homepage (featured articles, stats, search, audio preview)
-├── quran.html                  # Complete 114 Surahs audio library and King Fahd Mushaf PDFs
-├── quran-verses.html           # Master compilation of 108 Quranic verses from 62 books
-├── ruqyah.html                 # 60 pre-rendered authentic Ruqyah verses with audio & filters
-├── java-oop.html               # Deepened Java OOP tutorial with challenges & JVM output
-├── jinn-islamic-theology.html  # Authentic theological research with scholarly Hadith citations
-├── web-dev-guide.html          # Modern semantic web development & GitHub Pages guide
-├── about.html                  # Bio, journey, technical values, and background
-├── contact.html                # Direct privacy-first contact & interactive subject helper
-├── privacy.html                # Privacy policy, local storage disclosure, and source citations
-├── 404.html                    # Custom accessible 404 error page with quick jump links
-├── manifest.json               # Progressive Web App manifest
-├── sw.js                       # Service worker with static cache-first offline strategy
-├── rss.xml                     # RSS 2.0 syndication feed for all articles & guides
-├── sitemap.xml                 # XML sitemap with accurate lastmod dates
-├── robots.txt                  # Search engine crawl rules
-├── LICENSE                     # MIT Open Source License
-├── README.md                   # Project documentation
+├── index.html                   # Homepage (featured articles, stats, search, audio preview)
+├── quran.html                   # Complete 114 Surahs audio library and King Fahd Mushaf PDFs
+├── quran-verses.html            # Master compilation of 108 Quranic verses from 62 books
+├── ruqyah.html                  # 60 pre-rendered authentic Ruqyah verses with audio & filters
+├── java-oop.html                # Deepened Java OOP tutorial with challenges & JVM output
+├── spring-boot-architecture.html# Enterprise Spring Boot 3 architecture guide & API simulator
+├── jinn-islamic-theology.html   # Authentic theological research with scholarly Hadith citations
+├── web-dev-guide.html           # Modern semantic web development & GitHub Pages guide
+├── about.html                   # Bio, journey, technical values, and background
+├── contact.html                 # Direct privacy-first contact & interactive subject helper
+├── privacy.html                 # Privacy policy, local storage disclosure, and source citations
+├── 404.html                     # Custom accessible 404 error page with quick jump links
+├── manifest.json                # Progressive Web App manifest
+├── sw.js                        # Service worker with static cache-first offline strategy
+├── rss.xml                      # RSS 2.0 syndication feed for all articles & guides
+├── sitemap.xml                  # XML sitemap with accurate lastmod dates
+├── robots.txt                   # Search engine crawl rules
+├── LICENSE                      # MIT Open Source License
+├── README.md                    # Project documentation
 ├── css/
-│   ├── style.css               # Core design system, variables, dark/light tokens, components
-│   ├── home.css                # Home-specific layouts, typewriter, and interactive grid
-│   ├── contact.css             # Contact page layout, presence clock, and topic pills
-│   ├── quran.css               # Surah search, playlist, and PDF grid styles
-│   ├── quran-player.css        # Persistent bottom audio recitation bar
-│   ├── master-verses.css       # 108 verses view modes and bookmarking styles
-│   └── ruqyah.css              # Ruqyah card styling, Arabic calligraphy, and player bars
+│   ├── style.css                # Core design system, variables, dark/light tokens, SVG icons
+│   ├── home.css                 # Home-specific layouts, typewriter, and interactive grid
+│   ├── contact.css              # Contact page layout, presence clock, and topic pills
+│   ├── quran.css                # Surah search, playlist, and PDF grid styles
+│   ├── quran-player.css         # Persistent bottom audio recitation bar
+│   ├── master-verses.css        # 108 verses view modes and bookmarking styles
+│   └── ruqyah.css               # Ruqyah card styling, Arabic calligraphy, and player bars
 ├── js/
-│   ├── script.js               # Theme engine, command palette, shortcuts modal, mailto copier
-│   ├── quran-player.js         # Persistent audio streaming engine with mirror failover
-│   ├── quran-page.js           # 114 Surahs controller, audio routing, and PDF reader
-│   ├── master-verses.js        # 108 verses controller, search, and bookmarking
-│   ├── master-verses-data.js   # Dataset of 108 verses from 62 classical sources
-│   ├── ruqyah.js               # Ruqyah audio controller, search/filter, and fallback retry
-│   └── ruqyah-data.js          # Authoritative dataset of 60 Ruqyah healing verses
-└── assets/
-    ├── banners/                # Optimized OpenGraph banners (og-banner.jpg 1200x630, etc.)
-    └── icons/                  # Crisp UI graphics and category icons
+│   ├── script.js                # Theme engine, command palette, shortcuts modal, mailto copier
+│   ├── quran-player.js          # Persistent audio streaming engine with mirror failover
+│   ├── quran-page.js            # 114 Surahs controller, audio routing, and PDF reader
+│   ├── master-verses.js         # 108 verses controller, search, and bookmarking
+│   ├── ruqyah.js                # Ruqyah audio controller, search/filter, and fallback retry
+│   └── data/                    # Structured datasets separated from controller logic
+│       ├── master-verses-data.js# Dataset of 108 verses from 62 classical sources
+│       └── ruqyah-data.js       # Authoritative dataset of 60 Ruqyah healing verses
+├── assets/
+│   ├── banners/                 # Optimized OpenGraph banners (1200x630, webp/jpg)
+│   └── icons/                   # Crisp UI graphics, theme icons, and metadata
+└── tools/                       # Maintenance and automation toolchain
+    ├── sync-components.ps1      # Component stamping script for headers, footers & modals
+    ├── validate-site.ps1        # Site integrity validator (links, assets, schemas)
+    ├── build-ruqyah.ps1         # Ruqyah dataset extractor & verification
+    ├── inject-ruqyah.ps1        # Static pre-renderer for 60 Ruqyah cards
+    └── components/              # Canonical HTML component templates
+        ├── header.html          # Standard navigation with crisp inline SVGs
+        ├── footer.html          # Standard footer with GitHub & shortcut triggers
+        └── shortcuts-modal.html # WCAG 2.1.4 compliant accessible shortcuts dialog
 ```
 
 ---

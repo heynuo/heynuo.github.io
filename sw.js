@@ -3,7 +3,7 @@
    Caches app shell, article pages, CSS, JS, and Ruqyah text.
    ========================================================= */
 
-const CACHE_NAME = 'heynuo-cache-v1';
+const CACHE_NAME = 'heynuo-cache-v2';
 
 const PRECACHE_URLS = [
   './',
@@ -12,6 +12,7 @@ const PRECACHE_URLS = [
   'quran.html',
   'quran-verses.html',
   'java-oop.html',
+  'spring-boot-architecture.html',
   'jinn-islamic-theology.html',
   'web-dev-guide.html',
   'about.html',
@@ -29,14 +30,15 @@ const PRECACHE_URLS = [
   'css/master-verses.css',
   'js/script.js',
   'js/ruqyah.js',
-  'js/ruqyah-data.js',
+  'js/data/ruqyah-data.js',
   'js/quran-player.js',
   'js/quran-page.js',
   'js/master-verses.js',
-  'js/master-verses-data.js',
+  'js/data/master-verses-data.js',
   'assets/banners/og-banner.jpg',
   'assets/banners/hero-banner.jpg',
   'assets/banners/java-oop.jpg',
+  'assets/banners/spring-boot.jpg',
   'assets/banners/quran-cover.jpg',
   'assets/banners/ruqyah-theology.jpg',
   'assets/banners/web-dev.jpg',

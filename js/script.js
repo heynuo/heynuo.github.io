@@ -37,6 +37,23 @@ const state = {
 // ✅ REAL ARTICLE LINKS (trimmed, honest reading times)
 const POSTS = Object.freeze([
   {
+    title: "Spring Boot Enterprise Architecture: Clean REST APIs & DTOs",
+    excerpt: "Master production-grade Spring Boot architecture: 3-tier layering, request validation with Bean Validation, clean DTO mapping, and global exception handling.",
+    category: "Java",
+    link: "spring-boot-architecture.html",
+    date: "2026-09-28",
+    readTime: "8 min read",
+    tags: ["SpringBoot", "Java", "Architecture", "REST"],
+    banner: "assets/banners/spring-boot.jpg",
+    takeaways: [
+      "Strict 3-tier layered architecture: Controller, Service, and Repository boundaries",
+      "Decouple domain entities from public APIs using immutable request/response DTO records",
+      "Declarative input validation with Jakarta Bean Validation (@Valid, @NotNull, @Size)",
+      "Centralized error interception with @RestControllerAdvice and structured error payloads",
+      "Idempotency patterns to protect mutation endpoints against duplicate network retries"
+    ]
+  },
+  {
     title: "Java OOP Tutorial: Classes, Objects & Inheritance",
     excerpt: "Learn Java OOP with clear examples of classes, objects, inheritance, polymorphism, and encapsulation. A practical beginner-friendly guide.",
     category: "Java",
@@ -198,8 +215,8 @@ function applyTheme(theme) {
   const btn = $.get('#theme-toggle');
   if (btn) {
     btn.innerHTML = theme === 'dark'
-      ? '<img src="assets/icons/sun.png" alt="Light mode" width="20" height="20" class="theme-icon">'
-      : '<img src="assets/icons/moon.png" alt="Dark mode" width="20" height="20" class="theme-icon">';
+      ? '<svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>'
+      : '<svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
   }
 }
 
@@ -216,7 +233,7 @@ function initThemeToggle() {
       applyTheme(next);
       showToast(
         next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
-        next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
+        next === 'dark' ? '🌙' : '☀️'
       );
       return;
     }

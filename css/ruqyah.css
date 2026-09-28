@@ -555,6 +555,8 @@
   overflow: visible;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
 }
 
 @media (max-width: 768px) {
