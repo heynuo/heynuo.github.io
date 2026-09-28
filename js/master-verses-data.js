@@ -26,8 +26,8 @@ const MASTER_VERSES_DATA = [
                             6,
                             7
                         ],
-        "arabic":  "(1) ﻿بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ (2) ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ (3) ٱلرَّحْمَٰنِ ٱلرَّحِيمِ (4) مَٰلِكِ يَوْمِ ٱلدِّينِ (5) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (6) ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ (7) صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
-        "transliteration":  "[1] Bismillaahir Rahmaanir Raheem [2] Alhamdu lillaahi Rabbil \u0027aalameen [3] Ar-Rahmaanir-Raheem [4] Maaliki Yawmid-Deen [5] Iyyaaka na\u0027budu wa lyyaaka nasta\u0027een [6] Ihdinas-Siraatal-Mustaqeem [7] Siraatal-lazeena an\u0027amta \u0027alaihim ghayril-maghdoobi \u0027alaihim wa lad-daaalleen",
+        "arabic":  "(1) بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ (2) ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ (3) ٱلرَّحْمَٰنِ ٱلرَّحِيمِ (4) مَٰلِكِ يَوْمِ ٱلدِّينِ (5) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (6) ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ (7) صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ",
+        "transliteration":  "[1] Bismillaahir Rahmaanir Raheem [2] Alhamdu lillaahi Rabbil \u0027aalameen [3] Ar-Rahmaanir-Raheem [4] Maaliki Yawmid-Deen [5] Iyyaaka na\u0027budu wa Iyyaaka nasta\u0027een [6] Ihdinas-Siraatal-Mustaqeem [7] Siraatal-lazeena an\u0027amta \u0027alaihim ghayril-maghdoobi \u0027alaihim wa lad-daalleen",
         "translation":  "[1] In the name of Allah, the Entirely Merciful, the Especially Merciful. [2] [All] praise is [due] to Allah, Lord of the worlds - [3] The Entirely Merciful, the Especially Merciful, [4] Sovereign of the Day of Recompense. [5] It is You we worship and You we ask for help. [6] Guide us to the straight path - [7] The path of those upon whom You have bestowed favor, not of those who have evoked [Your] anger or of those who are astray.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/1:1"
     },
@@ -50,7 +50,7 @@ const MASTER_VERSES_DATA = [
                             102
                         ],
         "arabic":  "وَٱتَّبَعُوا۟ مَا تَتْلُوا۟ ٱلشَّيَٰطِينُ عَلَىٰ مُلْكِ سُلَيْمَٰنَ ۖ وَمَا كَفَرَ سُلَيْمَٰنُ وَلَٰكِنَّ ٱلشَّيَٰطِينَ كَفَرُوا۟ يُعَلِّمُونَ ٱلنَّاسَ ٱلسِّحْرَ وَمَآ أُنزِلَ عَلَى ٱلْمَلَكَيْنِ بِبَابِلَ هَٰرُوتَ وَمَٰرُوتَ ۚ وَمَا يُعَلِّمَانِ مِنْ أَحَدٍ حَتَّىٰ يَقُولَآ إِنَّمَا نَحْنُ فِتْنَةٌۭ فَلَا تَكْفُرْ ۖ فَيَتَعَلَّمُونَ مِنْهُمَا مَا يُفَرِّقُونَ بِهِۦ بَيْنَ ٱلْمَرْءِ وَزَوْجِهِۦ ۚ وَمَا هُم بِضَآرِّينَ بِهِۦ مِنْ أَحَدٍ إِلَّا بِإِذْنِ ٱللَّهِ ۚ وَيَتَعَلَّمُونَ مَا يَضُرُّهُمْ وَلَا يَنفَعُهُمْ ۚ وَلَقَدْ عَلِمُوا۟ لَمَنِ ٱشْتَرَىٰهُ مَا لَهُۥ فِى ٱلْءَاخِرَةِ مِنْ خَلَٰقٍۢ ۚ وَلَبِئْسَ مَا شَرَوْا۟ بِهِۦٓ أَنفُسَهُمْ ۚ لَوْ كَانُوا۟ يَعْلَمُونَ",
-        "transliteration":  "Wattaba\u0027oo maa tatlush Shayaateenu \u0027alaa mulki Sulaimaana wa maa kafara Sulaimaanu wa laakinnash Shayattena kafaroo yu\u0027al limoonan naasas sihra wa maaa unzila \u0027alal malakaini bi Baabila Haaroota wa Maaroot; wa maa yu\u0027allimaani min ahadin hattaa yaqoolaaa innamaa nahnu fitnatun falaa takfur fayata\u0027al lamoona minhumaa maa yufarriqoona bihee bainal mar\u0027i wa zawjih; wa maa hum bidaaarreena bihee min ahadin illaa bi-iznillah; wa yata\u0027allamoona maa yadurruhum wa laa yanfa\u0027uhum; wa laqad \u0027alimoo lamanish taraahu maa lahoo fil Aakhirati min khalaaq; wa labi\u0027sa maa sharaw biheee anfusahum; law kaanoo ya\u0027lamoon",
+        "transliteration":  "Wattaba\u0027oo maa tatlush Shayaateenu \u0027alaa mulki Sulaimaana wa maa kafara Sulaimaanu wa laakinnash Shayaateena kafaroo yu\u0027allimoonan naasas sihra wa maaa unzila \u0027alal malakaini bi Baabila Haaroota wa Maaroot; wa maa yu\u0027allimaani min ahadin hattaa yaqoolaaa innamaa nahnu fitnatun falaa takfur fayata\u0027allamoona minhumaa maa yufarriqoona bihee bainal mar\u0027i wa zawjih; wa maa hum bidaaarreena bihee min ahadin illaa bi-iznillah; wa yata\u0027allamoona maa yadurruhum wa laa yanfa\u0027uhum; wa laqad \u0027alimoo lamanish taraahu maa lahoo fil Aakhirati min khalaaq; wa labi\u0027sa maa sharaw biheee anfusahum; law kaanoo ya\u0027lamoon",
         "translation":  "And they followed [instead] what the devils had recited during the reign of Solomon. It was not Solomon who disbelieved, but the devils disbelieved, teaching people magic and that which was revealed to the two angels at Babylon, Harut and Marut. But the two angels do not teach anyone unless they say, \"We are a trial, so do not disbelieve [by practicing magic].\" And [yet] they learn from them that by which they cause separation between a man and his wife. But they do not harm anyone through it except by permission of Allah. And the people learn what harms them and does not benefit them. But the Children of Israel certainly knew that whoever purchased the magic would not have in the Hereafter any share. And wretched is that for which they sold themselves, if they only knew.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/2:102"
     },
@@ -96,7 +96,7 @@ const MASTER_VERSES_DATA = [
                             109
                         ],
         "arabic":  "وَدَّ كَثِيرٌۭ مِّنْ أَهْلِ ٱلْكِتَٰبِ لَوْ يَرُدُّونَكُم مِّنۢ بَعْدِ إِيمَٰنِكُمْ كُفَّارًا حَسَدًۭا مِّنْ عِندِ أَنفُسِهِم مِّنۢ بَعْدِ مَا تَبَيَّنَ لَهُمُ ٱلْحَقُّ ۖ فَٱعْفُوا۟ وَٱصْفَحُوا۟ حَتَّىٰ يَأْتِىَ ٱللَّهُ بِأَمْرِهِۦٓ ۗ إِنَّ ٱللَّهَ عَلَىٰ كُلِّ شَىْءٍۢ قَدِيرٌۭ",
-        "transliteration":  "Wadda kaseerum min ahlil kitaabi law yaruddoo nakum mim ba\u0027di eemaanikum kuffaaran hasadam min \u0027indi anfusihim mim ba\u0027di maa tabaiyana lahumul haqqu fa\u0027foo washfahoo hattaa yaa tiyallaahu bi amrih; innal laaha \u0027alaa kulli shai\u0027in qadeer",
+        "transliteration":  "Wadda kaseerum min ahlil kitaabi law yaruddoonakum mim ba\u0027di eemaanikum kuffaaran hasadam min \u0027indi anfusihim mim ba\u0027di maa tabaiyana lahumul haqqu fa\u0027foo wasfahoo hattaa ya\u0027tiyallaahu bi amrih; innal laaha \u0027alaa kulli shai\u0027in qadeer",
         "translation":  "Many of the People of the Scripture wish they could turn you back to disbelief after you have believed, out of envy from themselves [even] after the truth has become clear to them. So pardon and overlook until Allah delivers His command. Indeed, Allah is over all things competent.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/2:109"
     },
@@ -119,7 +119,7 @@ const MASTER_VERSES_DATA = [
                             255
                         ],
         "arabic":  "ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
-        "transliteration":  "Allahu laaa ilaaha illaa Huwal Haiyul Qaiyoom; laa taakhuzuhoo sinatunw wa laa nawm; lahoo maa fissamaawaati wa maa fil ard; man zal lazee yashfa\u0027u indahooo illaa bi-iznih; ya\u0027lamu maa baina aydeehim wa mww khalfahum wa laa yuheetoona bishai\u0027im min \u0027ilmihee illaa bimaa shaaa\u0027; wasi\u0027a Kursiyyuhus samaawaati wal arda wa laa ya\u0027ooduho hifzuhumaa; wa Huwal Aliyyul \u0027Azeem",
+        "transliteration":  "Allahu laaa ilaaha illaa Huwal Haiyul Qaiyoom; laa taakhuzuhoo sinatunw wa laa nawm; lahoo maa fissamaawaati wa maa fil ard; man zal lazee yashfa\u0027u \u0027indahoo illaa bi-iznih; ya\u0027lamu maa baina aydeehim wa maa khalfahum wa laa yuheetoona bishai\u0027im min \u0027ilmihee illaa bimaa shaaa\u0027; wasi\u0027a Kursiyyuhus samaawaati wal arda wa laa ya\u0027ooduhoo hifzuhumaa; wa Huwal Aliyyul \u0027Azeem",
         "translation":  "Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/2:255"
     },
@@ -142,7 +142,7 @@ const MASTER_VERSES_DATA = [
                             275
                         ],
         "arabic":  "ٱلَّذِينَ يَأْكُلُونَ ٱلرِّبَوٰا۟ لَا يَقُومُونَ إِلَّا كَمَا يَقُومُ ٱلَّذِى يَتَخَبَّطُهُ ٱلشَّيْطَٰنُ مِنَ ٱلْمَسِّ ۚ ذَٰلِكَ بِأَنَّهُمْ قَالُوٓا۟ إِنَّمَا ٱلْبَيْعُ مِثْلُ ٱلرِّبَوٰا۟ ۗ وَأَحَلَّ ٱللَّهُ ٱلْبَيْعَ وَحَرَّمَ ٱلرِّبَوٰا۟ ۚ فَمَن جَآءَهُۥ مَوْعِظَةٌۭ مِّن رَّبِّهِۦ فَٱنتَهَىٰ فَلَهُۥ مَا سَلَفَ وَأَمْرُهُۥٓ إِلَى ٱللَّهِ ۖ وَمَنْ عَادَ فَأُو۟لَٰٓئِكَ أَصْحَٰبُ ٱلنَّارِ ۖ هُمْ فِيهَا خَٰلِدُونَ",
-        "transliteration":  "Allazeena yaakuloonar ribaa laa yaqoomoona illaa kamaa yaqoomul lazee yatakhabbatuhush shaitaanu minal mass; zaalika bi annahum qaalooo innamal bai\u0027u mishur ribaa; wa ahallal laahul bai\u0027a wa harramar ribba; faman jaaa\u0027ahoo maw\u0027izatum mir rabbihee fantahaa falahoo maa salafa wa amruhooo ilal laahi wa man \u0027aada fa ulaaa \u0027ika Ashaabun naari hum feehaa khaalidoon",
+        "transliteration":  "Allazeena yaakuloonar ribaa laa yaqoomoona illaa kamaa yaqoomul lazee yatakhabbatuhush shaitaanu minal mass; zaalika bi annahum qaalooo innamal bai\u0027u mislur ribaa; wa ahallal laahul bai\u0027a wa harramar ribaa; faman jaaa\u0027ahoo maw\u0027izatum mir rabbihee fantahaa falahoo maa salafa wa amruhooo ilal laahi wa man \u0027aada fa ulaaa \u0027ika Ashaabun naari hum feehaa khaalidoon",
         "translation":  "Those who consume interest cannot stand [on the Day of Resurrection] except as one stands who is being beaten by Satan into insanity. That is because they say, \"Trade is [just] like interest.\" But Allah has permitted trade and has forbidden interest. So whoever has received an admonition from his Lord and desists may have what is past, and his affair rests with Allah. But whoever returns to [dealing in interest or usury] - those are the companions of the Fire; they will abide eternally therein.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/2:275"
     },
@@ -166,7 +166,7 @@ const MASTER_VERSES_DATA = [
                             286
                         ],
         "arabic":  "(285) ءَامَنَ ٱلرَّسُولُ بِمَآ أُنزِلَ إِلَيْهِ مِن رَّبِّهِۦ وَٱلْمُؤْمِنُونَ ۚ كُلٌّ ءَامَنَ بِٱللَّهِ وَمَلَٰٓئِكَتِهِۦ وَكُتُبِهِۦ وَرُسُلِهِۦ لَا نُفَرِّقُ بَيْنَ أَحَدٍۢ مِّن رُّسُلِهِۦ ۚ وَقَالُوا۟ سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ ٱلْمَصِيرُ (286) لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا ٱكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَآ إِن نَّسِينَآ أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَآ إِصْرًۭا كَمَا حَمَلْتَهُۥ عَلَى ٱلَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِۦ ۖ وَٱعْفُ عَنَّا وَٱغْفِرْ لَنَا وَٱرْحَمْنَآ ۚ أَنتَ مَوْلَىٰنَا فَٱنصُرْنَا عَلَى ٱلْقَوْمِ ٱلْكَٰفِرِينَ",
-        "transliteration":  "[285] Aamanar-Rasoolu bimaaa unzila ilaihi mir-Rabbihee walmu\u0027minoon; kullun aamana billaahi wa Malaaa\u0027ikathihee wa Kutubhihee wa Rusulih laa nufarriqu baina ahadim-mir-Rusulihee wa qaaloo sami\u0027naa wa ata\u0027naa ghufraanaka Rabbanaa wa ilaikal-maseer [286] Laa yukalliful-laahu nafsan illaa wus\u0027ahaa; lahaa maa kasabat wa \u0027alaihaa maktasabat; Rabbanaa la tu\u0027aakhiznaa in naseenaaa aw akhtaanaa; Rabbanaa wa laa tahmil-\u0027alainaaa isran kamaa hamaltahoo \u0027alal-lazeena min qablinaa; Rabbanaa wa laa tuhammilnaa maa laa taaqata lanaa bih wa\u0027fu \u0027annaa waghfir lanaa warhamnaa; Anta mawlaanaa fansurnaa \u0027alal qawmil kaafireen",
+        "transliteration":  "[285] Aamanar-Rasoolu bimaaa unzila ilaihi mir-Rabbihee walmu\u0027minoon; kullun aamana billaahi wa Malaaa\u0027ikatihee wa Kutubihee wa Rusulih laa nufarriqu baina ahadim-mir-Rusulihee wa qaaloo sami\u0027naa wa ata\u0027naa ghufraanaka Rabbanaa wa ilaikal-maseer [286] Laa yukalliful-laahu nafsan illaa wus\u0027ahaa; lahaa maa kasabat wa \u0027alaihaa maktasabat; Rabbanaa laa tu\u0027aakhiznaa in naseenaaa aw akhtaanaa; Rabbanaa wa laa tahmil-\u0027alainaaa isran kamaa hamaltahoo \u0027alal-lazeena min qablinaa; Rabbanaa wa laa tuhammilnaa maa laa taaqata lanaa bih wa\u0027fu \u0027annaa waghfir lanaa warhamnaa; Anta mawlaanaa fansurnaa \u0027alal qawmil kaafireen",
         "translation":  "[285] The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers. All of them have believed in Allah and His angels and His books and His messengers, [saying], \"We make no distinction between any of His messengers.\" And they say, \"We hear and we obey. [We seek] Your forgiveness, our Lord, and to You is the [final] destination.\" [286] Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained, and it will bear [the consequence of] what [evil] it has earned. \"Our Lord, do not impose blame upon us if we have forgotten or erred. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and burden us not with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us. You are our protector, so give us victory over the disbelieving people.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/2:285"
     },
@@ -258,7 +258,7 @@ const MASTER_VERSES_DATA = [
                             116
                         ],
         "arabic":  "إِنَّ ٱللَّهَ لَا يَغْفِرُ أَن يُشْرَكَ بِهِۦ وَيَغْفِرُ مَا دُونَ ذَٰلِكَ لِمَن يَشَآءُ ۚ وَمَن يُشْرِكْ بِٱللَّهِ فَقَدْ ضَلَّ ضَلَٰلًۢا بَعِيدًا",
-        "transliteration":  "Innal laaha laa yaghfiru ai yushraka bihee wayaghfiru maa doona zaalika limai yashaaa\u0027; wa mai yushrik billaahi faqad dalla dalaalam ba\u0027eedaa",
+        "transliteration":  "Innal laaha laa yaghfiru ai yushraka bihee wa yaghfiru maa doona zaalika limai yashaaa\u0027; wa mai yushrik billaahi faqad dalla dalaalam ba\u0027eedaa",
         "translation":  "Indeed, Allah does not forgive association with Him, but He forgives what is less than that for whom He wills. And he who associates others with Allah has certainly gone far astray.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/4:116"
     },
@@ -281,7 +281,7 @@ const MASTER_VERSES_DATA = [
                             72
                         ],
         "arabic":  "لَقَدْ كَفَرَ ٱلَّذِينَ قَالُوٓا۟ إِنَّ ٱللَّهَ هُوَ ٱلْمَسِيحُ ٱبْنُ مَرْيَمَ ۖ وَقَالَ ٱلْمَسِيحُ يَٰبَنِىٓ إِسْرَٰٓءِيلَ ٱعْبُدُوا۟ ٱللَّهَ رَبِّى وَرَبَّكُمْ ۖ إِنَّهُۥ مَن يُشْرِكْ بِٱللَّهِ فَقَدْ حَرَّمَ ٱللَّهُ عَلَيْهِ ٱلْجَنَّةَ وَمَأْوَىٰهُ ٱلنَّارُ ۖ وَمَا لِلظَّٰلِمِينَ مِنْ أَنصَارٍۢ",
-        "transliteration":  "Laqad kafaral lazeena qaalooo innal laaha Huwal maseehub nu Maryama wa qaalal Maseehu yaa Baneee Israaa\u0027eela budul laaha Rabbee wa Rabbakum innnahoo many-yushrik ballaahi faqad harramal laahu \u0027alaihil jannata wa maa waahun Naaru wa maa lizzaalimeena min ansaar",
+        "transliteration":  "Laqad kafaral lazeena qaalooo innal laaha Huwal maseehub nu Maryama wa qaalal Maseehu yaa Baneee Israaa\u0027eela I\u0027budul laaha Rabbee wa Rabbakum innahoo many-yushrik billaahi faqad harramal laahu \u0027alaihil jannata wa ma\u0027waahun-Naar wa maa lizzaalimeena min ansaar",
         "translation":  "They have certainly disbelieved who say, \"Allah is the Messiah, the son of Mary\" while the Messiah has said, \"O Children of Israel, worship Allah, my Lord and your Lord.\" Indeed, he who associates others with Allah - Allah has forbidden him Paradise, and his refuge is the Fire. And there are not for the wrongdoers any helpers.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/5:72"
     },
@@ -378,7 +378,7 @@ const MASTER_VERSES_DATA = [
                             31
                         ],
         "arabic":  "قُلْ مَن يَرْزُقُكُم مِّنَ ٱلسَّمَآءِ وَٱلْأَرْضِ أَمَّن يَمْلِكُ ٱلسَّمْعَ وَٱلْأَبْصَٰرَ وَمَن يُخْرِجُ ٱلْحَىَّ مِنَ ٱلْمَيِّتِ وَيُخْرِجُ ٱلْمَيِّتَ مِنَ ٱلْحَىِّ وَمَن يُدَبِّرُ ٱلْأَمْرَ ۚ فَسَيَقُولُونَ ٱللَّهُ ۚ فَقُلْ أَفَلَا تَتَّقُونَ",
-        "transliteration":  "Qul mai yarzuqukum minas samaaa\u0027i wal ardi ammany yamlikus sam\u0027a wal absaara wa mai yukhrijul haiya minal maiyiti wa yikhrijul maiyita minal haiyi wa mai yudabbirul amr; fasa yaqooloonal laah; faqul afalaa tattaqoon",
+        "transliteration":  "Qul mai yarzuqukum minas samaaa\u0027i wal ardi ammany yamlikus sam\u0027a wal absaara wa mai yukhrijul haiya minal maiyiti wa yukhrijul maiyita minal haiyi wa mai yudabbirul amr; fasa yaqooloonal laah; faqul afalaa tattaqoon",
         "translation":  "Say, \"Who provides for you from the heaven and the earth? Or who controls hearing and sight and who brings the living out of the dead and brings the dead out of the living and who arranges [every] matter?\" They will say, \"Allah,\" so say, \"Then will you not fear Him?\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/10:31"
     },
@@ -404,7 +404,7 @@ const MASTER_VERSES_DATA = [
                             82
                         ],
         "arabic":  "(79) وَقَالَ فِرْعَوْنُ ٱئْتُونِى بِكُلِّ سَٰحِرٍ عَلِيمٍۢ (80) فَلَمَّا جَآءَ ٱلسَّحَرَةُ قَالَ لَهُم مُّوسَىٰٓ أَلْقُوا۟ مَآ أَنتُم مُّلْقُونَ (81) فَلَمَّآ أَلْقَوْا۟ قَالَ مُوسَىٰ مَا جِئْتُم بِهِ ٱلسِّحْرُ ۖ إِنَّ ٱللَّهَ سَيُبْطِلُهُۥٓ ۖ إِنَّ ٱللَّهَ لَا يُصْلِحُ عَمَلَ ٱلْمُفْسِدِينَ (82) وَيُحِقُّ ٱللَّهُ ٱلْحَقَّ بِكَلِمَٰتِهِۦ وَلَوْ كَرِهَ ٱلْمُجْرِمُونَ",
-        "transliteration":  "[79] Wa qaala Fir\u0027awnu\u0027 toonee bikulli saahirin \u0027aleem [80] Falammaa jaaa\u0027assa haratu qaala lahum Moosaaa alqoo maaa antum mulqoon [81] Falammaaa alqaw qaala Moosaa maa ji\u0027tum bihis sihru innal laaha sa yubtiluhoo innal laaha laa yuslihu \u0027amalal mufsideen [82] Wa yuhiqqul laahul haqqa bi Kalimaatihee wa law karihal mujrimoon",
+        "transliteration":  "[79] Wa qaala Fir\u0027awnutoonee bikulli saahirin \u0027aleem [80] Falammaa jaaa\u0027as-saharatu qaala lahum Moosaaa alqoo maaa antum mulqoon [81] Falammaaa alqaw qaala Moosaa maa ji\u0027tum bihis sihru innal laaha sa yubtiluhoo innal laaha laa yuslihu \u0027amalal mufsideen [82] Wa yuhiqqul laahul haqqa bi Kalimaatihee wa law karihal mujrimoon",
         "translation":  "[79] And Pharaoh said, \"Bring to me every learned magician.\" [80] So when the magicians came, Moses said to them, \"Throw down whatever you will throw.\" [81] And when they had thrown, Moses said, \"What you have brought is [only] magic. Indeed, Allah will expose its worthlessness. Indeed, Allah does not amend the work of corrupters. [82] And Allah will establish the truth by His words, even if the criminals dislike it.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/10:79"
     },
@@ -473,7 +473,7 @@ const MASTER_VERSES_DATA = [
                             106
                         ],
         "arabic":  "وَمَا يُؤْمِنُ أَكْثَرُهُم بِٱللَّهِ إِلَّا وَهُم مُّشْرِكُونَ",
-        "transliteration":  "Wa maa yu\u0027minu aksaru hum billaahi illaa wa hum mushrikoon",
+        "transliteration":  "Wa maa yu\u0027minu aksaruhum billaahi illaa wa hum mushrikoon",
         "translation":  "And most of them believe not in Allah except while they associate others with Him.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/12:106"
     },
@@ -611,7 +611,7 @@ const MASTER_VERSES_DATA = [
                             5
                         ],
         "arabic":  "وَإِنِّى خِفْتُ ٱلْمَوَٰلِىَ مِن وَرَآءِى وَكَانَتِ ٱمْرَأَتِى عَاقِرًۭا فَهَبْ لِى مِن لَّدُنكَ وَلِيًّۭا",
-        "transliteration":  "Wa innee khiftul mawaa liya minw waraaa\u0027ee wa kaana tim ra atee \u0027aairan fahab lee mil ladunka waliyyaa",
+        "transliteration":  "Wa innee khiftul mawaa liya minw waraaa\u0027ee wa kaanatimra-atee \u0027aaqiran fahab lee mil ladunka waliyyaa",
         "translation":  "And indeed, I fear the successors after me, and my wife has been barren, so give me from Yourself an heir",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/19:5"
     },
@@ -634,7 +634,7 @@ const MASTER_VERSES_DATA = [
                             13
                         ],
         "arabic":  "وَأَنَا ٱخْتَرْتُكَ فَٱسْتَمِعْ لِمَا يُوحَىٰٓ",
-        "transliteration":  "Wa anakhtartuka fastami\u0027 limaa yoohaa",
+        "transliteration":  "Wa ana-khtartuka fastami\u0027 limaa yoohaa",
         "translation":  "And I have chosen you, so listen to what is revealed [to you].",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/20:13"
     },
@@ -661,7 +661,7 @@ const MASTER_VERSES_DATA = [
                             69
                         ],
         "arabic":  "(65) قَالُوا۟ يَٰمُوسَىٰٓ إِمَّآ أَن تُلْقِىَ وَإِمَّآ أَن نَّكُونَ أَوَّلَ مَنْ أَلْقَىٰ (66) قَالَ بَلْ أَلْقُوا۟ ۖ فَإِذَا حِبَالُهُمْ وَعِصِيُّهُمْ يُخَيَّلُ إِلَيْهِ مِن سِحْرِهِمْ أَنَّهَا تَسْعَىٰ (67) فَأَوْجَسَ فِى نَفْسِهِۦ خِيفَةًۭ مُّوسَىٰ (68) قُلْنَا لَا تَخَفْ إِنَّكَ أَنتَ ٱلْأَعْلَىٰ (69) وَأَلْقِ مَا فِى يَمِينِكَ تَلْقَفْ مَا صَنَعُوٓا۟ ۖ إِنَّمَا صَنَعُوا۟ كَيْدُ سَٰحِرٍۢ ۖ وَلَا يُفْلِحُ ٱلسَّاحِرُ حَيْثُ أَتَىٰ",
-        "transliteration":  "[65] Qaaloo yaa Moosaaa immaaa an tulqiya wa immaaa an nakoona awala man alqaa [66] Qaala bal alqoo fa izaa hibaaluhum wa \u0027isiyyuhum yuhaiyalu ilaihi min sihrihim annahaa tas\u0027aa [67] Fa awjasa fee nafsihee kheefatam Moosa [68] Qulnaa laa takhaf innaka antal a\u0027laa [69] Wa alqi maa fee yamee nika talqaf maa sana\u0027oo; innamaa sana\u0027oo kaidu saahir; wa laa yuflihus saahiru haisu ataa",
+        "transliteration":  "[65] Qaaloo yaa Moosaaa immaaa an tulqiya wa immaaa an nakoona awwala man alqaa [66] Qaala bal alqoo fa izaa hibaaluhum wa \u0027isiyyuhum yuhaiyalu ilaihi min sihrihim annahaa tas\u0027aa [67] Fa awjasa fee nafsihee kheefatam Moosaa [68] Qulnaa laa takhaf innaka antal a\u0027laa [69] Wa alqi maa fee yameenika talqaf maa sana\u0027oo; innamaa sana\u0027oo kaidu saahir; wa laa yuflihus saahiru haisu ataa",
         "translation":  "[65] They said, \"O Moses, either you throw or we will be the first to throw.\" [66] He said, \"Rather, you throw.\" And suddenly their ropes and staffs seemed to him from their magic that they were moving [like snakes]. [67] And he sensed within himself apprehension, did Moses. [68] Allah said, \"Fear not. Indeed, it is you who are superior. [69] And throw what is in your right hand; it will swallow up what they have crafted. What they have crafted is but the trick of a magician, and the magician will not succeed wherever he is.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/20:65"
     },
@@ -684,7 +684,7 @@ const MASTER_VERSES_DATA = [
                             115
                         ],
         "arabic":  "أَفَحَسِبْتُمْ أَنَّمَا خَلَقْنَٰكُمْ عَبَثًۭا وَأَنَّكُمْ إِلَيْنَا لَا تُرْجَعُونَ",
-        "transliteration":  "Afahsibtum annamaa khalaqnaakum \u0027abasanw wa annakum ilainaa laa turja\u0027oon",
+        "transliteration":  "Afahasibtum annamaa khalaqnaakum \u0027abasanw wa annakum ilainaa laa turja\u0027oon",
         "translation":  "Then did you think that We created you uselessly and that to Us you would not be returned?\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/23:115"
     },
@@ -730,7 +730,7 @@ const MASTER_VERSES_DATA = [
                             61
                         ],
         "arabic":  "لَّيْسَ عَلَى ٱلْأَعْمَىٰ حَرَجٌۭ وَلَا عَلَى ٱلْأَعْرَجِ حَرَجٌۭ وَلَا عَلَى ٱلْمَرِيضِ حَرَجٌۭ وَلَا عَلَىٰٓ أَنفُسِكُمْ أَن تَأْكُلُوا۟ مِنۢ بُيُوتِكُمْ أَوْ بُيُوتِ ءَابَآئِكُمْ أَوْ بُيُوتِ أُمَّهَٰتِكُمْ أَوْ بُيُوتِ إِخْوَٰنِكُمْ أَوْ بُيُوتِ أَخَوَٰتِكُمْ أَوْ بُيُوتِ أَعْمَٰمِكُمْ أَوْ بُيُوتِ عَمَّٰتِكُمْ أَوْ بُيُوتِ أَخْوَٰلِكُمْ أَوْ بُيُوتِ خَٰلَٰتِكُمْ أَوْ مَا مَلَكْتُم مَّفَاتِحَهُۥٓ أَوْ صَدِيقِكُمْ ۚ لَيْسَ عَلَيْكُمْ جُنَاحٌ أَن تَأْكُلُوا۟ جَمِيعًا أَوْ أَشْتَاتًۭا ۚ فَإِذَا دَخَلْتُم بُيُوتًۭا فَسَلِّمُوا۟ عَلَىٰٓ أَنفُسِكُمْ تَحِيَّةًۭ مِّنْ عِندِ ٱللَّهِ مُبَٰرَكَةًۭ طَيِّبَةًۭ ۚ كَذَٰلِكَ يُبَيِّنُ ٱللَّهُ لَكُمُ ٱلْءَايَٰتِ لَعَلَّكُمْ تَعْقِلُونَ",
-        "transliteration":  "Laisa \u0027alal a\u0027maa barajunw wa laa \u0027alal a\u0027raji barajunw wa laa \u0027alal mareedi barajun wa laa \u0027alaa anfusikum an taakuloo mim buyootikum aw buyooti aabaaa\u0027ikum aw buyooti ummahaatikum aw buyooti ikhwaanikum aw buyooti akhawaatikum aw buyooti a\u0027maamikum aw buyooti \u0027ammaatikum aw buyooti akhwaalikum aw buyooti khaalaatikum aw maa malaktum mafaatihahooo aw sadeeqikum; laisa \u0027alaikum junaahun an taakuloo jamee\u0027an aw ashtaata; fa izaa dakhaltum buyootan fasallimoo \u0027alaaa anfusikum tahiyyatam min \u0027indil laahi mubaarakatan taiyibah; kazaalika yubai yinul laahu lakumul Aayaati la\u0027allakum ta\u0027qiloon",
+        "transliteration":  "Laisa \u0027alal a\u0027maa harajunw wa laa \u0027alal a\u0027raji harajunw wa laa \u0027alal mareedi harajun wa laa \u0027alaa anfusikum an taakuloo mim buyootikum aw buyooti aabaaa\u0027ikum aw buyooti ummahaatikum aw buyooti ikhwaanikum aw buyooti akhawaatikum aw buyooti a\u0027maamikum aw buyooti \u0027ammaatikum aw buyooti akhwaalikum aw buyooti khaalaatikum aw maa malaktum mafaatihahooo aw sadeeqikum; laisa \u0027alaikum junaahun an taakuloo jamee\u0027an aw ashtaata; fa izaa dakhaltum buyootan fasallimoo \u0027alaaa anfusikum tahiyyatam min \u0027indil laahi mubaarakatan taiyibah; kazaalika yubaiyinul laahu lakumul Aayaati la\u0027allakum ta\u0027qiloon",
         "translation":  "There is not upon the blind [any] constraint nor upon the lame constraint nor upon the ill constraint nor upon yourselves when you eat from your [own] houses or the houses of your fathers or the houses of your mothers or the houses of your brothers or the houses of your sisters or the houses of your father\u0027s brothers or the houses of your father\u0027s sisters or the houses of your mother\u0027s brothers or the houses of your mother\u0027s sisters or [from houses] whose keys you possess or [from the house] of your friend. There is no blame upon you whether you eat together or separately. But when you enter houses, give greetings of peace upon each other - a greeting from Allah, blessed and good. Thus does Allah make clear to you the verses [of ordinance] that you may understand.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/24:61"
     },
@@ -776,7 +776,7 @@ const MASTER_VERSES_DATA = [
                             65
                         ],
         "arabic":  "قُل لَّا يَعْلَمُ مَن فِى ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ٱلْغَيْبَ إِلَّا ٱللَّهُ ۚ وَمَا يَشْعُرُونَ أَيَّانَ يُبْعَثُونَ",
-        "transliteration":  "Qul laa ya\u0027lamu mman fis sammaawaati wal ardil ghaiba illal laah; wa maa yash\u0027uroona aiyaana yub\u0027asoon",
+        "transliteration":  "Qul laa ya\u0027lamu man fis sammaawaati wal ardil ghaiba illal laah; wa maa yash\u0027uroona aiyaana yub\u0027asoon",
         "translation":  "Say, \"None in the heavens and earth knows the unseen except Allah, and they do not perceive when they will be resurrected.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/27:65"
     },
@@ -799,7 +799,7 @@ const MASTER_VERSES_DATA = [
                             11
                         ],
         "arabic":  "هَٰذَا خَلْقُ ٱللَّهِ فَأَرُونِى مَاذَا خَلَقَ ٱلَّذِينَ مِن دُونِهِۦ ۚ بَلِ ٱلظَّٰلِمُونَ فِى ضَلَٰلٍۢ مُّبِينٍۢ",
-        "transliteration":  "Haazaa khalqul laahi fa aroonee maazaa khalaqal lazeena min doonih; baliz zaalimoona fee dalalim Mubeen",
+        "transliteration":  "Haazaa khalqul laahi fa aroonee maazaa khalaqal lazeena min doonih; baliz zaalimoona fee dalaalim Mubeen",
         "translation":  "This is the creation of Allah. So show Me what those other than Him have created. Rather, the wrongdoers are in clear error.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/31:11"
     },
@@ -937,7 +937,7 @@ const MASTER_VERSES_DATA = [
                             35
                         ],
         "arabic":  "قَالَ رَبِّ ٱغْفِرْ لِى وَهَبْ لِى مُلْكًۭا لَّا يَنۢبَغِى لِأَحَدٍۢ مِّنۢ بَعْدِىٓ ۖ إِنَّكَ أَنتَ ٱلْوَهَّابُ",
-        "transliteration":  "Qaala Rabbigh fir lee wa hab lee mulkal laa yambaghee li ahadim mim ba\u0027de inaka Antal Wahhab",
+        "transliteration":  "Qaala Rabbigh fir lee wa hab lee mulkal laa yambaghee li ahadim mim ba\u0027dee innaka Antal Wahhaab",
         "translation":  "He said, \"My Lord, forgive me and grant me a kingdom such as will not belong to anyone after me. Indeed, You are the Bestower.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/38:35"
     },
@@ -960,7 +960,7 @@ const MASTER_VERSES_DATA = [
                             72
                         ],
         "arabic":  "فَإِذَا سَوَّيْتُهُۥ وَنَفَخْتُ فِيهِ مِن رُّوحِى فَقَعُوا۟ لَهُۥ سَٰجِدِينَ",
-        "transliteration":  "Fa-iza sawwaituhoo wa nafakhtu feehi mir roohee faqa\u0027oo lahoo saajideen",
+        "transliteration":  "Fa-izaa sawwaituhoo wa nafakhtu feehi mir roohee faqa\u0027oo lahoo saajideen",
         "translation":  "So when I have proportioned him and breathed into him of My [created] soul, then fall down to him in prostration.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/38:72"
     },
@@ -984,7 +984,7 @@ const MASTER_VERSES_DATA = [
                             83
                         ],
         "arabic":  "(82) قَالَ فَبِعِزَّتِكَ لَأُغْوِيَنَّهُمْ أَجْمَعِينَ (83) إِلَّا عِبَادَكَ مِنْهُمُ ٱلْمُخْلَصِينَ",
-        "transliteration":  "[82] Qaala fabi\u0027izzatika la ughwiyannahum ajma\u0027een [83] Illaa \u0027ibaadaka minhumul mukhlaseen",
+        "transliteration":  "[82] Qaala fabi\u0027izzatika la-ughwiyannahum ajma\u0027een [83] Illaa \u0027ibaadaka minhumul mukhlaseen",
         "translation":  "[82] [Iblees] said, \"By your might, I will surely mislead them all [83] Except, among them, Your chosen servants.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/38:82"
     },
@@ -1030,7 +1030,7 @@ const MASTER_VERSES_DATA = [
                             10
                         ],
         "arabic":  "قُلْ يَٰعِبَادِ ٱلَّذِينَ ءَامَنُوا۟ ٱتَّقُوا۟ رَبَّكُمْ ۚ لِلَّذِينَ أَحْسَنُوا۟ فِى هَٰذِهِ ٱلدُّنْيَا حَسَنَةٌۭ ۗ وَأَرْضُ ٱللَّهِ وَٰسِعَةٌ ۗ إِنَّمَا يُوَفَّى ٱلصَّٰبِرُونَ أَجْرَهُم بِغَيْرِ حِسَابٍۢ",
-        "transliteration":  "Qul yaa \u0027ibaadil lazeena aamanut taqoo Rabbakum; lillazeena ahsanoo fee haazihid dunyaa hasanah; wa ardul laahi waasi\u0027ah; innamaa yuwaffas saabiroona ajrahum bighayri hisab",
+        "transliteration":  "Qul yaa \u0027ibaadil lazeena aamanut taqoo Rabbakum; lillazeena ahsanoo fee haazihid dunyaa hasanah; wa ardul laahi waasi\u0027ah; innamaa yuwaffas saabiroona ajrahum bighayri hisaab",
         "translation":  "Say, \"O My servants who have believed, fear your Lord. For those who do good in this world is good, and the earth of Allah is spacious. Indeed, the patient will be given their reward without account.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/39:10"
     },
@@ -1054,7 +1054,7 @@ const MASTER_VERSES_DATA = [
                             23
                         ],
         "arabic":  "(22) أَفَمَن شَرَحَ ٱللَّهُ صَدْرَهُۥ لِلْإِسْلَٰمِ فَهُوَ عَلَىٰ نُورٍۢ مِّن رَّبِّهِۦ ۚ فَوَيْلٌۭ لِّلْقَٰسِيَةِ قُلُوبُهُم مِّن ذِكْرِ ٱللَّهِ ۚ أُو۟لَٰٓئِكَ فِى ضَلَٰلٍۢ مُّبِينٍ (23) ٱللَّهُ نَزَّلَ أَحْسَنَ ٱلْحَدِيثِ كِتَٰبًۭا مُّتَشَٰبِهًۭا مَّثَانِىَ تَقْشَعِرُّ مِنْهُ جُلُودُ ٱلَّذِينَ يَخْشَوْنَ رَبَّهُمْ ثُمَّ تَلِينُ جُلُودُهُمْ وَقُلُوبُهُمْ إِلَىٰ ذِكْرِ ٱللَّهِ ۚ ذَٰلِكَ هُدَى ٱللَّهِ يَهْدِى بِهِۦ مَن يَشَآءُ ۚ وَمَن يُضْلِلِ ٱللَّهُ فَمَا لَهُۥ مِنْ هَادٍ",
-        "transliteration":  "[22] Afaman sharahal laahu sadrahoo lil Islaami fahuwa \u0027alaa noorim mir Rabbih; fa wailul lilqaasiyati quloobuhum min zikril laah; ulaaa\u0027ika fee dalaalim mubeen [23] Allahu nazzala ahsanal hadeesi Kitaabam mutashaa biham masaaniy taqsha\u0027irru minhu juloodul lazeena yakhshawna Rabbahum summa taleenu julooduhum wa quloo buhum ilaa zikril laah; zaalika hudal laahi yahdee bihee mai yashaaa\u0027; wa mai yudlilil laahu famaa lahoo min haad",
+        "transliteration":  "[22] Afaman sharahal laahu sadrahoo lil Islaami fahuwa \u0027alaa noorim mir Rabbih; fa wailul lilqaasiyati quloobuhum min zikril laah; ulaaa\u0027ika fee dalaalim mubeen [23] Allahu nazzala ahsanal hadeesi Kitaabam mutashaabiham masaaniya taqsha\u0027irru minhu juloodul lazeena yakhshawna Rabbahum summa taleenu julooduhum wa quloobuhum ilaa zikril laah; zaalika hudal laahi yahdee bihee mai yashaaa\u0027; wa mai yudlilil laahu famaa lahoo min haad",
         "translation":  "[22] So is one whose breast Allah has expanded to [accept] Islam and he is upon a light from his Lord [like one whose heart rejects it]? Then woe to those whose hearts are hardened against the remembrance of Allah. Those are in manifest error. [23] Allah has sent down the best statement: a consistent Book wherein is reiteration. The skins shiver therefrom of those who fear their Lord; then their skins and their hearts relax at the remembrance of Allah. That is the guidance of Allah by which He guides whom He wills. And one whom Allah leaves astray - for him there is no guide.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/39:22"
     },
@@ -1123,7 +1123,7 @@ const MASTER_VERSES_DATA = [
                             24
                         ],
         "arabic":  "إِلَىٰ فِرْعَوْنَ وَهَٰمَٰنَ وَقَٰرُونَ فَقَالُوا۟ سَٰحِرٌۭ كَذَّابٌۭ",
-        "transliteration":  "Ilaa Fir\u0027awna wa Haamaana qa Qaaroona faqaaloo saahirun kazzaab",
+        "transliteration":  "Ilaa Fir\u0027awna wa Haamaana wa Qaaroona faqaaloo saahirun kazzaab",
         "translation":  "To Pharaoh, Haman and Qarun; but they said, \"[He is] a magician and a liar.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/40:24"
     },
@@ -1169,7 +1169,7 @@ const MASTER_VERSES_DATA = [
                             60
                         ],
         "arabic":  "وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ ۚ إِنَّ ٱلَّذِينَ يَسْتَكْبِرُونَ عَنْ عِبَادَتِى سَيَدْخُلُونَ جَهَنَّمَ دَاخِرِينَ",
-        "transliteration":  "Wa qaala Rabbukumud \u0027ooneee astajib lakum; innal lazeena yastakbiroona an \u0027ibaadatee sa yadkhuloona jahannama daakhireen",
+        "transliteration":  "Wa qaala Rabbukumud \u0027ooneee astajib lakum; innal lazeena yastakbiroona \u0027an \u0027ibaadatee sa yadkhuloona jahannama daakhireen",
         "translation":  "And your Lord says, \"Call upon Me; I will respond to you.\" Indeed, those who disdain My worship will enter Hell [rendered] contemptible.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/40:60"
     },
@@ -1196,7 +1196,7 @@ const MASTER_VERSES_DATA = [
                             5
                         ],
         "arabic":  "(1) بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ حمٓ (2) تَنزِيلٌۭ مِّنَ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ (3) كِتَٰبٌۭ فُصِّلَتْ ءَايَٰتُهُۥ قُرْءَانًا عَرَبِيًّۭا لِّقَوْمٍۢ يَعْلَمُونَ (4) بَشِيرًۭا وَنَذِيرًۭا فَأَعْرَضَ أَكْثَرُهُمْ فَهُمْ لَا يَسْمَعُونَ (5) وَقَالُوا۟ قُلُوبُنَا فِىٓ أَكِنَّةٍۢ مِّمَّا تَدْعُونَآ إِلَيْهِ وَفِىٓ ءَاذَانِنَا وَقْرٌۭ وَمِنۢ بَيْنِنَا وَبَيْنِكَ حِجَابٌۭ فَٱعْمَلْ إِنَّنَا عَٰمِلُونَ",
-        "transliteration":  "[1] Haa Meeem [2] Tanzeelum Minar-Rahmaanir-Raheem [3] Kitaabun fussilat Aayaatuhoo Qur-aanan \u0027Arabiyyal liqawminy ya\u0027lamoon [4] Basheeranw wa nazeeran fa-a\u0027rada aksaruhum fahum laa yasma\u0027oon [5] Wa qaaloo quloobunaa feee akinnatim mimmaa tad\u0027oonaaa ilaihi wa feee aazaaninaa waqrunw wa mim baininaa wa bainika bijaabun fa\u0027mal innanaa \u0027aamiloon",
+        "transliteration":  "[1] Haa Meeem [2] Tanzeelum Minar-Rahmaanir-Raheem [3] Kitaabun fussilat Aayaatuhoo Qur-aanan \u0027Arabiyyal liqawminy ya\u0027lamoon [4] Basheeranw wa nazeeran fa-a\u0027rada aksaruhum fahum laa yasma\u0027oon [5] Wa qaaloo quloobunaa feee akinnatim mimmaa tad\u0027oonaaa ilaihi wa feee aazaaninaa waqrunw wa mim baininaa wa bainika hijaabun fa\u0027mal innanaa \u0027aamiloon",
         "translation":  "[1] Ha, Meem. [2] [This is] a revelation from the Entirely Merciful, the Especially Merciful - [3] A Book whose verses have been detailed, an Arabic Qur\u0027an for a people who know, [4] As a giver of good tidings and a warner; but most of them turn away, so they do not hear. [5] And they say, \"Our hearts are within coverings from that to which you invite us, and in our ears is deafness, and between us and you is a partition, so work; indeed, we are working.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/41:1"
     },
@@ -1265,7 +1265,7 @@ const MASTER_VERSES_DATA = [
                             17
                         ],
         "arabic":  "وَأَمَّا ثَمُودُ فَهَدَيْنَٰهُمْ فَٱسْتَحَبُّوا۟ ٱلْعَمَىٰ عَلَى ٱلْهُدَىٰ فَأَخَذَتْهُمْ صَٰعِقَةُ ٱلْعَذَابِ ٱلْهُونِ بِمَا كَانُوا۟ يَكْسِبُونَ",
-        "transliteration":  "Wa ammaa Samoodu fahadinaahum fastahabbul \u0027ama \u0027alal huda fa akhazathum saa\u0027iqatul \u0027azaabil hooni bimaa kaanoo yaksiboon",
+        "transliteration":  "Wa ammaa Samoodu fahadinaahum fastahabbul \u0027amaa \u0027alal hudaa fa akhazathum saa\u0027iqatul \u0027azaabil hooni bimaa kaanoo yaksiboon",
         "translation":  "And as for Thamud, We guided them, but they preferred blindness over guidance, so the thunderbolt of humiliating punishment seized them for what they used to earn.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/41:17"
     },
@@ -1288,7 +1288,7 @@ const MASTER_VERSES_DATA = [
                             26
                         ],
         "arabic":  "وَقَالَ ٱلَّذِينَ كَفَرُوا۟ لَا تَسْمَعُوا۟ لِهَٰذَا ٱلْقُرْءَانِ وَٱلْغَوْا۟ فِيهِ لَعَلَّكُمْ تَغْلِبُونَ",
-        "transliteration":  "Wa qaalal lazeena kafaroo laa tasma\u0027oo lihaazal Quraani walghaw feehi la\u0027allakum taghlihoon",
+        "transliteration":  "Wa qaalal lazeena kafaroo laa tasma\u0027oo lihaazal Quraani walghaw feehi la\u0027allakum taghliboon",
         "translation":  "And those who disbelieve say, \"Do not listen to this Qur\u0027an and speak noisily during [the recitation of] it that perhaps you will overcome.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/41:26"
     },
@@ -1334,7 +1334,7 @@ const MASTER_VERSES_DATA = [
                             53
                         ],
         "arabic":  "سَنُرِيهِمْ ءَايَٰتِنَا فِى ٱلْءَافَاقِ وَفِىٓ أَنفُسِهِمْ حَتَّىٰ يَتَبَيَّنَ لَهُمْ أَنَّهُ ٱلْحَقُّ ۗ أَوَلَمْ يَكْفِ بِرَبِّكَ أَنَّهُۥ عَلَىٰ كُلِّ شَىْءٍۢ شَهِيدٌ",
-        "transliteration":  "Sanureehim Aayaatinaa fil aafaaqi wa feee anfusihim hattaa yatabaiyana lahum annahul haqq; awa lam yakfi bi Rabbika annahoo \u0027alaa kulli shai-in Shaheed",
+        "transliteration":  "Sanureehim Aayaatinaa fil aafaaqi wa feee anfusihim hattaa yatabaiyana lahum annahul haqq; awalam yakfi bi Rabbika annahoo \u0027alaa kulli shai-in Shaheed",
         "translation":  "We will show them Our signs in the horizons and within themselves until it becomes clear to them that it is the truth. But is it not sufficient concerning your Lord that He is, over all things, a Witness?",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/41:53"
     },
@@ -1357,7 +1357,7 @@ const MASTER_VERSES_DATA = [
                             13
                         ],
         "arabic":  "۞ شَرَعَ لَكُم مِّنَ ٱلدِّينِ مَا وَصَّىٰ بِهِۦ نُوحًۭا وَٱلَّذِىٓ أَوْحَيْنَآ إِلَيْكَ وَمَا وَصَّيْنَا بِهِۦٓ إِبْرَٰهِيمَ وَمُوسَىٰ وَعِيسَىٰٓ ۖ أَنْ أَقِيمُوا۟ ٱلدِّينَ وَلَا تَتَفَرَّقُوا۟ فِيهِ ۚ كَبُرَ عَلَى ٱلْمُشْرِكِينَ مَا تَدْعُوهُمْ إِلَيْهِ ۚ ٱللَّهُ يَجْتَبِىٓ إِلَيْهِ مَن يَشَآءُ وَيَهْدِىٓ إِلَيْهِ مَن يُنِيبُ",
-        "transliteration":  "Shara\u0027a lakum minad deeni maa wassaa bihee Noohanw wallazeee awhainaaa ilaika wa maa wassainaa biheee Ibraaheema wa Moosa wa \u0027Eesaaa an aqeemud adeena wa laa tatafarraqoo feeh; kabura \u0027alal mushrikeena maa tad\u0027oohum ilaih; Allaahu yajtabee ilaihi many yashaaa\u0027u wa yahdeee ilaihi mai yuneeb",
+        "transliteration":  "Shara\u0027a lakum minad deeni maa wassaa bihee Noohanw wallazeee awhainaaa ilaika wa maa wassainaa biheee Ibraaheema wa Moosaa wa \u0027Eesaaa an aqeemud deena wa laa tatafarraqoo feeh; kabura \u0027alal mushrikeena maa tad\u0027oohum ilaih; Allaahu yajtabee ilaihi many yashaaa\u0027u wa yahdeee ilaihi mai yuneeb",
         "translation":  "He has ordained for you of religion what He enjoined upon Noah and that which We have revealed to you, [O Muhammad], and what We enjoined upon Abraham and Moses and Jesus - to establish the religion and not be divided therein. Difficult for those who associate others with Allah is that to which you invite them. Allah chooses for Himself whom He wills and guides to Himself whoever turns back [to Him].",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/42:13"
     },
@@ -1380,7 +1380,7 @@ const MASTER_VERSES_DATA = [
                             20
                         ],
         "arabic":  "مَن كَانَ يُرِيدُ حَرْثَ ٱلْءَاخِرَةِ نَزِدْ لَهُۥ فِى حَرْثِهِۦ ۖ وَمَن كَانَ يُرِيدُ حَرْثَ ٱلدُّنْيَا نُؤْتِهِۦ مِنْهَا وَمَا لَهُۥ فِى ٱلْءَاخِرَةِ مِن نَّصِيبٍ",
-        "transliteration":  "Man kaana yureedu harsal Aakhirati nazid lahoo fee harsihee wa man kaana yureedu harsad dunyaa nu\u0027tihee mnhaa wa maa lahoo fil Aakhirati min naseeb",
+        "transliteration":  "Man kaana yureedu harsal Aakhirati nazid lahoo fee harsihee wa man kaana yureedu harsad dunyaa nu\u0027tihee minhaa wa maa lahoo fil Aakhirati min naseeb",
         "translation":  "Whoever desires the harvest of the Hereafter - We increase for him in his harvest. And whoever desires the harvest of this world - We give him thereof, but there is not for him in the Hereafter any share.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/42:20"
     },
@@ -1403,7 +1403,7 @@ const MASTER_VERSES_DATA = [
                             23
                         ],
         "arabic":  "ذَٰلِكَ ٱلَّذِى يُبَشِّرُ ٱللَّهُ عِبَادَهُ ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ ۗ قُل لَّآ أَسْـَٔلُكُمْ عَلَيْهِ أَجْرًا إِلَّا ٱلْمَوَدَّةَ فِى ٱلْقُرْبَىٰ ۗ وَمَن يَقْتَرِفْ حَسَنَةًۭ نَّزِدْ لَهُۥ فِيهَا حُسْنًا ۚ إِنَّ ٱللَّهَ غَفُورٌۭ شَكُورٌ",
-        "transliteration":  "Zaalikal lazee yubash shirul laahu \u0027ibaadahul lazeena aamanoo wa \u0027amilus saalihaat; qul laaa as\u0027alukum \u0027alaihi ajran illal mawaddata fil qurbaa; wa mai yaqtarif hasanatan nazid lahoo feehaa husnaa; innal laaha Ghafoorun Shakoor",
+        "transliteration":  "Zaalikal lazee yubashshirul laahu \u0027ibaadahul lazeena aamanoo wa \u0027amilus saalihaat; qul laaa as\u0027alukum \u0027alaihi ajran illal mawaddata fil qurbaa; wa mai yaqtarif hasanatan nazid lahoo feehaa husnaa; innal laaha Ghafoorun Shakoor",
         "translation":  "It is that of which Allah gives good tidings to His servants who believe and do righteous deeds. Say, [O Muhammad], \"I do not ask you for this message any payment [but] only good will through kinship.\" And whoever commits a good deed - We will increase for him good therein. Indeed, Allah is Forgiving and Appreciative.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/42:23"
     },
@@ -1449,7 +1449,7 @@ const MASTER_VERSES_DATA = [
                             40
                         ],
         "arabic":  "وَجَزَٰٓؤُا۟ سَيِّئَةٍۢ سَيِّئَةٌۭ مِّثْلُهَا ۖ فَمَنْ عَفَا وَأَصْلَحَ فَأَجْرُهُۥ عَلَى ٱللَّهِ ۚ إِنَّهُۥ لَا يُحِبُّ ٱلظَّٰلِمِينَ",
-        "transliteration":  "Wa jazaaa\u0027u saiyi\u0027atin saiyi\u0027tum misluha faman \u0027afaa wa aslaha fa ajruhoo \u0027alal laah; innahoo laa yuhibbuz zaalimeen",
+        "transliteration":  "Wa jazaaa\u0027u saiyi\u0027atin saiyi\u0027atum misluhaa faman \u0027afaa wa aslaha fa ajruhoo \u0027alal laah; innahoo laa yuhibbuz zaalimeen",
         "translation":  "And the retribution for an evil act is an evil one like it, but whoever pardons and makes reconciliation - his reward is [due] from Allah. Indeed, He does not like wrongdoers.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/42:40"
     },
@@ -1541,7 +1541,7 @@ const MASTER_VERSES_DATA = [
                             56
                         ],
         "arabic":  "لَا يَذُوقُونَ فِيهَا ٱلْمَوْتَ إِلَّا ٱلْمَوْتَةَ ٱلْأُولَىٰ ۖ وَوَقَىٰهُمْ عَذَابَ ٱلْجَحِيمِ",
-        "transliteration":  "Laa yazooqoona feehal mawtaa illal mawtatal oolaa wa qaqaahum \u0027azaabal jaheem",
+        "transliteration":  "Laa yazooqoona feehal mawtaa illal mawtatal oolaa wa waqaahum \u0027azaabal jaheem",
         "translation":  "They will not taste death therein except the first death, and He will have protected them from the punishment of Hellfire",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/44:56"
     },
@@ -1566,7 +1566,7 @@ const MASTER_VERSES_DATA = [
                             6
                         ],
         "arabic":  "(4) وَفِى خَلْقِكُمْ وَمَا يَبُثُّ مِن دَآبَّةٍ ءَايَٰتٌۭ لِّقَوْمٍۢ يُوقِنُونَ (5) وَٱخْتِلَٰفِ ٱلَّيْلِ وَٱلنَّهَارِ وَمَآ أَنزَلَ ٱللَّهُ مِنَ ٱلسَّمَآءِ مِن رِّزْقٍۢ فَأَحْيَا بِهِ ٱلْأَرْضَ بَعْدَ مَوْتِهَا وَتَصْرِيفِ ٱلرِّيَٰحِ ءَايَٰتٌۭ لِّقَوْمٍۢ يَعْقِلُونَ (6) تِلْكَ ءَايَٰتُ ٱللَّهِ نَتْلُوهَا عَلَيْكَ بِٱلْحَقِّ ۖ فَبِأَىِّ حَدِيثٍۭ بَعْدَ ٱللَّهِ وَءَايَٰتِهِۦ يُؤْمِنُونَ",
-        "transliteration":  "[4] Wa fee khalaqikum wa maa yabussu min daaabbatin Aayaatul liqawminy-yooqinoon [5] Wakhtilaafil laili wannahaari wa maaa anzalal laahu minas samaaa\u0027i mir rizqin fa ahyaa bihil arda ba\u0027da mawtihaa wa tasreefir riyaahi Aayaatul liqawminy ya\u0027qiloon [6] Tilka Aayatul laahi natloohaa \u0027alika bilhaqq, fabiayyi hadeesim ba\u0027dal laahi wa Aayaatihee yu\u0027minoon",
+        "transliteration":  "[4] Wa fee khalqikum wa maa yabussu min daaabbatin Aayaatul liqawminy-yooqinoon [5] Wakhtilaafil laili wannahaari wa maaa anzalal laahu minas samaaa\u0027i mir rizqin fa ahyaa bihil arda ba\u0027da mawtihaa wa tasreefir riyaahi Aayaatul liqawminy ya\u0027qiloon [6] Tilka Aayatul laahi natloohaa \u0027alaika bilhaqq, fabiayyi hadeesim ba\u0027dal laahi wa Aayaatihee yu\u0027minoon",
         "translation":  "[4] And in the creation of yourselves and what He disperses of moving creatures are signs for people who are certain [in faith]. [5] And [in] the alternation of night and day and [in] what Allah sends down from the sky of provision and gives life thereby to the earth after its lifelessness and [in His] directing of the winds are signs for a people who reason. [6] These are the verses of Allah which We recite to you in truth. Then in what statement after Allah and His verses will they believe?",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/45:4"
     },
@@ -1589,7 +1589,7 @@ const MASTER_VERSES_DATA = [
                             15
                         ],
         "arabic":  "مَنْ عَمِلَ صَٰلِحًۭا فَلِنَفْسِهِۦ ۖ وَمَنْ أَسَآءَ فَعَلَيْهَا ۖ ثُمَّ إِلَىٰ رَبِّكُمْ تُرْجَعُونَ",
-        "transliteration":  "Maa \u0027amila saalihan falinafsihee wa man asaaa\u0027a fa\u0027alaihaa summa ilaa Rabbikum turja\u0027oon",
+        "transliteration":  "Man \u0027amila saalihan falinafsihee wa man asaaa\u0027a fa\u0027alaihaa summa ilaa Rabbikum turja\u0027oon",
         "translation":  "Whoever does a good deed - it is for himself; and whoever does evil - it is against the self. Then to your Lord you will be returned.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/45:15"
     },
@@ -1612,7 +1612,7 @@ const MASTER_VERSES_DATA = [
                             24
                         ],
         "arabic":  "وَقَالُوا۟ مَا هِىَ إِلَّا حَيَاتُنَا ٱلدُّنْيَا نَمُوتُ وَنَحْيَا وَمَا يُهْلِكُنَآ إِلَّا ٱلدَّهْرُ ۚ وَمَا لَهُم بِذَٰلِكَ مِنْ عِلْمٍ ۖ إِنْ هُمْ إِلَّا يَظُنُّونَ",
-        "transliteration":  "Wa qaaloo maa hiya illaa hayaatunad dunyaa namootu wa nahyaa wa maa yuhlikunaaa illad dahr; wa maa lahum bizaalika min \u0027ilmin in hum illaayazunnoon",
+        "transliteration":  "Wa qaaloo maa hiya illaa hayaatunad dunyaa namootu wa nahyaa wa maa yuhlikunaaa illad dahr; wa maa lahum bizaalika min \u0027ilmin in hum illaa yazunnoon",
         "translation":  "And they say, \"There is not but our worldly life; we die and live, and nothing destroys us except time.\" And they have of that no knowledge; they are only assuming.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/45:24"
     },
@@ -1658,7 +1658,7 @@ const MASTER_VERSES_DATA = [
                             16
                         ],
         "arabic":  "أُو۟لَٰٓئِكَ ٱلَّذِينَ نَتَقَبَّلُ عَنْهُمْ أَحْسَنَ مَا عَمِلُوا۟ وَنَتَجَاوَزُ عَن سَيِّـَٔاتِهِمْ فِىٓ أَصْحَٰبِ ٱلْجَنَّةِ ۖ وَعْدَ ٱلصِّدْقِ ٱلَّذِى كَانُوا۟ يُوعَدُونَ",
-        "transliteration":  "Ulaaa\u0027ikal lazeena nata qabbalu \u0027anhum ahsana maa \u0027amiloo wa natajaawazu \u0027an saiyiaatihim feee Ashaabil jannati Wa\u0027das sidqil lazee kaanoo yoo\u0027adoon",
+        "transliteration":  "Ulaaa\u0027ikal lazeena nataqabbalu \u0027anhum ahsana maa \u0027amiloo wa natajaawazu \u0027an saiyiaatihim feee Ashaabil jannati Wa\u0027das sidqil lazee kaanoo yoo\u0027adoon",
         "translation":  "Those are the ones from whom We will accept the best of what they did and overlook their misdeeds, [their being] among the companions of Paradise. [That is] the promise of truth which they had been promised.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/46:16"
     },
@@ -1681,7 +1681,7 @@ const MASTER_VERSES_DATA = [
                             34
                         ],
         "arabic":  "وَيَوْمَ يُعْرَضُ ٱلَّذِينَ كَفَرُوا۟ عَلَى ٱلنَّارِ أَلَيْسَ هَٰذَا بِٱلْحَقِّ ۖ قَالُوا۟ بَلَىٰ وَرَبِّنَا ۚ قَالَ فَذُوقُوا۟ ٱلْعَذَابَ بِمَا كُنتُمْ تَكْفُرُونَ",
-        "transliteration":  "Wa Yawma yu\u0027radul lazeena kafaroo \u0027alan naari alaisa haaza bil haqq; qaaloo balaa wa Rabbinaa; qaala fazooqul \u0027azaaba bimaa kuntum takfuroon",
+        "transliteration":  "Wa Yawma yu\u0027radul lazeena kafaroo \u0027alan naari alaisa haazaa bil haqq; qaaloo balaa wa Rabbinaa; qaala fazooqul \u0027azaaba bimaa kuntum takfuroon",
         "translation":  "And the Day those who disbelieved are exposed to the Fire [it will be said], \"Is this not the truth?\" They will say, \"Yes, by our Lord.\" He will say, \"Then taste the punishment because you used to disbelieve.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/46:34"
     },
@@ -1727,7 +1727,7 @@ const MASTER_VERSES_DATA = [
                             4
                         ],
         "arabic":  "فَإِذَا لَقِيتُمُ ٱلَّذِينَ كَفَرُوا۟ فَضَرْبَ ٱلرِّقَابِ حَتَّىٰٓ إِذَآ أَثْخَنتُمُوهُمْ فَشُدُّوا۟ ٱلْوَثَاقَ فَإِمَّا مَنًّۢا بَعْدُ وَإِمَّا فِدَآءً حَتَّىٰ تَضَعَ ٱلْحَرْبُ أَوْزَارَهَا ۚ ذَٰلِكَ وَلَوْ يَشَآءُ ٱللَّهُ لَٱنتَصَرَ مِنْهُمْ وَلَٰكِن لِّيَبْلُوَا۟ بَعْضَكُم بِبَعْضٍۢ ۗ وَٱلَّذِينَ قُتِلُوا۟ فِى سَبِيلِ ٱللَّهِ فَلَن يُضِلَّ أَعْمَٰلَهُمْ",
-        "transliteration":  "Fa-izaa laqeetumul lazeena kafaroo fadarbar riqaab, hattaaa izaa askhan tumoohum fashuddul wasaaq, fa immaa mannnam ba\u0027du wa immaa fidaaa\u0027an hattaa tada\u0027al harbu awzaarahaa; zaalika wa law yashaaa\u0027ul laahu lantasara minhum wa laakil laiyabluwa ba\u0027dakum biba\u0027d; wallazeena qutiloo fee sabeelil laahi falany yudilla a\u0027maalahum",
+        "transliteration":  "Fa-izaa laqeetumul lazeena kafaroo fadarbar riqaab, hattaaa izaa askhan tumoohum fashuddul wasaaq, fa immaa mannam ba\u0027du wa immaa fidaaa\u0027an hattaa tada\u0027al harbu awzaarahaa; zaalika wa law yashaaa\u0027ul laahu lantasara minhum wa laakil laiyabluwa ba\u0027dakum biba\u0027d; wallazeena qutiloo fee sabeelil laahi falany yudilla a\u0027maalahum",
         "translation":  "So when you meet those who disbelieve [in battle], strike [their] necks until, when you have inflicted slaughter upon them, then secure their bonds, and either [confer] favor afterwards or ransom [them] until the war lays down its burdens. That [is the command]. And if Allah had willed, He could have taken vengeance upon them [Himself], but [He ordered armed struggle] to test some of you by means of others. And those who are killed in the cause of Allah - never will He waste their deeds.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/47:4"
     },
@@ -1796,7 +1796,7 @@ const MASTER_VERSES_DATA = [
                             2
                         ],
         "arabic":  "لِّيَغْفِرَ لَكَ ٱللَّهُ مَا تَقَدَّمَ مِن ذَنۢبِكَ وَمَا تَأَخَّرَ وَيُتِمَّ نِعْمَتَهُۥ عَلَيْكَ وَيَهْدِيَكَ صِرَٰطًۭا مُّسْتَقِيمًۭا",
-        "transliteration":  "Liyaghfira lakal laahu maa taqaddama min zambika wa maa ta akhkhara wa yutimma ni'matahoo 'alaika wa yahdiyaka siraatam mustaqeema",
+        "transliteration":  "Liyaghfira lakal laahu maa taqaddama min zambika wa maa ta\u0027akhkhara wa yutimma ni'matahoo 'alaika wa yahdiyaka siraatam mustaqeema",
         "translation":  "That Allah may forgive for you what preceded of your sin and what will follow and complete His favor upon you and guide you to a straight path.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/48:2"
     },
@@ -1819,7 +1819,7 @@ const MASTER_VERSES_DATA = [
                             10
                         ],
         "arabic":  "إِنَّ ٱلَّذِينَ يُبَايِعُونَكَ إِنَّمَا يُبَايِعُونَ ٱللَّهَ يَدُ ٱللَّهِ فَوْقَ أَيْدِيهِمْ ۚ فَمَن نَّكَثَ فَإِنَّمَا يَنكُثُ عَلَىٰ نَفْسِهِۦ ۖ وَمَنْ أَوْفَىٰ بِمَا عَٰهَدَ عَلَيْهُ ٱللَّهَ فَسَيُؤْتِيهِ أَجْرًا عَظِيمًۭا",
-        "transliteration":  "Innal lazeena yubaayi\u0027oonaka innamaa yubaayi\u0027oonal laaha yadul laahi fawqa aydehim; faman nakasa fainnamaa yuankusu \u0027alaa nafsihee wa man awfaa bimaa \u0027aahada \u0027alihul laaha fasa yu\u0027teehi ajran \u0027azeemaa",
+        "transliteration":  "Innal lazeena yubaayi\u0027oonaka innamaa yubaayi\u0027oonal laaha yadul laahi fawqa aydeehim; faman nakasa fainnamaa yankusu \u0027alaa nafsihee wa man awfaa bimaa \u0027aahada \u0027alaihul laaha fasa yu\u0027teehi ajran \u0027azeemaa",
         "translation":  "Indeed, those who pledge allegiance to you, [O Muhammad] - they are actually pledging allegiance to Allah. The hand of Allah is over their hands. So he who breaks his word only breaks it to the detriment of himself. And he who fulfills that which he has promised Allah - He will give him a great reward.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/48:10"
     },
@@ -1842,7 +1842,7 @@ const MASTER_VERSES_DATA = [
                             15
                         ],
         "arabic":  "سَيَقُولُ ٱلْمُخَلَّفُونَ إِذَا ٱنطَلَقْتُمْ إِلَىٰ مَغَانِمَ لِتَأْخُذُوهَا ذَرُونَا نَتَّبِعْكُمْ ۖ يُرِيدُونَ أَن يُبَدِّلُوا۟ كَلَٰمَ ٱللَّهِ ۚ قُل لَّن تَتَّبِعُونَا كَذَٰلِكُمْ قَالَ ٱللَّهُ مِن قَبْلُ ۖ فَسَيَقُولُونَ بَلْ تَحْسُدُونَنَا ۚ بَلْ كَانُوا۟ لَا يَفْقَهُونَ إِلَّا قَلِيلًۭا",
-        "transliteration":  "Sa yaqoolul mukhalla foona izan talaqtum ilaa maghaanima litaakhuzoohaa zaroonaa nattabi\u0027kum yureedoona any yubaddiloo Kalaamallaah; qul lan tattabi\u0027oonaa kazaalikum qaalal laahu min qablu fasa yaqooloona bal tahsudoonanna; bal kaanoo laa yafqahoona illaa qaleela",
+        "transliteration":  "Sa yaqoolul mukhallafoona izan-talaqtum ilaa maghaanima litaakhuzoohaa zaroonaa nattabi\u0027kum yureedoona any yubaddiloo Kalaamallaah; qul lan tattabi\u0027oonaa kazaalikum qaalal laahu min qablu fasa yaqooloona bal tahsudoonanaa; bal kaanoo laa yafqahoona illaa qaleela",
         "translation":  "Those who remained behind will say when you set out toward the war booty to take it, \"Let us follow you.\" They wish to change the words of Allah. Say, \"Never will you follow us. Thus did Allah say before.\" So they will say, \"Rather, you envy us.\" But [in fact] they were not understanding except a little.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/48:15"
     },
@@ -1865,7 +1865,7 @@ const MASTER_VERSES_DATA = [
                             18
                         ],
         "arabic":  "۞ لَّقَدْ رَضِىَ ٱللَّهُ عَنِ ٱلْمُؤْمِنِينَ إِذْ يُبَايِعُونَكَ تَحْتَ ٱلشَّجَرَةِ فَعَلِمَ مَا فِى قُلُوبِهِمْ فَأَنزَلَ ٱلسَّكِينَةَ عَلَيْهِمْ وَأَثَٰبَهُمْ فَتْحًۭا قَرِيبًۭا",
-        "transliteration":  "Laqad radiyal laahu \u0027anil mu\u0027mineena iz yubaayi \u0027oonaka tahtash shajarati fa\u0027alima maa fee quloobihim fa anzalas sakeenata \u0027alaihim wa asaa bahum fat han qareebaa",
+        "transliteration":  "Laqad radiyal laahu \u0027anil mu\u0027mineena iz yubaayi \u0027oonaka tahtash shajarati fa\u0027alima maa fee quloobihim fa anzalas sakeenata \u0027alaihim wa asaabahum fathan qareebaa",
         "translation":  "Certainly was Allah pleased with the believers when they pledged allegiance to you, [O Muhammad], under the tree, and He knew what was in their hearts, so He sent down tranquillity upon them and rewarded them with an imminent conquest",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/48:18"
     },
@@ -1888,7 +1888,7 @@ const MASTER_VERSES_DATA = [
                             20
                         ],
         "arabic":  "وَعَدَكُمُ ٱللَّهُ مَغَانِمَ كَثِيرَةًۭ تَأْخُذُونَهَا فَعَجَّلَ لَكُمْ هَٰذِهِۦ وَكَفَّ أَيْدِىَ ٱلنَّاسِ عَنكُمْ وَلِتَكُونَ ءَايَةًۭ لِّلْمُؤْمِنِينَ وَيَهْدِيَكُمْ صِرَٰطًۭا مُّسْتَقِيمًۭا",
-        "transliteration":  "Wa\u0027adakumul laahu ma ghaanima kaseeratan taakhuzoo nahaa fa\u0027ajjala lakum haazihee wa kaffa aydiyan naasi \u0027ankum wa litakoona aayatal lilmu\u0027mineena wa yahdiyakum siraatam mustaqeema",
+        "transliteration":  "Wa\u0027adakumul laahu maghaanima kaseeratan taakhuzoo nahaa fa\u0027ajjala lakum haazihee wa kaffa aydiyan naasi \u0027ankum wa litakoona aayatal lilmu\u0027mineena wa yahdiyakum siraatam mustaqeema",
         "translation":  "Allah has promised you much booty that you will take [in the future] and has hastened for you this [victory] and withheld the hands of people from you - that it may be a sign for the believers and [that] He may guide you to a straight path.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/48:20"
     },
@@ -1981,7 +1981,7 @@ const MASTER_VERSES_DATA = [
                             5
                         ],
         "arabic":  "(4) إِنَّ ٱلَّذِينَ يُنَادُونَكَ مِن وَرَآءِ ٱلْحُجُرَٰتِ أَكْثَرُهُمْ لَا يَعْقِلُونَ (5) وَلَوْ أَنَّهُمْ صَبَرُوا۟ حَتَّىٰ تَخْرُجَ إِلَيْهِمْ لَكَانَ خَيْرًۭا لَّهُمْ ۚ وَٱللَّهُ غَفُورٌۭ رَّحِيمٌۭ",
-        "transliteration":  "[4] Innal lazeena yunaadoo naka minw waraaa\u0027il hujuraati aksaruhum laa ya\u0027qiloon [5] Wa law annahum sabaroo hatta takhruja ilaihim lakaana khairal lahum; wallaahu Ghafoorur Raheem",
+        "transliteration":  "[4] Innal lazeena yunaadoonaka minw waraaa\u0027il hujuraati aksaruhum laa ya\u0027qiloon [5] Wa law annahum sabaroo hattaa takhruja ilaihim lakaana khairal lahum; wallaahu Ghafoorur Raheem",
         "translation":  "[4] Indeed, those who call you, [O Muhammad], from behind the chambers - most of them do not use reason. [5] And if they had been patient until you [could] come out to them, it would have been better for them. But Allah is Forgiving and Merciful.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/49:4"
     },
@@ -2005,7 +2005,7 @@ const MASTER_VERSES_DATA = [
                             12
                         ],
         "arabic":  "(11) يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ لَا يَسْخَرْ قَوْمٌۭ مِّن قَوْمٍ عَسَىٰٓ أَن يَكُونُوا۟ خَيْرًۭا مِّنْهُمْ وَلَا نِسَآءٌۭ مِّن نِّسَآءٍ عَسَىٰٓ أَن يَكُنَّ خَيْرًۭا مِّنْهُنَّ ۖ وَلَا تَلْمِزُوٓا۟ أَنفُسَكُمْ وَلَا تَنَابَزُوا۟ بِٱلْأَلْقَٰبِ ۖ بِئْسَ ٱلِٱسْمُ ٱلْفُسُوقُ بَعْدَ ٱلْإِيمَٰنِ ۚ وَمَن لَّمْ يَتُبْ فَأُو۟لَٰٓئِكَ هُمُ ٱلظَّٰلِمُونَ (12) يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱجْتَنِبُوا۟ كَثِيرًۭا مِّنَ ٱلظَّنِّ إِنَّ بَعْضَ ٱلظَّنِّ إِثْمٌۭ ۖ وَلَا تَجَسَّسُوا۟ وَلَا يَغْتَب بَّعْضُكُم بَعْضًا ۚ أَيُحِبُّ أَحَدُكُمْ أَن يَأْكُلَ لَحْمَ أَخِيهِ مَيْتًۭا فَكَرِهْتُمُوهُ ۚ وَٱتَّقُوا۟ ٱللَّهَ ۚ إِنَّ ٱللَّهَ تَوَّابٌۭ رَّحِيمٌۭ",
-        "transliteration":  "[11] Yaaa ayyuhal lazeena aamanoo laa yaskhar qawmum min qawmin \u0027asaaa anyyakoonoo khairam minhum wa laa nisaaa\u0027um min nisaaa\u0027in \u0027Asaaa ay yakunna khairam minhunna wa laa talmizooo bil alqaab; bi\u0027sal ismul fusooqu ba\u0027dal eemaan; wa mal-lam yatub fa-ulaaa\u0027ika humuz zaalimoon [12] Yaaa ayyuhal lazeena aamanuj taniboo kaseeram minaz zanni inna ba\u0027daz zanniismunw wa laa tajassasoo wa la yaghtab ba\u0027dukum ba\u0027daa; a yuhibbu ahadukum any yaakula lahma akheehi maitan fakarih tumooh; wattaqul laa; innal laaha tawwaabur Raheem",
+        "transliteration":  "[11] Yaaa ayyuhal lazeena aamanoo laa yaskhar qawmum min qawmin \u0027asaaa anyyakoonoo khairam minhum wa laa nisaaa\u0027um min nisaaa\u0027in \u0027Asaaa ay yakunna khairam minhunna wa laa talmizooo anfusakum wa laa tanaabazoo bil alqaab; bi\u0027sal ismul fusooqu ba\u0027dal eemaan; wa mal-lam yatub fa-ulaaa\u0027ika humuz zaalimoon [12] Yaaa ayyuhal lazeena aamanuj taniboo kaseeram minaz zanni inna ba\u0027daz zanni ismunw wa laa tajassasoo wa la yaghtab ba\u0027dukum ba\u0027daa; a yuhibbu ahadukum any yaakula lahma akheehi maitan fakarih tumooh; wattaqul laah; innal laaha tawwaabur Raheem",
         "translation":  "[11] O you who have believed, let not a people ridicule [another] people; perhaps they may be better than them; nor let women ridicule [other] women; perhaps they may be better than them. And do not insult one another and do not call each other by [offensive] nicknames. Wretched is the name of disobedience after [one\u0027s] faith. And whoever does not repent - then it is those who are the wrongdoers. [12] O you who have believed, avoid much [negative] assumption. Indeed, some assumption is sin. And do not spy or backbite each other. Would one of you like to eat the flesh of his brother when dead? You would detest it. And fear Allah; indeed, Allah is Accepting of repentance and Merciful.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/49:11"
     },
@@ -2028,7 +2028,7 @@ const MASTER_VERSES_DATA = [
                             14
                         ],
         "arabic":  "۞ قَالَتِ ٱلْأَعْرَابُ ءَامَنَّا ۖ قُل لَّمْ تُؤْمِنُوا۟ وَلَٰكِن قُولُوٓا۟ أَسْلَمْنَا وَلَمَّا يَدْخُلِ ٱلْإِيمَٰنُ فِى قُلُوبِكُمْ ۖ وَإِن تُطِيعُوا۟ ٱللَّهَ وَرَسُولَهُۥ لَا يَلِتْكُم مِّنْ أَعْمَٰلِكُمْ شَيْـًٔا ۚ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌ",
-        "transliteration":  "Qaalatil-A \u0027raabu aamannaa qul lam tu\u0027minoo wa laakin qoolooo aslamnaa wa lamma yadkhulil eemaanu fee quloobikum wa in tutee\u0027ul laaha wa Rasoolahoo laa yalitkum min a\u0027maalikum shai\u0027aa; innal laaha Ghafoorur Raheem",
+        "transliteration":  "Qaalatil-A\u0027raabu aamannaa qul lam tu\u0027minoo wa laakin qoolooo aslamnaa wa lamma yadkhulil eemaanu fee quloobikum wa in tutee\u0027ul laaha wa Rasoolahoo laa yalitkum min a\u0027maalikum shai\u0027aa; innal laaha Ghafoorur Raheem",
         "translation":  "The bedouins say, \"We have believed.\" Say, \"You have not [yet] believed; but say [instead], \u0027We have submitted,\u0027 for faith has not yet entered your hearts. And if you obey Allah and His Messenger, He will not deprive you from your deeds of anything. Indeed, Allah is Forgiving and Merciful.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/49:14"
     },
@@ -2074,7 +2074,7 @@ const MASTER_VERSES_DATA = [
                             22
                         ],
         "arabic":  "لَّقَدْ كُنتَ فِى غَفْلَةٍۢ مِّنْ هَٰذَا فَكَشَفْنَا عَنكَ غِطَآءَكَ فَبَصَرُكَ ٱلْيَوْمَ حَدِيدٌۭ",
-        "transliteration":  "Laqad kunta fee ghaf latim min haazaa fakashafnaa \u0027anka ghitaaa\u0027aka fabasarukal yawma hadeed",
+        "transliteration":  "Laqad kunta fee ghaflatim min haazaa fakashafnaa \u0027anka ghitaaa\u0027aka fabasarukal yawma hadeed",
         "translation":  "[It will be said], \"You were certainly in unmindfulness of this, and We have removed from you your cover, so your sight, this Day, is sharp.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/50:22"
     },
@@ -2202,7 +2202,7 @@ const MASTER_VERSES_DATA = [
                             11
                         ],
         "arabic":  "(5) عَلَّمَهُۥ شَدِيدُ ٱلْقُوَىٰ (6) ذُو مِرَّةٍۢ فَٱسْتَوَىٰ (7) وَهُوَ بِٱلْأُفُقِ ٱلْأَعْلَىٰ (8) ثُمَّ دَنَا فَتَدَلَّىٰ (9) فَكَانَ قَابَ قَوْسَيْنِ أَوْ أَدْنَىٰ (10) فَأَوْحَىٰٓ إِلَىٰ عَبْدِهِۦ مَآ أَوْحَىٰ (11) مَا كَذَبَ ٱلْفُؤَادُ مَا رَأَىٰٓ",
-        "transliteration":  "[5] \u0027Allamahoo shadeedul quwaa [6] Zoo mirratin fastawaa [7] Wa huwa bil ufuqil a\u0027laa [8] Summa danaa fatadalla [9] Fakaana qaaba qawsaini aw adnaa [10] Fa awhaaa ilaa \u0027abdihee maaa awhaa [11] Maa kazabal fu\u0027aadu maa ra aa",
+        "transliteration":  "[5] \u0027Allamahoo shadeedul quwaa [6] Zoo mirratin fastawaa [7] Wa huwa bil ufuqil a\u0027laa [8] Summa danaa fatadallaa [9] Fakaana qaaba qawsaini aw adnaa [10] Fa awhaaa ilaa \u0027abdihee maaa awhaa [11] Maa kazabal fu\u0027aadu maa ra\u0027aa",
         "translation":  "[5] Taught to him by one intense in strength - [6] One of soundness. And he rose to [his] true form [7] While he was in the higher [part of the] horizon. [8] Then he approached and descended [9] And was at a distance of two bow lengths or nearer. [10] And he revealed to His Servant what he revealed. [11] The heart did not lie [about] what it saw.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/53:5"
     },
@@ -2227,7 +2227,7 @@ const MASTER_VERSES_DATA = [
                             18
                         ],
         "arabic":  "(16) إِذْ يَغْشَى ٱلسِّدْرَةَ مَا يَغْشَىٰ (17) مَا زَاغَ ٱلْبَصَرُ وَمَا طَغَىٰ (18) لَقَدْ رَأَىٰ مِنْ ءَايَٰتِ رَبِّهِ ٱلْكُبْرَىٰٓ",
-        "transliteration":  "[16] Iz yaghshas sidrata maa yaghshaa [17] Maa zaaghal basaru wa maa taghaa [18] Laqad ra aa min aayaati Rabbihil kubraaa",
+        "transliteration":  "[16] Iz yaghshas sidrata maa yaghshaa [17] Maa zaaghal basaru wa maa taghaa [18] Laqad ra\u0027aa min aayaati Rabbihil kubraaa",
         "translation":  "[16] When there covered the Lote Tree that which covered [it]. [17] The sight [of the Prophet] did not swerve, nor did it transgress [its limit]. [18] He certainly saw of the greatest signs of his Lord.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/53:16"
     },
@@ -2252,7 +2252,7 @@ const MASTER_VERSES_DATA = [
                             8
                         ],
         "arabic":  "(6) فَتَوَلَّ عَنْهُمْ ۘ يَوْمَ يَدْعُ ٱلدَّاعِ إِلَىٰ شَىْءٍۢ نُّكُرٍ (7) خُشَّعًا أَبْصَٰرُهُمْ يَخْرُجُونَ مِنَ ٱلْأَجْدَاثِ كَأَنَّهُمْ جَرَادٌۭ مُّنتَشِرٌۭ (8) مُّهْطِعِينَ إِلَى ٱلدَّاعِ ۖ يَقُولُ ٱلْكَٰفِرُونَ هَٰذَا يَوْمٌ عَسِرٌۭ",
-        "transliteration":  "[6] Fatawalla \u0027anhum; yawma yad\u0027ud daa\u0027i ilaa shai \u0027in nukur [7] khushsha\u0027an absaaruhum yakrujoona minal ajdaasi ka annahum jaraadum muntashir [8] Muhti\u0027eena ilad daa\u0027i yaqoolul kafiroona haazaa yawmun \u0027asir",
+        "transliteration":  "[6] Fatawalla \u0027anhum; yawma yad\u0027ud daa\u0027i ilaa shai \u0027in nukur [7] khushsha\u0027an absaaruhum yakhrujoona minal ajdaasi ka annahum jaraadum muntashir [8] Muhti\u0027eena ilad daa\u0027i yaqoolul kafiroona haazaa yawmun \u0027asir",
         "translation":  "[6] So leave them, [O Muhammad]. The Day the Caller calls to something forbidding, [7] Their eyes humbled, they will emerge from the graves as if they were locusts spreading, [8] Racing ahead toward the Caller. The disbelievers will say, \"This is a difficult Day.\"",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/54:6"
     },
@@ -2275,7 +2275,7 @@ const MASTER_VERSES_DATA = [
                             31
                         ],
         "arabic":  "إِنَّآ أَرْسَلْنَا عَلَيْهِمْ صَيْحَةًۭ وَٰحِدَةًۭ فَكَانُوا۟ كَهَشِيمِ ٱلْمُحْتَظِرِ",
-        "transliteration":  "Innaaa arsalnaa \u0027alaihim saihatanw waahidatan fakaano kahasheemil muhtazir",
+        "transliteration":  "Innaaa arsalnaa \u0027alaihim saihatanw waahidatan fakaanoo kahasheemil muhtazir",
         "translation":  "Indeed, We sent upon them one blast from the sky, and they became like the dry twig fragments of an [animal] pen.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/54:31"
     },
@@ -2348,7 +2348,7 @@ const MASTER_VERSES_DATA = [
                             13
                         ],
         "arabic":  "(10) وَٱلْأَرْضَ وَضَعَهَا لِلْأَنَامِ (11) فِيهَا فَٰكِهَةٌۭ وَٱلنَّخْلُ ذَاتُ ٱلْأَكْمَامِ (12) وَٱلْحَبُّ ذُو ٱلْعَصْفِ وَٱلرَّيْحَانُ (13) فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ",
-        "transliteration":  "[10] Wal arda wada\u0027ahaa lilanaame [11] Feehaa faakihatunw wan nakhlu zaatul akmaam [12] Walhabbu zul \u0027asfi war Raihaanu [13] Fabi ayyi aalaaa\u0027i Rabbikumaa tukazzibaan",
+        "transliteration":  "[10] Wal arda wada\u0027ahaa lil-anaam [11] Feehaa faakihatunw wan nakhlu zaatul akmaam [12] Walhabbu zul \u0027asfi war Raihaanu [13] Fabi ayyi aalaaa\u0027i Rabbikumaa tukazzibaan",
         "translation":  "[10] And the earth He laid [out] for the creatures. [11] Therein is fruit and palm trees having sheaths [of dates] [12] And grain having husks and scented plants. [13] So which of the favors of your Lord would you deny?",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/55:10"
     },
@@ -2395,7 +2395,7 @@ const MASTER_VERSES_DATA = [
                             35
                         ],
         "arabic":  "يُرْسَلُ عَلَيْكُمَا شُوَاظٌۭ مِّن نَّارٍۢ وَنُحَاسٌۭ فَلَا تَنتَصِرَانِ",
-        "transliteration":  "Yursalu \u0027alaikumaa shuwaazum min naarifiw-wa nuhaasun falaa tantasiraan",
+        "transliteration":  "Yursalu \u0027alaikumaa shuwaazum min naarinw wa nuhaasun falaa tantasiraan",
         "translation":  "There will be sent upon you a flame of fire and smoke, and you will not defend yourselves.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/55:35"
     },
@@ -2438,23 +2438,14 @@ const MASTER_VERSES_DATA = [
         "isTopCrossReferenced":  false,
         "isFullSurah":  true,
         "audioVerses":  [
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            6,
-                            7,
-                            8,
-                            9,
-                            10,
-                            11,
-                            12,
-                            13,
-                            14
+                            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                            21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                            41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+                            61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+                            81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96
                         ],
         "arabic":  "(1) بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ إِذَا وَقَعَتِ ٱلْوَاقِعَةُ (2) لَيْسَ لِوَقْعَتِهَا كَاذِبَةٌ (3) خَافِضَةٌۭ رَّافِعَةٌ (4) إِذَا رُجَّتِ ٱلْأَرْضُ رَجًّۭا (5) وَبُسَّتِ ٱلْجِبَالُ بَسًّۭا (6) فَكَانَتْ هَبَآءًۭ مُّنۢبَثًّۭا (7) وَكُنتُمْ أَزْوَٰجًۭا ثَلَٰثَةًۭ (8) فَأَصْحَٰبُ ٱلْمَيْمَنَةِ مَآ أَصْحَٰبُ ٱلْمَيْمَنَةِ (9) وَأَصْحَٰبُ ٱلْمَشْـَٔمَةِ مَآ أَصْحَٰبُ ٱلْمَشْـَٔمَةِ (10) وَٱلسَّٰبِقُونَ ٱلسَّٰبِقُونَ (11) أُو۟لَٰٓئِكَ ٱلْمُقَرَّبُونَ (12) فِى جَنَّٰتِ ٱلنَّعِيمِ (13) ثُلَّةٌۭ مِّنَ ٱلْأَوَّلِينَ (14) وَقَلِيلٌۭ مِّنَ ٱلْءَاخِرِينَ (15) عَلَىٰ سُرُرٍۢ مَّوْضُونَةٍۢ (16) مُّتَّكِـِٔينَ عَلَيْهَا مُتَقَٰبِلِينَ (17) يَطُوفُ عَلَيْهِمْ وِلْدَٰنٌۭ مُّخَلَّدُونَ (18) بِأَكْوَابٍۢ وَأَبَارِيقَ وَكَأْسٍۢ مِّن مَّعِينٍۢ (19) لَّا يُصَدَّعُونَ عَنْهَا وَلَا يُنزِفُونَ (20) وَفَٰكِهَةٍۢ مِّمَّا يَتَخَيَّرُونَ (21) وَلَحْمِ طَيْرٍۢ مِّمَّا يَشْتَهُونَ (22) وَحُورٌ عِينٌۭ (23) كَأَمْثَٰلِ ٱللُّؤْلُؤِ ٱلْمَكْنُونِ (24) جَزَآءًۢ بِمَا كَانُوا۟ يَعْمَلُونَ (25) لَا يَسْمَعُونَ فِيهَا لَغْوًۭا وَلَا تَأْثِيمًا (26) إِلَّا قِيلًۭا سَلَٰمًۭا سَلَٰمًۭا (27) وَأَصْحَٰبُ ٱلْيَمِينِ مَآ أَصْحَٰبُ ٱلْيَمِينِ (28) فِى سِدْرٍۢ مَّخْضُودٍۢ (29) وَطَلْحٍۢ مَّنضُودٍۢ (30) وَظِلٍّۢ مَّمْدُودٍۢ (31) وَمَآءٍۢ مَّسْكُوبٍۢ (32) وَفَٰكِهَةٍۢ كَثِيرَةٍۢ (33) لَّا مَقْطُوعَةٍۢ وَلَا مَمْنُوعَةٍۢ (34) وَفُرُشٍۢ مَّرْفُوعَةٍ (35) إِنَّآ أَنشَأْنَٰهُنَّ إِنشَآءًۭ (36) فَجَعَلْنَٰهُنَّ أَبْكَارًا (37) عُرُبًا أَتْرَابًۭا (38) لِّأَصْحَٰبِ ٱلْيَمِينِ (39) ثُلَّةٌۭ مِّنَ ٱلْأَوَّلِينَ (40) وَثُلَّةٌۭ مِّنَ ٱلْءَاخِرِينَ (41) وَأَصْحَٰبُ ٱلشِّمَالِ مَآ أَصْحَٰبُ ٱلشِّمَالِ (42) فِى سَمُومٍۢ وَحَمِيمٍۢ (43) وَظِلٍّۢ مِّن يَحْمُومٍۢ (44) لَّا بَارِدٍۢ وَلَا كَرِيمٍ (45) إِنَّهُمْ كَانُوا۟ قَبْلَ ذَٰلِكَ مُتْرَفِينَ (46) وَكَانُوا۟ يُصِرُّونَ عَلَى ٱلْحِنثِ ٱلْعَظِيمِ (47) وَكَانُوا۟ يَقُولُونَ أَئِذَا مِتْنَا وَكُنَّا تُرَابًۭا وَعِظَٰمًا أَءِنَّا لَمَبْعُوثُونَ (48) أَوَءَابَآؤُنَا ٱلْأَوَّلُونَ (49) قُلْ إِنَّ ٱلْأَوَّلِينَ وَٱلْءَاخِرِينَ (50) لَمَجْمُوعُونَ إِلَىٰ مِيقَٰتِ يَوْمٍۢ مَّعْلُومٍۢ (51) ثُمَّ إِنَّكُمْ أَيُّهَا ٱلضَّآلُّونَ ٱلْمُكَذِّبُونَ (52) لَءَاكِلُونَ مِن شَجَرٍۢ مِّن زَقُّومٍۢ (53) فَمَالِـُٔونَ مِنْهَا ٱلْبُطُونَ (54) فَشَٰرِبُونَ عَلَيْهِ مِنَ ٱلْحَمِيمِ (55) فَشَٰرِبُونَ شُرْبَ ٱلْهِيمِ (56) هَٰذَا نُزُلُهُمْ يَوْمَ ٱلدِّينِ (57) نَحْنُ خَلَقْنَٰكُمْ فَلَوْلَا تُصَدِّقُونَ (58) أَفَرَءَيْتُم مَّا تُمْنُونَ (59) ءَأَنتُمْ تَخْلُقُونَهُۥٓ أَمْ نَحْنُ ٱلْخَٰلِقُونَ (60) نَحْنُ قَدَّرْنَا بَيْنَكُمُ ٱلْمَوْتَ وَمَا نَحْنُ بِمَسْبُوقِينَ (61) عَلَىٰٓ أَن نُّبَدِّلَ أَمْثَٰلَكُمْ وَنُنشِئَكُمْ فِى مَا لَا تَعْلَمُونَ (62) وَلَقَدْ عَلِمْتُمُ ٱلنَّشْأَةَ ٱلْأُولَىٰ فَلَوْلَا تَذَكَّرُونَ (63) أَفَرَءَيْتُم مَّا تَحْرُثُونَ (64) ءَأَنتُمْ تَزْرَعُونَهُۥٓ أَمْ نَحْنُ ٱلزَّٰرِعُونَ (65) لَوْ نَشَآءُ لَجَعَلْنَٰهُ حُطَٰمًۭا فَظَلْتُمْ تَفَكَّهُونَ (66) إِنَّا لَمُغْرَمُونَ (67) بَلْ نَحْنُ مَحْرُومُونَ (68) أَفَرَءَيْتُمُ ٱلْمَآءَ ٱلَّذِى تَشْرَبُونَ (69) ءَأَنتُمْ أَنزَلْتُمُوهُ مِنَ ٱلْمُزْنِ أَمْ نَحْنُ ٱلْمُنزِلُونَ (70) لَوْ نَشَآءُ جَعَلْنَٰهُ أُجَاجًۭا فَلَوْلَا تَشْكُرُونَ (71) أَفَرَءَيْتُمُ ٱلنَّارَ ٱلَّتِى تُورُونَ (72) ءَأَنتُمْ أَنشَأْتُمْ شَجَرَتَهَآ أَمْ نَحْنُ ٱلْمُنشِـُٔونَ (73) نَحْنُ جَعَلْنَٰهَا تَذْكِرَةًۭ وَمَتَٰعًۭا لِّلْمُقْوِينَ (74) فَسَبِّحْ بِٱسْمِ رَبِّكَ ٱلْعَظِيمِ (75) ۞ فَلَآ أُقْسِمُ بِمَوَٰقِعِ ٱلنُّجُومِ (76) وَإِنَّهُۥ لَقَسَمٌۭ لَّوْ تَعْلَمُونَ عَظِيمٌ (77) إِنَّهُۥ لَقُرْءَانٌۭ كَرِيمٌۭ (78) فِى كِتَٰبٍۢ مَّكْنُونٍۢ (79) لَّا يَمَسُّهُۥٓ إِلَّا ٱلْمُطَهَّرُونَ (80) تَنزِيلٌۭ مِّن رَّبِّ ٱلْعَٰلَمِينَ (81) أَفَبِهَٰذَا ٱلْحَدِيثِ أَنتُم مُّدْهِنُونَ (82) وَتَجْعَلُونَ رِزْقَكُمْ أَنَّكُمْ تُكَذِّبُونَ (83) فَلَوْلَآ إِذَا بَلَغَتِ ٱلْحُلْقُومَ (84) وَأَنتُمْ حِينَئِذٍۢ تَنظُرُونَ (85) وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنكُمْ وَلَٰكِن لَّا تُبْصِرُونَ (86) فَلَوْلَآ إِن كُنتُمْ غَيْرَ مَدِينِينَ (87) تَرْجِعُونَهَآ إِن كُنتُمْ صَٰدِقِينَ (88) فَأَمَّآ إِن كَانَ مِنَ ٱلْمُقَرَّبِينَ (89) فَرَوْحٌۭ وَرَيْحَانٌۭ وَجَنَّتُ نَعِيمٍۢ (90) وَأَمَّآ إِن كَانَ مِنْ أَصْحَٰبِ ٱلْيَمِينِ (91) فَسَلَٰمٌۭ لَّكَ مِنْ أَصْحَٰبِ ٱلْيَمِينِ (92) وَأَمَّآ إِن كَانَ مِنَ ٱلْمُكَذِّبِينَ ٱلضَّآلِّينَ (93) فَنُزُلٌۭ مِّنْ حَمِيمٍۢ (94) وَتَصْلِيَةُ جَحِيمٍ (95) إِنَّ هَٰذَا لَهُوَ حَقُّ ٱلْيَقِينِ (96) فَسَبِّحْ بِٱسْمِ رَبِّكَ ٱلْعَظِيمِ",
-        "transliteration":  "[1] Izaa waqa\u0027atil waaqi\u0027ah [2] Laisa liwaq\u0027atihaa kaazibah [3] Khafidatur raafi\u0027ah [4] Izaa rujjatil ardu rajjaa [5] Wa bussatil jibaalu bassaa [6] Fakaanat habaaa\u0027am mumbassaa [7] Wa kuntum azwaajan salaasah [8] Fa as haabul maimanati maaa as haabul maimanah [9] Wa as haabul mash\u0027amati maaa as haabul mash\u0027amah [10] Wassaabiqoonas saabiqoon [11] Ulaaa\u0027ikal muqarraboon [12] Fee Jannaatin Na\u0027eem [13] Sullatum minal awwaleen [14] Wa qaleelum minal aa khireen [15] \u0027Alaa sururim mawdoonah [16] Muttaki\u0027eena \u0027alaihaa mutaqabileen [17] Yatoofu \u0027alaihim wildaa num mukkhalladoon [18] Bi akwaabinw wa abaareeq, wa kaasim mim ma\u0027een [19] Laa yusadda\u0027oona \u0027anhaa wa laa yunzifoon [20] Wa faakihatim mimmaa yatakhaiyaroon [21] Wa lahmi tairim mimmaa yashtahoon [22] Wa hoorun\u0027een [23] Ka amsaalil lu\u0027lu\u0027il maknoon [24] Jazaaa\u0027am bimaa kaanoo ya\u0027maloon [25] Laa yasma\u0027oona feehaa laghwanw wa laa taaseemaa [26] Illaa qeelan salaaman salaamaa [27] Wa as haabul yameeni maaa as haabul Yameen [28] Fee sidrim makhdood [29] Wa talhim mandood [30] Wa zillim mamdood [31] Wa maaa\u0027im maskoob [32] Wa faakihatin kaseerah [33] Laa maqtoo\u0027atinw wa laa mamnoo\u0027ah [34] Wa furushim marfoo\u0027ah [35] Innaaa anshaanaahunna inshaaa\u0027aa [36] Faja\u0027alnaahunna abkaaraa [37] \u0027Uruban atraabaa [38] Li as haabil yameen [39] Sullatum minal awwa leen [40] Wa sullatum minal aakhireen [41] Wa as haabush shimaali maaa as haabush shimaal [42] Fee samoominw wa hameem [43] Wa zillim miny yahmoom [44] Laa baaridinw wa laa kareem [45] Innaahum kaanoo qabla zaalika mutrafeen [46] Wa kaanoo yusirroona \u0027alal hinsil \u0027azeem [47] Wa kaanoo yaqooloona a\u0027izaa mitnaa wa kunnaa turaabanw wa izaaman\u0027ainnaa lamab\u0027oosoon [48] Awa aabaaa\u0027unal awwaloon [49] Qul innal awwaleena wal aakhireen [50] Lamajmoo\u0027oona ilaa meeqaati yawmim ma\u0027loon [51] summa innakum ayyuhad daaalloonal mukazziboon [52] La aakiloona min shaja rim min zaqqoom [53] Famaali\u0027oona minhal butoon [54] Fashaariboona \u0027alaihi minal hameem [55] Fashaariboona shurbal heem [56] Haazaa nuzuluhum yawmad deen [57] Nahnu khalaqnaakum falaw laa tusaddiqoon [58] Afara\u0027aytum maa tumnoon [59] \u0027A-antum takhluqoo nahooo am nahnul khaaliqoon [60] Nahnu qaddarnaa baina kumul mawta wa maa nahnu bimasbooqeen [61] \u0027Alaaa an nubaddila amsaalakum wa nunshi\u0027akum fee maa laa ta\u0027lamoon [62] Wa laqad \u0027alimtumun nash atal oolaa falaw laa tazakkaroon [63] Afara\u0027aytum maa tahrusoon [64] \u0027A-antum tazra\u0027oonahooo am nahnuz zaari\u0027ooon [65] Law nashaaa\u0027u laja\u0027al naahu hutaaman fazaltum tafakkahoon [66] Innaa lamughramoon [67] Bal nahnu mahroomoon [68] Afara\u0027aytumul maaa\u0027allazee tashraboon [69] \u0027A-antum anzaltumoohu minal muzni am nahnul munziloon [70] Law nashaaa\u0027u ja\u0027alnaahu ujaajan falaw laa tashkuroon [71] Afara\u0027aytumun naaral latee tooroon [72] \u0027A-antum anshaatum shajaratahaaa am nahnul munshi\u0027oon [73] Nahnu ja\u0027alnaahaa tazkira tanw wa mataa\u0027al lilmuqween [74] Fasabbih bismi Rabbikal \u0027azeem [75] Falaa uqsimu bimaawaa qi\u0027innujoom [76] Wa innahoo laqasamul lawta\u0027lamoona\u0027azeem [77] Innahoo la quraanun kareem [78] Fee kitaabim maknoon [79] Laa yamassuhooo illal mutahharoon [80] Tanzeelum mir Rabbil\u0027aalameen [81] Afabihaazal hadeesi antum mudhinoon [82] Wa taj\u0027aloona rizqakum annakum tukazziboon [83] Falaw laaa izaa balaghatil hulqoom [84] Wa antum heena\u0027izin tanzuroon [85] Wa nahnu aqrabu ilaihi minkum wa laakil laa tubsiroon [86] Falaw laaa in kuntum ghira madeeneen [87] Tarji\u0027oonahaaa in kuntum saadiqeen [88] Fa ammaaa in kaana minal muqarrabeen [89] Farawhunw wa raihaa nunw wa jannatu na\u0027eem [90] Wa ammaaa in kaana min as haabil yameen [91] Fasalaamul laka min as haabil yameen [92] Wa ammaaa in kaana minal mukazzibeenad daaalleen [93] Fanuzulum min hameem [94] Wa tasliyatu jaheem [95] Inna haaza lahuwa haqqul yaqeen [96] Fasabbih bismi rabbikal \u0027azeem",
+        "transliteration":  "[1] Izaa waqa\u0027atil waaqi\u0027ah [2] Laisa liwaq\u0027atihaa kaazibah [3] Khafidatur raafi\u0027ah [4] Izaa rujjatil ardu rajjaa [5] Wa bussatil jibaalu bassaa [6] Fakaanat habaaa\u0027am mumbassaa [7] Wa kuntum azwaajan salaasah [8] Fa as haabul maimanati maaa as haabul maimanah [9] Wa as haabul mash\u0027amati maaa as haabul mash\u0027amah [10] Wassaabiqoonas saabiqoon [11] Ulaaa\u0027ikal muqarraboon [12] Fee Jannaatin Na\u0027eem [13] Sullatum minal awwaleen [14] Wa qaleelum minal aa khireen [15] \u0027Alaa sururim mawdoonah [16] Muttaki\u0027eena \u0027alaihaa mutaqabileen [17] Yatoofu \u0027alaihim wildaa num mukkhalladoon [18] Bi akwaabinw wa abaareeq, wa kaasim mim ma\u0027een [19] Laa yusadda\u0027oona \u0027anhaa wa laa yunzifoon [20] Wa faakihatim mimmaa yatakhaiyaroon [21] Wa lahmi tairim mimmaa yashtahoon [22] Wa hoorun\u0027een [23] Ka amsaalil lu\u0027lu\u0027il maknoon [24] Jazaaa\u0027am bimaa kaanoo ya\u0027maloon [25] Laa yasma\u0027oona feehaa laghwanw wa laa taaseemaa [26] Illaa qeelan salaaman salaamaa [27] Wa as haabul yameeni maaa as haabul Yameen [28] Fee sidrim makhdood [29] Wa talhim mandood [30] Wa zillim mamdood [31] Wa maaa\u0027im maskoob [32] Wa faakihatin kaseerah [33] Laa maqtoo\u0027atinw wa laa mamnoo\u0027ah [34] Wa furushim marfoo\u0027ah [35] Innaaa anshaanaahunna inshaaa\u0027aa [36] Faja\u0027alnaahunna abkaaraa [37] \u0027Uruban atraabaa [38] Li as haabil yameen [39] Sullatum minal awwa leen [40] Wa sullatum minal aakhireen [41] Wa as haabush shimaali maaa as haabush shimaal [42] Fee samoominw wa hameem [43] Wa zillim miny yahmoom [44] Laa baaridinw wa laa kareem [45] Innaahum kaanoo qabla zaalika mutrafeen [46] Wa kaanoo yusirroona \u0027alal hinsil \u0027azeem [47] Wa kaanoo yaqooloona a\u0027izaa mitnaa wa kunnaa turaabanw wa izaaman\u0027ainnaa lamab\u0027oosoon [48] Awa aabaaa\u0027unal awwaloon [49] Qul innal awwaleena wal aakhireen [50] Lamajmoo\u0027oona ilaa meeqaati yawmim ma\u0027loon [51] summa innakum ayyuhad daaalloonal mukazziboon [52] La aakiloona min shaja rim min zaqqoom [53] Famaali\u0027oona minhal butoon [54] Fashaariboona \u0027alaihi minal hameem [55] Fashaariboona shurbal heem [56] Haazaa nuzuluhum yawmad deen [57] Nahnu khalaqnaakum falaw laa tusaddiqoon [58] Afara\u0027aytum maa tumnoon [59] \u0027A-antum takhluqoo nahooo am nahnul khaaliqoon [60] Nahnu qaddarnaa baina kumul mawta wa maa nahnu bimasbooqeen [61] \u0027Alaaa an nubaddila amsaalakum wa nunshi\u0027akum fee maa laa ta\u0027lamoon [62] Wa laqad \u0027alimtumun nash atal oolaa falaw laa tazakkaroon [63] Afara\u0027aytum maa tahrusoon [64] \u0027A-antum tazra\u0027oonahooo am nahnuz zaari\u0027ooon [65] Law nashaaa\u0027u laja\u0027al naahu hutaaman fazaltum tafakkahoon [66] Innaa lamughramoon [67] Bal nahnu mahroomoon [68] Afara\u0027aytumul maaa\u0027allazee tashraboon [69] \u0027A-antum anzaltumoohu minal muzni am nahnul munziloon [70] Law nashaaa\u0027u ja\u0027alnaahu ujaajan falaw laa tashkuroon [71] Afara\u0027aytumun naaral latee tooroon [72] \u0027A-antum anshaatum shajaratahaaa am nahnul munshi\u0027oon [73] Nahnu ja\u0027alnaahaa tazkira tanw wa mataa\u0027al lilmuqween [74] Fasabbih bismi Rabbikal \u0027azeem [75] Falaa uqsimu bimaawaaqi\u0027in-nujoom [76] Wa innahoo laqasamul law ta\u0027lamoona \u0027azeem [77] Innahoo la quraanun kareem [78] Fee kitaabim maknoon [79] Laa yamassuhooo illal mutahharoon [80] Tanzeelum mir Rabbil\u0027aalameen [81] Afabihaazal hadeesi antum mudhinoon [82] Wa taj\u0027aloona rizqakum annakum tukazziboon [83] Falaw laaa izaa balaghatil hulqoom [84] Wa antum heena\u0027izin tanzuroon [85] Wa nahnu aqrabu ilaihi minkum wa laakil laa tubsiroon [86] Falaw laaa in kuntum ghaira madeeneen [87] Tarji\u0027oonahaaa in kuntum saadiqeen [88] Fa ammaaa in kaana minal muqarrabeen [89] Farawhunw wa raihaanunw wa jannatu na\u0027eem [90] Wa ammaaa in kaana min as haabil yameen [91] Fasalaamul laka min as haabil yameen [92] Wa ammaaa in kaana minal mukazzibeenad daaalleen [93] Fanuzulum min hameem [94] Wa tasliyatu jaheem [95] Inna haaza lahuwa haqqul yaqeen [96] Fasabbih bismi rabbikal \u0027azeem",
         "translation":  "[1] When the Occurrence occurs, [2] There is, at its occurrence, no denial. [3] It will bring down [some] and raise up [others]. [4] When the earth is shaken with convulsion [5] And the mountains are broken down, crumbling [6] And become dust dispersing. [7] And you become [of] three kinds: [8] Then the companions of the right - what are the companions of the right? [9] And the companions of the left - what are the companions of the left? [10] And the forerunners, the forerunners - [11] Those are the ones brought near [to Allah] [12] In the Gardens of Pleasure, [13] A [large] company of the former peoples [14] And a few of the later peoples, [15] On thrones woven [with ornament], [16] Reclining on them, facing each other. [17] There will circulate among them young boys made eternal [18] With vessels, pitchers and a cup [of wine] from a flowing spring - [19] No headache will they have therefrom, nor will they be intoxicated - [20] And fruit of what they select [21] And the meat of fowl, from whatever they desire. [22] And [for them are] fair women with large, [beautiful] eyes, [23] The likenesses of pearls well-protected, [24] As reward for what they used to do. [25] They will not hear therein ill speech or commission of sin - [26] Only a saying: \"Peace, peace.\" [27] The companions of the right - what are the companions of the right? [28] [They will be] among lote trees with thorns removed [29] And [banana] trees layered [with fruit] [30] And shade extended [31] And water poured out [32] And fruit, abundant [and varied], [33] Neither limited [to season] nor forbidden, [34] And [upon] beds raised high. [35] Indeed, We have produced the women of Paradise in a [new] creation [36] And made them virgins, [37] Devoted [to their husbands] and of equal age, [38] For the companions of the right [who are] [39] A company of the former peoples [40] And a company of the later peoples. [41] And the companions of the left - what are the companions of the left? [42] [They will be] in scorching fire and scalding water [43] And a shade of black smoke, [44] Neither cool nor beneficial. [45] Indeed they were, before that, indulging in affluence, [46] And they used to persist in the great violation, [47] And they used to say, \"When we die and become dust and bones, are we indeed to be resurrected? [48] And our forefathers [as well]?\" [49] Say, [O Muhammad], \"Indeed, the former and the later peoples [50] Are to be gathered together for the appointment of a known Day.\" [51] Then indeed you, O those astray [who are] deniers, [52] Will be eating from trees of zaqqum [53] And filling with it your bellies [54] And drinking on top of it from scalding water [55] And will drink as the drinking of thirsty camels. [56] That is their accommodation on the Day of Recompense. [57] We have created you, so why do you not believe? [58] Have you seen that which you emit? [59] Is it you who creates it, or are We the Creator? [60] We have decreed death among you, and We are not to be outdone [61] In that We will change your likenesses and produce you in that [form] which you do not know. [62] And you have already known the first creation, so will you not remember? [63] And have you seen that [seed] which you sow? [64] Is it you who makes it grow, or are We the grower? [65] If We willed, We could make it [dry] debris, and you would remain in wonder, [66] [Saying], \"Indeed, we are [now] in debt; [67] Rather, we have been deprived.\" [68] And have you seen the water that you drink? [69] Is it you who brought it down from the clouds, or is it We who bring it down? [70] If We willed, We could make it bitter, so why are you not grateful? [71] And have you seen the fire that you ignite? [72] Is it you who produced its tree, or are We the producer? [73] We have made it a reminder and provision for the travelers, [74] So exalt the name of your Lord, the Most Great. [75] Then I swear by the setting of the stars, [76] And indeed, it is an oath - if you could know - [most] great. [77] Indeed, it is a noble Qur\u0027an [78] In a Register well-protected; [79] None touch it except the purified. [80] [It is] a revelation from the Lord of the worlds. [81] Then is it to this statement that you are indifferent [82] And make [the thanks for] your provision that you deny [the Provider]? [83] Then why, when the soul at death reaches the throat [84] And you are at that time looking on - [85] And Our angels are nearer to him than you, but you do not see - [86] Then why do you not, if you are not to be recompensed, [87] Bring it back, if you should be truthful? [88] And if the deceased was of those brought near to Allah, [89] Then [for him is] rest and bounty and a garden of pleasure. [90] And if he was of the companions of the right, [91] Then [the angels will say], \"Peace for you; [you are] from the companions of the right.\" [92] But if he was of the deniers [who were] astray, [93] Then [for him is] accommodation of scalding water [94] And burning in Hellfire [95] Indeed, this is the true certainty, [96] So exalt the name of your Lord, the Most Great.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/56:1"
     },
@@ -2478,7 +2469,7 @@ const MASTER_VERSES_DATA = [
                             2
                         ],
         "arabic":  "(1) بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ قُلْ أُوحِىَ إِلَىَّ أَنَّهُ ٱسْتَمَعَ نَفَرٌۭ مِّنَ ٱلْجِنِّ فَقَالُوٓا۟ إِنَّا سَمِعْنَا قُرْءَانًا عَجَبًۭا (2) يَهْدِىٓ إِلَى ٱلرُّشْدِ فَـَٔامَنَّا بِهِۦ ۖ وَلَن نُّشْرِكَ بِرَبِّنَآ أَحَدًۭا",
-        "transliteration":  "[1] Qul oohiya ilaiya annna hustama\u0027a nafarum minal jinnni faqaalooo innaa sami\u0027naa quraanan \u0027ajabaa [2] Yahdeee ilar rushdi fa aamannaa bihee wa lan nushrika bi rabbinaaa ahadaa",
+        "transliteration":  "[1] Qul oohiya ilaiya annahu-stama\u0027a nafarum minal jinnni faqaalooo innaa sami\u0027naa quraanan \u0027ajabaa [2] Yahdeee ilar rushdi fa aamannaa bihee wa lan nushrika bi rabbinaaa ahadaa",
         "translation":  "[1] Say, [O Muhammad], \"It has been revealed to me that a group of the jinn listened and said, \u0027Indeed, we have heard an amazing Qur\u0027an. [2] It guides to the right course, and we have believed in it. And we will never associate with our Lord anyone.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/72:1"
     },
@@ -2571,7 +2562,7 @@ const TOP_CROSS_REFERENCED_ADDITIONAL = [
         "bonusNumber":  109,
         "surah":  17,
         "surahName":  "Al-Israa",
-        "surahNameAr":  "Ø³ÙÙˆØ±ÙŽØ©Ù Ø§Ù„Ø¥ÙØ³Û¡Ø±ÙŽØ§Ø¡Ù",
+        "surahNameAr":  "سُورَةُ الإِسۡرَاءِ",
         "surahTranslation":  "The Night Journey",
         "verseRange":  "17:82",
         "startAyah":  82,
@@ -2590,6 +2581,8 @@ const TOP_CROSS_REFERENCED_ADDITIONAL = [
         "alislamAppUrl":  "https://www.alislam.org/quran/app/17:82"
     },
     {
+        "id":  "bonus-24-35",
+        "bonusNumber":  110,
         "surah":  24,
         "surahName":  "An-Noor",
         "surahNameAr":  "سُورَةُ النُّورِ",
@@ -2605,11 +2598,13 @@ const TOP_CROSS_REFERENCED_ADDITIONAL = [
                             35
                         ],
         "arabic":  "۞ ٱللَّهُ نُورُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ ۚ مَثَلُ نُورِهِۦ كَمِشْكَوٰةٍۢ فِيهَا مِصْبَاحٌ ۖ ٱلْمِصْبَاحُ فِى زُجَاجَةٍ ۖ ٱلزُّجَاجَةُ كَأَنَّهَا كَوْكَبٌۭ دُرِّىٌّۭ يُوقَدُ مِن شَجَرَةٍۢ مُّبَٰرَكَةٍۢ زَيْتُونَةٍۢ لَّا شَرْقِيَّةٍۢ وَلَا غَرْبِيَّةٍۢ يَكَادُ زَيْتُهَا يُضِىٓءُ وَلَوْ لَمْ تَمْسَسْهُ نَارٌۭ ۚ نُّورٌ عَلَىٰ نُورٍۢ ۗ يَهْدِى ٱللَّهُ لِنُورِهِۦ مَن يَشَآءُ ۚ وَيَضْرِبُ ٱللَّهُ ٱلْأَمْثَٰلَ لِلنَّاسِ ۗ وَٱللَّهُ بِكُلِّ شَىْءٍ عَلِيمٌۭ",
-        "transliteration":  "Allaahu noorus samaawaati wal ard; masalu noorihee kamishkaatin feehaa misbaah; almisbaahu fee zujaajatin azzujaajatu ka annahaa kawkabun durriyyuny yooqadu min shajaratim mubaarakatin zaitoonatil laa shariqiyyatinw wa laa gharbiyyatiny yakaadu zaituhaa yudeee\u0027u wa law alm tamsashu naar; noorun \u0027alaa noor; yahdil laahu linoorihee mai yashaaa\u0027; wa yadribul laahul amsaala linnaas; wallaahu bikulli shai\u0027in Aleem",
+        "transliteration":  "Allaahu noorus samaawaati wal ard; masalu noorihee kamishkaatin feehaa misbaah; almisbaahu fee zujaajatin azzujaajatu ka annahaa kawkabun durriyyuny yooqadu min shajaratim mubaarakatin zaytoonatil laa sharqiyyatinw wa laa gharbiyyatiny yakaadu zaytuhaa yudeee\u0027u wa law lam tamsashu naar; noorun \u0027alaa noor; yahdillaahu linoorihee may yashaaa\u0027; wa yadribullaahul amsaala linnaas; wallaahu bikulli shai\u0027in \u0027Aleem",
         "translation":  "Allah is the Light of the heavens and the earth. The example of His light is like a niche within which is a lamp, the lamp is within glass, the glass as if it were a pearly [white] star lit from [the oil of] a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even if untouched by fire. Light upon light. Allah guides to His light whom He wills. And Allah presents examples for the people, and Allah is Knowing of all things.",
         "alislamAppUrl":  "https://www.alislam.org/quran/app/24:35"
     },
     {
+        "id":  "bonus-36-82",
+        "bonusNumber":  111,
         "surah":  36,
         "surahName":  "Yaseen",
         "surahNameAr":  "سُورَةُ يسٓ",
@@ -2647,7 +2642,7 @@ const MASTER_COMPILATION_META = {
     "pdfSize":  "92 KB",
     "closingQuote":  {
                          "verse":  "Surah Al-Isra (17:82)",
-                         "arabic":  "وَنُنَزِّلُ مِنَ ٱلْقُرّءَانِ مَا هُوَ شِفَآءٌ وَرَحْمَةٌ۬ لِّلْمُؤْمِنِينَ",
+                         "arabic":  "وَنُنَزِّلُ مِنَ ٱلْقُرْءَانِ مَا هُوَ شِفَآءٌ وَرَحْمَةٌۭ لِّلْمُؤْمِنِينَ",
                          "translation":  "And We send down of the Quran that which is healing and mercy for the believers."
                      },
     "top10":  [
