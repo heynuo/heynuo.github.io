@@ -27,6 +27,7 @@
   let favorites = JSON.parse(localStorage.getItem('ruqyah_favorites') || '[]');
   let activeCategory = 'all';
   let searchQuery = '';
+  let isUsingFallbackAudio = false;
 
   // Audio Engine State
   let currentAudio = null;
@@ -51,15 +52,22 @@
     toastEl.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
     toastEl.classList.add('show');
     if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
   }
 
-  // Audio URL Helper
+  // Audio URL Helper (Primary: Al-Islam Quran Cloud)
   function getAlIslamAudioUrl(surah, ayah, reciterKey = currentReciter) {
     const folder = (RECITERS[reciterKey] || RECITERS.ashiq).folder;
     const sPad = String(surah).padStart(3, '0');
     const aPad = String(ayah).padStart(3, '0');
     return `https://files.alislam.cloud/audio/tilawat/${folder}/${sPad}-${aPad}-AR.mp3`;
+  }
+
+  // Fallback Audio URL Helper (Secondary: EveryAyah CDN)
+  function getFallbackAudioUrl(surah, ayah) {
+    const sPad = String(surah).padStart(3, '0');
+    const aPad = String(ayah).padStart(3, '0');
+    return `https://everyayah.com/data/Alafasy_128kbps/${sPad}${aPad}.mp3`;
   }
 
   // Audio Control Engine
@@ -76,7 +84,7 @@
     updateAllCardPlayerUI();
   }
 
-  function playAyah(cardId, ayahIndex = 0) {
+  function playAyah(cardId, ayahIndex = 0, allowFallback = true) {
     const item = RUQYAH_VERSES.find(v => v.id === cardId);
     if (!item || !item.audioVerses || !item.audioVerses.length) return;
 
@@ -100,10 +108,16 @@
       try { window.QuranPlayer.pause(); } catch (e) {}
     }
 
+    if (!isUsingFallbackAudio) {
+      isUsingFallbackAudio = false;
+    }
+
     playingCardId = cardId;
     playingAyahIndex = ayahIndex;
     const currentAyahNumber = item.audioVerses[ayahIndex];
-    const url = getAlIslamAudioUrl(item.surah, currentAyahNumber, currentReciter);
+    const url = isUsingFallbackAudio
+      ? getFallbackAudioUrl(item.surah, currentAyahNumber)
+      : getAlIslamAudioUrl(item.surah, currentAyahNumber, currentReciter);
 
     currentAudio = new Audio(url);
     currentAudio.preload = 'auto';
@@ -128,6 +142,7 @@
         playAyah(cardId, playingAyahIndex + 1);
       } else {
         stopCurrentAudio();
+        isUsingFallbackAudio = false;
         showToast(`Completed recitation of ${item.reference}`, '✨');
       }
     };
@@ -146,6 +161,7 @@
     if (playingCardId === cardId && isAudioPlaying) {
       if (currentAudio) currentAudio.pause();
     } else {
+      isUsingFallbackAudio = false;
       playAyah(cardId, playingCardId === cardId ? playingAyahIndex : 0);
     }
   }
@@ -153,10 +169,18 @@
   function handleAudioError() {
     const item = RUQYAH_VERSES.find(v => v.id === playingCardId);
     const ref = item ? item.reference : 'verse';
-    showToast(`Audio stream unavailable. Opening Al-Islam App...`, '⚠️');
-    if (item && item.alislamAppUrl) {
-      window.open(item.alislamAppUrl, '_blank', 'noopener');
+
+    // If primary failed and hasn't tried fallback yet, switch to EveryAyah CDN
+    if (!isUsingFallbackAudio && item) {
+      isUsingFallbackAudio = true;
+      showToast(`Primary audio stream unavailable; switched to backup reciter (Sheikh Alafasy)`, '🔄', 3500);
+      playAyah(playingCardId, playingAyahIndex);
+      return;
     }
+
+    // Both failed (or offline)
+    showToast(`Audio unavailable for ${ref}. You can read the authentic text and translation directly.`, '⚠️', 4000);
+    isUsingFallbackAudio = false;
     stopCurrentAudio();
   }
 
@@ -431,7 +455,7 @@
 
           <!-- Arabic Text Box -->
           <div class="arabic-box">
-            <div class="arabic-text" dir="rtl">${escapeHtml(item.arabic)}</div>
+            <div class="arabic-text" dir="rtl" lang="ar">${escapeHtml(item.arabic)}</div>
           </div>
 
           <!-- English Transliteration -->

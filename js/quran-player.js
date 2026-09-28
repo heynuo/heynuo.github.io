@@ -1610,6 +1610,30 @@
     });
     audio.addEventListener('progress', updateBufferDisplay);
 
+    let hasTriedFallback = false;
+    audio.addEventListener('error', () => {
+      const surah = SURAHS[currentIndex];
+      if (!hasTriedFallback && surah) {
+        hasTriedFallback = true;
+        const padded = String(surah.id).padStart(3, '0');
+        const fallbackUrl = `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${padded}.mp3`;
+        showNotification('Primary audio slow/unavailable; retrying from backup mirror...', '🔄');
+        audio.src = fallbackUrl;
+        audio.play().then(() => {
+          isPlaying = true;
+          localStorage.setItem(STORAGE_KEYS.IS_PLAYING, 'true');
+          updatePlayIcons();
+        }).catch(() => {
+          pauseAudio();
+          showNotification('Audio stream offline. Please check your connection.', '⚠️');
+        });
+        return;
+      }
+      hasTriedFallback = false;
+      pauseAudio();
+      showNotification('Audio stream offline. Please check your connection.', '⚠️');
+    });
+
     // Player bar buttons
     dom.playBtn.addEventListener('click', togglePlay);
     dom.mobilePlayBtn.addEventListener('click', togglePlay);
@@ -1796,6 +1820,10 @@
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+      if (e.target.isContentEditable) return;
+      if (localStorage.getItem('heynuo_shortcuts_enabled') === 'false') {
+        if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Escape'].includes(e.key)) return;
+      }
 
       switch (e.key) {
         case ' ':

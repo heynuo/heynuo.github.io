@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HeyNuo — Digital Knowledge Hub</title>
+    <link>https://heynuo.github.io/</link>
+    <description>Fast, tracker-free personal knowledge base featuring Java OOP, web development guides, authentic Islamic research, and complete Quran &amp; Ruqyah sanctuary.</description>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 28 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://heynuo.github.io/rss.xml" rel="self" type="application/rss+xml" />
+
+    <item>
+      <title>Ruqyah Shari'yah Guide — 60 Authentic Quranic Healing &amp; Protection Verses</title>
+      <link>https://heynuo.github.io/ruqyah.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/ruqyah.html</guid>
+      <pubDate>Sun, 27 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Explore 60 authentic Quranic Ruqyah passages with verified Arabic script, phonetic English transliterations, English meanings, and multi-reciter audio playback.</description>
+      <category>Islamic Research</category>
+    </item>
+
+    <item>
+      <title>Master Compilation of 108 Quranic Verses (13-Page PDF Publication)</title>
+      <link>https://heynuo.github.io/quran-verses.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/quran-verses.html</guid>
+      <pubDate>Sun, 27 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Scholarly cross-referenced master compilation of 108 unique Quranic verse references extracted across 62 books, covering 44 Surahs in canonical order.</description>
+      <category>Islamic Research</category>
+    </item>
+
+    <item>
+      <title>The Holy Quran Library — Complete 114 Surahs &amp; Authentic PDF Downloads</title>
+      <link>https://heynuo.github.io/quran.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/quran.html</guid>
+      <pubDate>Thu, 17 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Continuous recitation of all 114 Surahs by world-renowned Qaris with authentic King Fahd Madinah Mushaf, Tajweed, and translation PDF downloads.</description>
+      <category>Islamic Research</category>
+    </item>
+
+    <item>
+      <title>Java OOP Tutorial: Classes, Objects &amp; Inheritance</title>
+      <link>https://heynuo.github.io/java-oop.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/java-oop.html</guid>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Master object-oriented programming in Java with clear examples of classes, objects, encapsulation, polymorphism, inheritance, JVM memory model, and exercises.</description>
+      <category>Java</category>
+    </item>
+
+    <item>
+      <title>Jinn in Islamic Theology: Meaning, Types &amp; Quran</title>
+      <link>https://heynuo.github.io/jinn-islamic-theology.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/jinn-islamic-theology.html</guid>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Rigorous theological study of jinn in Islamic creed: Quranic verses, Sahih Hadith, free will, differences from angels, and authentic protection methods.</description>
+      <category>Islamic Research</category>
+    </item>
+
+    <item>
+      <title>Pure HTML, CSS &amp; JavaScript Web Development Guide</title>
+      <link>https://heynuo.github.io/web-dev-guide.html</link>
+      <guid isPermaLink="true">https://heynuo.github.io/web-dev-guide.html</guid>
+      <pubDate>Tue, 02 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Build blazing fast, responsive, and accessible static websites with zero frameworks using semantic HTML5, modern CSS layers, and vanilla JavaScript.</description>
+      <category>Web Dev</category>
+    </item>
+  </channel>
+</rss>

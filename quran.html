@@ -31,9 +31,12 @@
     content="Listen to continuous recitations of all 114 Surahs, browse Arabic text, transliterations, and download authentic complete Quran PDF copies.">
   <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/quran-cover.jpg">
 
-  <!-- Favicon -->
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
   <!-- Google Fonts Preconnect & Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -234,20 +237,56 @@
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
-      <p>© 2026 HeyNuo · Authentic Islamic Studies, Modern Notes &amp; Quranic Research</p>
       <div class="footer-links">
         <a href="index.html">Home</a>
-        <a href="quran.html">Quran</a>
+        <a href="quran.html" class="active" aria-current="page">Quran</a>
         <a href="quran-verses.html">108 Verses</a>
         <a href="ruqyah.html">Ruqyah</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
+        <a href="privacy.html">Privacy &amp; Sources</a>
+        <a href="rss.xml">RSS</a>
         <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">
           <img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub
         </a>
+        <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
       </div>
+      <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
     </div>
   </footer>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-toggle-row">
+        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
+          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
+          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+        </label>
+        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Core Shared Script -->
   <script src="js/script.js" defer></script>

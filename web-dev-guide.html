@@ -18,8 +18,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Pure HTML, CSS &amp; JavaScript Web Dev Guide | HeyNuo">
   <meta name="twitter:description" content="Build a fast, clean website with pure HTML, CSS, and JavaScript. Learn semantic markup, responsive design, performance, and accessibility.">
-  <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/web-dev.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,7 +94,13 @@
       <article>
         <div class="article-header">
           <h1>Pure HTML, CSS &amp; JavaScript Web Development Guide</h1>
-          <div class="article-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> June 2, 2026</span><span><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> 9 min read</span></div>
+          <div class="article-meta">
+            <span>👤 HeyNuo</span>
+            <span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14" height="14"> June 2, 2026</span>
+            <span>🔄 Updated Sep 28, 2026</span>
+            <span><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span>
+            <span><img src="assets/icons/clock.png" alt="" class="meta-icon" width="14" height="14"> 6 min read</span>
+          </div>
         </div>
 
         <div class="article-hero-banner">
@@ -100,7 +109,18 @@
         <div class="prose">
           <p>You don’t need complex frameworks to ship fast, responsive, and accessible websites. This guide walks you through modern HTML, CSS, vanilla JavaScript, and deployment on <strong>GitHub Pages — 100% free</strong>.</p>
 
-          <h2>📄 1. Semantic HTML5</h2>
+          <nav class="article-toc-box" aria-label="Table of contents" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin: 1.5rem 0;">
+            <div class="toc-title" style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text);">📑 Table of Contents</div>
+            <ol class="toc-list" style="margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><a href="#semantic-html">1. Semantic HTML5 Architecture</a></li>
+              <li><a href="#modern-css">2. Modern CSS Techniques &amp; Layouts</a></li>
+              <li><a href="#vanilla-js">3. Vanilla JavaScript Interactivity</a></li>
+              <li><a href="#web-performance">4. Performance Optimization &amp; Core Web Vitals</a></li>
+              <li><a href="#free-hosting">5. Free Production Hosting on GitHub Pages</a></li>
+            </ol>
+          </nav>
+
+          <h2 id="semantic-html">📄 1. Semantic HTML5</h2>
           <p>Use <code>&lt;header&gt;, &lt;main&gt;, &lt;article&gt;, &lt;section&gt;</code> for accessibility and SEO. Screen readers love meaningful tags.</p>
           <pre><code class="language-html">&lt;article&gt;
   &lt;h2&gt;Blog title&lt;/h2&gt;
@@ -194,6 +214,18 @@ toggleBtn?.addEventListener('click', () => {
           <p>Looking to connect front-end interfaces to a reliable backend? Explore our <a href="java-oop.html">Java OOP Tutorial</a> to master object-oriented principles, or read our research notes on <a href="jinn-islamic-theology.html">Jinn in Islamic Theology</a>.</p>
         </div>
 
+        <!-- Next / Previous Article Navigation -->
+        <nav class="article-pagination-nav" aria-label="Article navigation" style="display: flex; justify-content: space-between; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;">
+          <a href="jinn-islamic-theology.html" class="btn btn-secondary" style="flex: 1; text-align: left; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">← Previous Article</small>
+            <span>📖 Jinn in Islamic Theology</span>
+          </a>
+          <a href="java-oop.html" class="btn btn-secondary" style="flex: 1; text-align: right; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">Next Article →</small>
+            <span>☕ Java OOP Tutorial</span>
+          </a>
+        </nav>
+
         <div class="related-links">
           <a href="java-oop.html" class="related-card">☕ Java OOP Tutorial</a>
           <a href="jinn-islamic-theology.html" class="related-card">📖 Jinn in Islamic Theology</a>
@@ -214,10 +246,12 @@ toggleBtn?.addEventListener('click', () => {
           <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy &amp; Sources</a>
+          <a href="rss.xml">RSS</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
           <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
         </div>
-        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+        <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
       </div>
     </footer>
   </div>
@@ -231,6 +265,37 @@ toggleBtn?.addEventListener('click', () => {
   </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-toggle-row">
+        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
+          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
+          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+        </label>
+        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Shared script: mobile menu, active nav, scroll-to-top, skip link -->
   <script src="js/script.js"></script>

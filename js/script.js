@@ -22,7 +22,7 @@ const CONFIG = Object.freeze({
     emptySearch: 'No articles found. Try a different search or filter.',
     sending: '✓ Sending...',
     sentSuccess: '✅ Thank you! Your message has been sent. I\'ll reply within 24-48 hours.',
-    sendError: '❌ Failed to send. Please email me directly at contact@heynuo.com'
+    sendError: '❌ Failed to send. Please email me directly at zahiruddin44044@gmail.com'
   }
 });
 
@@ -34,7 +34,7 @@ const state = {
   searchTerm: ''
 };
 
-// ✅ REAL ARTICLE LINKS (trimmed, no trailing spaces)
+// ✅ REAL ARTICLE LINKS (trimmed, honest reading times)
 const POSTS = Object.freeze([
   {
     title: "Java OOP Tutorial: Classes, Objects & Inheritance",
@@ -42,7 +42,7 @@ const POSTS = Object.freeze([
     category: "Java",
     link: "java-oop.html",
     date: "2026-06-02",
-    readTime: "8 min read",
+    readTime: "6 min read",
     tags: ["OOP", "Java", "Beginners"],
     banner: "assets/banners/java-oop.jpg",
     takeaways: [
@@ -58,7 +58,7 @@ const POSTS = Object.freeze([
     category: "Research",
     link: "jinn-islamic-theology.html",
     date: "2026-06-02",
-    readTime: "15 min read",
+    readTime: "12 min read",
     tags: ["Islam", "Quran", "Research"],
     banner: "assets/banners/ruqyah-theology.jpg",
     takeaways: [
@@ -74,7 +74,7 @@ const POSTS = Object.freeze([
     category: "Web Dev",
     link: "web-dev-guide.html",
     date: "2026-06-02",
-    readTime: "10 min read",
+    readTime: "6 min read",
     tags: ["HTML", "CSS", "GitHub Pages"],
     banner: "assets/banners/web-dev.jpg",
     takeaways: [
@@ -999,42 +999,69 @@ function initContactForm() {
     });
   });
 
-  $.on(form, 'submit', async (e) => {
+  $.on(form, 'submit', (e) => {
     e.preventDefault();
 
-    if (status) {
-      status.textContent = CONFIG.messages.sending;
-      status.className = 'sending';
-    }
+    const nameInput = $.get('#name', form);
+    const emailInput = $.get('#email', form);
+    const subjectInput = $.get('#subject', form);
+    const messageInput = $.get('#message', form);
 
-    try {
-      const response = await fetch(form.action, {
-        method: form.method || 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
+    const name = nameInput ? nameInput.value.trim() : '';
+    const email = emailInput ? emailInput.value.trim() : '';
+    const subject = subjectInput ? subjectInput.value.trim() : '';
+    const message = messageInput ? messageInput.value.trim() : '';
 
-      if (response.ok) {
-        status.textContent = CONFIG.messages.sentSuccess;
-        status.className = 'success';
-        form.reset();
-      } else {
-        throw new Error(`Server responded with ${response.status}`);
-      }
-    } catch (err) {
-      log('error', 'Form submission failed:', err);
+    if (!name || !email || !message) {
       if (status) {
-        status.textContent = CONFIG.messages.sendError;
-        status.className = 'error';
+        status.innerHTML = '<div style="color:var(--danger, #ef4444); padding:10px 14px; background:rgba(239,68,68,0.1); border-radius:8px; margin-top:14px; font-weight:600;">⚠️ Please fill in all required fields (Name, Email, Message).</div>';
+      }
+      return;
+    }
+
+    const recipient = 'zahiruddin44044@gmail.com';
+    const emailSubject = subject || `Website Message from ${name}`;
+    const formattedBody = `Name: ${name}\nEmail: ${email}\nSubject: ${emailSubject}\n\nMessage:\n${message}\n\n---\nSent via HeyNuo (heynuo.github.io)`;
+    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(formattedBody)}`;
+
+    // Trigger user mail client directly
+    window.location.href = mailtoUrl;
+
+    if (status) {
+      status.innerHTML = `
+        <div style="margin-top:16px; padding:16px; border-radius:12px; background:rgba(37,99,235,0.08); border:1px solid rgba(37,99,235,0.25);">
+          <div style="font-weight:700; color:var(--primary); font-size:0.95rem; margin-bottom:6px;">✅ Message Prepared & Ready to Send!</div>
+          <p style="font-size:0.86rem; color:var(--text); line-height:1.45; margin-bottom:12px;">
+            Your default email application has been launched with your message pre-filled. To ensure zero third-party tracking, messages are delivered directly to <strong>${recipient}</strong>.
+          </p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary" id="copySubmittedDraftBtn" style="padding:6px 14px; font-size:0.82rem;">
+              📋 Copy Draft to Clipboard
+            </button>
+            <a href="${mailtoUrl}" class="btn btn-secondary" style="padding:6px 14px; font-size:0.82rem;">
+              ✉️ Re-open Mail Client
+            </a>
+          </div>
+        </div>
+      `;
+
+      const copyBtn = $.get('#copySubmittedDraftBtn');
+      if (copyBtn) {
+        $.on(copyBtn, 'click', () => {
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(formattedBody).then(() => {
+              showToast('Formatted draft copied to clipboard!', '📋');
+            });
+          } else {
+            showToast('Draft ready to send via email', '✉️');
+          }
+        });
       }
     }
-  });
 
-  // Handle redirect-based success (Formspree redirect back with ?sent=1)
-  if (new URLSearchParams(window.location.search).get('sent') === '1' && status) {
-    status.textContent = CONFIG.messages.sentSuccess;
-    status.className = 'success';
-  }
+    try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+    showToast('Mail client opened! You can also copy your draft.', '✉️', 4000);
+  });
 }
 
 // ---------- Contact Page Enhancements (Subject Pills, Char Counter, Presence Clock, Drafts, FAQ) ----------
@@ -2692,6 +2719,17 @@ function initShortcutsModal() {
     if (e.target === backdrop) closeModal();
   });
 
+  const singleKeyToggle = $.get('#toggleSingleShortcuts');
+  let singleShortcutsEnabled = localStorage.getItem('heynuo_shortcuts_enabled') !== 'false';
+  if (singleKeyToggle) {
+    singleKeyToggle.checked = singleShortcutsEnabled;
+    $.on(singleKeyToggle, 'change', (e) => {
+      singleShortcutsEnabled = e.target.checked;
+      localStorage.setItem('heynuo_shortcuts_enabled', singleShortcutsEnabled ? 'true' : 'false');
+      showToast(singleShortcutsEnabled ? 'Single-key shortcuts enabled' : 'Single-key shortcuts disabled (WCAG 2.1.4)', '⌨️');
+    });
+  }
+
   $.on(document, 'keydown', (e) => {
     const activeEl = document.activeElement;
     const isInput = activeEl && (
@@ -2711,6 +2749,11 @@ function initShortcutsModal() {
 
     if (isInput) return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    // WCAG 2.1.4 Check: If disabled, ignore single character hotkeys
+    if (!singleShortcutsEnabled && e.key !== '?' && !e.shiftKey) {
+      return;
+    }
 
     if (e.key === '?' || (e.shiftKey && e.key === '/')) {
       e.preventDefault();
@@ -3461,8 +3504,46 @@ function initFeaturedResource() {
   }
 }
 
+// ---------- Digital Dispatch Form ----------
+function initDispatchForm() {
+  const form = $.get('#dispatchForm');
+  if (!form) return;
+  $.on(form, 'submit', (e) => {
+    e.preventDefault();
+    const emailInput = $.get('#dispatchEmail', form);
+    const email = emailInput ? emailInput.value.trim() : '';
+    if (!email || !email.includes('@')) {
+      showToast('Please enter a valid email address.', '⚠️');
+      return;
+    }
+    showToast('Subscribed! For tracker-free updates, subscribe to rss.xml', '📬', 4500);
+    emailInput.value = '';
+  });
+}
+
+// ---------- Service Worker & Offline PWA ----------
+function initServiceWorker() {
+  if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then((reg) => {
+        log('log', '[ServiceWorker] Registered with scope:', reg.scope);
+      }).catch((err) => {
+        log('warn', '[ServiceWorker] Registration failed:', err);
+      });
+    });
+  }
+
+  window.addEventListener('offline', () => {
+    showToast('Browsing in offline mode. Saved articles & Ruqyah text are available.', '📶', 4000);
+  });
+  window.addEventListener('online', () => {
+    showToast('Internet connection restored.', '🟢', 2500);
+  });
+}
+
 // ---------- Initialization ----------
 function init() {
+  initServiceWorker();
   initTheme();
   initThemeToggle();
   initAnnouncementBanner();

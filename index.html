@@ -20,7 +20,10 @@
   <meta property="og:title" content="HeyNuo | Java, Web Dev &amp; Islamic Theology Notes">
   <meta property="og:description"
     content="HeyNuo is a personal knowledge hub with clear notes on Java, web development, and Islamic theology. Fast, simple, and tracker-free.">
-  <meta property="og:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <meta property="og:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="HeyNuo Digital Knowledge Hub Banner">
   <meta property="og:url" content="https://heynuo.github.io/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="HeyNuo">
@@ -29,13 +32,15 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="HeyNuo | Java, Web Dev &amp; Islamic Theology Notes">
   <meta name="twitter:description" content="HeyNuo is a personal knowledge hub with clear notes on Java, web development, and Islamic theology. Fast, simple, and tracker-free.">
-  <meta name="twitter:image" content="https://heynuo.github.io/images/og-banner.jpg">
+  <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
 
-  <!-- Favicon -->
+  <!-- Favicon & PWA Manifest -->
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="apple-touch-icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -633,16 +638,18 @@
     <footer>
       <div class="footer-inner">
         <div class="footer-links">
-          <a href="index.html">Home</a>
+          <a href="index.html" class="active" aria-current="page">Home</a>
           <a href="quran.html">Quran</a>
           <a href="quran-verses.html">108 Verses</a>
           <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy &amp; Sources</a>
+          <a href="rss.xml">RSS</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
           <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
         </div>
-        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+        <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
       </div>
     </footer>
   </div>
@@ -659,12 +666,19 @@
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- Keyboard Shortcuts Modal -->
+  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
   <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
     <div class="shortcuts-modal">
       <div class="shortcuts-header">
         <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
         <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-toggle-row">
+        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
+          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
+          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+        </label>
+        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
       </div>
       <div class="shortcuts-list">
         <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
@@ -682,14 +696,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TYJNKZE5LL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-  </script>
 
   <!-- Shared script: search/filter, mobile menu, active nav, scroll-to-top, skip link -->
   <script src="js/script.js"></script>

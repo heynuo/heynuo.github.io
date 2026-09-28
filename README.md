@@ -1,45 +1,52 @@
-# HeyNuo — Personal Website & Digital Knowledge Base
+# HeyNuo — Personal Website, Technical Hub & Quranic Library
 
 [![Live Site](https://img.shields.io/badge/Live%20Website-heynuo.github.io-blue?style=for-the-badge&logo=github)](https://heynuo.github.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 [![Vanilla JS](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](js/script.js)
 [![HTML5 & CSS3](https://img.shields.io/badge/Stack-HTML5%20%2F%20CSS3-E34F26?style=for-the-badge&logo=html5&logoColor=white)](css/style.css)
+[![Tracker Free](https://img.shields.io/badge/Privacy-100%25%20Tracker--Free-success?style=for-the-badge)](privacy.html)
+[![PWA Ready](https://img.shields.io/badge/PWA-Offline%20Ready-purple?style=for-the-badge)](manifest.json)
 
-> Clean, accessible, lightweight personal website and knowledge base featuring technical tutorials on Java OOP, modern web development guides, and authentic Islamic research.
+> **HeyNuo** is a fast, 100% tracker-free static website and knowledge base featuring clean tutorials on Java Object-Oriented Programming, accessible web development guides, and an authentic Quran & Ruqyah Shari'yah reference library with streaming recitation.
 
 ---
 
-## 🌐 Live Website
+## 🌐 Live Website & Mirrors
 
-- **Production URL:** [https://heynuo.github.io/](https://heynuo.github.io/)
-- **Ruqyah Shariyah Companion:** [https://heynuo.github.io/heynuo.github.io-ruqyah-guide/](https://heynuo.github.io/heynuo.github.io-ruqyah-guide/)
+- **Production Site:** [https://heynuo.github.io/](https://heynuo.github.io/)
+- **Quran Audio Library & PDFs:** [https://heynuo.github.io/quran.html](https://heynuo.github.io/quran.html)
+- **108 Master Verses Compilation:** [https://heynuo.github.io/quran-verses.html](https://heynuo.github.io/quran-verses.html)
+- **Authentic Ruqyah Guide:** [https://heynuo.github.io/ruqyah.html](https://heynuo.github.io/ruqyah.html)
+- **Privacy & Source Disclosures:** [https://heynuo.github.io/privacy.html](https://heynuo.github.io/privacy.html)
+- **RSS 2.0 Feed:** [https://heynuo.github.io/rss.xml](https://heynuo.github.io/rss.xml)
 
 ---
 
 ## ✨ Features & Architecture
 
-- **🌓 Dual-Theme Engine (Dark / Light Mode):**
-  - Smooth CSS transitions with system color-scheme detection (`prefers-color-scheme`).
-  - Theme state persisted via `localStorage` with zero flash of unstyled theme (FOUT).
+- **100% Tracker-Free & Privacy First:**
+  - Zero Google Analytics, Facebook Pixel, telemetry, or marketing cookies.
+  - Transparent `localStorage` usage documented on [`privacy.html`](privacy.html).
+  - Direct mailto dispatch with formatted clipboard copying — zero third-party form processors.
 
-- **🎨 Modern Glassmorphism & Modular Design System:**
-  - Built entirely on Vanilla CSS using native `@layer` (`reset`, `base`, `components`, `utilities`) and CSS custom properties (variables).
-  - Modern typography powered by Google Fonts (*Plus Jakarta Sans* and *Inter*), optimized with non-blocking `<link>` tags and preconnect hints.
+- **Resilient Static & No-JS Architecture:**
+  - All 60 Ruqyah verse cards are pre-rendered directly in HTML with full Arabic (`lang="ar" dir="rtl"`), transliteration, translation, and scholarly source tags.
+  - Full content is readable with JavaScript disabled; client-side JS only progressively enhances audio streaming and instant filtering.
+  - Multi-tier audio fallback: Primary streams from Al-Islam Quran Cloud with automatic fallback to EveryAyah mirrors.
 
-- **🎧 Embedded Custom Audio Player:**
-  - Bespoke HTML5 audio player designed for Quranic recitations and Ruqyah listening.
-  - Features real-time track seeking, volume control, playback rate adjustment, time elapsed display, and keyboard accessibility.
+- **Dual-Theme & Modern Aesthetic:**
+  - Sleek dark and light themes with smooth transitions and system preference detection (`prefers-color-scheme`).
+  - Glassmorphic panels, ambient lighting canvases, and responsive card grids.
+  - Accessible typography with Google Fonts (*Plus Jakarta Sans*, *Inter*, *Amiri* for Arabic calligraphy, and *Merriweather*).
 
-- **📖 Reading & UX Enhancements:**
-  - Real-time scroll-driven reading progress bar across long-form articles.
-  - Floating circular progress scroll-to-top button.
-  - Skip-to-content links and accessible ARIA attributes across all interactive components.
-  - Lightly obfuscated contact endpoints preventing public scrapers from crawling contact details.
+- **WCAG 2.2 AA Accessibility & Keyboard Shortcuts:**
+  - Full command palette (`Ctrl + K` or `/`).
+  - Single-key shortcuts (`T` for theme, `H` for home, `A` for about, `C` for contact, `Space` for audio playback, `V` for player toggle) with a user toggle in the shortcuts dialog conforming strictly to **WCAG 2.1.4**.
+  - Visible focus rings, skip-to-content links, and semantic landmark roles.
 
-- **⚡ Performance & SEO:**
-  - Zero external JavaScript frameworks or heavy runtime dependencies for instant page loads.
-  - Fully responsive, mobile-first layouts across all screen viewports.
-  - Comprehensive OpenGraph metadata, Twitter Cards, XML Sitemap, and JSON-LD structured data.
+- **Offline Progressive Web App (PWA):**
+  - Web App Manifest (`manifest.json`) with app shortcuts and theme colors.
+  - Cache-first Service Worker (`sw.js`) that caches core pages, CSS, and UI assets for offline study.
 
 ---
 
@@ -47,61 +54,134 @@
 
 ```text
 heynuo.github.io/
-├── index.html                  # Homepage (featured articles, stats, search, bio)
-├── about.html                  # Bio, expertise, values, and tech stack
-├── contact.html                # Contact form, socials, and dynamic reach-out links
-├── 404.html                    # Custom animated 404 error page
-├── java-oop.html               # Java Object-Oriented Programming crash course
-├── jinn-islamic-theology.html  # Authentic research & comprehensive Ruqyah verses
-├── web-dev-guide.html          # Modern web development fundamentals & workflow
-├── css/
-│   └── style.css               # Unified CSS layers, tokens, components, and layout
-├── js/
-│   └── script.js               # Theme engine, audio player, copy features, and UI logic
-├── assets/
-│   ├── audio/                  # Ruqyah & recitation audio tracks
-│   ├── banners/                # High-definition 3D tech & research banners
-│   └── icons/                  # 3D UI icons and graphics
-├── robots.txt                  # Search engine crawl directives
-├── sitemap.xml                 # XML sitemap for SEO discovery
+├── index.html                  # Homepage (featured articles, stats, search, audio preview)
+├── quran.html                  # Complete 114 Surahs audio library and King Fahd Mushaf PDFs
+├── quran-verses.html           # Master compilation of 108 Quranic verses from 62 books
+├── ruqyah.html                 # 60 pre-rendered authentic Ruqyah verses with audio & filters
+├── java-oop.html               # Deepened Java OOP tutorial with challenges & JVM output
+├── jinn-islamic-theology.html  # Authentic theological research with scholarly Hadith citations
+├── web-dev-guide.html          # Modern semantic web development & GitHub Pages guide
+├── about.html                  # Bio, journey, technical values, and background
+├── contact.html                # Direct privacy-first contact & interactive subject helper
+├── privacy.html                # Privacy policy, local storage disclosure, and source citations
+├── 404.html                    # Custom accessible 404 error page with quick jump links
+├── manifest.json               # Progressive Web App manifest
+├── sw.js                       # Service worker with static cache-first offline strategy
+├── rss.xml                     # RSS 2.0 syndication feed for all articles & guides
+├── sitemap.xml                 # XML sitemap with accurate lastmod dates
+├── robots.txt                  # Search engine crawl rules
 ├── LICENSE                     # MIT Open Source License
-└── README.md                   # Project documentation
+├── README.md                   # Project documentation
+├── css/
+│   ├── style.css               # Core design system, variables, dark/light tokens, components
+│   ├── home.css                # Home-specific layouts, typewriter, and interactive grid
+│   ├── contact.css             # Contact page layout, presence clock, and topic pills
+│   ├── quran.css               # Surah search, playlist, and PDF grid styles
+│   ├── quran-player.css        # Persistent bottom audio recitation bar
+│   ├── master-verses.css       # 108 verses view modes and bookmarking styles
+│   └── ruqyah.css              # Ruqyah card styling, Arabic calligraphy, and player bars
+├── js/
+│   ├── script.js               # Theme engine, command palette, shortcuts modal, mailto copier
+│   ├── quran-player.js         # Persistent audio streaming engine with mirror failover
+│   ├── quran-page.js           # 114 Surahs controller, audio routing, and PDF reader
+│   ├── master-verses.js        # 108 verses controller, search, and bookmarking
+│   ├── master-verses-data.js   # Dataset of 108 verses from 62 classical sources
+│   ├── ruqyah.js               # Ruqyah audio controller, search/filter, and fallback retry
+│   └── ruqyah-data.js          # Authoritative dataset of 60 Ruqyah healing verses
+└── assets/
+    ├── banners/                # Optimized OpenGraph banners (og-banner.jpg 1200x630, etc.)
+    └── icons/                  # Crisp UI graphics and category icons
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## ✍️ How to Add a New Article
 
-| Domain | Technology |
-|---|---|
-| **Structure** | Semantic HTML5, ARIA roles, JSON-LD schema |
-| **Styling** | Vanilla CSS3, CSS Custom Properties, `@layer`, Flexbox & CSS Grid |
-| **Typography** | Plus Jakarta Sans, Inter (Google Fonts) |
-| **Interactivity** | Vanilla JavaScript (ES6+ modular utility pattern) |
-| **Hosting & CI/CD** | GitHub Pages (static automated deployment) |
+Adding a new article to HeyNuo takes four simple steps:
+
+### 1. Create the HTML File
+Create your new page (e.g. `spring-boot-guide.html`) using `java-oop.html` as a template:
+- Include the shared `<header>` navigation and standard `<footer>`.
+- Include `<link rel="manifest" href="manifest.json">` and the RSS link in `<head>`.
+- Set OpenGraph metadata (`og:title`, `og:description`, `og:image`).
+- Add a table of contents `<nav class="article-toc-box">` and pagination links (`<nav class="article-pagination-nav">`).
+- Add the shortcuts modal markup before `</body>`.
+
+### 2. Register in `js/script.js`
+Open `js/script.js` and add an entry to the `POSTS` array:
+```javascript
+{
+  title: "Spring Boot Enterprise Architecture",
+  url: "spring-boot-guide.html",
+  category: "Java",
+  date: "Oct 15, 2026",
+  readTime: "8 min read",
+  description: "Build robust REST APIs and services with Spring Boot and clean architecture.",
+  tags: ["java", "spring", "backend", "architecture"]
+}
+```
+This automatically wires the new article into the **Command Palette (`Ctrl + K`)**, instant live search, category filters, and preview modals.
+
+### 3. Update `rss.xml`
+Add a `<item>` entry to `rss.xml`:
+```xml
+<item>
+  <title>Spring Boot Enterprise Architecture</title>
+  <link>https://heynuo.github.io/spring-boot-guide.html</link>
+  <guid>https://heynuo.github.io/spring-boot-guide.html</guid>
+  <pubDate>Thu, 15 Oct 2026 00:00:00 GMT</pubDate>
+  <description>Build robust REST APIs and services with Spring Boot and clean architecture.</description>
+  <category>Java</category>
+</item>
+```
+
+### 4. Update `sitemap.xml`
+Add a `<url>` block with the current date:
+```xml
+<url>
+  <loc>https://heynuo.github.io/spring-boot-guide.html</loc>
+  <lastmod>2026-10-15</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
+```
 
 ---
 
-## 🚀 Local Development
+## 🛠️ Tech Stack & Philosophy
 
-Since this project has zero external build tools or node dependencies, running it locally is instant:
+| Layer | Implementation | Notes |
+|---|---|---|
+| **Structure** | Semantic HTML5 | Validated markup with ARIA landmarks & JSON-LD schema |
+| **Styling** | Vanilla CSS3 | Modular CSS Custom Properties, no Tailwind, zero build overhead |
+| **Typography** | Google Fonts | Amiri, Plus Jakarta Sans, Inter, Merriweather (`display=swap`) |
+| **Scripting** | Vanilla ES6+ | Zero npm dependencies, no jQuery, lightweight modular controllers |
+| **Offline** | Service Worker & Manifest | Cache-first shell strategy, instant second loads |
+| **Hosting** | GitHub Pages | Automated zero-cost global edge delivery |
 
-### Option 1: Direct File
-Simply double-click `index.html` or open it directly in any modern browser.
+---
 
-### Option 2: Local HTTP Server (Recommended)
+## 🚀 Local Preview
+
+Since this project has zero external build tools, running it locally requires no build steps:
+
+### Option 1: Direct Browser
+Open `index.html` directly in any modern browser (Chrome, Firefox, Edge, Safari).
+
+### Option 2: Local HTTP Server (Recommended for PWA & Audio)
 Using Python:
 ```bash
 python -m http.server 8000
 ```
-Or using Node `serve` / `npx`:
+Or using Node:
 ```bash
 npx serve .
 ```
-Then navigate to `http://localhost:8000` in your web browser.
+Then visit `http://localhost:8000`.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE) — feel free to use and reference the code for your own personal sites and learning!
+This project is licensed under the [MIT License](LICENSE) — feel free to learn from, adapt, and build upon the open-source code!
+The Quranic texts and audio recitations remain under public-domain and religious educational fair use.

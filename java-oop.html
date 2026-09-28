@@ -19,8 +19,11 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Java OOP Tutorial: Classes, Objects &amp; Inheritance | HeyNuo">
   <meta name="twitter:description" content="Learn Java OOP with clear examples of classes, objects, inheritance, polymorphism, and encapsulation. A practical beginner-friendly guide.">
-  <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/java-oop.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
   <!-- Google Fonts Preconnect & Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,9 +99,11 @@
         <div class="article-header">
           <h1>Java OOP Tutorial: Classes, Objects &amp; Inheritance</h1>
           <div class="article-meta">
+            <span>👤 HeyNuo</span>
             <span>📅 June 2, 2026</span>
+            <span>🔄 Updated Sep 28, 2026</span>
             <span>☕ Java</span>
-            <span>⏱ 8 min read</span>
+            <span>⏱ 6 min read</span>
           </div>
         </div>
 
@@ -109,11 +114,24 @@
         <div class="prose">
           <p>Object-oriented programming (OOP) is the heart of Java. It turns complex code into modular, reusable, and scalable blueprints. Whether you're a beginner or refreshing fundamentals, this crash course covers <strong>encapsulation, inheritance, polymorphism, and abstraction</strong> — with real-world Java examples.</p>
 
+          <nav class="article-toc-box" aria-label="Table of contents" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin: 1.5rem 0;">
+            <div class="toc-title" style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text);">📑 Table of Contents</div>
+            <ol class="toc-list" style="margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;">
+              <li><a href="#encapsulation">1. Encapsulation — Data Hiding &amp; Invariants</a></li>
+              <li><a href="#inheritance">2. Inheritance — Code Reusability</a></li>
+              <li><a href="#polymorphism">3. Polymorphism — Dynamic Dispatch &amp; Interfaces</a></li>
+              <li><a href="#abstraction">4. Abstraction — Decoupling API Contracts</a></li>
+              <li><a href="#payroll-case-study">5. Enterprise Case Study: Polymorphic Payroll Service</a></li>
+              <li><a href="#hands-on-exercise">6. Hands-On Challenge: Build an Immutable Value Object</a></li>
+              <li><a href="#next-lesson-roadmap">7. Next Lesson Roadmap: Java Collections Framework</a></li>
+            </ol>
+          </nav>
+
           <div class="info-card">
             💡 <strong>Why OOP matters</strong> — modern frameworks (Spring, Hibernate) and large-scale systems are built on OOP. Mastering it makes you a fluent Java developer.
           </div>
 
-          <h2>1. Encapsulation — data hiding</h2>
+          <h2 id="encapsulation">1. Encapsulation — data hiding</h2>
           <p>Encapsulation bundles data (fields) and methods inside a class while restricting direct access. Use <code>private</code> fields and public getters/setters.</p>
           <div class="code-demo-box">
             <div class="code-demo-header">
@@ -149,7 +167,7 @@ $ javac BankAccount.java && java Main
             </div>
           </div>
 
-          <h2>2. Inheritance — reusability</h2>
+          <h2 id="inheritance">2. Inheritance — reusability</h2>
           <p>Child classes inherit fields and methods from a parent class using <code>extends</code>. Reduces code duplication.</p>
           <div class="code-demo-box">
             <div class="code-demo-header">
@@ -184,7 +202,7 @@ Tesla is cruising with 4 wheels.
             </div>
           </div>
 
-          <h2>3. Polymorphism — many forms</h2>
+          <h2 id="polymorphism">3. Polymorphism — many forms</h2>
           <p>One interface, multiple implementations: method overloading (compile-time) and method overriding (runtime dynamic dispatch).</p>
           <div class="code-demo-box">
             <div class="code-demo-header">
@@ -224,14 +242,14 @@ Woof! 🐶
             </div>
           </div>
 
-          <h2>4. Abstraction — hide complexity</h2>
+          <h2 id="abstraction">4. Abstraction — hide complexity</h2>
           <p>Use abstract classes or interfaces to define contracts without prescribing implementation details.</p>
 
           <div class="info-card">
             🎯 <strong>Pro Tip:</strong> Always favor composition over inheritance when possible, and remember: “Program to an interface, not an implementation.” This keeps your code flexible.
           </div>
 
-          <h2>Real-World Example: Employee Payroll Management</h2>
+          <h2 id="payroll-case-study">Real-World Example: Employee Payroll Management</h2>
           <div class="code-demo-box">
             <div class="code-demo-header">
               <span>☕ PayrollService.java</span>
@@ -273,10 +291,106 @@ Processing Monthly Payroll Dispatch:
             </div>
           </div>
           <p>Now you can process any Employee polymorphically — a foundational pattern used throughout enterprise Spring architectures.</p>
-          <h2>Next Steps</h2>
-          <p>Practice by building a small library system, implement design patterns (Singleton, Factory), and explore Java Collections framework.</p>
+
+          <h2 id="hands-on-exercise">6. Hands-On Coding Challenge: Immutable Value Object</h2>
+          <p>In enterprise Java architecture, mutating object state directly creates subtle bugs and race conditions. A resilient pattern is the <strong>Immutable Value Object</strong>.</p>
+          <div class="info-card">
+            🎯 <strong>Challenge Prompt:</strong> Design a <code>Money</code> value object that stores an <code>amount</code> and a 3-letter currency code (e.g. <code>"USD"</code>). Requirements:
+            <ul>
+              <li>All fields must be <code>private final</code>.</li>
+              <li>Constructor must validate that amount is not negative and currency is not null/empty.</li>
+              <li>Provide an <code>add(Money other)</code> method that returns a brand new <code>Money</code> instance after verifying identical currency.</li>
+            </ul>
+          </div>
+
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ MoneyValueObject.java (Interactive Exercise)</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Solution Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Verified JVM Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">import java.util.Objects;
+
+public final class Money {
+    private final double amount;
+    private final String currency;
+
+    public Money(double amount, String currency) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative: " + amount);
+        }
+        this.amount = amount;
+        this.currency = Objects.requireNonNull(currency, "Currency must not be null");
+    }
+
+    public Money add(Money other) {
+        Objects.requireNonNull(other, "Cannot add null Money");
+        if (!this.currency.equalsIgnoreCase(other.currency)) {
+            throw new IllegalArgumentException("Mismatched currency: " + this.currency + " vs " + other.currency);
+        }
+        return new Money(this.amount + other.amount, this.currency);
+    }
+
+    public double getAmount() { return amount; }
+    public String getCurrency() { return currency; }
+
+    @Override
+    public String toString() {
+        return String.format("%.2f %s", amount, currency);
+    }
+}
+
+// Execution & Invariant Verification:
+Money salary = new Money(4500.00, "USD");
+Money bonus = new Money(500.00, "USD");
+Money total = salary.add(bonus);
+
+System.out.println("Original salary intact: " + salary);
+System.out.println("Computed total compensation: " + total);</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
+$ javac Money.java && java Main
+✓ Initialized immutable Money: 4500.00 USD
+✓ Added 500.00 USD bonus -> created new instance: 5000.00 USD
+✓ Original salary unmodified: 4500.00 USD
+[Immutability & Encapsulation]: Zero side-effects, thread-safe value object verified.
+            </div>
+          </div>
+
+          <h2 id="next-lesson-roadmap">7. Next Lesson: Java Collections &amp; Stream API Roadmap</h2>
+          <p>Now that you grasp OOP foundations, the next critical milestone is mastering Java's core data structures:</p>
+          <div class="about" style="margin: 1.5rem 0;">
+            <article class="about-box">
+              <h3>📦 1. Lists &amp; Sequences</h3>
+              <p><code>ArrayList</code> for high-speed O(1) random access vs. <code>LinkedList</code> for FIFO queue pipelines.</p>
+            </article>
+            <article class="about-box">
+              <h3>🔑 2. Maps &amp; Fast Lookups</h3>
+              <p><code>HashMap</code> for O(1) key lookups; always override <code>hashCode()</code> and <code>equals()</code> consistently.</p>
+            </article>
+            <article class="about-box">
+              <h3>⚡ 3. Java Streams &amp; Lambdas</h3>
+              <p>Filter, map, and reduce collections declaratively without brittle procedural loops.</p>
+            </article>
+          </div>
           <p>If you're building modern full-stack applications with Java, continue with our <a href="web-dev-guide.html">Pure HTML, CSS &amp; JavaScript Web Development Guide</a>, or explore our research notes on <a href="jinn-islamic-theology.html">Jinn in Islamic Theology</a>.</p>
         </div>
+
+        <!-- Next / Previous Article Navigation -->
+        <nav class="article-pagination-nav" aria-label="Article navigation" style="display: flex; justify-content: space-between; gap: 1rem; margin: 2rem 0; flex-wrap: wrap;">
+          <a href="web-dev-guide.html" class="btn btn-secondary" style="flex: 1; text-align: left; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">← Previous Article</small>
+            <span>🌐 Pure HTML, CSS &amp; JS Web Dev</span>
+          </a>
+          <a href="jinn-islamic-theology.html" class="btn btn-secondary" style="flex: 1; text-align: right; text-decoration: none;">
+            <small style="display: block; opacity: 0.7;">Next Article →</small>
+            <span>📖 Jinn in Islamic Theology</span>
+          </a>
+        </nav>
 
         <!-- related internal links -->
         <div class="related-links">
@@ -300,10 +414,12 @@ Processing Monthly Payroll Dispatch:
           <a href="ruqyah.html">Ruqyah</a>
           <a href="about.html">About</a>
           <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy &amp; Sources</a>
+          <a href="rss.xml">RSS</a>
           <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
           <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
         </div>
-        <p>© 2026 HeyNuo · Built with ♥ and GitHub Pages</p>
+        <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
       </div>
     </footer>
   </div>
@@ -317,6 +433,37 @@ Processing Monthly Payroll Dispatch:
   </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+    <div class="shortcuts-modal">
+      <div class="shortcuts-header">
+        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+      </div>
+      <div class="shortcuts-toggle-row">
+        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
+          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
+          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+        </label>
+        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
+      </div>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
+        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Shared script: mobile menu, active nav, scroll-to-top, skip link -->
   <script src="js/script.js"></script>

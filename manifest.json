@@ -1,0 +1,25 @@
+{
+  "name": "HeyNuo — Digital Knowledge Hub & Quran Sanctuary",
+  "short_name": "HeyNuo",
+  "description": "Fast, tracker-free personal knowledge base featuring Java OOP, web development guides, authentic Islamic research, and complete Quran & Ruqyah sanctuary.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d1117",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "assets/icons/quran.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/rocket.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
