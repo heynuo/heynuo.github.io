@@ -148,7 +148,7 @@
       </p>
 
       <!-- Sub-Tab Switcher between Full Quran, 108 Verses, Ruqyah Guide, and PDF Downloads -->
-      <div class="quran-tab-switcher" role="tablist" aria-label="Quran Sections Navigation" style="margin-bottom: 26px;">
+      <div class="quran-tab-switcher" role="tablist" aria-label="Quran Sections Navigation">
         <a href="quran.html" class="quran-tab-btn" role="tab" aria-selected="false">📖 Full Quran (114 Surahs)</a>
         <a href="quran-verses.html" class="quran-tab-btn active" role="tab" aria-selected="true">📜 108 Master Verses</a>
         <a href="ruqyah.html" class="quran-tab-btn" role="tab" aria-selected="false">🛡️ Ruqyah Healing Verses</a>
@@ -228,10 +228,10 @@
         </div>
 
         <div class="mv-pdf-button-group">
-          <a href="assets/pdf/quran_verses_master_compilation.pdf" download class="btn btn-primary" style="padding:12px 22px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);">
+          <a href="assets/pdf/quran_verses_master_compilation.pdf" download class="btn btn-primary mv-pdf-btn-download">
             <span>📥 Direct Download PDF</span>
           </a>
-          <a href="assets/pdf/quran_verses_master_compilation.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding:12px 20px;">
+          <a href="assets/pdf/quran_verses_master_compilation.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mv-pdf-btn-preview">
             <span>↗ Open in New Window</span>
           </a>
         </div>
@@ -242,16 +242,16 @@
         <div class="mv-methodology-title">
           <span>📖</span> Background, Methodology &amp; Key Statistics (From Publication)
         </div>
-        <p style="margin-bottom: 8px;">
+        <p class="mv-methodology-lead">
           <strong>Analysis &amp; Deduplication:</strong> This document presents a master compilation of 108 unique Quranic verse references extracted through the systematic analysis of 62 books spanning Islamic sciences, Ruqyah and healing traditions, Seerah (prophetic biography), Tafsir (Quranic exegesis), and Islamic history. Each entry has been deduplicated so that no verse reference appears more than once, providing a clean, authoritative reference covering 44 chapters of the Holy Quran.
         </p>
-        <p style="margin-bottom: 0; color: var(--muted); font-size: 0.85rem;">
+        <p class="mv-methodology-note">
           <strong>Note on Source Books:</strong> Of the 62 books in the analyzed collection, approximately 30 are Western occult and non-Islamic texts containing zero Quranic content. The remaining 17–18 Islamic books yielded all 108 unique verse references documented here. The two primary contributing books are <em>Understanding Ruqyah and Jinn in Islam</em> (contributing the vast majority of verses) and <em>Ism-e-Azam (Ilmul Hisab)</em> (contributing 4 specialized verses connected to Prophetic names of Allah).
         </p>
 
         <!-- Quick Table of Contents Chips matching 13-page PDF -->
         <div class="mv-pdf-toc-strip">
-          <span style="font-size:0.78rem; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;">Publication Index:</span>
+          <span class="mv-pdf-toc-label">Publication Index:</span>
           <a href="#main-content" class="mv-pdf-toc-chip"><span>📄</span> P.1 Cover</a>
           <a href="#pdf-document" class="mv-pdf-toc-chip"><span>📊</span> P.2 Statistics</a>
           <a href="#explorer" class="mv-pdf-toc-chip"><span>🗂️</span> P.3 Thematic Taxonomy</a>
@@ -264,14 +264,14 @@
       <!-- Embedded In-Browser PDF Reader Box -->
       <div class="mv-pdf-embedded-container" id="mvPdfViewerWrap">
         <div class="mv-pdf-viewer-bar">
-          <span style="font-weight:700; font-size:0.95rem; color:var(--text); display:flex; align-items:center; gap:8px;">
+          <span class="mv-pdf-viewer-title">
             <span>👁️</span> In-Browser PDF Publication Reader (13 Pages)
           </span>
-          <div style="display:flex; gap:8px;">
-            <a href="assets/pdf/quran_verses_master_compilation.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding:6px 14px; font-size:0.8rem;">
+          <div class="mv-pdf-viewer-actions">
+            <a href="assets/pdf/quran_verses_master_compilation.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-secondary mv-pdf-viewer-btn">
               <span>Full Screen ↗</span>
             </a>
-            <button type="button" class="btn btn-secondary" id="mvCloseViewerBtn" style="padding:6px 14px; font-size:0.8rem;">
+            <button type="button" class="btn btn-secondary mv-pdf-viewer-btn" id="mvCloseViewerBtn">
               <span>✕ Close Viewer</span>
             </button>
           </div>
@@ -403,6 +403,7 @@
               autocomplete="off"
               aria-label="Search master compilation of Quranic verses"
             >
+            <kbd class="mv-search-kbd-badge" title="Press / to search" aria-hidden="true">/</kbd>
             <button type="button" class="mv-search-clear-btn" id="mvSearchClear" aria-label="Clear search query">✕</button>
           </div>
 
@@ -461,11 +462,10 @@
             <!-- Random Discovery Button -->
             <button
               type="button"
-              class="mv-action-icon-btn"
+              class="mv-action-icon-btn mv-toolbar-pill-btn"
               id="mvRandomBtn"
               title="Discover a random inspirational Ayah (Hot-key: R)"
               aria-label="Discover random Ayah"
-              style="width:auto; padding:0 12px; gap:6px; font-size:0.84rem; font-weight:700;"
             >
               <span>🎲</span> <span>Random</span>
             </button>
@@ -473,11 +473,10 @@
             <!-- Bookmarks Quick Filter -->
             <button
               type="button"
-              class="mv-action-icon-btn"
+              class="mv-action-icon-btn mv-toolbar-pill-btn"
               id="mvBookmarksToggleBtn"
               title="Filter bookmarked / saved verses (Hot-key: F)"
               aria-label="Filter bookmarks"
-              style="width:auto; padding:0 12px; gap:6px; font-size:0.84rem; font-weight:700;"
             >
               <span>★</span> <span id="mvBookmarksCountLabel">Saved (0)</span>
             </button>
@@ -485,11 +484,10 @@
             <!-- Continuous Autoplay Switch -->
             <button
               type="button"
-              class="mv-action-icon-btn"
+              class="mv-action-icon-btn mv-toolbar-pill-btn"
               id="mvAutoAdvanceBtn"
               title="Toggle continuous autoplay across verses"
               aria-label="Toggle continuous autoplay"
-              style="width:auto; padding:0 12px; gap:6px; font-size:0.84rem; font-weight:700;"
             >
               <span>🔁</span> <span>Auto-Play</span>
             </button>
@@ -497,11 +495,10 @@
             <!-- Keyboard Shortcuts Trigger -->
             <button
               type="button"
-              class="mv-action-icon-btn"
+              class="mv-action-icon-btn mv-shortcuts-trigger-btn"
               id="mvShortcutsBtn"
               title="View Keyboard Shortcuts (Hot-keys)"
               aria-label="Keyboard Shortcuts"
-              style="width:36px; height:36px;"
             >
               ⌨️
             </button>
@@ -527,14 +524,14 @@
         <div>
           Showing <span class="mv-count-strong" id="mvResultsCount">108 of 108</span> Quranic verses
         </div>
-        <div style="font-size: 0.85rem; color: var(--muted); display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+        <div class="mv-summary-hints">
           <span>💡 Click <strong>Listen</strong> for audio · Click <strong>📋</strong> to copy · Click <strong>📤</strong> to share</span>
         </div>
       </div>
 
       <!-- Empty State Indicator -->
       <div class="mv-empty-results" id="mvEmptyState">
-        <div style="font-size:3rem; margin-bottom:12px;" aria-hidden="true">🔎</div>
+        <div class="mv-empty-icon" aria-hidden="true">🔎</div>
         <h3>No matching verses found</h3>
         <p>Try searching for a different keyword, Surah name (e.g. Al-Baqarah), or verse reference (e.g. 2:255).</p>
       </div>
@@ -570,7 +567,7 @@
       <div class="mv-closing-arabic" lang="ar" dir="rtl">
         وَنُنَزِّلُ مِنَ ٱلْقُرْءَانِ مَا هُوَ شِفَآءٌ وَرَحْمَةٌۭ لِّلْمُؤْمِنِينَ
       </div>
-      <div class="mv-closing-translit" style="font-family: var(--font-body); font-size: 0.95rem; color: #b45309; margin-bottom: 12px; font-weight: 500; font-style: italic;">
+      <div class="mv-closing-translit">
         Wa nunazzilu minal-Qur'aani maa huwa shifaaa'unw wa rahmatul lilmu'mineen
       </div>
       <blockquote class="mv-closing-quote">
@@ -649,13 +646,13 @@
 
   <!-- Keyboard Shortcuts Modal Dialog -->
   <div class="mv-bonus-modal-backdrop" id="mvShortcutsModal" role="dialog" aria-modal="true" aria-labelledby="mvShortcutsTitle">
-    <div class="mv-bonus-modal-card" style="max-width: 520px;">
+    <div class="mv-bonus-modal-card mv-shortcuts-modal-card">
       <button type="button" class="mv-bonus-modal-close" id="mvShortcutsModalClose" aria-label="Close shortcuts modal">✕</button>
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+      <div class="mv-shortcuts-modal-head">
         <span class="mv-top10-rank-pill">⌨️ Fast Access</span>
-        <h3 id="mvShortcutsTitle" style="margin:0; font-family:var(--font-display); font-size:1.35rem; font-weight:800; color:var(--text);">Keyboard Shortcuts</h3>
+        <h3 id="mvShortcutsTitle" class="mv-shortcuts-modal-title">Keyboard Shortcuts</h3>
       </div>
-      <p style="font-size:0.85rem; color:var(--muted); margin-bottom:18px;">
+      <p class="mv-shortcuts-modal-sub">
         Browse the 108 Master Quranic Verses smoothly with fast key commands:
       </p>
       <div class="mv-shortcuts-table">
