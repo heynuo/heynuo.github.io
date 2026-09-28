@@ -304,6 +304,11 @@ function initMobileMenu() {
   $.on(menuBtn, 'click', () => toggleMenu());
   $.on(backdrop, 'click', () => toggleMenu(false));
 
+  const navCloseBtn = $.get('#navCloseBtn', navLinks);
+  if (navCloseBtn) {
+    $.on(navCloseBtn, 'click', () => toggleMenu(false));
+  }
+
   $.getAll('a', navLinks).forEach(link => {
     $.on(link, 'click', () => toggleMenu(false));
   });
@@ -2715,7 +2720,7 @@ function initShortcutsModal() {
     document.body.appendChild(backdrop);
   }
 
-  const openBtns = $.getAll('#shortcutHelpBtn');
+  const openBtns = $.getAll('#shortcutHelpBtn, #headerShortcutsBtn, .shortcut-help-btn');
   const closeBtn = $.get('#shortcutsClose', backdrop);
 
   function openModal() {
@@ -2735,6 +2740,14 @@ function initShortcutsModal() {
   $.on(backdrop, 'click', (e) => {
     if (e.target === backdrop) closeModal();
   });
+
+  const backTop = $.get('#footerBackTop');
+  if (backTop) {
+    $.on(backTop, 'click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    });
+  }
 
   const singleKeyToggle = $.get('#toggleSingleShortcuts');
   let singleShortcutsEnabled = localStorage.getItem('heynuo_shortcuts_enabled') !== 'false';

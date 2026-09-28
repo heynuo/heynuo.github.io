@@ -166,8 +166,8 @@ $filtersPre = @"
 
 $ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
     $ruqyahHtml,
-    '<div class="ruqyah-stats-dashboard" id="ruqyahStats"[^>]*>.*?</div>',
-    $statsPre,
+    '<div class="ruqyah-stats-dashboard" id="ruqyahStats"[^>]*>.*?(?=\s*</section>)',
+    $statsPre.Trim(),
     [System.Text.RegularExpressions.RegexOptions]::Singleline
 )
 
@@ -212,7 +212,7 @@ $modalTpl = [System.IO.File]::ReadAllText("tools\components\shortcuts-modal.html
 
 $ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
     $ruqyahHtml,
-    '<!-- Keyboard Shortcuts Modal.*?id="shortcutsModal".*?</div>\s*</div>',
+    '<!-- Keyboard Shortcuts Modal.*?(?=\s*(?:<div id="ruqyahToast"|<script))',
     $modalTpl.Trim(),
     [System.Text.RegularExpressions.RegexOptions]::Singleline
 )

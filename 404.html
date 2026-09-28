@@ -44,12 +44,30 @@
 </head>
 <body>
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
-  <header>
-    <nav class="container">
-      <div class="logo">Hey<span>Nuo</span></div>
+  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+  <header role="banner">
+    <nav class="container" aria-label="Main navigation">
+      <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+        </span>
+        Hey<span>Nuo</span>
+      </a>
 
       <div class="nav-right">
-        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles" title="Quick Search (Ctrl+K)">
+        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles and topics (Ctrl+K)" title="Quick Search (Ctrl+K)">
           <span class="nav-search-icon" aria-hidden="true">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </span>
@@ -57,7 +75,14 @@
           <kbd class="nav-search-kbd">Ctrl K</kbd>
         </button>
 
-        <div class="nav-links" id="nav-links">
+        <div class="nav-links" id="nav-links" role="region" aria-label="Site menu">
+          <div class="nav-mobile-head">
+            <div class="nav-mobile-brand">
+              <span class="logo-mark-mini" aria-hidden="true">HN</span>
+              <span>Navigation</span>
+            </div>
+            <button type="button" class="nav-mobile-close" id="navCloseBtn" aria-label="Close navigation menu">✕</button>
+          </div>
           <a href="index.html" data-nav="index">Home</a>
           <a href="quran.html" data-nav="quran">Quran</a>
           <a href="quran-verses.html" data-nav="quran-verses">108 Verses</a>
@@ -66,13 +91,22 @@
           <a href="contact.html" data-nav="contact">Contact</a>
         </div>
 
-        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile" title="GitHub @heynuo">
+        <button type="button" class="nav-icon-btn shortcut-help-btn" id="headerShortcutsBtn" aria-label="Keyboard Shortcuts" title="Keyboard Shortcuts (?)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M8 16h8"></path>
+          </svg>
+        </button>
+
+        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile @heynuo" title="GitHub @heynuo">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
         </a>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">
+
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme (T)">
           <svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
-        <button class="menu-btn" id="menu-btn" aria-label="Menu" aria-expanded="false">
+
+        <button class="menu-btn" id="menu-btn" aria-label="Toggle navigation menu" aria-controls="nav-links" aria-expanded="false">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
       </div>
@@ -107,23 +141,95 @@
         </div>
       </div>
     </main>
-    <footer>
-      <div class="footer-inner">
-        <div class="footer-links">
-          <a href="index.html" data-nav="index">Home</a>
-          <a href="quran.html" data-nav="quran">Quran</a>
-          <a href="quran-verses.html" data-nav="quran-verses">108 Verses</a>
-          <a href="ruqyah.html" data-nav="ruqyah">Ruqyah</a>
-          <a href="about.html" data-nav="about">About</a>
-          <a href="contact.html" data-nav="contact">Contact</a>
-          <a href="privacy.html" data-nav="privacy">Privacy &amp; Sources</a>
-          <a href="rss.xml">RSS</a>
-          <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px; margin-right:4px;" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg> GitHub
-          </a>
-          <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">⌨️ Shortcuts</button>
+    <footer role="contentinfo">
+      <div class="footer-wrap container">
+        <div class="footer-top">
+          <div class="footer-brand-col">
+            <a href="index.html" class="footer-logo" aria-label="HeyNuo Homepage">
+              <span class="logo-mark" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                  <path d="M2 17l10 5 10-5"></path>
+                  <path d="M2 12l10 5 10-5"></path>
+                </svg>
+              </span>
+              Hey<span>Nuo</span>
+            </a>
+            <p class="footer-desc">
+              Open knowledge sanctuary uniting authentic Islamic scholarship, verified Ruqyah Shariyah, and modern enterprise software architecture. Free, privacy-first, zero ads.
+            </p>
+            <div class="footer-badges">
+              <span class="footer-badge"><span class="badge-dot" aria-hidden="true"></span> Pure Vanilla Web</span>
+              <span class="footer-badge">⚡ Ultra Fast &amp; Ad-Free</span>
+              <span class="footer-badge">📖 MIT Licensed</span>
+            </div>
+          </div>
+
+          <nav class="footer-nav-grid" aria-label="Footer Navigation">
+            <div class="footer-col">
+              <h4 class="footer-heading">Sacred Sciences</h4>
+              <ul class="footer-list">
+                <li><a href="quran.html" data-nav="quran">Quran Player</a></li>
+                <li><a href="quran-verses.html" data-nav="quran-verses">108 Verses</a></li>
+                <li><a href="ruqyah.html" data-nav="ruqyah">Ruqyah Sanctuary</a></li>
+                <li><a href="jinn-islamic-theology.html" data-nav="jinn-islamic-theology">Jinn in Islamic Theology</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-heading">Engineering</h4>
+              <ul class="footer-list">
+                <li><a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">Spring Boot Architecture</a></li>
+                <li><a href="java-oop.html" data-nav="java-oop">Java OOP Masterclass</a></li>
+                <li><a href="web-dev-guide.html" data-nav="web-dev-guide">Web Development Guide</a></li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-heading">Site &amp; Author</h4>
+              <ul class="footer-list">
+                <li><a href="index.html" data-nav="index">Home</a></li>
+                <li><a href="about.html" data-nav="about">About Zahiruddin</a></li>
+                <li><a href="contact.html" data-nav="contact">Contact &amp; Inquiries</a></li>
+                <li>
+                  <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="footer-ext-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                    GitHub @heynuo
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="footer-col">
+              <h4 class="footer-heading">Trust &amp; Feed</h4>
+              <ul class="footer-list">
+                <li><a href="privacy.html" data-nav="privacy">Privacy &amp; Sources</a></li>
+                <li>
+                  <a href="rss.xml" class="footer-ext-link">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+                    RSS 2.0 Feed
+                  </a>
+                </li>
+                <li><a href="sitemap.xml">XML Sitemap</a></li>
+              </ul>
+            </div>
+          </nav>
         </div>
-        <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
+
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
+          <div class="footer-actions">
+            <button type="button" class="footer-shortcut-btn shortcut-help-btn" id="shortcutHelpBtn" title="View keyboard shortcuts (?)">
+              <span class="shortcut-icon" aria-hidden="true">⌨️</span>
+              <span>Shortcuts</span>
+              <kbd class="footer-kbd">?</kbd>
+            </button>
+            <a href="#main-content" class="footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
+              <span>Top</span>
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   </div>
@@ -142,29 +248,107 @@
   <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
     <div class="shortcuts-modal">
       <div class="shortcuts-header">
-        <h3 id="shortcutsTitle">⌨️ Keyboard Shortcuts</h3>
+        <div class="shortcuts-title-wrap">
+          <span class="shortcuts-header-icon" aria-hidden="true">⌨️</span>
+          <div>
+            <h3 id="shortcutsTitle">Keyboard Shortcuts</h3>
+            <p class="shortcuts-subtitle">Productivity hotkeys &amp; audio player controls</p>
+          </div>
+        </div>
         <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
       </div>
+
       <div class="shortcuts-toggle-row">
         <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
-          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
-          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
+          <span>Enable Single-Key Shortcuts (<kbd>T</kbd>, <kbd>H</kbd>, <kbd>A</kbd>, <kbd>C</kbd>, <kbd>?</kbd>, <kbd>Space</kbd>)</span>
+          <small>Disable if you use voice dictation or assistive technology (WCAG 2.1.4)</small>
         </label>
         <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
       </div>
-      <div class="shortcuts-list">
-        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
+
+      <div class="shortcuts-body-scroll">
+        <!-- Section 1: Navigation & System -->
+        <div class="shortcuts-group">
+          <h4 class="shortcuts-group-title">
+            <span class="group-icon" aria-hidden="true">🌐</span> Navigation &amp; Commands
+          </h4>
+          <div class="shortcuts-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Search &amp; Command Palette</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd> <span class="shortcut-or">or</span> <kbd class="shortcut-key">/</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Go to Home Dashboard</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">H</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Go to About Page</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">A</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Go to Contact</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">C</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">View This Shortcuts Modal</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">?</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Close Any Dialog or Menu</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Esc</kbd></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Themes & Comfort -->
+        <div class="shortcuts-group">
+          <h4 class="shortcuts-group-title">
+            <span class="group-icon" aria-hidden="true">🎨</span> Display &amp; Reading Modes
+          </h4>
+          <div class="shortcuts-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Toggle Dark / Light Theme</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">T</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Sepia Comfort / Slate Night Mode</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Audio & Quran Player -->
+        <div class="shortcuts-group">
+          <h4 class="shortcuts-group-title">
+            <span class="group-icon" aria-hidden="true">🎧</span> Quran &amp; Media Player
+          </h4>
+          <div class="shortcuts-list">
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Quran Play / Pause</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Space</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Next / Previous Surah</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">→</kbd> <span class="shortcut-or">/</span> <kbd class="shortcut-key">←</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Surah Playlist Queue</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Q</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Fullscreen Player Modal</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">F</kbd></span>
+            </div>
+            <div class="shortcut-row">
+              <span class="shortcut-desc">Minimize / Restore Player</span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">V</kbd></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shortcuts-footer">
+        <span class="shortcuts-footer-hint">💡 Press <kbd class="shortcut-key-inline">Esc</kbd> or click outside to dismiss</span>
       </div>
     </div>
   </div>
