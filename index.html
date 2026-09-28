@@ -77,6 +77,9 @@
 </head>
 
 <body>
+  <!-- Include once, anywhere after <body> opens (or in <head> with defer) -->
+  <script src="/assets/js/quran-player.js" defer></script>
+
   <!-- Reading Progress Bar -->
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
 
@@ -91,15 +94,6 @@
       <button type="button" class="announcement-close" id="announcementClose" aria-label="Close announcement">✕</button>
     </div>
   </aside>
-
-  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
-  <a href="#main-content" class="skip-to-content">Skip to main content</a>
-
-  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
-  <a href="#main-content" class="skip-to-content">Skip to main content</a>
-
-  <!-- Skip to Main Content Link (WCAG 2.4.1 AAA) -->
-  <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
   <header role="banner">
     <nav class="container" aria-label="Main navigation">
@@ -703,82 +697,190 @@
     </main>
 
     <footer role="contentinfo">
+      <!-- Ambient Top Accent Glow Line -->
+      <div class="footer-glow-line" aria-hidden="true"></div>
+
       <div class="footer-wrap container">
+        <!-- Interactive Quick Discovery Bar -->
+        <div class="footer-discovery-bar">
+          <div class="footer-quote">
+            <span class="quote-icon" aria-hidden="true">🕊️</span>
+            <span class="quote-text">“And say: My Lord, increase me in knowledge.”</span>
+            <cite class="quote-ref">— Surah Ta-Ha (20:114)</cite>
+          </div>
+          <div class="footer-quick-tools">
+            <button type="button" class="footer-search-trigger" id="footerSearchTrigger" aria-label="Open command palette search (Ctrl+K)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <span>Quick Search</span>
+              <kbd class="footer-mini-kbd">Ctrl K</kbd>
+            </button>
+            <button type="button" class="footer-shortcut-trigger shortcut-help-btn" id="footerShortcutBtn" aria-label="View keyboard shortcuts (?)">
+              <span aria-hidden="true">⌨️</span>
+              <span>Hotkeys</span>
+              <kbd class="footer-mini-kbd">?</kbd>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Footer Grid -->
         <div class="footer-top">
+          <!-- Brand & Mission Column -->
           <div class="footer-brand-col">
             <a href="index.html" class="footer-logo" aria-label="HeyNuo Homepage">
               <span class="logo-mark" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                   <path d="M2 17l10 5 10-5"></path>
                   <path d="M2 12l10 5 10-5"></path>
                 </svg>
               </span>
-              Hey<span>Nuo</span>
+              <span class="footer-logo-text">Hey<span>Nuo</span></span>
             </a>
             <p class="footer-desc">
-              Open knowledge sanctuary uniting authentic Islamic scholarship, verified Ruqyah Shariyah, and modern enterprise software architecture. Free, privacy-first, zero ads.
+              Open knowledge sanctuary uniting authentic Quranic sciences, referenced Ruqyah Shariyah, and modern enterprise software engineering. Ad-free, privacy-first, and freely accessible to all.
             </p>
             <div class="footer-badges">
-              <span class="footer-badge"><span class="badge-dot" aria-hidden="true"></span> Pure Vanilla Web</span>
-              <span class="footer-badge">⚡ Ultra Fast &amp; Ad-Free</span>
-              <span class="footer-badge">📖 MIT Licensed</span>
+              <span class="footer-badge status-live">
+                <span class="badge-beacon" aria-hidden="true"></span>
+                <span>Vanilla Web (0kb libs)</span>
+              </span>
+              <span class="footer-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Zero Ads &amp; Trackers</span>
+              </span>
+              <span class="footer-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>MIT Licensed</span>
+              </span>
+              <span class="footer-badge">
+                <span aria-hidden="true">♿</span>
+                <span>WCAG 2.1 AAA</span>
+              </span>
             </div>
           </div>
 
+          <!-- Navigation Columns -->
           <nav class="footer-nav-grid" aria-label="Footer Navigation">
             <div class="footer-col">
-              <h4 class="footer-heading">Sacred Sciences</h4>
+              <h4 class="footer-heading">
+                <span class="heading-icon" aria-hidden="true">📖</span>
+                <span>Sacred Sciences</span>
+              </h4>
               <ul class="footer-list">
-                <li><a href="quran.html" data-nav="quran">Quran Player</a></li>
-                <li><a href="quran-verses.html" data-nav="quran-verses">108 Verses</a></li>
-                <li><a href="ruqyah.html" data-nav="ruqyah">Ruqyah Sanctuary</a></li>
-                <li><a href="jinn-islamic-theology.html" data-nav="jinn-islamic-theology">Jinn in Islamic Theology</a></li>
+                <li>
+                  <a href="quran.html" data-nav="quran">
+                    <span class="link-label">Quran Player</span>
+                    <span class="footer-pill-tag">114 Surahs</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="quran-verses.html" data-nav="quran-verses">
+                    <span class="link-label">108 Master Verses</span>
+                    <span class="footer-pill-tag audio-tag">Audio</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="ruqyah.html" data-nav="ruqyah">
+                    <span class="link-label">Ruqyah Sanctuary</span>
+                    <span class="footer-pill-tag shifa-tag">60 Cards</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="jinn-islamic-theology.html" data-nav="jinn-islamic-theology">
+                    <span class="link-label">Jinn Islamic Theology</span>
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div class="footer-col">
-              <h4 class="footer-heading">Engineering</h4>
+              <h4 class="footer-heading">
+                <span class="heading-icon" aria-hidden="true">⚡</span>
+                <span>Engineering</span>
+              </h4>
               <ul class="footer-list">
-                <li><a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">Spring Boot Architecture</a></li>
-                <li><a href="java-oop.html" data-nav="java-oop">Java OOP Masterclass</a></li>
-                <li><a href="web-dev-guide.html" data-nav="web-dev-guide">Web Development Guide</a></li>
+                <li>
+                  <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
+                    <span class="link-label">Spring Boot Enterprise</span>
+                    <span class="footer-pill-tag new-tag">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="java-oop.html" data-nav="java-oop">
+                    <span class="link-label">Java OOP Masterclass</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="web-dev-guide.html" data-nav="web-dev-guide">
+                    <span class="link-label">Pure Web Dev Guide</span>
+                  </a>
+                </li>
               </ul>
             </div>
 
             <div class="footer-col">
-              <h4 class="footer-heading">Site &amp; Author</h4>
+              <h4 class="footer-heading">
+                <span class="heading-icon" aria-hidden="true">👤</span>
+                <span>Site &amp; Author</span>
+              </h4>
               <ul class="footer-list">
-                <li><a href="index.html" class="active" aria-current="page">Home</a></li>
-                <li><a href="about.html" data-nav="about">About Zahiruddin</a></li>
-                <li><a href="contact.html" data-nav="contact">Contact &amp; Inquiries</a></li>
+                <li>
+                  <a href="index.html" class="active" aria-current="page">Home</a>
+                </li>
+                <li>
+                  <a href="about.html" data-nav="about">
+                    <span class="link-label">About Zahiruddin</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="contact.html" data-nav="contact">
+                    <span class="link-label">Contact &amp; Inquiries</span>
+                  </a>
+                </li>
                 <li>
                   <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="footer-ext-link">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
-                    GitHub @heynuo
+                    <span>GitHub @heynuo</span>
                   </a>
                 </li>
               </ul>
             </div>
 
             <div class="footer-col">
-              <h4 class="footer-heading">Trust &amp; Feed</h4>
+              <h4 class="footer-heading">
+                <span class="heading-icon" aria-hidden="true">🛡️</span>
+                <span>Trust &amp; Access</span>
+              </h4>
               <ul class="footer-list">
-                <li><a href="privacy.html" data-nav="privacy">Privacy &amp; Sources</a></li>
+                <li>
+                  <a href="privacy.html" data-nav="privacy">
+                    <span class="link-label">Privacy &amp; Sources</span>
+                    <span class="footer-pill-tag trust-tag">Verified</span>
+                  </a>
+                </li>
                 <li>
                   <a href="rss.xml" class="footer-ext-link">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
-                    RSS 2.0 Feed
+                    <span>RSS 2.0 Feed</span>
                   </a>
                 </li>
-                <li><a href="sitemap.xml">XML Sitemap</a></li>
+                <li>
+                  <a href="sitemap.xml">
+                    <span class="link-label">XML Sitemap</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </nav>
         </div>
 
+        <!-- Footer Bottom Bar -->
         <div class="footer-bottom">
-          <p class="footer-copy">© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
+          <div class="footer-copy-wrap">
+            <p class="footer-copy">© 2026 <strong>HeyNuo</strong> · Built with pure HTML5, CSS3 &amp; Vanilla JavaScript · Free &amp; Open Knowledge</p>
+            <span class="footer-subcopy">Crafted with precision &amp; care by Zahiruddin · Hosted on GitHub Pages</span>
+          </div>
+
           <div class="footer-actions">
             <button type="button" class="footer-shortcut-btn shortcut-help-btn" id="shortcutHelpBtn" title="View keyboard shortcuts (?)">
               <span class="shortcut-icon" aria-hidden="true">⌨️</span>
@@ -916,8 +1018,6 @@
     </div>
   </div>
   <script src="js/script.js"></script>
-  <!-- Persistent Quran Auto-Listening Player Engine -->
-  <script src="js/quran-player.js" defer></script>
 </body>
 
 </html>

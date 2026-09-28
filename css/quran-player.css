@@ -1540,10 +1540,13 @@ body.has-qp-minimized {
 
 @media (max-width: 480px) {
   :root {
-    --qp-bar-height: 64px;
+    --qp-bar-height: 58px;
+  }
+  body.has-qp-docked {
+    padding-bottom: calc(var(--qp-bar-height) + 18px) !important;
   }
   .qp-player-bar {
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(6px + env(safe-area-inset-bottom, 0px));
     left: 8px;
     right: 8px;
     border-radius: 18px;
@@ -1552,30 +1555,38 @@ body.has-qp-minimized {
     padding: 0 10px;
     gap: 8px;
   }
-  .qp-track-art {
-    width: 38px;
-    height: 38px;
+  .qp-cover-wrap {
+    width: 42px;
+    height: 42px;
     border-radius: 9px;
   }
   .qp-track-block {
     gap: 9px;
     min-width: 0;
   }
-  .qp-track-title {
-    font-size: 0.86rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .qp-track-info {
+    min-width: 0;
   }
-  .qp-track-sub {
-    font-size: 0.70rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .qp-surah-title {
+    font-size: 0.84rem;
+  }
+  .qp-surah-arabic,
+  .qp-track-subrow,
+  .qp-fav-btn,
+  .qp-right .qp-speed-btn,
+  .qp-right .qp-timer-btn,
+  .qp-right #qpFullscreenBtn {
+    display: none;
+  }
+  .qp-mobile-play-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
   .qp-icon-btn {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
   .qp-drawer {
     max-width: 100%;

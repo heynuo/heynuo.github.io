@@ -1936,14 +1936,14 @@ const CommandPalette = {
       }
     });
 
-    // Navbar search button click
-    const navSearchBtn = $.get('#navSearchBtn');
-    if (navSearchBtn) {
-      $.on(navSearchBtn, 'click', (e) => {
+    // Navbar and Footer search button triggers
+    const searchTriggers = $.getAll('#navSearchBtn, #footerSearchTrigger');
+    searchTriggers.forEach(btn => {
+      $.on(btn, 'click', (e) => {
         e.preventDefault();
         this.open();
       });
-    }
+    });
   },
 
   isOpen() {

@@ -32,6 +32,7 @@ const PRECACHE_URLS = [
   'js/ruqyah.js',
   'js/data/ruqyah-data.js',
   'js/quran-player.js',
+  'assets/js/quran-player.js',
   'js/quran-page.js',
   'js/master-verses.js',
   'js/data/master-verses-data.js',
