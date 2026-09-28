@@ -325,13 +325,20 @@
     const total = RUQYAH_VERSES.length;
     const categoriesCount = new Set(RUQYAH_VERSES.map(v => v.category)).size;
     const favCount = favorites.length;
+    const reciterName = RECITERS[currentReciter]?.name || 'Al-Islam Audio';
 
-    if (statsDashboardEl) {
+    const favEl = document.getElementById('statFavCount');
+    const reciterEl = document.getElementById('statReciterName');
+
+    if (favEl && reciterEl) {
+      favEl.textContent = favCount;
+      reciterEl.textContent = reciterName;
+    } else if (statsDashboardEl) {
       statsDashboardEl.innerHTML = `
-        <div class="ruqyah-stat-chip">📖 <strong>${total}</strong> Ruqyah Verses</div>
-        <div class="ruqyah-stat-chip">🏷️ <strong>${categoriesCount}</strong> Categories</div>
-        <div class="ruqyah-stat-chip">⭐ <strong>${favCount}</strong> Favorites</div>
-        <div class="ruqyah-stat-chip">🎙️ <strong>${RECITERS[currentReciter]?.name || 'Al-Islam Audio'}</strong></div>
+        <div class="ruqyah-stat-chip">&#128214; <strong>${total}</strong> Ruqyah Verses</div>
+        <div class="ruqyah-stat-chip">&#127991;&#65039; <strong>${categoriesCount}</strong> Categories</div>
+        <div class="ruqyah-stat-chip">&#11088; <strong id="statFavCount">${favCount}</strong> Favorites</div>
+        <div class="ruqyah-stat-chip">&#127897;&#65039; <strong id="statReciterName">${escapeHtml(reciterName)}</strong></div>
       `;
     }
   }

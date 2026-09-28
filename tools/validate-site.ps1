@@ -65,6 +65,13 @@ foreach ($file in $htmlFiles) {
             $errors += "[$file] Broken image src='$target'!"
         }
     }
+
+    # 8. Check <div> tag balance
+    $openDivs = [regex]::Matches($content, '<div\b').Count
+    $closeDivs = [regex]::Matches($content, '</div>').Count
+    if ($openDivs -ne $closeDivs) {
+        $errors += "[$file] Unbalanced <div> tags: $openDivs open vs $closeDivs close!"
+    }
     
     $successCount++
 }

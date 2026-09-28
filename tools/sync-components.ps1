@@ -30,20 +30,25 @@ foreach ($file in $htmlFiles) {
         $pageFooter = $pageFooter.Replace("data-nav=`"$pageKey`">", "class=`"active`" aria-current=`"page`">")
     }
 
-    # Replace <header>...</header>
-    $headerRegex = [regex]'<header\b[^>]*>.*?</header>'
+    # Replace <header>...</header> (singleline to match across newlines)
+    $headerRegex = New-Object System.Text.RegularExpressions.Regex('<header\b[^>]*>.*?</header>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
     if ($headerRegex.IsMatch($content)) {
         $content = $headerRegex.Replace($content, $pageHeader.Trim(), 1)
     }
 
-    # Replace <footer>...</footer>
-    $footerRegex = [regex]'<footer\b[^>]*>.*?</footer>'
+    # Replace <footer>...</footer> (singleline to match across newlines) or insert after </main>
+    $footerRegex = New-Object System.Text.RegularExpressions.Regex('<footer\b[^>]*>.*?</footer>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
     if ($footerRegex.IsMatch($content)) {
         $content = $footerRegex.Replace($content, $pageFooter.Trim(), 1)
+    } elseif ($content.Contains('</main>')) {
+        $content = $content.Replace('</main>', "</main>`n`n" + $pageFooter.Trim())
     }
 
-    # Ensure shortcuts modal exists
-    if (-not $content.Contains('id="shortcutsModal"')) {
+    # Canonicalize shortcuts modal cleanly (matches through any trailing divs up to script or toast)
+    $modalRegex = New-Object System.Text.RegularExpressions.Regex('<!-- Keyboard Shortcuts Modal.*?(?=\s*(?:<div id="ruqyahToast"|<script))', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    if ($modalRegex.IsMatch($content)) {
+        $content = $modalRegex.Replace($content, $modalTemplate.Trim(), 1)
+    } elseif (-not $content.Contains('id="shortcutsModal"')) {
         $content = $content.Replace('</body>', $modalTemplate + "`n</body>")
     }
 

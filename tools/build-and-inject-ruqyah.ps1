@@ -142,8 +142,8 @@ $statsPre = @"
       <div class="ruqyah-stats-dashboard" id="ruqyahStats" aria-label="Ruqyah statistics">
         <div class="ruqyah-stat-chip">&#128214; <strong>60</strong> Ruqyah Verses</div>
         <div class="ruqyah-stat-chip">&#127991;&#65039; <strong>9</strong> Categories</div>
-        <div class="ruqyah-stat-chip">&#11088; <strong>0</strong> Favorites</div>
-        <div class="ruqyah-stat-chip">&#127897;&#65039; <strong>Qari Muhammad Ashiq</strong></div>
+        <div class="ruqyah-stat-chip">&#11088; <strong id="statFavCount">0</strong> Favorites</div>
+        <div class="ruqyah-stat-chip">&#127897;&#65039; <strong id="statReciterName">Qari Muhammad Ashiq</strong></div>
       </div>
 "@
 
@@ -196,73 +196,26 @@ $ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
     [System.Text.RegularExpressions.RegexOptions]::Singleline
 )
 
-# Standard Shared Footer
-$standardFooter = @"
-  <!-- Footer -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="quran.html">Quran</a>
-        <a href="quran-verses.html">108 Verses</a>
-        <a href="ruqyah.html" class="active" aria-current="page">Ruqyah</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-        <a href="privacy.html">Privacy &amp; Sources</a>
-        <a href="rss.xml">RSS</a>
-        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.png" alt="" width="15" height="15" class="footer-icon"> GitHub</a>
-        <button type="button" class="footer-shortcut-btn" id="shortcutHelpBtn" title="View keyboard shortcuts">&#9000;&#65039; Shortcuts</button>
-      </div>
-      <p>© 2026 HeyNuo · Built with pure HTML, CSS &amp; JS · Free &amp; Open Knowledge</p>
-    </div>
-  </footer>
-"@
+# Standard Shared Footer from canonical component
+$footerTpl = [System.IO.File]::ReadAllText("tools\components\footer.html", [System.Text.Encoding]::UTF8)
+$ruqyahFooter = $footerTpl.Replace('data-nav="ruqyah">', 'class="active" aria-current="page">')
 
 $ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
     $ruqyahHtml,
-    '<!-- Footer -->\s*<footer>.*?</footer>',
-    $standardFooter,
+    '<footer\b[^>]*>.*?</footer>',
+    $ruqyahFooter.Trim(),
     [System.Text.RegularExpressions.RegexOptions]::Singleline
 )
 
-# Ensure shortcuts modal markup is present
-$shortcutsModalMarkup = @"
+# Ensure shortcuts modal markup is canonical
+$modalTpl = [System.IO.File]::ReadAllText("tools\components\shortcuts-modal.html", [System.Text.Encoding]::UTF8)
 
-  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
-  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
-    <div class="shortcuts-modal">
-      <div class="shortcuts-header">
-        <h3 id="shortcutsTitle">&#9000;&#65039; Keyboard Shortcuts</h3>
-        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
-      </div>
-      <div class="shortcuts-toggle-row">
-        <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
-          <span>Enable Single-Key Shortcuts (T, H, A, C, ?, Space)</span>
-          <small>Turn off if using speech-to-text or screen readers (WCAG 2.1.4)</small>
-        </label>
-        <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
-      </div>
-      <div class="shortcuts-list">
-        <div class="shortcut-row"><span class="shortcut-desc">Search &amp; Command Palette</span><span><kbd class="shortcut-key">Ctrl + K</kbd> or <kbd class="shortcut-key">/</kbd></span></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Toggle Dark / Light Mode</span><kbd class="shortcut-key">T</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to Home</span><kbd class="shortcut-key">H</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to About</span><kbd class="shortcut-key">A</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Go to Contact</span><kbd class="shortcut-key">C</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">View Shortcuts</span><kbd class="shortcut-key">?</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Quran Play / Pause</span><kbd class="shortcut-key">Space</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Next / Previous Surah</span><span><kbd class="shortcut-key">→</kbd> / <kbd class="shortcut-key">←</kbd></span></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Minimize / Restore Player</span><kbd class="shortcut-key">V</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Surah Playlist Queue</span><kbd class="shortcut-key">Q</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Fullscreen Player Modal</span><kbd class="shortcut-key">F</kbd></div>
-        <div class="shortcut-row"><span class="shortcut-desc">Close Any Dialog</span><kbd class="shortcut-key">Esc</kbd></div>
-      </div>
-    </div>
-  </div>
-"@
-
-if (-not $ruqyahHtml.Contains('id="shortcutsModal"')) {
-    $ruqyahHtml = $ruqyahHtml.Replace('<div id="ruqyahToast"', $shortcutsModalMarkup + "`n`n  <div id=`"ruqyahToast`"")
-}
+$ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
+    $ruqyahHtml,
+    '<!-- Keyboard Shortcuts Modal.*?id="shortcutsModal".*?</div>\s*</div>',
+    $modalTpl.Trim(),
+    [System.Text.RegularExpressions.RegexOptions]::Singleline
+)
 
 # Ensure manifest and RSS in head
 if (-not $ruqyahHtml.Contains('rel="manifest"')) {
