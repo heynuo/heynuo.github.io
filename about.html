@@ -1,42 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="robots" content="index, follow">
-  <title>About Me - HeyNuo | Developer & Researcher</title>
-  <meta name="description" content="Learn about HeyNuo - a passionate Java developer, Islamic researcher, and content creator sharing tutorials, research notes, and web development guides.">
-  <meta name="keywords" content="About HeyNuo, developer bio, Java programmer, Islamic research, web development, content creator, Ruqyah guide">
+
+  <!-- Perf: colour-scheme hint for the browser chrome -->
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+
+  <!-- SEO -->
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
   <meta name="author" content="HeyNuo">
+  <meta name="description"
+    content="Learn about HeyNuo — a Java developer, Islamic researcher, and content creator sharing tutorials, research notes, and web development guides.">
   <link rel="canonical" href="https://heynuo.github.io/about.html">
-  <meta property="og:title" content="About Me - HeyNuo | Developer & Researcher">
-  <meta property="og:description" content="Passionate developer, Java enthusiast, Islamic researcher, and content creator.">
+
+  <title>About Me — HeyNuo | Developer &amp; Researcher</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="HeyNuo">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://heynuo.github.io/about.html">
+  <meta property="og:title" content="About Me — HeyNuo | Developer &amp; Researcher">
+  <meta property="og:description"
+    content="Java developer, Islamic researcher, and content creator sharing tutorials, research notes, and web development guides.">
   <meta property="og:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://heynuo.github.io/about.html">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="HeyNuo">
+  <meta property="og:image:alt" content="HeyNuo — Developer, Researcher, Content Creator">
+  <meta property="profile:username" content="heynuo">
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About Me - HeyNuo | Developer & Researcher">
+  <meta name="twitter:title" content="About Me — HeyNuo | Developer &amp; Researcher">
   <meta name="twitter:description" content="Java tutorials, Islamic research, and web development guides by HeyNuo.">
   <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <meta name="twitter:image:alt" content="HeyNuo — Developer, Researcher, Content Creator">
+
+  <!-- Favicon + PWA -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
-  <!-- Google Fonts Preconnect & Stylesheet -->
+  <!-- Structured data: ProfilePage + Person + Website + Breadcrumbs -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://heynuo.github.io/#website",
+        "url": "https://heynuo.github.io/",
+        "name": "HeyNuo",
+        "description": "Open knowledge sanctuary — Quranic sciences, Ruqyah Shariyah, and software engineering.",
+        "publisher": { "@id": "https://heynuo.github.io/#person" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://heynuo.github.io/#person",
+        "name": "HeyNuo",
+        "alternateName": "Zahiruddin",
+        "url": "https://heynuo.github.io/",
+        "image": "https://heynuo.github.io/assets/banners/og-banner.jpg",
+        "jobTitle": "Developer & Researcher",
+        "description": "Java developer, Islamic researcher, and content creator focused on clean code and authentic knowledge sharing.",
+        "sameAs": [ "https://github.com/heynuo" ],
+        "knowsAbout": [
+          "Java", "Object-Oriented Programming", "Design Patterns",
+          "HTML5", "CSS3", "JavaScript ES6+",
+          "Web Performance", "Web Accessibility",
+          "Quranic Studies", "Hadith", "Ruqyah Shariyah"
+        ]
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://heynuo.github.io/about.html#webpage",
+        "url": "https://heynuo.github.io/about.html",
+        "name": "About Me — HeyNuo",
+        "description": "About HeyNuo — developer, Islamic researcher, and content creator.",
+        "isPartOf": { "@id": "https://heynuo.github.io/#website" },
+        "about": { "@id": "https://heynuo.github.io/#person" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://heynuo.github.io/" },
+          { "@type": "ListItem", "position": 2, "name": "About", "item": "https://heynuo.github.io/about.html" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
-  <!-- Shared stylesheet: global styles + about page components -->
+  <!-- App CSS -->
   <link rel="stylesheet" href="css/style.css">
-  <!-- Persistent Quran Auto-Listening Audio Player -->
   <link rel="stylesheet" href="css/quran-player.css">
+
+  <!-- Screen-reader utility (also add to style.css so it's global) -->
+  <style>
+    .sr-only {
+      position: absolute;
+      inline-size: 1px;
+      block-size: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+  <!-- Fallback for no-JS: hide JS-dependent chrome -->
+  <noscript>
+    <style>
+      .reading-progress,
+      .scroll-to-top {
+        display: none !important;
+      }
+    </style>
+  </noscript>
 </head>
+
 <body>
-  <!-- Include once, anywhere after <body> opens (or in <head> with defer) -->
   <script src="/assets/js/quran-player.js" defer></script>
 
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
@@ -44,9 +147,10 @@
 
   <header role="banner">
     <nav class="container" aria-label="Main navigation">
-      <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
+      <a href="index.html" class="logo" aria-label="HeyNuo — Return to homepage">
         <span class="logo-mark" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
             <path d="M2 17l10 5 10-5"></path>
             <path d="M2 12l10 5 10-5"></path>
@@ -56,12 +160,17 @@
       </a>
 
       <div class="nav-right">
-        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles and topics (Ctrl+K)" title="Quick Search (Ctrl+K)">
+        <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search articles and topics (Ctrl+K)"
+          title="Quick Search (Ctrl+K)">
           <span class="nav-search-icon" aria-hidden="true">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
           </span>
-          <span class="nav-search-text">Search...</span>
-          <kbd class="nav-search-kbd">Ctrl K</kbd>
+          <span class="nav-search-text">Search…</span>
+          <kbd class="nav-search-kbd" aria-hidden="true">Ctrl K</kbd>
         </button>
 
         <div class="nav-links" id="nav-links" role="region" aria-label="Site menu">
@@ -70,7 +179,8 @@
               <span class="logo-mark-mini" aria-hidden="true">HN</span>
               <span>Navigation</span>
             </div>
-            <button type="button" class="nav-mobile-close" id="navCloseBtn" aria-label="Close navigation menu">✕</button>
+            <button type="button" class="nav-mobile-close" id="navCloseBtn"
+              aria-label="Close navigation menu">✕</button>
           </div>
           <a href="index.html" data-nav="index">Home</a>
           <a href="quran.html" data-nav="quran">Quran</a>
@@ -80,23 +190,39 @@
           <a href="contact.html" data-nav="contact">Contact</a>
         </div>
 
-        <button type="button" class="nav-icon-btn shortcut-help-btn" id="headerShortcutsBtn" aria-label="Keyboard Shortcuts" title="Keyboard Shortcuts (?)">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button type="button" class="nav-icon-btn shortcut-help-btn" id="headerShortcutsBtn"
+          aria-label="Keyboard shortcuts" title="Keyboard Shortcuts (?)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
             <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M8 16h8"></path>
           </svg>
         </button>
 
-        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="nav-icon-btn" aria-label="GitHub Profile @heynuo" title="GitHub @heynuo">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+        <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer me" class="nav-icon-btn"
+          aria-label="GitHub profile @heynuo (opens in new tab)" title="GitHub @heynuo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z">
+            </path>
+          </svg>
         </a>
 
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light or dark theme" title="Toggle theme (T)">
-          <svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="theme-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
         </button>
 
-        <button class="menu-btn" id="menu-btn" aria-label="Toggle navigation menu" aria-controls="nav-links" aria-expanded="false">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <button class="menu-btn" id="menu-btn" aria-label="Toggle navigation menu" aria-controls="nav-links"
+          aria-expanded="false">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
         </button>
       </div>
     </nav>
@@ -104,16 +230,22 @@
 
   <div class="container">
     <main id="main-content">
-      <section class="hero about-hero">
+
+      <!-- ============ HERO ============ -->
+      <section class="hero about-hero" aria-labelledby="pageTitle">
         <div class="hero-ambient-glow" aria-hidden="true"></div>
         <div class="hero-content">
-          <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            ✦ Developer, Researcher &amp; Creator
-          </div>
-          <h1>About <span>Me</span></h1>
+          <p class="hero-badge">
+            <span class="hero-badge-dot" aria-hidden="true"></span>
+            <span aria-hidden="true">✦</span>
+            <span>Developer, Researcher &amp; Creator</span>
+          </p>
+          <h1 id="pageTitle">About <span>Me</span></h1>
           <p class="hero-subtitle">Developer · Researcher · Content Creator</p>
-          <p class="hero-description">Assalamu Alaikum! I'm HeyNuo — passionate about sharing knowledge through clean code, authentic Islamic research, and high-performance educational web guides.</p>
+          <p class="hero-description">
+            Assalamu Alaikum! I'm HeyNuo — passionate about sharing knowledge through clean code,
+            authentic Islamic research, and high-performance educational web guides.
+          </p>
           <div class="hero-buttons">
             <a href="index.html#articles" class="btn btn-primary">View My Articles ↓</a>
             <a href="contact.html" class="btn btn-secondary">Get In Touch →</a>
@@ -121,202 +253,341 @@
         </div>
       </section>
 
-      <section class="section-spacing">
-        <h2 class="section-title">Who <span>Am I?</span></h2>
+      <!-- ============ WHO AM I ============ -->
+      <section class="section-spacing" aria-labelledby="whoTitle">
+        <h2 class="section-title" id="whoTitle">Who <span>Am I?</span></h2>
         <div class="about">
           <article class="about-box">
-            <h2><img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="24" height="24"> My Journey</h2>
-            <p>I'm a developer and researcher dedicated to creating valuable educational content. My journey spans <strong>Java programming</strong>, <strong>modern web development</strong>, and <strong>Islamic research</strong> — all driven by a passion for authentic knowledge sharing.</p>
+            <h3>
+              <img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="24" height="24" loading="lazy"
+                decoding="async" aria-hidden="true">
+              My Journey
+            </h3>
+            <p>
+              I'm a developer and researcher dedicated to creating valuable educational content.
+              My journey spans <strong>Java programming</strong>, <strong>modern web development</strong>,
+              and <strong>Islamic research</strong> — all driven by a passion for authentic knowledge sharing.
+            </p>
           </article>
           <article class="about-box">
-            <h2><img src="assets/icons/books.png" alt="" class="inline-title-icon" width="24" height="24"> This Website</h2>
-            <p>This is my digital notebook: a place where I document tutorials, share research findings, and build open resources like the <a href="ruqyah.html">Ruqyah Shariyah Guide</a> and the <a href="quran.html">Complete Quran Library</a>.</p>
+            <h3>
+              <img src="assets/icons/books.png" alt="" class="inline-title-icon" width="24" height="24" loading="lazy"
+                decoding="async" aria-hidden="true">
+              This Website
+            </h3>
+            <p>
+              This is my digital notebook: a place where I document tutorials, share research findings,
+              and build open resources like the <a href="ruqyah.html">Ruqyah Shariyah Guide</a>
+              and the <a href="quran.html">Complete Quran Library</a>.
+            </p>
           </article>
         </div>
       </section>
 
-      <section class="section-spacing">
-        <h2 class="section-title">My <span>Expertise</span></h2>
+      <!-- ============ EXPERTISE ============ -->
+      <section class="section-spacing" aria-labelledby="expertiseTitle">
+        <h2 class="section-title" id="expertiseTitle">My <span>Expertise</span></h2>
         <div class="cards">
-          <article class="card">
-            <span class="category"><img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14"> Java</span>
-            <h3><img src="assets/icons/java.png" alt="" class="inline-title-icon" width="22" height="22"> Java Development</h3>
+
+          <article class="card" aria-labelledby="expJava">
+            <span class="category">
+              <img src="assets/icons/java.png" alt="" class="badge-icon" width="14" height="14" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Java
+            </span>
+            <h3 id="expJava">
+              <img src="assets/icons/java.png" alt="" class="inline-title-icon" width="22" height="22" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Java Development
+            </h3>
             <p>Object-Oriented Programming, Data Structures, Algorithms, and practical projects.</p>
-            <div class="skill-meter-list">
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>OOP Principles</span><span class="skill-meter-num">95%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="95" style="width: 0%;"></div></div>
+            <div class="skill-meter-list" role="list">
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-java-1">OOP Principles</span>
+                  <span class="skill-meter-num">95%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-java-1" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="95">
+                  <div class="skill-meter-fill" data-pct="95" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Design Patterns</span><span class="skill-meter-num">90%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="90" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-java-2">Design Patterns</span>
+                  <span class="skill-meter-num">90%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-java-2" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="90">
+                  <div class="skill-meter-fill" data-pct="90" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Code Architecture</span><span class="skill-meter-num">92%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="92" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-java-3">Code Architecture</span>
+                  <span class="skill-meter-num">92%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-java-3" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="92">
+                  <div class="skill-meter-fill" data-pct="92" style="width:0%"></div>
+                </div>
               </div>
             </div>
           </article>
-          <article class="card">
-            <span class="category"><img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14"> Web Dev</span>
-            <h3><img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="22" height="22"> Web Development</h3>
+
+          <article class="card" aria-labelledby="expWeb">
+            <span class="category">
+              <img src="assets/icons/html5.png" alt="" class="badge-icon" width="14" height="14" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Web Dev
+            </span>
+            <h3 id="expWeb">
+              <img src="assets/icons/html5.png" alt="" class="inline-title-icon" width="22" height="22" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Web Development
+            </h3>
             <p>Clean, responsive websites built with pure HTML, CSS &amp; JavaScript.</p>
-            <div class="skill-meter-list">
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>HTML5 &amp; CSS3 Layouts</span><span class="skill-meter-num">98%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+            <div class="skill-meter-list" role="list">
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-web-1">HTML5 &amp; CSS3 Layouts</span>
+                  <span class="skill-meter-num">98%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-web-1" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="98">
+                  <div class="skill-meter-fill" data-pct="98" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Vanilla JavaScript (ES6+)</span><span class="skill-meter-num">94%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="94" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-web-2">Vanilla JavaScript (ES6+)</span>
+                  <span class="skill-meter-num">94%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-web-2" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="94">
+                  <div class="skill-meter-fill" data-pct="94" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Performance &amp; Accessibility</span><span class="skill-meter-num">96%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="96" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-web-3">Performance &amp; Accessibility</span>
+                  <span class="skill-meter-num">96%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-web-3" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="96">
+                  <div class="skill-meter-fill" data-pct="96" style="width:0%"></div>
+                </div>
               </div>
             </div>
           </article>
-          <article class="card">
-            <span class="category"><img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14"> Research</span>
-            <h3><img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="22" height="22"> Islamic Research</h3>
+
+          <article class="card" aria-labelledby="expResearch">
+            <span class="category">
+              <img src="assets/icons/quran.png" alt="" class="badge-icon" width="14" height="14" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Research
+            </span>
+            <h3 id="expResearch">
+              <img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="22" height="22" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Islamic Research
+            </h3>
             <p>Authentic research on Quran, Hadith, Tawheed, and contemporary issues.</p>
-            <div class="skill-meter-list">
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Qur'anic Commentary</span><span class="skill-meter-num">92%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="92" style="width: 0%;"></div></div>
+            <div class="skill-meter-list" role="list">
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-res-1">Qur'anic Commentary</span>
+                  <span class="skill-meter-num">92%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-res-1" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="92">
+                  <div class="skill-meter-fill" data-pct="92" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Hadith Verification</span><span class="skill-meter-num">94%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="94" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-res-2">Hadith Verification</span>
+                  <span class="skill-meter-num">94%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-res-2" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="94">
+                  <div class="skill-meter-fill" data-pct="94" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Ruqyah Shariyah</span><span class="skill-meter-num">98%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-res-3">Ruqyah Shariyah</span>
+                  <span class="skill-meter-num">98%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-res-3" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="98">
+                  <div class="skill-meter-fill" data-pct="98" style="width:0%"></div>
+                </div>
               </div>
             </div>
           </article>
-          <article class="card">
-            <span class="category"><img src="assets/icons/open-book.png" alt="" class="badge-icon" width="14" height="14"> Content</span>
-            <h3><img src="assets/icons/open-book.png" alt="" class="inline-title-icon" width="22" height="22"> Content Creation</h3>
+
+          <article class="card" aria-labelledby="expContent">
+            <span class="category">
+              <img src="assets/icons/open-book.png" alt="" class="badge-icon" width="14" height="14" loading="lazy"
+                decoding="async" aria-hidden="true">
+              Content
+            </span>
+            <h3 id="expContent">
+              <img src="assets/icons/open-book.png" alt="" class="inline-title-icon" width="22" height="22"
+                loading="lazy" decoding="async" aria-hidden="true">
+              Content Creation
+            </h3>
             <p>Educational tutorials, guides, and research articles for learners worldwide.</p>
-            <div class="skill-meter-list">
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Technical Writing</span><span class="skill-meter-num">96%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="96" style="width: 0%;"></div></div>
+            <div class="skill-meter-list" role="list">
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-con-1">Technical Writing</span>
+                  <span class="skill-meter-num">96%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-con-1" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="96">
+                  <div class="skill-meter-fill" data-pct="96" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Diagrams &amp; Visuals</span><span class="skill-meter-num">90%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="90" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-con-2">Diagrams &amp; Visuals</span>
+                  <span class="skill-meter-num">90%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-con-2" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="90">
+                  <div class="skill-meter-fill" data-pct="90" style="width:0%"></div>
+                </div>
               </div>
-              <div class="skill-meter">
-                <div class="skill-meter-head"><span>Educational Clarity</span><span class="skill-meter-num">98%</span></div>
-                <div class="skill-meter-track"><div class="skill-meter-fill" data-pct="98" style="width: 0%;"></div></div>
+              <div class="skill-meter" role="listitem">
+                <div class="skill-meter-head">
+                  <span id="s-con-3">Educational Clarity</span>
+                  <span class="skill-meter-num">98%</span>
+                </div>
+                <div class="skill-meter-track" role="progressbar" aria-labelledby="s-con-3" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="98">
+                  <div class="skill-meter-fill" data-pct="98" style="width:0%"></div>
+                </div>
               </div>
             </div>
           </article>
+
         </div>
       </section>
 
-      <section class="section-spacing">
-        <h2 class="section-title">Tech <span>Stack &amp; Tools</span></h2>
-        <div class="tech-stack-grid">
-          <div class="tech-pill"><span class="icon">☕</span> Java (OOP)</div>
-          <div class="tech-pill"><span class="icon">💻</span> Responsive Web Design</div>
-          <div class="tech-pill"><span class="icon">🌐</span> HTML5 / CSS3</div>
-          <div class="tech-pill"><span class="icon">⚡</span> JavaScript ES6+</div>
-          <div class="tech-pill"><span class="icon">🐙</span> Git &amp; GitHub</div>
-          <div class="tech-pill"><span class="icon">📖</span> Quranic Studies</div>
-          <div class="tech-pill"><span class="icon">✍️</span> Technical Writing</div>
-          <div class="tech-pill"><span class="icon">🚀</span> GitHub Pages</div>
-        </div>
+      <!-- ============ TECH STACK ============ -->
+      <section class="section-spacing" aria-labelledby="stackTitle">
+        <h2 class="section-title" id="stackTitle">Tech <span>Stack &amp; Tools</span></h2>
+        <ul class="tech-stack-grid" role="list">
+          <li class="tech-pill"><span class="icon" aria-hidden="true">☕</span> Java (OOP)</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">💻</span> Responsive Web Design</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">🌐</span> HTML5 / CSS3</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">⚡</span> JavaScript ES6+</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">🐙</span> Git &amp; GitHub</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">📖</span> Quranic Studies</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">✍️</span> Technical Writing</li>
+          <li class="tech-pill"><span class="icon" aria-hidden="true">🚀</span> GitHub Pages</li>
+        </ul>
       </section>
 
-      <!-- Journey & Milestones Timeline -->
-      <section class="section-spacing">
-        <h2 class="section-title">Journey &amp; <span>Milestones</span></h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
+      <!-- ============ TIMELINE ============ -->
+      <section class="section-spacing" aria-labelledby="timelineTitle">
+        <h2 class="section-title" id="timelineTitle">Journey &amp; <span>Milestones</span></h2>
+        <ol class="timeline" role="list">
+          <li class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
             <div class="timeline-card">
-              <span class="timeline-date">2024</span>
+              <time class="timeline-date" datetime="2024">2024</time>
               <h3>Java OOP &amp; Core Architecture</h3>
-              <p>Deep-dived into OOP design patterns, data structures, and clean modular code in Java, setting the foundation for reusable engineering.</p>
+              <p>Deep-dived into OOP design patterns, data structures, and clean modular code in Java, setting the
+                foundation for reusable engineering.</p>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
             <div class="timeline-card">
-              <span class="timeline-date">2025</span>
+              <time class="timeline-date" datetime="2025">2025</time>
               <h3>Ruqyah Shariyah Theological Reference</h3>
-              <p>Authored and compiled the authentic 25+ Qur'anic healing verses reference with audio recitation, sahih hadith sources, and spiritual wellness guidance.</p>
+              <p>Authored and compiled the authentic 25+ Qur'anic healing verses reference with audio recitation, sahih
+                hadith sources, and spiritual wellness guidance.</p>
             </div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-dot"></div>
+          </li>
+          <li class="timeline-item">
+            <div class="timeline-dot" aria-hidden="true"></div>
             <div class="timeline-card">
-              <span class="timeline-date">2026</span>
+              <time class="timeline-date" datetime="2026">2026</time>
               <h3>HeyNuo Knowledge Hub Launch</h3>
-              <p>Built and published this high-performance, accessible, static documentation platform on GitHub Pages with zero framework bloat.</p>
+              <p>Built and published this high-performance, accessible, static documentation platform on GitHub Pages
+                with zero framework bloat.</p>
             </div>
-          </div>
-        </div>
+          </li>
+        </ol>
       </section>
 
-      <section class="section-spacing">
-        <h2 class="section-title">Featured <span>Project</span></h2>
-        <div class="featured-banner">
+      <!-- ============ FEATURED PROJECT ============ -->
+      <section class="section-spacing" aria-labelledby="featuredTitle">
+        <h2 class="section-title" id="featuredTitle">Featured <span>Project</span></h2>
+        <article class="featured-banner" aria-labelledby="featuredProjectTitle">
           <div class="featured-ambient-glow" aria-hidden="true"></div>
           <div class="featured-banner-grid">
             <div class="featured-banner-info">
               <div class="featured-header-row">
                 <div class="project-featured-badge">
                   <span class="pulse-beacon" aria-hidden="true"></span>
-                  <img src="assets/icons/star.png" alt="" width="14" height="14" class="btn-icon">
+                  <img src="assets/icons/star.png" alt="" width="14" height="14" loading="lazy" decoding="async"
+                    class="btn-icon" aria-hidden="true">
                   Flagship Web App
                 </div>
                 <div class="featured-pill-tag">
-                  <span class="badge-dot-green"></span> Live v2.4 · Free &amp; Open
+                  <span class="badge-dot-green" aria-hidden="true"></span>
+                  Live v2.4 · Free &amp; Open
                 </div>
               </div>
 
-              <h3 class="featured-banner-title">
-                <img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="26" height="26">
+              <h3 class="featured-banner-title" id="featuredProjectTitle">
+                <img src="assets/icons/quran.png" alt="" class="inline-title-icon" width="26" height="26" loading="lazy"
+                  decoding="async" aria-hidden="true">
                 <span>Ruqyah Shariyah</span> Comprehensive Guide
               </h3>
 
               <p class="featured-banner-desc">
-                An authentic, interactive web resource for Qur'anic healing verses — covering protection, jinn expulsion, spiritual remedies, and more, based directly on Qur'an &amp; Sunnah.
+                An authentic, interactive web resource for Qur'anic healing verses — covering protection,
+                jinn expulsion, spiritual remedies, and more, based directly on Qur'an &amp; Sunnah.
               </p>
 
-              <div class="featured-highlights">
-                <div class="featured-highlight-item">
-                  <span class="featured-highlight-icon">📖</span>
+              <ul class="featured-highlights" role="list">
+                <li class="featured-highlight-item">
+                  <span class="featured-highlight-icon" aria-hidden="true">📖</span>
                   <div>
                     <strong>25+ Verses</strong>
                     <small>Arabic + English + Tajweed</small>
                   </div>
-                </div>
-                <div class="featured-highlight-item">
-                  <span class="featured-highlight-icon">🎧</span>
+                </li>
+                <li class="featured-highlight-item">
+                  <span class="featured-highlight-icon" aria-hidden="true">🎧</span>
                   <div>
                     <strong>Studio Audio</strong>
                     <small>Mishary Alafasy Reciter</small>
                   </div>
-                </div>
-                <div class="featured-highlight-item">
-                  <span class="featured-highlight-icon">🛡️</span>
+                </li>
+                <li class="featured-highlight-item">
+                  <span class="featured-highlight-icon" aria-hidden="true">🛡️</span>
                   <div>
                     <strong>Sunnah Sourced</strong>
                     <small>Authentic Hadith Citations</small>
                   </div>
-                </div>
-              </div>
+                </li>
+              </ul>
 
               <div class="featured-actions">
-                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="project-btn">
-                  <img src="assets/icons/open-book.png" alt="" width="18" height="18" class="btn-icon">
+                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank"
+                  rel="noopener noreferrer" class="project-btn">
+                  <img src="assets/icons/open-book.png" alt="" width="18" height="18" loading="lazy" decoding="async"
+                    class="btn-icon" aria-hidden="true">
                   <span>Open Ruqyah Guide</span>
                   <span class="btn-arrow" aria-hidden="true">→</span>
+                  <span class="sr-only">(opens in a new tab)</span>
                 </a>
                 <a href="jinn-islamic-theology.html" class="btn btn-secondary">
                   Theology Article →
@@ -325,10 +596,12 @@
             </div>
 
             <div class="featured-banner-preview">
-              <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Guide Banner" width="600" height="375" loading="lazy" class="preview-main-img">
-              
+              <img src="assets/banners/ruqyah-theology.jpg" alt="Ruqyah Shariyah Guide — preview banner" width="600"
+                height="375" loading="lazy" decoding="async" class="preview-main-img">
+
               <div class="preview-floating-badge badge-top-left">
-                <span class="badge-dot-green"></span> Verified PWA
+                <span class="badge-dot-green" aria-hidden="true"></span>
+                Verified PWA
               </div>
               <div class="preview-floating-badge badge-top-right">
                 <div class="preview-mini-waves" aria-hidden="true">
@@ -338,59 +611,94 @@
               </div>
 
               <div class="preview-hover-overlay">
-                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank" rel="noopener noreferrer" class="preview-launch-btn">
-                  <img src="assets/icons/rocket.png" alt="" width="16" height="16">
+                <a href="https://heynuo.github.io/heynuo.github.io-ruqyah-guide/" target="_blank"
+                  rel="noopener noreferrer" class="preview-launch-btn">
+                  <img src="assets/icons/rocket.png" alt="" width="16" height="16" loading="lazy" decoding="async"
+                    aria-hidden="true">
                   Launch Full Guide ↗
+                  <span class="sr-only">(opens in a new tab)</span>
                 </a>
               </div>
             </div>
           </div>
-        </div>
+        </article>
       </section>
 
-      <!-- Quick Bio & Speaker Widget -->
-      <section class="section-spacing">
+      <!-- ============ SHORT BIO ============ -->
+      <section class="section-spacing" aria-labelledby="bioTitle">
+        <h2 id="bioTitle" class="sr-only">Short Bio</h2>
         <div class="bio-card">
           <div class="bio-card-header">
             <div>
-              <span class="bio-badge">📋 Short Bio</span>
-              <h3 style="margin:6px 0 0; font-family:var(--font-display); font-size:17px;">For Collaborations &amp; Introductions</h3>
+              <span class="bio-badge" aria-hidden="true">📋 Short Bio</span>
+              <h3 style="margin:6px 0 0; font-family:var(--font-display); font-size:17px;">
+                For Collaborations &amp; Introductions
+              </h3>
             </div>
-            <button type="button" class="btn btn-secondary btn-sm" id="copyBioBtn" title="Copy bio to clipboard">📋 Copy Bio</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="copyBioBtn" title="Copy bio to clipboard"
+              aria-describedby="bioCopyHint">
+              <span aria-hidden="true">📋</span> Copy Bio
+            </button>
           </div>
-          <p class="bio-text" id="bioText">HeyNuo is a developer and researcher passionate about clean Java OOP architecture, authentic Islamic theological research, and lightweight, high-performance web development.</p>
+          <p class="bio-text" id="bioText">
+            HeyNuo is a developer and researcher passionate about clean Java OOP architecture,
+            authentic Islamic theological research, and lightweight, high-performance web development.
+          </p>
+          <span id="bioCopyHint" class="sr-only">Copies the bio text above to your clipboard.</span>
         </div>
       </section>
 
-      <section class="section-spacing">
-        <h2 class="section-title">My <span>Values</span></h2>
+      <!-- ============ VALUES ============ -->
+      <section class="section-spacing" aria-labelledby="valuesTitle">
+        <h2 class="section-title" id="valuesTitle">My <span>Values</span></h2>
         <div class="about">
-          <article class="about-box"><h2>✓ Authenticity</h2><p>Verified information from reliable sources — in both code and faith.</p></article>
-          <article class="about-box"><h2>♥ Service</h2><p>Creating content that genuinely helps learners and seekers of knowledge.</p></article>
-          <article class="about-box"><h2>⚡ Simplicity</h2><p>Breaking complex topics into clear, digestible lessons for everyone.</p></article>
-          <article class="about-box"><h2>🌱 Growth</h2><p>Committed to lifelong learning in technology and Islamic knowledge.</p></article>
+          <article class="about-box">
+            <h3><span aria-hidden="true">✓</span> Authenticity</h3>
+            <p>Verified information from reliable sources — in both code and faith.</p>
+          </article>
+          <article class="about-box">
+            <h3><span aria-hidden="true">♥</span> Service</h3>
+            <p>Creating content that genuinely helps learners and seekers of knowledge.</p>
+          </article>
+          <article class="about-box">
+            <h3><span aria-hidden="true">⚡</span> Simplicity</h3>
+            <p>Breaking complex topics into clear, digestible lessons for everyone.</p>
+          </article>
+          <article class="about-box">
+            <h3><span aria-hidden="true">🌱</span> Growth</h3>
+            <p>Committed to lifelong learning in technology and Islamic knowledge.</p>
+          </article>
         </div>
       </section>
 
-      <section class="hero cta-section">
-        <h2>Let's <span>Connect</span></h2>
+      <!-- ============ CTA ============ -->
+      <section class="hero cta-section" aria-labelledby="ctaTitle">
+        <h2 id="ctaTitle">Let's <span>Connect</span></h2>
         <p class="cta-text">Have questions, suggestions, or want to collaborate? I'd love to hear from you!</p>
         <div class="hero-buttons">
           <a href="contact.html" class="btn btn-primary">Get In Touch</a>
-          <button type="button" class="btn btn-secondary copy-email-btn" data-user="zahiruddin44044" data-domain="gmail.com"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16"> Copy Email</button>
+          <button type="button" class="btn btn-secondary copy-email-btn" data-user="zahiruddin44044"
+            data-domain="gmail.com" aria-label="Copy email address to clipboard">
+            <img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16" loading="lazy"
+              decoding="async" aria-hidden="true">
+            Copy Email
+          </button>
         </div>
       </section>
+
     </main>
 
+    <!-- ============ FOOTER ============ -->
     <footer role="contentinfo">
       <div class="footer-container">
-        <!-- Main 5-Column Grid -->
         <div class="footer-grid">
-          <!-- Column 1: HeyNuo Brand & About -->
+
+          <!-- Column 1: Brand -->
           <div class="footer-col footer-col-brand">
-            <a href="index.html" class="footer-brand-logo" aria-label="HeyNuo Homepage">
+            <a href="index.html" class="footer-brand-logo" aria-label="HeyNuo — Homepage">
               <span class="logo-mark" aria-hidden="true">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                   <path d="M2 17l10 5 10-5"></path>
                   <path d="M2 12l10 5 10-5"></path>
@@ -399,12 +707,13 @@
               <span class="footer-logo-name">Hey<span>Nuo</span></span>
             </a>
             <p class="footer-brand-desc">
-              Open knowledge sanctuary uniting authentic Quranic sciences, referenced Ruqyah Shariyah, and modern enterprise software engineering.
+              Open knowledge sanctuary uniting authentic Quranic sciences, referenced Ruqyah Shariyah,
+              and modern enterprise software engineering.
             </p>
             <p class="footer-brand-motto">
               <span class="motto-icon" aria-hidden="true">🕊️</span>
-              <span>“My Lord, increase me in knowledge.”</span>
-              <cite>— 20:114</cite>
+              <span>&ldquo;My Lord, increase me in knowledge.&rdquo;</span>
+              <cite>&mdash; Qur'an 20:114</cite>
             </p>
             <div class="footer-badges-grid">
               <span class="footer-badge badge-vanilla">
@@ -412,11 +721,17 @@
                 <span>Vanilla Web</span>
               </span>
               <span class="footer-badge">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
                 <span>Zero Ads &amp; Trackers</span>
               </span>
               <span class="footer-badge">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
                 <span>MIT Licensed</span>
               </span>
               <span class="footer-badge">
@@ -424,139 +739,157 @@
                 <span>WCAG 2.1 AAA</span>
               </span>
             </div>
+            <div class="footer-social-row" aria-label="Social profiles">
+              <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer me"
+                class="footer-social-link" aria-label="GitHub @heynuo (opens in new tab)" title="GitHub">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+              <a href="rss.xml" class="footer-social-link" aria-label="RSS feed" title="RSS">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 11a9 9 0 0 1 9 9" />
+                  <path d="M4 4a16 16 0 0 1 16 16" />
+                  <circle cx="5" cy="19" r="1" />
+                </svg>
+              </a>
+              <a href="sitemap.xml" class="footer-social-link" aria-label="XML sitemap" title="Sitemap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="6" height="6" rx="1" />
+                  <rect x="15" y="3" width="6" height="6" rx="1" />
+                  <rect x="9" y="15" width="6" height="6" rx="1" />
+                  <path d="M6 9v3a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V9" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           <!-- Column 2: Sacred Sciences -->
-          <div class="footer-col">
-            <h4 class="footer-heading">
+          <nav class="footer-col" aria-labelledby="foot-sacred">
+            <h4 class="footer-heading" id="foot-sacred">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
             </h4>
             <ul class="footer-nav-list">
-              <li>
-                <a href="quran.html" data-nav="quran">
+              <li><a href="quran.html" data-nav="quran">
                   <span>Quran Player</span>
                   <span class="footer-pill-tag">114 Surahs</span>
-                </a>
-              </li>
-              <li>
-                <a href="quran-verses.html" data-nav="quran-verses">
+                </a></li>
+              <li><a href="quran-verses.html" data-nav="quran-verses">
                   <span>108 Master Verses</span>
                   <span class="footer-pill-tag audio-tag">Audio</span>
-                </a>
-              </li>
-              <li>
-                <a href="ruqyah.html" data-nav="ruqyah">
+                </a></li>
+              <li><a href="ruqyah.html" data-nav="ruqyah">
                   <span>Ruqyah Sanctuary</span>
                   <span class="footer-pill-tag shifa-tag">60 Cards</span>
-                </a>
-              </li>
-              <li>
-                <a href="jinn-islamic-theology.html" data-nav="jinn-islamic-theology">
+                </a></li>
+              <li><a href="jinn-islamic-theology.html" data-nav="jinn-islamic-theology">
                   <span>Jinn Islamic Theology</span>
-                </a>
-              </li>
+                </a></li>
             </ul>
-          </div>
+          </nav>
 
           <!-- Column 3: Engineering -->
-          <div class="footer-col">
-            <h4 class="footer-heading">
+          <nav class="footer-col" aria-labelledby="foot-eng">
+            <h4 class="footer-heading" id="foot-eng">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
             </h4>
             <ul class="footer-nav-list">
-              <li>
-                <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
+              <li><a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
                   <span>Spring Boot Enterprise</span>
                   <span class="footer-pill-tag new-tag">New</span>
-                </a>
-              </li>
-              <li>
-                <a href="java-oop.html" data-nav="java-oop">
+                </a></li>
+              <li><a href="java-oop.html" data-nav="java-oop">
                   <span>Java OOP Masterclass</span>
-                </a>
-              </li>
-              <li>
-                <a href="web-dev-guide.html" data-nav="web-dev-guide">
+                </a></li>
+              <li><a href="web-dev-guide.html" data-nav="web-dev-guide">
                   <span>Pure Web Dev Guide</span>
-                </a>
-              </li>
+                </a></li>
             </ul>
-          </div>
+          </nav>
 
           <!-- Column 4: Site & Author -->
-          <div class="footer-col">
-            <h4 class="footer-heading">
+          <nav class="footer-col" aria-labelledby="foot-site">
+            <h4 class="footer-heading" id="foot-site">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
             </h4>
             <ul class="footer-nav-list">
-              <li>
-                <a href="index.html" data-nav="index">Home</a>
-              </li>
-              <li>
-                <a href="about.html" class="active" aria-current="page">
+              <li><a href="index.html" data-nav="index">Home</a></li>
+              <li><a href="about.html" class="active" aria-current="page">
                   <span>About Zahiruddin</span>
-                </a>
-              </li>
-              <li>
-                <a href="contact.html" data-nav="contact">
+                </a></li>
+              <li><a href="contact.html" data-nav="contact">
                   <span>Contact &amp; Inquiries</span>
-                </a>
-              </li>
+                </a></li>
               <li>
-                <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="footer-ext-link">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer me"
+                  class="footer-ext-link">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z">
+                    </path>
+                  </svg>
                   <span>GitHub @heynuo</span>
                 </a>
               </li>
             </ul>
-          </div>
+          </nav>
 
           <!-- Column 5: Trust & Access -->
-          <div class="footer-col">
-            <h4 class="footer-heading">
+          <nav class="footer-col" aria-labelledby="foot-trust">
+            <h4 class="footer-heading" id="foot-trust">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
             </h4>
             <ul class="footer-nav-list">
-              <li>
-                <a href="privacy.html" data-nav="privacy">
+              <li><a href="privacy.html" data-nav="privacy">
                   <span>Privacy &amp; Sources</span>
                   <span class="footer-pill-tag trust-tag">Verified</span>
-                </a>
-              </li>
+                </a></li>
               <li>
                 <a href="rss.xml" class="footer-ext-link">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 11a9 9 0 0 1 9 9"></path>
+                    <path d="M4 4a16 16 0 0 1 16 16"></path>
+                    <circle cx="5" cy="19" r="1"></circle>
+                  </svg>
                   <span>RSS 2.0 Feed</span>
                 </a>
               </li>
-              <li>
-                <a href="sitemap.xml">
-                  <span>XML Sitemap</span>
-                </a>
-              </li>
+              <li><a href="sitemap.xml"><span>XML Sitemap</span></a></li>
             </ul>
-          </div>
+          </nav>
+
         </div>
 
-        <!-- Bottom Footer Bar -->
         <div class="footer-bottom">
           <div class="footer-meta-block">
-            <p class="footer-copy">© 2026 <strong>HeyNuo</strong> · Built with pure HTML5, CSS3 &amp; Vanilla JavaScript · Free &amp; Open Knowledge</p>
-            <p class="footer-attribution">Crafted with precision &amp; care by Zahiruddin · Hosted on GitHub Pages</p>
+            <p class="footer-copy">
+              &copy; 2026 <strong>HeyNuo</strong> · Built with pure HTML5, CSS3 &amp; Vanilla JavaScript · Free &amp;
+              Open Knowledge
+            </p>
+            <p class="footer-attribution">Crafted with precision &amp; care by HeyNuo · Hosted on GitHub Pages</p>
           </div>
 
           <div class="footer-controls">
-            <button type="button" class="footer-ctrl-btn shortcut-help-btn" id="shortcutHelpBtn" title="View keyboard shortcuts (?)">
+            <button type="button" class="footer-ctrl-btn shortcut-help-btn" id="shortcutHelpBtn"
+              title="View keyboard shortcuts (?)">
               <span aria-hidden="true">⌨️</span>
               <span>Shortcuts</span>
-              <kbd class="footer-kbd">?</kbd>
+              <kbd class="footer-kbd" aria-hidden="true">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
+            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop"
+              aria-label="Back to top of page" title="Back to top">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 15l-6-6-6 6"></path>
+              </svg>
               <span>Top</span>
             </a>
           </div>
@@ -567,122 +900,131 @@
 
   <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
     <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
-      <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-      <path class="progress-ring-circle" id="scrollProgressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path class="progress-ring-bg"
+        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+      <path class="progress-ring-circle" id="scrollProgressCircle"
+        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
     </svg>
-    <span class="scroll-arrow">↑</span>
+    <span class="scroll-arrow" aria-hidden="true">↑</span>
   </button>
 
-  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Keyboard Shortcuts Modal (WCAG 2.1.4 compliant) -->
-  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="shortcuts-modal-backdrop" id="shortcutsModal" aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="shortcutsTitle">
     <div class="shortcuts-modal">
       <div class="shortcuts-header">
         <div class="shortcuts-title-wrap">
           <span class="shortcuts-header-icon" aria-hidden="true">⌨️</span>
           <div>
-            <h3 id="shortcutsTitle">Keyboard Shortcuts</h3>
+            <h2 id="shortcutsTitle">Keyboard Shortcuts</h2>
             <p class="shortcuts-subtitle">Productivity hotkeys &amp; audio player controls</p>
           </div>
         </div>
-        <button type="button" class="announcement-close" id="shortcutsClose" aria-label="Close shortcuts dialog">✕</button>
+        <button type="button" class="announcement-close" id="shortcutsClose"
+          aria-label="Close shortcuts dialog">✕</button>
       </div>
 
       <div class="shortcuts-toggle-row">
         <label for="toggleSingleShortcuts" class="shortcuts-toggle-label">
-          <span>Enable Single-Key Shortcuts (<kbd>T</kbd>, <kbd>H</kbd>, <kbd>A</kbd>, <kbd>C</kbd>, <kbd>?</kbd>, <kbd>Space</kbd>)</span>
+          <span>Enable single-key shortcuts (<kbd>T</kbd>, <kbd>H</kbd>, <kbd>A</kbd>, <kbd>C</kbd>, <kbd>?</kbd>,
+            <kbd>Space</kbd>)</span>
           <small>Disable if you use voice dictation or assistive technology (WCAG 2.1.4)</small>
         </label>
         <input type="checkbox" id="toggleSingleShortcuts" class="shortcuts-checkbox" checked>
       </div>
 
       <div class="shortcuts-body-scroll">
-        <!-- Section 1: Navigation & System -->
-        <div class="shortcuts-group">
-          <h4 class="shortcuts-group-title">
+        <section class="shortcuts-group" aria-labelledby="sc-nav">
+          <h3 class="shortcuts-group-title" id="sc-nav">
             <span class="group-icon" aria-hidden="true">🌐</span> Navigation &amp; Commands
-          </h4>
-          <div class="shortcuts-list">
+          </h3>
+          <dl class="shortcuts-list">
             <div class="shortcut-row">
-              <span class="shortcut-desc">Search &amp; Command Palette</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd> <span class="shortcut-or">or</span> <kbd class="shortcut-key">/</kbd></span>
+              <dt class="shortcut-desc">Search &amp; command palette</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd> <span class="shortcut-or">or</span>
+                <kbd class="shortcut-key">/</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Go to Home Dashboard</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">H</kbd></span>
+              <dt class="shortcut-desc">Go to home dashboard</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">H</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Go to About Page</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">A</kbd></span>
+              <dt class="shortcut-desc">Go to About page</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">A</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Go to Contact</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">C</kbd></span>
+              <dt class="shortcut-desc">Go to Contact</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">C</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">View This Shortcuts Modal</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">?</kbd></span>
+              <dt class="shortcut-desc">View this shortcuts modal</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">?</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Close Any Dialog or Menu</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Esc</kbd></span>
+              <dt class="shortcut-desc">Close any dialog or menu</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">Esc</kbd></dd>
             </div>
-          </div>
-        </div>
+          </dl>
+        </section>
 
-        <!-- Section 2: Themes & Comfort -->
-        <div class="shortcuts-group">
-          <h4 class="shortcuts-group-title">
+        <section class="shortcuts-group" aria-labelledby="sc-display">
+          <h3 class="shortcuts-group-title" id="sc-display">
             <span class="group-icon" aria-hidden="true">🎨</span> Display &amp; Reading Modes
-          </h4>
-          <div class="shortcuts-list">
+          </h3>
+          <dl class="shortcuts-list">
             <div class="shortcut-row">
-              <span class="shortcut-desc">Toggle Dark / Light Theme</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">T</kbd></span>
+              <dt class="shortcut-desc">Toggle dark / light theme</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">T</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Sepia Comfort / Slate Night Mode</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></span>
+              <dt class="shortcut-desc">Sepia / slate night mode</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></dd>
             </div>
-          </div>
-        </div>
+          </dl>
+        </section>
 
-        <!-- Section 3: Audio & Quran Player -->
-        <div class="shortcuts-group">
-          <h4 class="shortcuts-group-title">
+        <section class="shortcuts-group" aria-labelledby="sc-media">
+          <h3 class="shortcuts-group-title" id="sc-media">
             <span class="group-icon" aria-hidden="true">🎧</span> Quran &amp; Media Player
-          </h4>
-          <div class="shortcuts-list">
+          </h3>
+          <dl class="shortcuts-list">
             <div class="shortcut-row">
-              <span class="shortcut-desc">Quran Play / Pause</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Space</kbd></span>
+              <dt class="shortcut-desc">Quran play / pause</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">Space</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Next / Previous Surah</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">→</kbd> <span class="shortcut-or">/</span> <kbd class="shortcut-key">←</kbd></span>
+              <dt class="shortcut-desc">Next / previous surah</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">→</kbd> <span class="shortcut-or">/</span> <kbd
+                  class="shortcut-key">←</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Surah Playlist Queue</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Q</kbd></span>
+              <dt class="shortcut-desc">Surah playlist queue</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">Q</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Fullscreen Player Modal</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">F</kbd></span>
+              <dt class="shortcut-desc">Fullscreen player modal</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">F</kbd></dd>
             </div>
             <div class="shortcut-row">
-              <span class="shortcut-desc">Minimize / Restore Player</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">V</kbd></span>
+              <dt class="shortcut-desc">Minimize / restore player</dt>
+              <dd class="shortcut-keys"><kbd class="shortcut-key">V</kbd></dd>
             </div>
-          </div>
-        </div>
+          </dl>
+        </section>
       </div>
 
       <div class="shortcuts-footer">
-        <span class="shortcuts-footer-hint">💡 Press <kbd class="shortcut-key-inline">Esc</kbd> or click outside to dismiss</span>
+        <span class="shortcuts-footer-hint">
+          💡 Press <kbd class="shortcut-key-inline">Esc</kbd> or click outside to dismiss
+        </span>
       </div>
     </div>
   </div>
-  <script src="js/script.js"></script>
+
+  <script src="buttons.js" defer></script>
+  <script src="js/script.js" defer></script>
 </body>
+
 </html>

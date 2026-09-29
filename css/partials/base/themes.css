@@ -1,0 +1,400 @@
+﻿/* =========================================================
+   HeyNuo — Theme Overrides (themes.css)
+   Dark · Light · Sepia · Slate  +  Serif reading mode
+   =========================================================
+   DROP-IN. No HTML, JS, or other CSS file needs to change.
+   Selectors match exactly what the app already toggles:
+     <html data-theme="dark">    |  <html data-theme="light">
+     <html data-reading-theme="sepia">  |  "slate"
+     <body class="reading-font-serif">
+     .reading-font-serif .prose
+   =========================================================
+   Every rule lives in @layer base. Anything unlayered — and
+   anything in a later layer — still wins automatically.
+   Decorative additions use :where(), so their specificity is
+   0: pure fallbacks, never overrides.
+   ========================================================= */
+
+@layer base {
+
+  /* =======================================================
+     0 · TYPOGRAPHY TOKENS
+     Referenced by the serif mode below but never defined in
+     the original file — added here with real fallbacks.
+     ======================================================= */
+  :root {
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-serif: "Source Serif 4", "Source Serif Pro", "Iowan Old Style",
+      Charter, ui-serif, Georgia, "Times New Roman", serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Mono",
+      Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  /* =======================================================
+     1 · LIGHT (explicit — beats the OS dark fallback in §5)
+     Swap these hex values for your existing light palette
+     if you already ship one elsewhere.
+     ======================================================= */
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --primary: #2563eb;
+    --secondary: #0ea5e9;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: rgba(15, 23, 42, 0.10);
+    --accent: #3b82f6;
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --blob-1: rgba(59, 130, 246, 0.14);
+    --blob-2: rgba(14, 165, 233, 0.10);
+  }
+
+  /* =======================================================
+     2 · DARK  (JS-driven data-attribute; primary path)
+     ======================================================= */
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #090d16;
+    --card-bg: #111827;
+    --primary: #3b82f6;
+    --secondary: #38bdf8;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.07);
+    --accent: #60a5fa;
+    --glass-bg: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --blob-1: rgba(59, 130, 246, 0.18);
+    --blob-2: rgba(56, 189, 248, 0.13);
+  }
+
+  /* =======================================================
+     3 · READING THEMES
+     Declared AFTER dark, so they win on equal specificity
+     when both attributes sit on the same element.
+     ======================================================= */
+  [data-reading-theme="sepia"] {
+    color-scheme: light;
+    --bg: #fbf0d9;
+    --card-bg: #fffbf2;
+    --text: #3c2f21;
+    --muted: #786450;
+    --border: rgba(120, 80, 30, 0.12);
+    --primary: #b45309;
+    --secondary: #d97706;
+    --accent: #d97706;
+    --glass-bg: rgba(255, 251, 242, 0.85);
+    --glass-border: rgba(120, 80, 30, 0.10);
+    --blob-1: rgba(217, 119, 6, 0.10);
+    --blob-2: rgba(180, 83, 9, 0.08);
+  }
+
+  [data-reading-theme="slate"] {
+    color-scheme: dark;
+    --bg: #0b1120;
+    --card-bg: #0f172a;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.08);
+    --primary: #38bdf8;
+    --secondary: #818cf8;
+    --accent: #60a5fa;
+    --glass-bg: rgba(15, 23, 42, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --blob-1: rgba(56, 189, 248, 0.16);
+    --blob-2: rgba(129, 140, 248, 0.12);
+  }
+
+  /* =======================================================
+     4 · SERIF READING MODE
+     ======================================================= */
+  body.reading-font-serif,
+  .reading-font-serif .prose {
+    font-family: var(--font-serif);
+    line-height: 1.85;
+    letter-spacing: 0.01em;
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Nicer line breaking — only where supported. */
+  @supports (text-wrap: pretty) {
+
+    body.reading-font-serif :is(p, li, dd),
+    .reading-font-serif .prose :is(p, li, dd) {
+      text-wrap: pretty;
+    }
+
+    body.reading-font-serif :is(h1, h2, h3, h4, h5, h6),
+    .reading-font-serif .prose :is(h1, h2, h3, h4, h5, h6) {
+      text-wrap: balance;
+    }
+  }
+
+  /* =======================================================
+     5 · DARK VIA OS PREFERENCE
+     Only until JS pins a theme. The three :not() guards
+     raise specificity above the reading themes, which is
+     why it must be written this way round.
+     ======================================================= */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]):not([data-reading-theme]) {
+      color-scheme: dark;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --primary: #3b82f6;
+      --secondary: #38bdf8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.07);
+      --accent: #60a5fa;
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.06);
+      --blob-1: rgba(59, 130, 246, 0.18);
+      --blob-2: rgba(56, 189, 248, 0.13);
+    }
+  }
+
+  /* =======================================================
+     6 · NATIVE WIDGETS
+     All :where() — specificity 0 — so any component rule
+     for the same element still wins. Pure fallbacks.
+     ======================================================= */
+
+  /* Checkboxes, radios, ranges, progress bars follow --primary */
+  :where([data-theme], [data-reading-theme]) :where(input, select, textarea, progress, meter) {
+    accent-color: var(--primary, auto);
+  }
+
+  /* Placeholder text stops looking washed-out */
+  :where([data-theme], [data-reading-theme]) :where(input, textarea)::placeholder {
+    color: var(--muted, GrayText);
+    opacity: 1;
+  }
+
+  /* Caret matches the theme */
+  :where([data-theme], [data-reading-theme]) :where(input, textarea, [contenteditable]) {
+    caret-color: var(--primary, currentColor);
+  }
+
+  /* Chrome's autofill yellow/blue block — fixed for dark mode.
+     Uses the inset box-shadow trick because Chrome's internal
+     background-color rule can't be beaten head-on. */
+  :where([data-theme], [data-reading-theme]) :where(input:autofill, input:-webkit-autofill,
+    textarea:autofill, textarea:-webkit-autofill) {
+    -webkit-text-fill-color: var(--text);
+    -webkit-box-shadow: 0 0 0 1000px var(--card-bg) inset;
+    box-shadow: 0 0 0 1000px var(--card-bg) inset;
+    caret-color: var(--text);
+    border-color: var(--border);
+  }
+
+  /* Kill the blue tap flash on mobile, use the theme instead */
+  :where([data-theme], [data-reading-theme]) :where(a, button, summary, label, [role="button"], input, select, textarea) {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.08);
+    -webkit-tap-highlight-color:
+      color-mix(in oklab, var(--primary, #3b82f6) 18%, transparent);
+  }
+
+  /* File-input button */
+  :where([data-theme], [data-reading-theme]) ::file-selector-button {
+    color: var(--text);
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35em 0.75em;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  /* List bullets and numbered markers */
+  :where([data-theme], [data-reading-theme]) :where(li)::marker {
+    color: var(--muted, currentColor);
+  }
+
+  /* Modal overlay */
+  :where([data-theme], [data-reading-theme]) ::backdrop {
+    background: color-mix(in oklab, var(--bg, #000) 62%, transparent);
+  }
+
+  /* =======================================================
+     7 · SELECTION + FOCUS RING
+     Derived from --primary, with system-color fallbacks so
+     nothing breaks if a token is ever missing.
+     ======================================================= */
+  ::selection {
+    background: Highlight;
+    /* fallback */
+    background: color-mix(in oklab, var(--primary, Highlight) 30%, transparent);
+    color: var(--text, currentColor);
+  }
+
+  :focus-visible {
+    outline: 2px solid Highlight;
+    /* fallback */
+    outline: 2px solid var(--primary, currentColor);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* =======================================================
+     8 · SURFACE DEFAULTS
+     Only apply if the app hasn't styled them. All :where().
+     ======================================================= */
+  :where([data-theme], [data-reading-theme]) :where(hr) {
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(blockquote) {
+    border-inline-start: 3px solid var(--border);
+    padding-inline-start: 1em;
+    color: var(--muted);
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(code, kbd, samp) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    padding: 0.12em 0.34em;
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(pre) {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1em 1.15em;
+    overflow-x: auto;
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(mark) {
+    background: color-mix(in oklab, var(--accent, Gold) 30%, transparent);
+    color: inherit;
+    padding: 0.05em 0.2em;
+    border-radius: 3px;
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(table) {
+    border-collapse: collapse;
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(th, td) {
+    border: 1px solid var(--border);
+  }
+
+  :where([data-theme], [data-reading-theme]) :where(thead th) {
+    background: var(--glass-bg);
+  }
+
+  /* =======================================================
+     9 · SMOOTH THEME SWAP  (CSS-only — no JS class needed)
+     :where() keeps specificity at 0. Any component rule
+     that defines its own `transition` automatically wins,
+     so hover states and motion design stay untouched.
+     ======================================================= */
+  @media (prefers-reduced-motion: no-preference) {
+
+    :where([data-theme], [data-reading-theme]),
+    :where([data-theme], [data-reading-theme]) *,
+    :where([data-theme], [data-reading-theme]) *::before,
+    :where([data-theme], [data-reading-theme]) *::after {
+      transition:
+        background-color 260ms ease,
+        border-color 260ms ease,
+        color 260ms ease,
+        outline-color 260ms ease,
+        fill 260ms ease,
+        stroke 260ms ease;
+    }
+  }
+
+  /* =======================================================
+     10 · USER PREFERENCE FALLBACKS
+     ======================================================= */
+
+  /* Reduced transparency → solid glass panels, no blur */
+  @media (prefers-reduced-transparency: reduce) {
+
+    [data-theme],
+    [data-reading-theme] {
+      --glass-bg: var(--card-bg);
+      --glass-border: var(--border);
+    }
+
+    :where([data-theme], [data-reading-theme]) ::backdrop {
+      backdrop-filter: none;
+    }
+  }
+
+  /* Reduced data → drop expensive backdrop blurs */
+  @media (prefers-reduced-data: reduce) {
+    :where([data-theme], [data-reading-theme]) ::backdrop {
+      backdrop-filter: none;
+    }
+  }
+
+  /* Higher contrast */
+  @media (prefers-contrast: more) {
+
+    [data-theme],
+    [data-reading-theme] {
+      --border: currentColor;
+      --glass-border: currentColor;
+    }
+  }
+
+  /* Windows High Contrast — hand control to the OS */
+  @media (forced-colors: active) {
+
+    [data-theme],
+    [data-reading-theme] {
+      --border: CanvasText;
+      --glass-border: CanvasText;
+      --glass-bg: Canvas;
+      --blob-1: transparent;
+      --blob-2: transparent;
+    }
+
+    :where([data-theme], [data-reading-theme]) :where(hr, th, td, blockquote) {
+      forced-color-adjust: none;
+    }
+  }
+
+  /* =======================================================
+     11 · PRINT — force light tokens, drop decoration
+     ======================================================= */
+  @media print {
+
+    :root,
+    [data-theme],
+    [data-reading-theme] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --card-bg: #ffffff;
+      --text: #000000;
+      --muted: #333333;
+      --border: #cccccc;
+      --primary: #000000;
+      --secondary: #000000;
+      --accent: #000000;
+      --glass-bg: transparent;
+      --glass-border: transparent;
+      --blob-1: transparent;
+      --blob-2: transparent;
+    }
+  }
+}

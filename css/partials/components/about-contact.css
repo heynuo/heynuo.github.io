@@ -1,0 +1,1047 @@
+﻿/* =========================================================
+   HeyNuo – About & Contact (about-contact.css) — v5
+   ---------------------------------------------------------
+   v5 additions over v4 (all HTML-aware):
+     • .about-hero modifier (matches <section class="hero about-hero">)
+     • .inline-title-icon / .badge-icon rules (icons live in HTML)
+     • .about-box h2 with embedded <img> — proper baseline alignment
+     • Auto-adapts padding when .about has 4 children (Values grid)
+     • External-link arrow via [target="_blank"]::after
+     • Section rhythm scoped to .about pages only
+     • Zero-cost opt-outs for reduced-data / printing / WHCM
+     • Removed text-box trim when an icon is present (interference fix)
+     • Grid auto-flow tuned for 2/3/4-item card rows
+     • Fallback for browsers without :has() (no broken layouts)
+   ========================================================= */
+
+/* ---------- Layer order ---------- */
+@layer reset, tokens, themes, base, components, states, utilities;
+
+/* =========================================================
+   TOKENS
+   ========================================================= */
+@layer tokens {
+
+  @property --ac-hover-y {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  @property --ac-focus-ring {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: transparent;
+  }
+
+  @property --ac-i {
+    syntax: "<integer>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  :root {
+    interpolate-size: allow-keywords;
+    color-scheme: light dark;
+    accent-color: var(--primary);
+  }
+
+  /* Scoped tokens for the About/Contact family */
+  @scope (.about, .about-hero, .contact-grid, .contact-links) {
+    :scope {
+      --ac-radius-sm: 8px;
+      --ac-radius-md: 10px;
+      --ac-radius-lg: 24px;
+
+      --ac-surface-input: light-dark(#ffffff, rgba(255 255 255 / .05));
+      --ac-surface-input-fallback: #ffffff;
+      --ac-surface-hover: light-dark(rgba(0 0 0 / .05), rgba(255 255 255 / .08));
+
+      --ac-transition: 180ms cubic-bezier(.2, .8, .2, 1);
+      --ac-transition-slow: 320ms cubic-bezier(.2, .8, .2, 1);
+
+      --ac-focus-outline: 2px solid var(--primary);
+      --ac-focus-offset: 2px;
+
+      --ac-ring: rgba(37 99 235 / .2);
+      --ac-ring-error: rgba(239 68 68 / .2);
+
+      --ac-touch-min: 40px;
+      --ac-card-pad: clamp(1.35rem, 3.5cqi, 2.2rem);
+      --ac-card-pad-sm: clamp(1rem, 2.5cqi, 1.5rem);
+    }
+  }
+
+  @supports (color: color-mix(in oklab, red, blue)) {
+    :where(.about, .contact-grid, .contact-links) {
+      --ac-ring: color-mix(in oklab, var(--primary) 20%, transparent);
+      --ac-ring-error: color-mix(in oklab, var(--error) 20%, transparent);
+    }
+  }
+}
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+@layer themes {
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  html[data-theme="auto"] {
+    color-scheme: light dark;
+  }
+
+  html[data-theme="dark"] :where(.about, .contact-grid, .contact-links) {
+    --ac-surface-input-fallback: rgba(255 255 255 / .05);
+  }
+}
+
+/* =========================================================
+   COMPONENTS
+   ========================================================= */
+@layer components {
+
+  /* -------------------------------------------------------
+     §1  About hero (modifier on <section class="hero about-hero">)
+         Adds a bit of nuance without fighting the global .hero
+     ------------------------------------------------------- */
+  .about-hero {
+
+    /* Nothing structural — the global .hero already lays it out.
+       We only refine the descriptive copy + badge tone. */
+    .hero-description {
+      max-inline-size: 62ch;
+      text-wrap: pretty;
+    }
+
+    .hero-badge {
+      /* Warmer accent than the default hero badge */
+      --hero-badge-accent: var(--accent, #f59e0b);
+    }
+
+    /* More generous rhythm on large screens */
+    @media (width >=60rem) {
+      .hero-content {
+        padding-block: clamp(1rem, 4vh, 2.5rem);
+      }
+    }
+  }
+
+  /* -------------------------------------------------------
+     §2  About grid
+         Handles 2-item, 3-item, and 4-item rows gracefully
+     ------------------------------------------------------- */
+  .about {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: var(--space-2xl);
+    margin-block-end: var(--space-5xl);
+
+    contain: layout style;
+    scroll-margin-block-start: 5rem;
+
+    @supports (container-type: inline-size) {
+      container-type: inline-size;
+      container-name: about;
+    }
+  }
+
+  /* The "My Values" row is a 4-up set of small cards.
+     Detect via :has() and tighten spacing/padding accordingly. */
+  @supports selector(:has(*)) {
+    .about:has(> .about-box:nth-child(4)) {
+      gap: var(--space-xl, var(--space-lg, 1.25rem));
+
+      >.about-box {
+        --ac-card-pad: var(--ac-card-pad-sm);
+      }
+
+      >.about-box h2 {
+        font-size: clamp(1.05rem, 1.4cqi + .9rem, 1.25rem);
+      }
+
+      >.about-box p {
+        font-size: .95rem;
+        line-height: 1.7;
+      }
+    }
+  }
+
+  /* Large-screen editorial rhythm for the *first* .about row (2 cards) */
+  @media (width >=60rem) {
+    .about:not(:has(> .about-box:nth-child(3))) {
+      grid-template-columns: 1.15fr .85fr;
+    }
+  }
+
+  /* Deep-link highlight */
+  .about:target .about-box,
+  .contact-grid:target .about-box {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--ac-ring);
+  }
+
+  /* -------------------------------------------------------
+     §3  About box (matches <article class="about-box">)
+         Real content: <h2>with optional inline <img> + <p>
+     ------------------------------------------------------- */
+  .about-box {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: var(--ac-card-pad);
+    border-radius: var(--ac-radius-lg);
+    block-size: 100%;
+    box-shadow: 0 4px 6px rgb(0 0 0 / .05);
+
+    /* Rhythm-safe: children don't bleed past the rounded corners */
+    overflow: clip;
+
+    transition:
+      border-color var(--ac-transition-slow),
+      box-shadow var(--ac-transition-slow),
+      --ac-hover-y var(--ac-transition-slow);
+    transition-delay: calc(var(--ac-i, 0) * 60ms);
+
+    translate: 0 var(--ac-hover-y);
+    contain: layout style paint;
+
+    /* Entry animation for supporting browsers */
+    @starting-style {
+      opacity: 0;
+      translate: 0 6px;
+    }
+
+    /* Fallback stagger if --ac-i isn't authored */
+    &:nth-child(2) {
+      --ac-i: 1;
+    }
+
+    &:nth-child(3) {
+      --ac-i: 2;
+    }
+
+    &:nth-child(4) {
+      --ac-i: 3;
+    }
+
+    /* --- Heading --- */
+    h2 {
+      margin-block-end: 14px;
+      font-size: clamp(1.25rem, 2cqi + .9rem, 1.6rem);
+      font-weight: 700;
+      line-height: 1.3;
+      text-wrap: balance;
+      hanging-punctuation: first last;
+      text-spacing-trim: space-first;
+
+      /* If there is NO icon inside, trim the cap-height overshoot */
+      &:not(:has(img)) {
+        @supports (text-box: trim-both cap alphabetic) {
+          text-box: trim-both cap alphabetic;
+          margin-block-start: 0;
+        }
+      }
+
+      /* If there IS an icon, align it to the cap height and give a gap */
+      &:has(img) {
+        display: flex;
+        align-items: center;
+        gap: .5em;
+        flex-wrap: wrap;
+      }
+    }
+
+    /* --- Inline title icons (assets/icons/*.png inside h2) --- */
+    .inline-title-icon {
+      display: inline-block;
+      inline-size: 1em;
+      block-size: 1em;
+      flex: 0 0 auto;
+      object-fit: contain;
+      vertical-align: -.15em;
+      /* Match the heading colour for monochrome SVGs if needed */
+      color: currentColor;
+      /* Keep them crisp on HiDPI */
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* --- Body copy --- */
+    p,
+    ul {
+      color: var(--muted);
+      line-height: 1.85;
+      text-wrap: pretty;
+    }
+
+    :is(p, ul)+ :is(p, ul) {
+      margin-block-start: .75em;
+    }
+
+    /* Kill orphaned leading/trailing margins inside the card */
+    > :first-child {
+      margin-block-start: 0;
+    }
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+
+    ul {
+      padding-inline-start: 20px;
+      display: grid;
+      gap: .35em;
+    }
+
+    li::marker {
+      color: var(--accent);
+    }
+
+    /* --- Links inside about boxes --- */
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      transition: color var(--ac-transition);
+      /* Wrap long URLs gracefully */
+      overflow-wrap: anywhere;
+    }
+  }
+
+  /* External-link arrow for links with target="_blank" */
+  .about-box a[target="_blank"]::after {
+    content: " ↗";
+    font-size: .85em;
+    vertical-align: .1em;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-block;
+    transition: translate var(--ac-transition);
+  }
+
+  /* Hover affordances — capability-gated */
+  @media (hover: hover) and (pointer: fine) {
+    .about-box:hover {
+      --ac-hover-y: -2px;
+      border-color: rgb(37 99 235 / .3);
+      box-shadow: 0 8px 24px rgb(0 0 0 / .08);
+    }
+
+    .about-box a:hover {
+      color: var(--primary);
+    }
+
+    .about-box a[target="_blank"]:hover::after {
+      translate: 2px -2px;
+    }
+
+    @supports (interest-delay: 100ms) {
+      .about-box {
+        interest-delay: 100ms 60ms;
+      }
+    }
+
+    @supports (color: color-mix(in oklab, red, blue)) {
+      .about-box:hover {
+        border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+      }
+    }
+  }
+
+  /* -------------------------------------------------------
+     §4  Contact grid (unchanged from v4, kept for contact.html)
+     ------------------------------------------------------- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    gap: var(--space-2xl);
+    margin-block-end: var(--space-4xl);
+    contain: layout style;
+    scroll-margin-block-start: 5rem;
+
+    @supports (container-type: inline-size) {
+      container-type: inline-size;
+      container-name: contact;
+    }
+  }
+
+  /* -------------------------------------------------------
+     §5  Form groups
+     ------------------------------------------------------- */
+  .form-group {
+    margin-block-end: var(--space-md);
+    position: relative;
+
+    &:focus-within label {
+      color: var(--primary);
+      transition: color var(--ac-transition);
+    }
+
+    @supports selector(:has(*)) {
+      &:has(input:user-invalid, textarea:user-invalid) label {
+        color: var(--error);
+      }
+    }
+
+    label {
+      display: block;
+      margin-block-end: 6px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.5;
+      transition: color var(--ac-transition);
+    }
+
+    .form-hint {
+      display: block;
+      margin-block-start: 4px;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+  }
+
+  /* -------------------------------------------------------
+     §6  Inputs & textarea
+     ------------------------------------------------------- */
+  .form-input,
+  .form-textarea {
+    inline-size: 100%;
+    padding: 12px 16px;
+    padding-inline: max(16px, env(safe-area-inset-inline-start, 16px)) max(16px, env(safe-area-inset-inline-end, 16px));
+    border-radius: var(--ac-radius-md);
+    border: 1px solid var(--border);
+    background: var(--ac-surface-input-fallback);
+    color: var(--text);
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1.5;
+    transition:
+      border-color var(--ac-transition),
+      box-shadow var(--ac-transition),
+      background var(--ac-transition);
+    color-scheme: inherit;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+    @supports (background: light-dark(#fff, #000)) {
+      background: var(--ac-surface-input);
+    }
+
+    &::placeholder {
+      color: color-mix(in oklab, var(--muted) 80%, transparent);
+      opacity: 1;
+    }
+
+    &::selection {
+      background: color-mix(in oklab, var(--primary) 25%, transparent);
+      color: var(--text);
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text);
+      -webkit-box-shadow: 0 0 0 1000px var(--ac-surface-input-fallback) inset;
+      transition: background-color 9999s ease-out;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus-visible {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ac-ring);
+      outline: var(--ac-focus-outline);
+      outline-offset: var(--ac-focus-offset);
+    }
+
+    &:user-invalid,
+    &[aria-invalid="true"] {
+      border-color: var(--error);
+      box-shadow: 0 0 0 3px var(--ac-ring-error);
+    }
+
+    &:user-valid:not(:placeholder-shown) {
+      border-color: color-mix(in oklab, var(--success) 60%, var(--border));
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      opacity: .6;
+      cursor: not-allowed;
+      background: color-mix(in oklab, var(--muted) 8%, var(--ac-surface-input));
+    }
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-block-size: 120px;
+    max-block-size: 40dvh;
+    field-sizing: content;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      inline-size: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: color-mix(in oklab, var(--muted) 40%, transparent);
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: color-mix(in oklab, var(--muted) 70%, transparent);
+    }
+  }
+
+  /* -------------------------------------------------------
+     §7  Status region
+     ------------------------------------------------------- */
+  #form-status {
+    margin-block-start: var(--space-sm);
+    font-size: 14px;
+    color: var(--muted);
+    text-align: center;
+    min-block-size: 20px;
+    line-height: 1.4;
+    transition: color var(--ac-transition);
+
+    &.sending {
+      color: var(--accent);
+    }
+
+    &.success {
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    &.error {
+      color: var(--error);
+    }
+
+    &.sending::after {
+      content: "";
+      display: inline-block;
+      inline-size: 6px;
+      block-size: 6px;
+      margin-inline-start: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: ac-pulse 1s ease-in-out infinite;
+      vertical-align: middle;
+    }
+
+    &:popover-open {
+      position: fixed;
+      inset: auto 1rem 1rem auto;
+      padding: 12px 16px;
+      border-radius: var(--ac-radius-md);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px rgb(0 0 0 / .18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: start;
+      max-inline-size: 32ch;
+    }
+
+    &::backdrop {
+      background: transparent;
+    }
+  }
+
+  @keyframes ac-pulse {
+
+    0%,
+    100% {
+      opacity: .3;
+      transform: scale(.8);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+  }
+
+  @starting-style {
+    #form-status:popover-open {
+      opacity: 0;
+      translate: 0 8px;
+    }
+  }
+
+  #form-status:popover-open {
+    transition:
+      opacity var(--ac-transition),
+      translate var(--ac-transition),
+      display var(--ac-transition) allow-discrete,
+      overlay var(--ac-transition) allow-discrete;
+  }
+
+  /* -------------------------------------------------------
+     §8  Buttons & contact links
+     ------------------------------------------------------- */
+  .btn-full {
+    inline-size: 100%;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+
+    &[data-loading="true"] {
+      cursor: progress;
+      pointer-events: none;
+      opacity: .75;
+    }
+
+    @supports selector(:has(*)) {
+      form:has(input:user-invalid, textarea:user-invalid) &:not([data-force]) {
+        opacity: .7;
+      }
+    }
+  }
+
+  .contact-links {
+    margin-block-start: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    contain: layout style;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    text-decoration: none;
+    padding: 12px;
+    border-radius: var(--ac-radius-md);
+    background: var(--glass-bg);
+    border: 1px solid transparent;
+    transition:
+      background var(--ac-transition),
+      border-color var(--ac-transition),
+      --ac-hover-y var(--ac-transition);
+
+    translate: 0 var(--ac-hover-y);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus-visible {
+      outline: var(--ac-focus-outline);
+      outline-offset: var(--ac-focus-offset);
+    }
+
+    &:active {
+      --ac-hover-y: 0px;
+    }
+  }
+
+  .contact-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1;
+    forced-color-adjust: none;
+  }
+
+  .contact-label {
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .contact-value {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .contact-link .contact-chevron {
+    margin-inline-start: auto;
+    color: var(--muted);
+    transition: translate var(--ac-transition);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .contact-link:hover {
+      --ac-hover-y: -1px;
+      background: var(--ac-surface-hover);
+      border-color: var(--border);
+    }
+
+    .contact-link:hover .contact-chevron {
+      translate: 2px 0;
+    }
+  }
+
+  /* -------------------------------------------------------
+     §9  Highlight card
+     ------------------------------------------------------- */
+  .contact-highlight {
+    padding: 12px;
+    border-radius: var(--ac-radius-md);
+    background: color-mix(in oklab, var(--warning) 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--warning) 30%, transparent);
+  }
+
+  .contact-highlight-title {
+    font-weight: 500;
+    color: var(--warning);
+    margin-block-end: 4px;
+    forced-color-adjust: none;
+  }
+
+  .contact-highlight-text {
+    color: var(--muted);
+    font-size: 14px;
+    margin-block-end: 8px;
+  }
+
+  .contact-highlight-link {
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* -------------------------------------------------------
+     §10  Section rhythm — only inside about page context.
+          Detects "the section right above .about" so global
+          section titles don't get double-spaced.
+     ------------------------------------------------------- */
+  .section-spacing:has(> .about) {
+
+    /* No-op structurally, but lets us safely target headings
+       that precede the about grid. */
+    >.section-title {
+      margin-block-end: clamp(1rem, 2vh, 1.5rem);
+    }
+  }
+}
+
+/* =========================================================
+   STATES
+   ========================================================= */
+@layer states {
+
+  .about-box a:focus-visible,
+  .contact-link:focus-visible,
+  .contact-highlight-link:focus-visible {
+    outline: var(--ac-focus-outline);
+    outline-offset: var(--ac-focus-offset);
+    border-radius: 2px;
+  }
+}
+
+/* =========================================================
+   UTILITIES
+   ========================================================= */
+@layer utilities {
+
+  /* §11  Container queries */
+  @supports (container-type: inline-size) {
+    @container contact (width < 380px) {
+      .contact-link {
+        padding: 10px;
+      }
+    }
+
+    @container about (width < 340px) {
+      .about-box {
+        padding: 1.25rem;
+      }
+
+      .about-box h2 {
+        font-size: 1.15rem;
+      }
+    }
+  }
+
+  /* §12  Pointer refinements */
+  @media (any-pointer: coarse) {
+
+    .form-input,
+    .form-textarea,
+    .btn-full {
+      min-block-size: var(--ac-touch-min);
+    }
+
+    .contact-link {
+      padding-block: 14px;
+    }
+  }
+
+  /* §13  Dark mode */
+  @media (prefers-color-scheme: dark) {
+    :where(.about, .contact-grid, .contact-links) {
+      --ac-surface-input-fallback: rgba(255 255 255 / .05);
+    }
+
+    .about-box {
+      box-shadow: none;
+
+      &:hover {
+        border-color: rgb(59 130 246 / .3);
+        box-shadow: 0 8px 24px rgb(0 0 0 / .35);
+      }
+    }
+
+    @supports (color: color-mix(in oklab, red, blue)) {
+      .about-box:hover {
+        border-color: color-mix(in oklab, var(--primary) 30%, transparent);
+      }
+    }
+
+    .form-input,
+    .form-textarea {
+
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0 1000px var(--ac-surface-input-fallback) inset;
+      }
+    }
+  }
+
+  /* §14  High contrast */
+  @media (prefers-contrast: more) {
+
+    .about-box,
+    .contact-link,
+    .form-input,
+    .form-textarea,
+    .contact-highlight {
+      border-color: currentColor;
+      border-width: 2px;
+    }
+
+    .form-input:focus-visible,
+    .form-textarea:focus-visible {
+      outline-width: 3px;
+      box-shadow: none;
+    }
+
+    .about-box p,
+    .about-box ul,
+    .contact-value,
+    .form-hint {
+      color: var(--text);
+    }
+  }
+
+  /* §15  Reduced transparency */
+  @media (prefers-reduced-transparency: reduce) {
+
+    .about-box,
+    .contact-link,
+    #form-status:popover-open {
+      background: light-dark(#ffffff, #111318);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .contact-highlight {
+      background: light-dark(#fff7ed, #2a1e0a);
+    }
+  }
+
+  /* §16  Reduced data */
+  @media (prefers-reduced-data: reduce) {
+
+    .about-box,
+    .contact-link,
+    #form-status:popover-open {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      transition: none;
+    }
+  }
+
+  /* §17  Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+
+    .about-box,
+    .contact-link,
+    .contact-link .contact-chevron,
+    .form-input,
+    .form-textarea,
+    .form-group label,
+    #form-status:popover-open {
+      transition-duration: .01ms !important;
+      transition-delay: 0ms !important;
+      animation: none !important;
+    }
+
+    .about-box,
+    .contact-link {
+      translate: 0 0;
+    }
+
+    #form-status.sending::after {
+      animation: none;
+      opacity: 1;
+    }
+
+    @starting-style {
+      .about-box {
+        opacity: 1;
+        translate: 0 0;
+      }
+    }
+  }
+
+  /* §18  Slow update (e-ink) */
+  @media (update: slow) {
+
+    .about-box,
+    .contact-link,
+    .form-input,
+    .form-textarea {
+      transition: none;
+    }
+  }
+
+  /* §19  Inverted colors */
+  @media (inverted-colors: inverted) {
+
+    .about-box,
+    .contact-link {
+      box-shadow: none;
+    }
+
+    .contact-icon,
+    .contact-highlight-title {
+      filter: invert(1);
+    }
+  }
+
+  /* §20  No-JS fallback */
+  @media (scripting: none) {
+
+    .about-box,
+    #form-status {
+      opacity: 1 !important;
+      translate: 0 0 !important;
+    }
+
+    .btn-full[data-loading="true"] {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* §21  Forced colors */
+  @media (forced-colors: active) {
+
+    .about-box,
+    .contact-link,
+    .form-input,
+    .form-textarea,
+    .contact-highlight {
+      border: 1px solid CanvasText;
+    }
+
+    .form-input:focus-visible,
+    .form-textarea:focus-visible,
+    .contact-link:focus-visible,
+    .about-box a:focus-visible,
+    .contact-highlight-link:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+      forced-color-adjust: none;
+    }
+
+    .about-box:hover,
+    .contact-link:hover {
+      translate: 0 0;
+    }
+
+    .inline-title-icon {
+      forced-color-adjust: auto;
+    }
+  }
+
+  /* §22  Print — matches the DOM of about.html */
+  @media print {
+
+    .about-box,
+    .contact-link,
+    .contact-highlight {
+      background: transparent !important;
+      box-shadow: none !important;
+      border-color: #000;
+      break-inside: avoid;
+      contain: none;
+    }
+
+    #form-status,
+    .btn-full,
+    .contact-chevron {
+      display: none !important;
+    }
+
+    .about-box a,
+    .contact-highlight-link {
+      color: #000;
+      text-decoration: underline;
+    }
+
+    .about-box a[target="_blank"]::after {
+      content: "";
+    }
+
+    .about-box a[href^="http"]::after {
+      content: " (" attr(href) ")";
+      font-size: .85em;
+      color: #444;
+    }
+
+    .inline-title-icon {
+      filter: grayscale(1);
+    }
+  }
+
+  /* §23  Scroll-driven reveal */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .about-box {
+        animation: ac-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+        animation-composition: add;
+      }
+    }
+  }
+
+  @keyframes ac-reveal {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+    }
+
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* §24  View Transition target for form status */
+  ::view-transition-old(ac-status),
+  ::view-transition-new(ac-status) {
+    animation-duration: 240ms;
+    animation-timing-function: cubic-bezier(.2, .8, .2, 1);
+  }
+
+  #form-status {
+    view-transition-name: ac-status;
+  }
+}

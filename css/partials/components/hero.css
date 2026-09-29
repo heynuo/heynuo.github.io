@@ -1,0 +1,676 @@
+/* =========================================================
+   HeyNuo – Hero Section (hero.css) v2.0
+   ---------------------------------------------------------
+   Hero banner, badges, radar animation, typography, stats counter.
+
+   v2.0 additions over v1.0:
+     • @property — animatable custom properties (gradient angle, stat border)
+     • Animated gradient text on h1 span
+     • Rotating conic-gradient border on stat hover
+     • SVG grain texture overlay for premium feel
+     • Radial top-spotlight vignette
+     • Modern light-dark() with fallback
+     • Focus-visible styles (accessibility)
+     • Typography polish (font-feature-settings, optical sizing, text-wrap: pretty)
+     • Logical properties throughout
+     • Local theming tokens (customize via --hero-*)
+     • Smarter prefers-reduced-motion (pauses, doesn't nuke layout)
+     • Refined entrance easing (cubic-bezier spring)
+     • Custom selection color
+     • Print styles
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. Animatable Custom Properties (@property)
+   These enable smooth CSS transitions/animations on values
+   that historically weren't animatable (angles, gradients).
+   --------------------------------------------------------- */
+@property --hn-stat-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ---------------------------------------------------------
+   2. Hero Section
+   --------------------------------------------------------- */
+@layer components {
+  .hero {
+    /* ---------- Local design tokens (easy customization) ---------- */
+    --hero-content-max: 680px;
+    --hero-inline-pad: clamp(1rem, 4vw, 2rem);
+    --hero-pad-block: clamp(4rem, 10vh, 7rem);
+    --hero-min-height: min(88svh, 820px);
+    --hero-aurora-opacity: 1;
+    --hero-grain-opacity: 0.035;
+    --hero-vignette-opacity: 0.55;
+
+    /* ---------- Layout ---------- */
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: var(--hero-min-height);
+    padding-block: var(--hero-pad-block);
+    padding-inline: var(--hero-inline-pad);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    color: var(--text);
+    contain: layout style;
+  }
+
+  /* dvh gives a more accurate height on mobile browsers with collapsing chrome */
+  @supports (height: 100dvh) {
+    .hero {
+      --hero-min-height: min(88dvh, 820px);
+    }
+  }
+
+  /* Anchor navigation offset when scrolling to hero */
+  .hero[id] {
+    scroll-margin-top: clamp(4rem, 8vh, 6rem);
+  }
+
+  /* ---------------------------------------------------------
+     3. Aurora Background + Vignette (::before)
+     --------------------------------------------------------- */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: var(--hero-aurora-opacity);
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%,
+        rgba(255, 255, 255, 0.35) 0%,
+        transparent 70%),
+      radial-gradient(ellipse at 20% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+    animation: hn-aurora-drift 22s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  @keyframes hn-aurora-drift {
+    0% {
+      transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    }
+
+    100% {
+      transform: translate3d(3%, -3%, 0) rotate(5deg) scale(1.1);
+    }
+  }
+
+  /* Dark theme aurora */
+  [data-theme="dark"] .hero::before {
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%,
+        rgba(37, 99, 235, 0.18) 0%,
+        transparent 70%),
+      radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(16, 185, 129, 0.10) 0%, transparent 60%);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hero::before {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%,
+          rgba(37, 99, 235, 0.18) 0%,
+          transparent 70%),
+        radial-gradient(ellipse at 20% 50%, rgba(59, 130, 246, 0.14) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% 80%, rgba(16, 185, 129, 0.10) 0%, transparent 60%);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     4. Grain Texture Overlay (::after)
+     Subtle film grain adds premium feel. SVG feTurbulence
+     is rendered once and tiled via background-repeat.
+     --------------------------------------------------------- */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: var(--hero-grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    background-repeat: repeat;
+  }
+
+  [data-theme="dark"] .hero::after {
+    --hero-grain-opacity: 0.06;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hero::after {
+      --hero-grain-opacity: 0.06;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     5. Hero Content Wrapper
+     --------------------------------------------------------- */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    inline-size: 100%;
+    max-inline-size: var(--hero-content-max);
+    margin-inline: auto;
+  }
+
+  /* ---------------------------------------------------------
+     6. Staggered Entrance Animations
+     Spring-like cubic-bezier for a modern, physical feel.
+     --------------------------------------------------------- */
+  @keyframes hn-fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 22px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .hero-content>* {
+    animation: hn-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+  }
+
+  .hero-content>.hero-badge {
+    animation-delay: 0.08s;
+  }
+
+  .hero-content>h1 {
+    animation-delay: 0.18s;
+  }
+
+  .hero-content>.hero-subtitle {
+    animation-delay: 0.28s;
+  }
+
+  .hero-content>.hero-description {
+    animation-delay: 0.38s;
+  }
+
+  .hero-content>.hero-buttons {
+    animation-delay: 0.48s;
+  }
+
+  .hero-content>.hero-stats {
+    animation-delay: 0.58s;
+  }
+
+  /* ---------------------------------------------------------
+     7. Hero Badge
+     --------------------------------------------------------- */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(37, 99, 235, 0.09);
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    color: var(--primary);
+    padding-block: 6px;
+    padding-inline: 16px;
+    border-radius: 40px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-block-end: 22px;
+    transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  @media (hover: hover) {
+    .hero-badge:hover {
+      border-color: rgba(37, 99, 235, 0.4);
+      transform: translateY(-1px);
+    }
+  }
+
+  [data-theme="dark"] .hero-badge {
+    background: rgba(59, 130, 246, 0.14);
+    border-color: rgba(59, 130, 246, 0.28);
+    color: #93c5fd;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hero-badge {
+      background: rgba(59, 130, 246, 0.14);
+      border-color: rgba(59, 130, 246, 0.28);
+      color: #93c5fd;
+    }
+  }
+
+  /* Badge dot with radar pulse */
+  .hero-badge-dot {
+    position: relative;
+    inline-size: 7px;
+    block-size: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  .hero-badge-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    opacity: 0.8;
+    animation: hn-radar-pulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+    will-change: transform, opacity;
+  }
+
+  @keyframes hn-radar-pulse {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.9;
+    }
+
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     8. Typography
+     --------------------------------------------------------- */
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw + 1rem, 4.5rem);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-block-end: 20px;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-optical-sizing: auto;
+    font-feature-settings: "ss01", "cv11", "kern", "liga";
+  }
+
+  /* Animated gradient text */
+  .hero h1 span,
+  .about-hero h1 span,
+  .contact-hero h1 span,
+  .section-title span {
+    background-image: linear-gradient(135deg,
+        var(--primary) 0%,
+        var(--secondary) 50%,
+        var(--primary) 100%);
+    background-size: 220% 220%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: hn-gradient-flow 8s ease-in-out infinite;
+    will-change: background-position;
+  }
+
+  @keyframes hn-gradient-flow {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.2vw + 0.8rem, 1.25rem);
+    line-height: 1.5;
+    font-weight: 500;
+    color: var(--accent);
+    margin-block-end: var(--space-md);
+    text-wrap: balance;
+  }
+
+  .hero-description,
+  .hero p {
+    max-inline-size: 640px;
+    margin-inline: auto;
+    color: var(--muted);
+    font-size: clamp(1rem, 1vw + 0.75rem, 1.125rem);
+    line-height: 1.75;
+    text-wrap: pretty;
+    font-feature-settings: "kern", "liga", "onum";
+  }
+
+  .hero-description {
+    max-inline-size: 620px;
+    margin-block-end: var(--space-lg);
+  }
+
+  .hero p {
+    margin-block-end: 0;
+  }
+
+  /* ---------------------------------------------------------
+     9. Buttons Row + Focus Styles
+     --------------------------------------------------------- */
+  .hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-block-start: var(--space-xl);
+  }
+
+  /* Accessible focus rings for all interactive children */
+  .hero :is(a, button, [tabindex]):focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+    border-radius: 10px;
+  }
+
+  /* ---------------------------------------------------------
+     10. Hero Stats — Glassmorphism + Rotating Border
+     --------------------------------------------------------- */
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-block-start: var(--space-2xl);
+  }
+
+  .hero-stat {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    isolation: isolate;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding-block: 14px;
+    padding-inline: 22px;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.3s ease,
+      box-shadow 0.35s ease;
+    will-change: transform;
+  }
+
+  /* Static gradient hairline (always visible) */
+  .hero-stat::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.30),
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.15));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Rotating conic-gradient border (revealed on hover) */
+  .hero-stat::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: conic-gradient(from var(--hn-stat-angle),
+        transparent 0deg,
+        rgba(37, 99, 235, 0.85) 60deg,
+        transparent 130deg,
+        transparent 230deg,
+        rgba(139, 92, 246, 0.85) 300deg,
+        transparent 360deg);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  @media (hover: hover) {
+    .hero-stat:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: rgba(37, 99, 235, 0.4);
+      box-shadow:
+        0 12px 32px rgba(37, 99, 235, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .hero-stat:hover::after {
+      opacity: 1;
+      animation: hn-stat-spin 3s linear infinite;
+    }
+  }
+
+  @keyframes hn-stat-spin {
+    to {
+      --hn-stat-angle: 360deg;
+    }
+  }
+
+  [data-theme="dark"] .hero-stat {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hero-stat {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  .hero-stat-icon {
+    font-size: 21px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .hero-stat-info {
+    text-align: start;
+  }
+
+  .hero-stat-value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13.5px;
+    line-height: 1.25;
+    color: var(--text);
+    font-feature-settings: "tnum", "kern";
+  }
+
+  .hero-stat-label {
+    font-size: 11.5px;
+    line-height: 1.25;
+    color: var(--muted);
+  }
+
+  /* ---------------------------------------------------------
+     11. Custom Selection Color
+     --------------------------------------------------------- */
+  .hero ::selection {
+    background: rgba(37, 99, 235, 0.22);
+    color: var(--text);
+  }
+
+  /* ---------------------------------------------------------
+     12. Responsive — Tablet
+     --------------------------------------------------------- */
+  @media (max-width: 900px) {
+    .hero {
+      --hero-pad-block: clamp(3rem, 8vh, 5rem);
+      --hero-min-height: auto;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     13. Responsive — Mobile
+     --------------------------------------------------------- */
+  @media (max-width: 640px) {
+    .hero {
+      --hero-pad-block: clamp(2.5rem, 6vh, 4rem);
+      --hero-min-height: auto;
+    }
+
+    .hero h1 {
+      letter-spacing: -0.02em;
+      margin-block-end: 16px;
+    }
+
+    .hero-badge {
+      font-size: 12px;
+      padding-block: 5px;
+      padding-inline: 14px;
+      margin-block-end: 18px;
+    }
+
+    .hero-buttons {
+      flex-direction: column;
+      align-items: stretch;
+      margin-block-start: var(--space-lg);
+    }
+
+    .hero-buttons>* {
+      inline-size: 100%;
+      max-inline-size: 320px;
+      margin-inline: auto;
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      align-items: center;
+      margin-block-start: var(--space-xl);
+    }
+
+    .hero-stat {
+      inline-size: 100%;
+      max-inline-size: 300px;
+      justify-content: center;
+    }
+
+    .hero-stat-info {
+      text-align: center;
+    }
+
+    /* Grain becomes distracting on small screens — soften it */
+    .hero::after {
+      --hero-grain-opacity: 0.025;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     14. Reduced Motion — Accessibility
+     Pause animations rather than removing them, so layout,
+     stacking, and opacity remain correct.
+     --------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .hero::before {
+      animation-play-state: paused;
+    }
+
+    .hero-content>* {
+      animation-duration: 0.01s;
+      animation-delay: 0s;
+    }
+
+    .hero h1 span,
+    .about-hero h1 span,
+    .contact-hero h1 span,
+    .section-title span {
+      animation: none;
+      background-position: 50% 50%;
+    }
+
+    .hero-badge-dot::after {
+      animation: none;
+      opacity: 0.5;
+      transform: scale(1);
+    }
+
+    .hero-stat,
+    .hero-badge {
+      transition: none;
+    }
+
+    .hero-stat:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .hero-stat:hover::after {
+      animation: none;
+      opacity: 0.35;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     15. High-Contrast Mode Support
+     --------------------------------------------------------- */
+  @media (prefers-contrast: more) {
+    .hero-badge {
+      border-color: currentColor;
+    }
+
+    .hero-stat {
+      border-color: currentColor;
+    }
+
+    .hero-stat::before,
+    .hero-stat::after {
+      display: none;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     16. Print Styles
+     --------------------------------------------------------- */
+  @media print {
+
+    .hero::before,
+    .hero::after,
+    .hero-badge-dot::after {
+      display: none !important;
+    }
+
+    .hero,
+    .hero-content>* {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .hero h1 span {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      color: var(--text);
+    }
+  }
+}

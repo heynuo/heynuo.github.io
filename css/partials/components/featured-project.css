@@ -1,0 +1,420 @@
+﻿/* =========================================================
+   HeyNuo — Featured Project (featured-project.css)
+   Featured project card · ambient glow · tags · CTA button
+
+   Drop-in replacement: all original class names are kept, so
+   no HTML or other CSS file needs to change.
+   ========================================================= */
+
+@layer components {
+
+  /* ---------------------------------------------------------
+     1. Local design tokens
+        Namespaced --fp-* on :root so that dark-mode overrides
+        can never be shadowed by a value declared on the card.
+     --------------------------------------------------------- */
+  :root {
+    --fp-amber: 245 158 11;
+    /* RGB triplet → any alpha */
+    --fp-amber-deep: #b45309;
+    /* white on this = 5.0:1  AA */
+    --fp-amber-ink: #92400e;
+    /* amber TEXT on a light bg  */
+    --fp-btn-from: #92400e;
+    /* white on this = 7.6:1  AAA */
+    --fp-btn-to: #b45309;
+    --fp-card-bg: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 100%);
+    --fp-radius: 1.875rem;
+    --fp-ease: cubic-bezier(.2, .7, .3, 1);
+    --fp-dur: 450ms;
+  }
+
+  /* Dark theme — explicit attribute first … */
+  :root[data-theme="dark"] {
+    --fp-amber-ink: #fbbf24;
+    --fp-card-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  /* … then system preference, unless a light theme is forced */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fp-amber-ink: #fbbf24;
+      --fp-card-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     2. Section wrapper
+     --------------------------------------------------------- */
+  .featured-project {
+    display: flex;
+    justify-content: center;
+    /* Fallback added: an undefined var() used to void the whole
+       shorthand, collapsing the margins to 0. */
+    margin-block: clamp(2rem, 4vw, 2.5rem) var(--space-3xl, 4rem);
+    padding-inline: clamp(1rem, 4vw, 1.5rem);
+
+    /* Becomes the query container for the card's internals */
+    container-type: inline-size;
+    container-name: fp-section;
+  }
+
+  /* ---------------------------------------------------------
+     3. Card
+     --------------------------------------------------------- */
+  .project-card {
+    position: relative;
+    isolation: isolate;
+    /* traps the negative-z glow */
+    box-sizing: border-box;
+
+    inline-size: 100%;
+    max-inline-size: 50rem;
+    /* 800px */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.25rem, 3vw, 2rem);
+
+    padding: clamp(1.75rem, 4vw, 2.25rem) clamp(1.5rem, 5vw, 2.75rem);
+
+    background: var(--fp-card-bg);
+    border: 1px solid rgb(var(--fp-amber) / 0.32);
+    border-radius: var(--fp-radius);
+    box-shadow: 0 0 1.875rem rgb(var(--fp-amber) / 0.08);
+
+    transition:
+      transform var(--fp-dur) var(--fp-ease),
+      border-color var(--fp-dur) ease,
+      box-shadow var(--fp-dur) ease;
+  }
+
+  /* ---------------------------------------------------------
+     4. Ambient glow
+        Lives on a pseudo-element so the pulse animates `opacity`
+        (compositor-only) instead of `box-shadow` (full repaint).
+     --------------------------------------------------------- */
+  .project-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+
+    box-shadow: 0 0 2.5rem rgb(var(--fp-amber) / 0.5);
+    opacity: 0.22;
+    transition: opacity 600ms ease;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-card::after {
+      animation: fp-breathe 6s ease-in-out infinite alternate;
+    }
+  }
+
+  /* Hover and keyboard focus share one visual state */
+  @media (hover: hover) {
+    .project-card:hover {
+      transform: translateY(-5px);
+      border-color: rgb(var(--fp-amber) / 0.6);
+      box-shadow: 0 0.9375rem 2.1875rem rgb(var(--fp-amber) / 0.22);
+    }
+
+    .project-card:hover::after {
+      animation: none;
+      /* release `opacity` to the rule below */
+      opacity: 0.85;
+    }
+  }
+
+  .project-card:focus-within {
+    transform: translateY(-5px);
+    border-color: rgb(var(--fp-amber) / 0.6);
+    box-shadow: 0 0.9375rem 2.1875rem rgb(var(--fp-amber) / 0.22);
+  }
+
+  .project-card:focus-within::after {
+    animation: none;
+    opacity: 0.85;
+  }
+
+  /* ---------------------------------------------------------
+     5. Copy
+     --------------------------------------------------------- */
+  .project-info {
+    flex: 1 1 22rem;
+    /* grows instead of squashing */
+    min-inline-size: 0;
+    /* lets long words wrap safely */
+  }
+
+  .project-info h3 {
+    margin-block: 0 0.625rem;
+    font-size: clamp(1.25rem, 3vw, 1.625rem);
+    line-height: 1.25;
+    /* currentColor fallback keeps the heading readable even if
+       --text is missing or fails to resolve. */
+    color: var(--text, currentColor);
+    text-wrap: balance;
+  }
+
+  .project-info h3 span {
+    /* Was var(--warning) — amber #f59e0b on a light card is only
+       2.0:1, so this token flips per theme instead. */
+    color: var(--fp-amber-ink);
+  }
+
+  .project-info p {
+    margin-block: 0;
+    max-inline-size: 25rem;
+    /* 400px, as before */
+    color: var(--muted, currentColor);
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+
+  /* ---------------------------------------------------------
+     6. Tags  (listed in the original header comment)
+        Inert until matching markup exists — zero risk.
+     --------------------------------------------------------- */
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 0.875rem 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-tags li {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--fp-amber-ink);
+    background: rgb(var(--fp-amber) / 0.12);
+    border: 1px solid rgb(var(--fp-amber) / 0.28);
+    border-radius: 999px;
+  }
+
+  /* ---------------------------------------------------------
+     7. CTA button
+     --------------------------------------------------------- */
+  .project-btn {
+    position: relative;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    min-block-size: 2.75rem;
+    /* comfortable touch target */
+    padding: 1rem 2rem;
+    border: 0;
+    border-radius: 999px;
+
+    /* Darkened gradient: white on the old #f59e0b end was 2.1:1,
+       which fails WCAG. Both stops now clear AA. */
+    background-image: linear-gradient(to right,
+        var(--fp-btn-from),
+        var(--fp-btn-to));
+
+    color: #fff;
+    font: inherit;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      transform 250ms ease,
+      box-shadow 250ms ease,
+      filter 250ms ease;
+  }
+
+  /* Nudge a trailing icon/arrow, if the markup has one */
+  .project-btn>svg {
+    inline-size: 1em;
+    block-size: 1em;
+    flex: 0 0 auto;
+    transition: transform 250ms var(--fp-ease);
+  }
+
+  @media (hover: hover) {
+    .project-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0.625rem 1.5625rem rgb(var(--fp-amber) / 0.4);
+      filter: brightness(1.08);
+    }
+
+    .project-btn:hover>svg {
+      transform: translateX(0.2em);
+    }
+  }
+
+  .project-btn:active {
+    transform: scale(0.98);
+  }
+
+  .project-btn:focus-visible {
+    outline: 3px solid var(--fp-amber-ink);
+    outline-offset: 3px;
+  }
+
+  /* ---------------------------------------------------------
+     8. Narrow layout
+        Container query so the card reacts to *its own* width,
+        with a media-query fallback for older engines.
+     --------------------------------------------------------- */
+  @container fp-section (max-width: 40rem) {
+    .project-card {
+      flex-direction: column;
+      text-align: center;
+      gap: 1.5rem;
+    }
+
+    .project-info {
+      flex: 0 0 auto;
+      inline-size: 100%;
+    }
+
+    .project-info p {
+      margin-inline: auto;
+    }
+
+    .project-tags {
+      justify-content: center;
+    }
+
+    .project-btn {
+      inline-size: 100%;
+      max-inline-size: 22rem;
+    }
+  }
+
+  @supports not (container-type: inline-size) {
+    @media (max-width: 42rem) {
+      .project-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+
+      .project-info {
+        flex: 0 0 auto;
+        inline-size: 100%;
+      }
+
+      .project-info p {
+        margin-inline: auto;
+      }
+
+      .project-tags {
+        justify-content: center;
+      }
+
+      .project-btn {
+        inline-size: 100%;
+        max-inline-size: 22rem;
+      }
+    }
+  }
+
+  /* ---------------------------------------------------------
+     9. Higher contrast preference
+     --------------------------------------------------------- */
+  @media (prefers-contrast: more) {
+    .project-card {
+      border-color: rgb(var(--fp-amber) / 0.85);
+      box-shadow: 0 0 1.875rem rgb(var(--fp-amber) / 0.25);
+    }
+
+    .project-info p {
+      color: var(--text, currentColor);
+    }
+
+    .project-tags li {
+      border-color: rgb(var(--fp-amber) / 0.7);
+    }
+
+    .project-btn {
+      outline: 2px solid currentColor;
+      outline-offset: -5px;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     10. Forced colors (Windows High Contrast)
+     --------------------------------------------------------- */
+  @media (forced-colors: active) {
+    .project-card {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      box-shadow: none;
+    }
+
+    .project-card::after {
+      display: none;
+    }
+
+    .project-info h3 span,
+    .project-tags li {
+      color: CanvasText;
+      border-color: CanvasText;
+    }
+
+    .project-btn {
+      background: ButtonFace;
+      color: ButtonText;
+      border: 1px solid ButtonText;
+    }
+  }
+
+  /* ---------------------------------------------------------
+     11. Reduced motion
+     --------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+
+    .project-card,
+    .project-btn,
+    .project-btn>svg {
+      transition-duration: 0.01ms;
+    }
+
+    .project-card::after {
+      animation: none;
+      opacity: 0.35;
+      transition: none;
+    }
+
+    .project-card:hover,
+    .project-card:focus-within,
+    .project-btn:hover,
+    .project-btn:active {
+      transform: none;
+    }
+
+    .project-btn:hover>svg {
+      transform: none;
+    }
+  }
+}
+
+/* Keyframes stay outside the layer so the name is global
+   and predictable regardless of layer order. */
+@keyframes fp-breathe {
+  from {
+    opacity: 0.16;
+  }
+
+  to {
+    opacity: 0.52;
+  }
+}

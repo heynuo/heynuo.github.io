@@ -1,0 +1,781 @@
+/* =========================================================
+   HeyNuo – Design Tokens (tokens.css)  v2.0
+   Colors, Typography, Spacing, Effects, Motion, Layout.
+   ✅ 100% Backward Compatible — no other files need changes.
+   ========================================================= */
+
+@layer base {
+
+  /* =========================================================
+     1. PRIMITIVE TOKENS (raw values – never use in components)
+     ========================================================= */
+  :root {
+    /* ---------- Color primitives ---------- */
+    /* Blue */
+    --hn-blue-50: #eff6ff;
+    --hn-blue-100: #dbeafe;
+    --hn-blue-200: #bfdbfe;
+    --hn-blue-300: #93c5fd;
+    --hn-blue-400: #60a5fa;
+    --hn-blue-500: #3b82f6;
+    --hn-blue-600: #2563eb;
+    --hn-blue-700: #1d4ed8;
+    --hn-blue-800: #1e40af;
+    --hn-blue-900: #1e3a8a;
+
+    /* Cyan */
+    --hn-cyan-50: #ecfeff;
+    --hn-cyan-100: #cffafe;
+    --hn-cyan-200: #a5f3fc;
+    --hn-cyan-300: #67e8f9;
+    --hn-cyan-400: #22d3ee;
+    --hn-cyan-500: #06b6d4;
+    --hn-cyan-600: #0891b2;
+    --hn-cyan-700: #0e7490;
+    --hn-cyan-800: #155e75;
+    --hn-cyan-900: #164e63;
+
+    /* Slate */
+    --hn-slate-50: #f8fafc;
+    --hn-slate-100: #f1f5f9;
+    --hn-slate-200: #e2e8f0;
+    --hn-slate-300: #cbd5e1;
+    --hn-slate-400: #94a3b8;
+    --hn-slate-500: #64748b;
+    --hn-slate-600: #475569;
+    --hn-slate-700: #334155;
+    --hn-slate-800: #1e293b;
+    --hn-slate-900: #0f172a;
+    --hn-slate-950: #020617;
+
+    /* Green */
+    --hn-green-50: #ecfdf5;
+    --hn-green-100: #d1fae5;
+    --hn-green-400: #34d399;
+    --hn-green-500: #10b981;
+    --hn-green-600: #059669;
+    --hn-green-700: #047857;
+
+    /* Red */
+    --hn-red-50: #fef2f2;
+    --hn-red-100: #fee2e2;
+    --hn-red-400: #f87171;
+    --hn-red-500: #ef4444;
+    --hn-red-600: #dc2626;
+    --hn-red-700: #b91c1c;
+
+    /* Amber */
+    --hn-amber-50: #fffbeb;
+    --hn-amber-100: #fef3c7;
+    --hn-amber-400: #fbbf24;
+    --hn-amber-500: #f59e0b;
+    --hn-amber-600: #d97706;
+    --hn-amber-700: #b45309;
+
+    /* Violet (new) */
+    --hn-violet-400: #a78bfa;
+    --hn-violet-500: #8b5cf6;
+    --hn-violet-600: #7c3aed;
+
+    /* Pink (new) */
+    --hn-pink-400: #f472b6;
+    --hn-pink-500: #ec4899;
+    --hn-pink-600: #db2777;
+
+    /* Pure */
+    --hn-white: #ffffff;
+    --hn-black: #000000;
+    --hn-transparent: transparent;
+    --hn-current: currentColor;
+
+    /* ---------- Numeric primitives ---------- */
+    --hn-0: 0;
+    --hn-1: 1px;
+    --hn-2: 2px;
+    --hn-4: 4px;
+    --hn-6: 6px;
+    --hn-8: 8px;
+    --hn-10: 10px;
+    --hn-12: 12px;
+    --hn-14: 14px;
+    --hn-16: 16px;
+    --hn-18: 18px;
+    --hn-20: 20px;
+    --hn-24: 24px;
+    --hn-28: 28px;
+    --hn-32: 32px;
+    --hn-35: 35px;
+    --hn-40: 40px;
+    --hn-48: 48px;
+    --hn-56: 56px;
+    --hn-60: 60px;
+    --hn-64: 64px;
+    --hn-72: 72px;
+    --hn-80: 80px;
+    --hn-96: 96px;
+    --hn-100: 100px;
+    --hn-120: 120px;
+    --hn-128: 128px;
+    --hn-160: 160px;
+
+    /* ---------- Alpha primitives ---------- */
+    --hn-alpha-0: 0;
+    --hn-alpha-4: 0.04;
+    --hn-alpha-5: 0.05;
+    --hn-alpha-7: 0.07;
+    --hn-alpha-8: 0.08;
+    --hn-alpha-10: 0.10;
+    --hn-alpha-12: 0.12;
+    --hn-alpha-15: 0.15;
+    --hn-alpha-18: 0.18;
+    --hn-alpha-20: 0.20;
+    --hn-alpha-25: 0.25;
+    --hn-alpha-30: 0.30;
+    --hn-alpha-40: 0.40;
+    --hn-alpha-50: 0.50;
+    --hn-alpha-60: 0.60;
+    --hn-alpha-65: 0.65;
+    --hn-alpha-70: 0.70;
+    --hn-alpha-75: 0.75;
+    --hn-alpha-80: 0.80;
+    --hn-alpha-90: 0.90;
+    --hn-alpha-100: 1;
+
+    /* ---------- Blur primitives ---------- */
+    --hn-blur-xs: 4px;
+    --hn-blur-sm: 8px;
+    --hn-blur-md: 12px;
+    --hn-blur-lg: 16px;
+    --hn-blur-xl: 20px;
+    --hn-blur-2xl: 24px;
+    --hn-blur-3xl: 32px;
+    --hn-blur-4xl: 40px;
+
+    /* ---------- Radius primitives ---------- */
+    --hn-radius-none: 0;
+    --hn-radius-xs: 4px;
+    --hn-radius-sm: 6px;
+    --hn-radius-md: 10px;
+    --hn-radius-lg: 12px;
+    --hn-radius-xl: 16px;
+    --hn-radius-2xl: 20px;
+    --hn-radius-3xl: 24px;
+    --hn-radius-4xl: 32px;
+    --hn-radius-full: 9999px;
+    --hn-radius-pill: 9999px;
+
+    /* ---------- Font size primitives ---------- */
+    --hn-text-2xs: 0.625rem;
+    /* 10px */
+    --hn-text-xs: 0.75rem;
+    /* 12px */
+    --hn-text-sm: 0.875rem;
+    /* 14px */
+    --hn-text-base: 1rem;
+    /* 16px */
+    --hn-text-lg: 1.125rem;
+    /* 18px */
+    --hn-text-xl: 1.25rem;
+    /* 20px */
+    --hn-text-2xl: 1.5rem;
+    /* 24px */
+    --hn-text-3xl: 1.875rem;
+    /* 30px */
+    --hn-text-4xl: 2.25rem;
+    /* 36px */
+    --hn-text-5xl: 3rem;
+    /* 48px */
+    --hn-text-6xl: 3.75rem;
+    /* 60px */
+    --hn-text-7xl: 4.5rem;
+    /* 72px */
+
+    /* ---------- Font weight primitives ---------- */
+    --hn-weight-thin: 100;
+    --hn-weight-extralight: 200;
+    --hn-weight-light: 300;
+    --hn-weight-normal: 400;
+    --hn-weight-medium: 500;
+    --hn-weight-semibold: 600;
+    --hn-weight-bold: 700;
+    --hn-weight-extrabold: 800;
+    --hn-weight-black: 900;
+
+    /* ---------- Line height primitives ---------- */
+    --hn-leading-none: 1;
+    --hn-leading-tight: 1.25;
+    --hn-leading-snug: 1.375;
+    --hn-leading-normal: 1.5;
+    --hn-leading-relaxed: 1.625;
+    --hn-leading-loose: 2;
+
+    /* ---------- Letter spacing primitives ---------- */
+    --hn-tracking-tighter: -0.05em;
+    --hn-tracking-tight: -0.025em;
+    --hn-tracking-normal: 0em;
+    --hn-tracking-wide: 0.025em;
+    --hn-tracking-wider: 0.05em;
+    --hn-tracking-widest: 0.1em;
+
+    /* ---------- Duration primitives ---------- */
+    --hn-duration-instant: 80ms;
+    --hn-duration-fast: 150ms;
+    --hn-duration-normal: 250ms;
+    --hn-duration-slow: 350ms;
+    --hn-duration-slower: 500ms;
+    --hn-duration-slowest: 700ms;
+
+    /* ---------- Easing primitives ---------- */
+    --hn-ease-linear: linear;
+    --hn-ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --hn-ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --hn-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --hn-ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --hn-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --hn-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* =========================================================
+     2. SEMANTIC TOKENS (purpose-driven – use in components)
+     ========================================================= */
+  :root {
+    color-scheme: light;
+
+    /* ---------- Backgrounds ---------- */
+    --hn-bg: var(--hn-slate-50);
+    --hn-bg-subtle: var(--hn-slate-100);
+    --hn-bg-muted: var(--hn-slate-200);
+    --hn-bg-surface: var(--hn-white);
+    --hn-bg-elevated: var(--hn-white);
+    --hn-bg-overlay: rgba(15, 23, 42, 0.50);
+    --hn-bg-inverse: var(--hn-slate-900);
+    --hn-bg-glass: rgba(255, 255, 255, 0.65);
+    --hn-bg-glass-strong: rgba(255, 255, 255, 0.80);
+    --hn-bg-glass-weak: rgba(255, 255, 255, 0.45);
+    --hn-bg-code: var(--hn-slate-100);
+
+    /* ---------- Text ---------- */
+    --hn-text: var(--hn-slate-900);
+    --hn-text-strong: var(--hn-slate-950);
+    --hn-text-muted: var(--hn-slate-600);
+    --hn-text-subtle: var(--hn-slate-500);
+    --hn-text-faint: var(--hn-slate-400);
+    --hn-text-disabled: var(--hn-slate-300);
+    --hn-text-inverse: var(--hn-white);
+    --hn-text-on-primary: var(--hn-white);
+    --hn-text-link: var(--hn-blue-600);
+    --hn-text-link-hover: var(--hn-blue-700);
+
+    /* ---------- Brand ---------- */
+    --hn-primary: var(--hn-blue-600);
+    --hn-primary-hover: var(--hn-blue-700);
+    --hn-primary-active: var(--hn-blue-800);
+    --hn-primary-subtle: var(--hn-blue-50);
+    --hn-primary-muted: var(--hn-blue-100);
+    --hn-primary-contrast: var(--hn-white);
+
+    --hn-secondary: var(--hn-cyan-600);
+    --hn-secondary-hover: var(--hn-cyan-700);
+    --hn-secondary-subtle: var(--hn-cyan-50);
+    --hn-secondary-muted: var(--hn-cyan-100);
+    --hn-secondary-contrast: var(--hn-white);
+
+    --hn-accent: var(--hn-blue-500);
+    --hn-accent-hover: var(--hn-blue-600);
+    --hn-accent-2: var(--hn-violet-500);
+    --hn-accent-3: var(--hn-pink-500);
+
+    /* ---------- Feedback ---------- */
+    --hn-success: var(--hn-green-500);
+    --hn-success-hover: var(--hn-green-600);
+    --hn-success-subtle: var(--hn-green-50);
+    --hn-success-contrast: var(--hn-white);
+
+    --hn-error: var(--hn-red-500);
+    --hn-error-hover: var(--hn-red-600);
+    --hn-error-subtle: var(--hn-red-50);
+    --hn-error-contrast: var(--hn-white);
+
+    --hn-warning: var(--hn-amber-500);
+    --hn-warning-hover: var(--hn-amber-600);
+    --hn-warning-subtle: var(--hn-amber-50);
+    --hn-warning-contrast: var(--hn-white);
+
+    --hn-info: var(--hn-blue-500);
+    --hn-info-subtle: var(--hn-blue-50);
+    --hn-info-contrast: var(--hn-white);
+
+    /* ---------- Borders ---------- */
+    --hn-border: rgba(0, 0, 0, 0.08);
+    --hn-border-strong: rgba(0, 0, 0, 0.15);
+    --hn-border-subtle: rgba(0, 0, 0, 0.04);
+    --hn-border-muted: rgba(0, 0, 0, 0.05);
+    --hn-border-glass: rgba(0, 0, 0, 0.07);
+    --hn-border-focus: var(--hn-blue-500);
+    --hn-border-color: var(--hn-slate-200);
+
+    /* ---------- Dividers ---------- */
+    --hn-divider: rgba(0, 0, 0, 0.06);
+    --hn-divider-strong: rgba(0, 0, 0, 0.12);
+
+    /* ---------- Shadows ---------- */
+    --hn-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --hn-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+    --hn-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+    --hn-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+    --hn-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.08);
+    --hn-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
+    --hn-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+    --hn-shadow-card: var(--hn-shadow-md);
+    --hn-shadow-card-hover: var(--hn-shadow-lg);
+    --hn-shadow-dropdown: var(--hn-shadow-xl);
+    --hn-shadow-modal: var(--hn-shadow-2xl);
+    --hn-shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --hn-shadow-focus: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    --hn-shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.25);
+    --hn-shadow-focus-success: 0 0 0 3px rgba(16, 185, 129, 0.25);
+    --hn-shadow-glow: 0 0 30px rgba(59, 130, 246, 0.35);
+
+    /* ---------- Spacing (semantic) ---------- */
+    --hn-space-3xs: var(--hn-2);
+    --hn-space-2xs: var(--hn-4);
+    --hn-space-xs: var(--hn-8);
+    --hn-space-sm: var(--hn-12);
+    --hn-space-md: var(--hn-16);
+    --hn-space-lg: var(--hn-24);
+    --hn-space-xl: var(--hn-32);
+    --hn-space-2xl: var(--hn-40);
+    --hn-space-3xl: var(--hn-48);
+    --hn-space-4xl: var(--hn-60);
+    --hn-space-5xl: var(--hn-80);
+    --hn-space-6xl: var(--hn-100);
+    --hn-space-7xl: var(--hn-120);
+
+    /* ---------- Radius (semantic) ---------- */
+    --hn-radius-card: var(--hn-radius-xl);
+    --hn-radius-button: var(--hn-radius-md);
+    --hn-radius-input: var(--hn-radius-md);
+    --hn-radius-badge: var(--hn-radius-full);
+    --hn-radius-avatar: var(--hn-radius-full);
+    --hn-radius-tooltip: var(--hn-radius-sm);
+    --hn-radius-modal: var(--hn-radius-2xl);
+
+    /* ---------- Typography (semantic) ---------- */
+    --hn-font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --hn-font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --hn-font-arabic: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+    --hn-font-serif: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --hn-font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace;
+
+    --hn-font-size-2xs: var(--hn-text-2xs);
+    --hn-font-size-xs: var(--hn-text-xs);
+    --hn-font-size-sm: var(--hn-text-sm);
+    --hn-font-size-md: var(--hn-text-base);
+    --hn-font-size-base: var(--hn-text-base);
+    --hn-font-size-lg: var(--hn-text-lg);
+    --hn-font-size-xl: var(--hn-text-xl);
+    --hn-font-size-2xl: var(--hn-text-2xl);
+    --hn-font-size-3xl: var(--hn-text-3xl);
+    --hn-font-size-4xl: var(--hn-text-4xl);
+    --hn-font-size-5xl: var(--hn-text-5xl);
+    --hn-font-size-6xl: var(--hn-text-6xl);
+
+    --hn-font-weight-normal: var(--hn-weight-normal);
+    --hn-font-weight-medium: var(--hn-weight-medium);
+    --hn-font-weight-semibold: var(--hn-weight-semibold);
+    --hn-font-weight-bold: var(--hn-weight-bold);
+
+    --hn-line-height-tight: var(--hn-leading-tight);
+    --hn-line-height-snug: var(--hn-leading-snug);
+    --hn-line-height-normal: var(--hn-leading-normal);
+    --hn-line-height-relaxed: var(--hn-leading-relaxed);
+
+    /* ---------- Motion (semantic) ---------- */
+    --hn-ease-default: var(--hn-ease-smooth);
+    --hn-transition-fast: color var(--hn-duration-fast) var(--hn-ease-smooth),
+      background-color var(--hn-duration-fast) var(--hn-ease-smooth),
+      transform var(--hn-duration-fast) var(--hn-ease-smooth);
+    --hn-transition-default: color var(--hn-duration-normal) var(--hn-ease-smooth),
+      background-color var(--hn-duration-normal) var(--hn-ease-smooth),
+      transform var(--hn-duration-normal) var(--hn-ease-smooth),
+      box-shadow var(--hn-duration-normal) var(--hn-ease-smooth),
+      border-color var(--hn-duration-normal) var(--hn-ease-smooth),
+      opacity var(--hn-duration-normal) var(--hn-ease-smooth);
+    --hn-transition-slow: transform var(--hn-duration-slow) var(--hn-ease-smooth),
+      box-shadow var(--hn-duration-slow) var(--hn-ease-smooth);
+    --hn-transition-colors: color var(--hn-duration-fast) var(--hn-ease-smooth),
+      background-color var(--hn-duration-fast) var(--hn-ease-smooth),
+      border-color var(--hn-duration-fast) var(--hn-ease-smooth);
+
+    /* ---------- Layout ---------- */
+    --hn-header-height: 65px;
+    --hn-scroll-offset: 90px;
+    --hn-fixed-offset: 24px;
+    --hn-container-sm: 640px;
+    --hn-container-md: 768px;
+    --hn-container-lg: 1024px;
+    --hn-container-xl: 1200px;
+    --hn-container-2xl: 1400px;
+    --hn-container-max: 1200px;
+    --hn-container-narrow: 800px;
+    --hn-container-prose: 65ch;
+    --hn-sidebar-width: 280px;
+    --hn-nav-width: 260px;
+
+    /* ---------- Z-index ---------- */
+    --hn-z-hide: -1;
+    --hn-z-base: 1;
+    --hn-z-raised: 10;
+    --hn-z-dropdown: 100;
+    --hn-z-sticky: 200;
+    --hn-z-nav: 300;
+    --hn-z-overlay: 350;
+    --hn-z-modal: 400;
+    --hn-z-popover: 450;
+    --hn-z-toast: 500;
+    --hn-z-tooltip: 600;
+    --hn-z-max: 9999;
+
+    /* ---------- Glassmorphism ---------- */
+    --hn-glass-blur-sm: var(--hn-blur-sm);
+    --hn-glass-blur-header: var(--hn-blur-xl);
+    --hn-glass-blur-card: var(--hn-blur-lg);
+    --hn-glass-blur-modal: var(--hn-blur-2xl);
+    --hn-glass-blur-nav: var(--hn-blur-xl);
+    --hn-glass-saturate: 180%;
+
+    /* ---------- Hero ambient blobs ---------- */
+    --hn-blob-1: rgba(59, 130, 246, 0.10);
+    --hn-blob-2: rgba(8, 145, 178, 0.08);
+    --hn-blob-3: rgba(139, 92, 246, 0.08);
+    --hn-blob-4: rgba(236, 72, 153, 0.06);
+
+    /* ---------- Gradients ---------- */
+    --hn-gradient-primary: linear-gradient(135deg, var(--hn-blue-500) 0%, var(--hn-cyan-500) 100%);
+    --hn-gradient-secondary: linear-gradient(135deg, var(--hn-cyan-500) 0%, var(--hn-blue-600) 100%);
+    --hn-gradient-accent: linear-gradient(135deg, var(--hn-violet-500) 0%, var(--hn-pink-500) 100%);
+    --hn-gradient-subtle: linear-gradient(135deg, var(--hn-blue-50) 0%, var(--hn-cyan-50) 100%);
+    --hn-gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%);
+
+    /* ---------- Scrollbar ---------- */
+    --hn-scrollbar-width: 10px;
+    --hn-scrollbar-track: var(--hn-slate-100);
+    --hn-scrollbar-thumb: var(--hn-slate-300);
+    --hn-scrollbar-thumb-hover: var(--hn-slate-400);
+
+    /* ---------- Selection ---------- */
+    --hn-selection-bg: var(--hn-blue-100);
+    --hn-selection-text: var(--hn-slate-900);
+
+    /* ---------- Focus ring ---------- */
+    --hn-focus-ring-width: 3px;
+    --hn-focus-ring-offset: 2px;
+    --hn-focus-ring-color: rgba(37, 99, 235, 0.35);
+    --hn-focus-ring: 0 0 0 var(--hn-focus-ring-width) var(--hn-focus-ring-color);
+
+    /* ---------- Component tokens (examples) ---------- */
+    --hn-btn-height-sm: 32px;
+    --hn-btn-height-md: 40px;
+    --hn-btn-height-lg: 48px;
+    --hn-btn-padding-x: var(--hn-space-md);
+
+    --hn-input-height-sm: 32px;
+    --hn-input-height-md: 40px;
+    --hn-input-height-lg: 48px;
+
+    --hn-card-padding: var(--hn-space-lg);
+    --hn-card-padding-sm: var(--hn-space-md);
+
+    --hn-avatar-xs: 24px;
+    --hn-avatar-sm: 32px;
+    --hn-avatar-md: 40px;
+    --hn-avatar-lg: 56px;
+    --hn-avatar-xl: 80px;
+  }
+
+  /* =========================================================
+     3. BACKWARD-COMPATIBILITY ALIASES
+        Keeps the original v1 token names working perfectly.
+        ⚠️  DO NOT REMOVE — legacy files depend on these.
+     ========================================================= */
+  :root {
+    /* Colors */
+    --bg: var(--hn-bg);
+    --card-bg: var(--hn-bg-surface);
+    --surface: var(--hn-bg-surface);
+    --bg-tertiary: var(--hn-bg-muted);
+    --primary: var(--hn-primary);
+    --primary-subtle: var(--hn-primary-subtle);
+    --secondary: var(--hn-secondary);
+    --secondary-subtle: var(--hn-secondary-subtle);
+    --text: var(--hn-text);
+    --muted: var(--hn-text-muted);
+    --text-muted: var(--hn-text-muted);
+    --border: var(--hn-border);
+    --border-hover: var(--hn-border-strong);
+    --accent: var(--hn-accent);
+    --success: var(--hn-success);
+    --error: var(--hn-error);
+    --warning: var(--hn-warning);
+
+    /* Shadows (common aliases) */
+    --shadow-sm: var(--hn-shadow-sm);
+    --shadow-md: var(--hn-shadow-md);
+    --shadow-lg: var(--hn-shadow-lg);
+
+    /* Glassmorphism */
+    --glass-bg: var(--hn-bg-glass);
+    --glass-border: var(--hn-border-glass);
+    --glass-blur-header: var(--hn-glass-blur-header);
+
+    /* Blobs */
+    --blob-1: var(--hn-blob-1);
+    --blob-2: var(--hn-blob-2);
+
+    /* Spacing (original scale preserved exactly) */
+    --space-xs: var(--hn-8);
+    /* 8px  */
+    --space-sm: var(--hn-12);
+    /* 12px */
+    --space-md: var(--hn-16);
+    /* 16px */
+    --space-lg: var(--hn-24);
+    /* 24px */
+    --space-xl: var(--hn-35);
+    /* 35px */
+    --space-2xl: var(--hn-40);
+    /* 40px */
+    --space-3xl: var(--hn-60);
+    /* 60px */
+    --space-4xl: var(--hn-80);
+    /* 80px */
+    --space-5xl: var(--hn-100);
+    /* 100px */
+
+    /* Z-index */
+    --z-base: var(--hn-z-base);
+    --z-dropdown: var(--hn-z-dropdown);
+    --z-sticky: var(--hn-z-sticky);
+    --z-nav: var(--hn-z-nav);
+    --z-modal: var(--hn-z-modal);
+    --z-toast: var(--hn-z-toast);
+
+    /* Transitions */
+    --transition-fast: var(--hn-transition-fast);
+    --transition-default: var(--hn-transition-default);
+    --transition-slow: var(--hn-transition-slow);
+
+    /* Layout */
+    --header-height: var(--hn-header-height);
+    --scroll-offset: var(--hn-scroll-offset);
+    --fixed-offset: var(--hn-fixed-offset);
+
+    /* Fonts */
+    --font-display: var(--hn-font-display);
+    --font-body: var(--hn-font-body);
+    --font-arabic: var(--hn-font-arabic);
+    --font-serif: var(--hn-font-serif);
+  }
+
+  /* =========================================================
+     4. DARK THEME — [data-theme="dark"]
+     ========================================================= */
+  [data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Backgrounds */
+    --hn-bg: var(--hn-slate-950);
+    --hn-bg-subtle: var(--hn-slate-900);
+    --hn-bg-muted: var(--hn-slate-800);
+    --hn-bg-surface: var(--hn-slate-900);
+    --hn-bg-elevated: var(--hn-slate-800);
+    --hn-bg-overlay: rgba(0, 0, 0, 0.65);
+    --hn-bg-inverse: var(--hn-slate-50);
+    --hn-bg-glass: rgba(15, 23, 42, 0.70);
+    --hn-bg-glass-strong: rgba(15, 23, 42, 0.85);
+    --hn-bg-glass-weak: rgba(15, 23, 42, 0.50);
+    --hn-bg-code: var(--hn-slate-800);
+
+    /* Text */
+    --hn-text: var(--hn-slate-100);
+    --hn-text-strong: var(--hn-white);
+    --hn-text-muted: var(--hn-slate-400);
+    --hn-text-subtle: var(--hn-slate-500);
+    --hn-text-faint: var(--hn-slate-600);
+    --hn-text-disabled: var(--hn-slate-700);
+    --hn-text-inverse: var(--hn-slate-900);
+    --hn-text-on-primary: var(--hn-white);
+    --hn-text-link: var(--hn-blue-400);
+    --hn-text-link-hover: var(--hn-blue-300);
+
+    /* Brand */
+    --hn-primary: var(--hn-blue-500);
+    --hn-primary-hover: var(--hn-blue-400);
+    --hn-primary-active: var(--hn-blue-300);
+    --hn-primary-subtle: rgba(59, 130, 246, 0.15);
+    --hn-primary-muted: rgba(59, 130, 246, 0.25);
+    --hn-primary-contrast: var(--hn-white);
+
+    --hn-secondary: var(--hn-cyan-500);
+    --hn-secondary-hover: var(--hn-cyan-400);
+    --hn-secondary-subtle: rgba(6, 182, 212, 0.15);
+    --hn-secondary-muted: rgba(6, 182, 212, 0.25);
+
+    --hn-accent: var(--hn-blue-400);
+    --hn-accent-hover: var(--hn-blue-300);
+    --hn-accent-2: var(--hn-violet-400);
+    --hn-accent-3: var(--hn-pink-400);
+
+    /* Feedback */
+    --hn-success: var(--hn-green-400);
+    --hn-success-hover: var(--hn-green-500);
+    --hn-success-subtle: rgba(16, 185, 129, 0.15);
+
+    --hn-error: var(--hn-red-400);
+    --hn-error-hover: var(--hn-red-500);
+    --hn-error-subtle: rgba(239, 68, 68, 0.15);
+
+    --hn-warning: var(--hn-amber-400);
+    --hn-warning-hover: var(--hn-amber-500);
+    --hn-warning-subtle: rgba(245, 158, 11, 0.15);
+
+    --hn-info: var(--hn-blue-400);
+    --hn-info-subtle: rgba(59, 130, 246, 0.15);
+
+    /* Borders */
+    --hn-border: rgba(255, 255, 255, 0.10);
+    --hn-border-strong: rgba(255, 255, 255, 0.18);
+    --hn-border-subtle: rgba(255, 255, 255, 0.05);
+    --hn-border-muted: rgba(255, 255, 255, 0.07);
+    --hn-border-glass: rgba(255, 255, 255, 0.08);
+    --hn-border-focus: var(--hn-blue-400);
+    --hn-border-color: var(--hn-slate-700);
+
+    /* Dividers */
+    --hn-divider: rgba(255, 255, 255, 0.08);
+    --hn-divider-strong: rgba(255, 255, 255, 0.15);
+
+    /* Shadows */
+    --hn-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.30);
+    --hn-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.40), 0 1px 2px -1px rgb(0 0 0 / 0.30);
+    --hn-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.40), 0 2px 4px -2px rgb(0 0 0 / 0.30);
+    --hn-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.45), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+    --hn-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.50), 0 8px 10px -6px rgb(0 0 0 / 0.40);
+    --hn-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.60);
+    --hn-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.30);
+
+    --hn-shadow-card: var(--hn-shadow-md);
+    --hn-shadow-card-hover: var(--hn-shadow-lg);
+    --hn-shadow-dropdown: var(--hn-shadow-xl);
+    --hn-shadow-modal: var(--hn-shadow-2xl);
+    --hn-shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --hn-shadow-focus: 0 0 0 3px rgba(96, 165, 250, 0.35);
+    --hn-shadow-focus-error: 0 0 0 3px rgba(248, 113, 113, 0.35);
+    --hn-shadow-focus-success: 0 0 0 3px rgba(52, 211, 153, 0.35);
+    --hn-shadow-glow: 0 0 30px rgba(59, 130, 246, 0.50);
+
+    /* Blobs */
+    --hn-blob-1: rgba(59, 130, 246, 0.08);
+    --hn-blob-2: rgba(8, 145, 178, 0.06);
+    --hn-blob-3: rgba(139, 92, 246, 0.06);
+    --hn-blob-4: rgba(236, 72, 153, 0.05);
+
+    /* Gradients */
+    --hn-gradient-subtle: linear-gradient(135deg, rgba(30, 64, 175, 0.20) 0%, rgba(8, 145, 178, 0.15) 100%);
+    --hn-gradient-glass: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.35) 100%);
+
+    /* Scrollbar */
+    --hn-scrollbar-track: var(--hn-slate-900);
+    --hn-scrollbar-thumb: var(--hn-slate-700);
+    --hn-scrollbar-thumb-hover: var(--hn-slate-600);
+
+    /* Selection */
+    --hn-selection-bg: rgba(59, 130, 246, 0.35);
+    --hn-selection-text: var(--hn-white);
+
+    /* Focus */
+    --hn-focus-ring-color: rgba(96, 165, 250, 0.45);
+  }
+
+  /* =========================================================
+     5. SYSTEM DARK PREFERENCE (only if no explicit theme set)
+     ========================================================= */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      color-scheme: dark;
+
+      --hn-bg: var(--hn-slate-950);
+      --hn-bg-subtle: var(--hn-slate-900);
+      --hn-bg-muted: var(--hn-slate-800);
+      --hn-bg-surface: var(--hn-slate-900);
+      --hn-bg-elevated: var(--hn-slate-800);
+      --hn-bg-overlay: rgba(0, 0, 0, 0.65);
+      --hn-bg-inverse: var(--hn-slate-50);
+      --hn-bg-glass: rgba(15, 23, 42, 0.70);
+      --hn-bg-glass-strong: rgba(15, 23, 42, 0.85);
+      --hn-bg-glass-weak: rgba(15, 23, 42, 0.50);
+      --hn-bg-code: var(--hn-slate-800);
+
+      --hn-text: var(--hn-slate-100);
+      --hn-text-strong: var(--hn-white);
+      --hn-text-muted: var(--hn-slate-400);
+      --hn-text-subtle: var(--hn-slate-500);
+      --hn-text-faint: var(--hn-slate-600);
+      --hn-text-disabled: var(--hn-slate-700);
+      --hn-text-inverse: var(--hn-slate-900);
+      --hn-text-link: var(--hn-blue-400);
+
+      --hn-primary: var(--hn-blue-500);
+      --hn-primary-hover: var(--hn-blue-400);
+      --hn-primary-subtle: rgba(59, 130, 246, 0.15);
+      --hn-primary-contrast: var(--hn-white);
+
+      --hn-secondary: var(--hn-cyan-500);
+      --hn-secondary-hover: var(--hn-cyan-400);
+      --hn-secondary-subtle: rgba(6, 182, 212, 0.15);
+
+      --hn-accent: var(--hn-blue-400);
+
+      --hn-success: var(--hn-green-400);
+      --hn-success-subtle: rgba(16, 185, 129, 0.15);
+      --hn-error: var(--hn-red-400);
+      --hn-error-subtle: rgba(239, 68, 68, 0.15);
+      --hn-warning: var(--hn-amber-400);
+      --hn-warning-subtle: rgba(245, 158, 11, 0.15);
+
+      --hn-border: rgba(255, 255, 255, 0.10);
+      --hn-border-strong: rgba(255, 255, 255, 0.18);
+      --hn-border-subtle: rgba(255, 255, 255, 0.05);
+      --hn-border-glass: rgba(255, 255, 255, 0.08);
+      --hn-border-color: var(--hn-slate-700);
+
+      --hn-divider: rgba(255, 255, 255, 0.08);
+      --hn-divider-strong: rgba(255, 255, 255, 0.15);
+
+      --hn-shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.40);
+      --hn-shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.45);
+      --hn-shadow-dropdown: 0 20px 25px -5px rgb(0 0 0 / 0.50);
+      --hn-shadow-modal: 0 25px 50px -12px rgb(0 0 0 / 0.60);
+      --hn-shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.35);
+      --hn-shadow-focus: 0 0 0 3px rgba(96, 165, 250, 0.35);
+
+      --hn-blob-1: rgba(59, 130, 246, 0.08);
+      --hn-blob-2: rgba(8, 145, 178, 0.06);
+      --hn-blob-3: rgba(139, 92, 246, 0.06);
+      --hn-blob-4: rgba(236, 72, 153, 0.05);
+
+      --hn-gradient-subtle: linear-gradient(135deg, rgba(30, 64, 175, 0.20) 0%, rgba(8, 145, 178, 0.15) 100%);
+      --hn-gradient-glass: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.35) 100%);
+
+      --hn-scrollbar-track: var(--hn-slate-900);
+      --hn-scrollbar-thumb: var(--hn-slate-700);
+      --hn-scrollbar-thumb-hover: var(--hn-slate-600);
+
+      --hn-selection-bg: rgba(59, 130, 246, 0.35);
+      --hn-selection-text: var(--hn-white);
+
+      --hn-focus-ring-color: rgba(96, 165, 250, 0.45);
+    }
+  }
+}

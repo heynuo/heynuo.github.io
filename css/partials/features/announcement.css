@@ -1,0 +1,109 @@
+﻿/* =========================================================
+   HeyNuo â€“ Top Announcement Banner (announcement.css)
+   Dismissible top notification banner, pulse pill, action link.
+   ========================================================= */
+
+@layer features {
+  /* ============================================
+     NEW: Top Announcement Banner
+     ============================================ */
+  .announcement-banner {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, rgba(8, 145, 178, 0.12) 50%, rgba(139, 92, 246, 0.12) 100%);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+    z-index: calc(var(--z-nav) + 5);
+    font-size: 13.5px;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] .announcement-banner {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, rgba(8, 145, 178, 0.18) 50%, rgba(139, 92, 246, 0.18) 100%);
+    border-bottom-color: rgba(59, 130, 246, 0.25);
+  }
+
+  .announcement-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 24px;
+    text-align: center;
+    flex-wrap: wrap;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .announcement-pill {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  }
+
+  .announcement-message {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .announcement-cta {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .announcement-cta:hover {
+    color: var(--secondary);
+    transform: translateX(3px);
+  }
+
+  .announcement-close {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+  }
+
+  .announcement-close:hover {
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="dark"] .announcement-close:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .announcement-banner.dismissed {
+    transform: translateY(-100%);
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    border: none;
+  }
+
+}

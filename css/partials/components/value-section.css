@@ -1,0 +1,185 @@
+﻿/* =========================================================
+   HeyNuo â€“ Value Grid Section (value-section.css)
+   Value cards, grid layout, feature icons, call-to-action banner.
+   ========================================================= */
+
+@layer components {
+  /* Section titles */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw + 0.5rem, 2.125rem);
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: 800;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    letter-spacing: -0.5px;
+  }
+
+  .section-heading {
+    max-width: 760px;
+    margin: 0 auto 28px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: var(--font-display);
+  }
+
+  .section-heading h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.06em;
+    color: var(--text);
+    text-wrap: balance;
+  }
+
+  .value-section {
+    margin: 12px 0 56px;
+    padding: 30px 0 10px;
+  }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .value-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  .value-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.1));
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 26px 22px;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .value-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 16px 38px rgba(37, 99, 235, 0.12);
+  }
+
+  [data-theme="dark"] .value-card {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.5));
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .value-card {
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.5));
+    }
+  }
+
+  [data-theme="dark"] .value-cta p {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .value-cta p {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  .value-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(8, 145, 178, 0.1));
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .value-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .value-card p {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .value-card ul {
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .value-card li {
+    position: relative;
+    padding-left: 18px;
+    color: var(--text);
+    font-size: 0.96rem;
+  }
+
+  .value-card li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  .value-cta {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .value-cta p {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.03);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .value-cta a {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .value-cta a:hover {
+    text-decoration: underline;
+  }
+
+  .section-spacing {
+    margin-bottom: var(--space-5xl);
+  }
+
+}

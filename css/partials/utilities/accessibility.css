@@ -1,0 +1,65 @@
+﻿/* =========================================================
+   HeyNuo â€“ Accessibility Overrides (accessibility.css)
+   prefers-contrast, prefers-reduced-motion, prefers-reduced-transparency.
+   ========================================================= */
+
+@layer utilities {
+  /* High contrast support */
+  @media (prefers-contrast: more) {
+    .card,
+    .about-box,
+    .project-card,
+    .form-input,
+    .form-textarea {
+      border-width: 2px;
+      border-color: currentColor;
+    }
+    .nav-links a {
+      border: 2px solid transparent;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      border-color: currentColor;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .project-card {
+      animation: none !important;
+      box-shadow: none !important;
+    }
+    .hero-badge-dot {
+      animation: none !important;
+    }
+    .reading-progress {
+      transition: none !important;
+    }
+  }
+
+  /* Reduced transparency support */
+  @media (prefers-reduced-transparency: reduce) {
+    header,
+    .nav-links,
+    .btn-secondary {
+      backdrop-filter: none !important;
+      background: var(--bg);
+    }
+    .card,
+    .about-box,
+    .contact-link,
+    .filter-btn {
+      background: var(--card-bg);
+    }
+  }
+
+
+}

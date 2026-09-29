@@ -1,0 +1,51 @@
+﻿/* =========================================================
+   HeyNuo â€“ Print Stylesheet (print.css)
+   Clean formatting, hides interactive chrome for printing.
+   ========================================================= */
+
+@layer utilities {
+  /* Print styles */
+  @media print {
+    body {
+      background: white;
+      color: black;
+    }
+    .hero h1 span,
+    .section-title span,
+    .article-header h1,
+    .prose h2 {
+      -webkit-text-fill-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-links,
+    .menu-btn,
+    .scroll-to-top,
+    .hero-buttons,
+    .project-btn,
+    .filter-btn,
+    .search-box,
+    .theme-toggle,
+    .reading-progress {
+      display: none !important;
+    }
+    .card,
+    .about-box,
+    .project-card {
+      border: 1px solid #ccc;
+      break-inside: avoid;
+      background: white;
+      color: black;
+      box-shadow: none;
+    }
+    a[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.8em;
+      color: #666;
+      word-break: break-all;
+    }
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after {
+      content: none;
+    }
+  }
+}

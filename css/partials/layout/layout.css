@@ -1,0 +1,89 @@
+﻿/* =========================================================
+   HeyNuo â€“ Layout Layer (layout.css)
+   Page containers, grid systems, and section scaffolding.
+   ========================================================= */
+
+@layer layout {
+  /* Global Container */
+  .container {
+    width: min(1200px, 90%);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      width: 100%;
+      padding-inline: 16px;
+    }
+  }
+
+  @media (max-width: 440px) {
+    .container {
+      padding-inline: 12px;
+    }
+  }
+
+  /* Section Spacing & Headings Scaffolding */
+  .section-spacing {
+    margin-bottom: var(--space-5xl);
+  }
+
+  .section-heading {
+    max-width: 760px;
+    margin: 0 auto 28px;
+  }
+
+  .section-heading h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .section-heading p {
+    font-size: 1.05rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+  }
+
+  /* Section Titles */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw + 0.5rem, 2.125rem);
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 24px;
+    position: relative;
+    display: inline-block;
+  }
+
+  .about-hero h1 span,
+  .contact-hero h1 span,
+  .section-title span {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 26px;
+    }
+  }
+}
