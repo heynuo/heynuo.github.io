@@ -659,10 +659,10 @@ components.buttons.a11y;
       inset-block-end: 0;
       inset-inline-start: 0;
       block-size: 3px;
-      inline-size: var(--btn-progress);
+      inline-size: var(--btn-progress, 0%);
       background: currentColor;
       border-radius: inherit;
-      transition: --btn-progress 300ms var(--ease-smooth);
+      transition: inline-size 300ms var(--ease-smooth), --btn-progress 300ms var(--ease-smooth);
       z-index: 3;
     }
   }

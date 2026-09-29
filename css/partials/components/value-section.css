@@ -1,156 +1,349 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Value Grid Section (value-section.css)
-   Value cards, grid layout, feature icons, call-to-action banner.
+   HeyNuo – Value Grid Section (value-section.css)
+
+   Self-contained. Only targets class names already in the
+   page markup. No HTML or other CSS file changes required.
    ========================================================= */
 
+/* ---------------------------------------------------------
+   0. Registered custom properties
+      (typed, animatable, survive subtree changes)
+   --------------------------------------------------------- */
+@property --vs-lift {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --vs-card-top {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.55);
+}
+
+@property --vs-card-bottom {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0.1);
+}
+
+@property --vs-icon-tint-a {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(37, 99, 235, 0.14);
+}
+
+@property --vs-icon-tint-b {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(8, 145, 178, 0.1);
+}
+
 @layer components {
-  /* Section titles */
+
+  /* -------------------------------------------------------
+     1. Local fallback tokens
+     ------------------------------------------------------- */
+  .value-section {
+    --vs-primary: var(--primary, #2563eb);
+    --vs-text: var(--text, #0f172a);
+    --vs-muted: var(--muted, #64748b);
+    --vs-border: var(--border, rgba(15, 23, 42, 0.12));
+    --vs-radius: 22px;
+    --vs-icon-r: 14px;
+    --vs-gap: 20px;
+    --vs-shadow-1: 0 12px 35px rgba(15, 23, 42, 0.05);
+    --vs-shadow-2: 0 16px 38px rgba(37, 99, 235, 0.12);
+    --vs-ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    --vs-dur: 0.2s;
+    --vs-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  /* -------------------------------------------------------
+     2. Section shell
+     ------------------------------------------------------- */
+  .value-section {
+    margin-block: 12px 56px;
+    padding-block: 30px 10px;
+    color: var(--vs-text);
+    color-scheme: light dark;
+    scroll-margin-top: 90px;
+    scrollbar-gutter: stable;
+    interpolate-size: allow-keywords;
+  }
+
+  .section-spacing {
+    margin-block-end: var(--space-5xl, 4rem);
+  }
+
+  /* Hide section entirely if empty (defensive; harmless otherwise) */
+  .value-section:empty {
+    display: none;
+  }
+
+  /* -------------------------------------------------------
+     3. Headings
+     ------------------------------------------------------- */
   .section-title {
-    font-family: var(--font-display);
+    font-family: var(--font-display, inherit);
     font-size: clamp(1.5rem, 3vw + 0.5rem, 2.125rem);
-    margin-bottom: 24px;
+    margin-block: 0 24px;
     text-align: center;
     font-weight: 800;
-    text-wrap: balance;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     letter-spacing: -0.5px;
+    color: var(--vs-text);
+    text-wrap: balance;
+    text-spacing-trim: trim-start;
+    font-size-adjust: 0.52;
+  }
+
+  @supports not (text-wrap: balance) {
+    .section-title {
+      text-wrap: normal;
+    }
   }
 
   .section-heading {
-    max-width: 760px;
-    margin: 0 auto 28px;
+    max-inline-size: 760px;
+    margin-inline: auto;
+    margin-block-end: 28px;
     text-align: center;
+  }
+
+  .section-heading h2 {
+    font-family: var(--font-display, inherit);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.06em;
+    color: var(--vs-text);
+    margin: 0;
+    text-wrap: balance;
+    text-spacing-trim: trim-start;
+  }
+
+  @supports not (text-wrap: balance) {
+    .section-heading h2 {
+      text-wrap: normal;
+    }
   }
 
   .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-block-end: 10px;
     padding: 7px 12px;
     border-radius: 999px;
     background: rgba(37, 99, 235, 0.1);
-    color: var(--primary);
+    color: var(--vs-primary);
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    font-family: var(--font-display);
+    font-family: var(--font-display, inherit);
+    white-space: nowrap;
+    line-height: 1;
   }
 
-  .section-heading h2 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.06em;
-    color: var(--text);
-    text-wrap: balance;
-  }
-
-  .value-section {
-    margin: 12px 0 56px;
-    padding: 30px 0 10px;
-  }
-
+  /* -------------------------------------------------------
+     4. Grid
+     ------------------------------------------------------- */
   .value-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: var(--vs-gap);
+    align-items: stretch;
+    grid-auto-rows: 1fr;
   }
 
-  @media (max-width: 860px) {
-    .value-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
+  /* -------------------------------------------------------
+     5. Card base
+     ------------------------------------------------------- */
+  .value-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+
+    background: linear-gradient(180deg,
+        var(--vs-card-top),
+        var(--vs-card-bottom));
+    border: 1px solid var(--vs-border);
+    border-radius: var(--vs-radius);
+    padding: 26px 22px;
+    box-shadow: var(--vs-shadow-1);
+
+    /* Perf: GPU-friendly individual properties */
+    translate: 0 var(--vs-lift);
+    transition:
+      --vs-lift var(--vs-dur) var(--vs-ease),
+      border-color var(--vs-dur) var(--vs-ease),
+      box-shadow var(--vs-dur) var(--vs-ease);
+
+    /* Perf: skip painting off-screen cards */
+    content-visibility: auto;
+    contain-intrinsic-size: 320px;
+
+    /* Card responds to its own width, not the viewport */
+    container-type: inline-size;
+    container-name: value-card;
+
+    /* Crisper glass edges */
+    background-clip: padding-box;
+  }
+
+  /* -------------------------------------------------------
+     6. Glass effect – progressive enhancement
+     ------------------------------------------------------- */
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .value-card {
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
     }
   }
 
-  .value-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(255,255,255,0.1));
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 26px 22px;
-    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.05);
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .value-card {
+      background: color-mix(in srgb, Canvas 94%, transparent);
+    }
   }
 
-  .value-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(37, 99, 235, 0.35);
-    box-shadow: 0 16px 38px rgba(37, 99, 235, 0.12);
+  /* -------------------------------------------------------
+     7. Theme: light-dark() with explicit fallbacks
+     ------------------------------------------------------- */
+  /* Base: respect system preference unless overridden */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .value-card {
+      --vs-card-top: rgba(17, 24, 39, 0.8);
+      --vs-card-bottom: rgba(17, 24, 39, 0.5);
+    }
+
+    :root:not([data-theme="light"]) .value-cta p {
+      background: rgba(255, 255, 255, 0.03);
+    }
   }
 
   [data-theme="dark"] .value-card {
-    background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.5));
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .value-card {
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.5));
-    }
+    --vs-card-top: rgba(17, 24, 39, 0.8);
+    --vs-card-bottom: rgba(17, 24, 39, 0.5);
   }
 
   [data-theme="dark"] .value-cta p {
     background: rgba(255, 255, 255, 0.03);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .value-cta p {
-      background: rgba(255, 255, 255, 0.03);
+  /* Modern path: single-source tokens via light-dark() */
+  @supports (color: light-dark(#000, #fff)) {
+    .value-card {
+      --vs-card-top: light-dark(rgba(255, 255, 255, 0.55), rgba(17, 24, 39, 0.8));
+      --vs-card-bottom: light-dark(rgba(255, 255, 255, 0.1), rgba(17, 24, 39, 0.5));
+    }
+
+    .value-cta p {
+      background: light-dark(rgba(15, 23, 42, 0.03), rgba(255, 255, 255, 0.03));
     }
   }
 
+  /* -------------------------------------------------------
+     8. Icon
+     ------------------------------------------------------- */
   .value-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    inline-size: 52px;
+    block-size: 52px;
+    aspect-ratio: 1;
+    border-radius: var(--vs-icon-r);
     display: grid;
     place-items: center;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(8, 145, 178, 0.1));
+    background: linear-gradient(135deg,
+        var(--vs-icon-tint-a),
+        var(--vs-icon-tint-b));
     font-size: 24px;
-    margin-bottom: 16px;
+    line-height: 1;
+    margin-block-end: 16px;
+    flex-shrink: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    user-select: none;
   }
 
+  /* -------------------------------------------------------
+     9. Typography inside cards
+     ------------------------------------------------------- */
   .value-card h3 {
-    font-family: var(--font-display);
+    font-family: var(--font-display, inherit);
     font-size: 1.45rem;
-    margin-bottom: 10px;
-    color: var(--text);
+    line-height: 1.25;
+    margin-block: 0 10px;
+    color: var(--vs-text);
+    text-wrap: balance;
+    text-spacing-trim: trim-start;
+  }
+
+  @supports not (text-wrap: balance) {
+    .value-card h3 {
+      text-wrap: normal;
+    }
   }
 
   .value-card p {
-    color: var(--muted);
+    color: var(--vs-muted);
     line-height: 1.7;
-    margin-bottom: 16px;
+    margin-block: 0 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
+  /* If a card has no paragraph, drop its bottom space */
+  @supports selector(:has(*)) {
+    .value-card:not(:has(p)) h3 {
+      margin-block-end: 14px;
+    }
+  }
+
+  /* -------------------------------------------------------
+     10. List – circular bullets via ::before (no font glyphs)
+     ------------------------------------------------------- */
   .value-card ul {
     list-style: none;
     display: grid;
     gap: 8px;
     padding: 0;
     margin: 0;
+    margin-block-start: auto;
+    /* push list to card bottom */
   }
 
   .value-card li {
     position: relative;
-    padding-left: 18px;
-    color: var(--text);
+    padding-inline-start: 18px;
+    color: var(--vs-text);
     font-size: 0.96rem;
+    line-height: 1.55;
+    text-wrap: pretty;
   }
 
   .value-card li::before {
-    content: '•';
+    content: "";
     position: absolute;
-    left: 0;
-    color: var(--primary);
-    font-weight: 700;
+    inset-inline-start: 0;
+    inset-block-start: 0.6em;
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    background: var(--vs-primary);
   }
 
+  /* -------------------------------------------------------
+     11. CTA banner
+     ------------------------------------------------------- */
   .value-cta {
-    margin-top: 24px;
+    margin-block-start: 24px;
     text-align: center;
   }
 
@@ -161,25 +354,275 @@
     gap: 6px;
     flex-wrap: wrap;
     padding: 12px 18px;
+    max-inline-size: 100%;
+    box-sizing: border-box;
     border-radius: 999px;
     background: rgba(15, 23, 42, 0.03);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    border: 1px solid var(--vs-border);
+    color: var(--vs-muted);
     font-weight: 500;
+    text-wrap: pretty;
   }
 
   .value-cta a {
-    color: var(--primary);
+    color: var(--vs-primary);
     font-weight: 700;
     text-decoration: none;
+    text-underline-offset: 3px;
+    text-decoration-thickness: from-font;
+    display: inline-block;
+    padding-block: 2px;
+    transition: color var(--vs-dur) var(--vs-ease);
   }
 
-  .value-cta a:hover {
-    text-decoration: underline;
+  /* -------------------------------------------------------
+     12. Interactive states – hover only on capable devices
+     ------------------------------------------------------- */
+  @media (hover: hover) and (pointer: fine) {
+    .value-card:hover {
+      --vs-lift: -4px;
+      border-color: rgba(37, 99, 235, 0.35);
+      box-shadow: var(--vs-shadow-2);
+    }
+
+    .value-cta a:hover {
+      text-decoration: underline;
+    }
   }
 
-  .section-spacing {
-    margin-bottom: var(--space-5xl);
+  /* Keyboard focus – always applied, regardless of pointer */
+  .value-card:focus-within {
+    border-color: var(--vs-primary);
+    box-shadow: var(--vs-ring), var(--vs-shadow-2);
   }
 
+  .value-card a:focus-visible,
+  .value-card button:focus-visible,
+  .value-cta a:focus-visible {
+    outline: 2px solid var(--vs-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* -------------------------------------------------------
+     13. Container queries – three tiers inside the card
+     ------------------------------------------------------- */
+  @container value-card (max-width: 260px) {
+    .value-icon {
+      margin-inline: auto;
+      margin-block-end: 12px;
+    }
+
+    .value-card h3 {
+      text-align: center;
+    }
+  }
+
+  @container value-card (min-width: 420px) {
+    .value-card {
+      padding: 30px 26px;
+    }
+
+    .value-card h3 {
+      font-size: 1.55rem;
+    }
+  }
+
+  /* -------------------------------------------------------
+     14. Narrow viewports
+     ------------------------------------------------------- */
+  @media (max-width: 480px) {
+    .value-cta p {
+      flex-direction: column;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    .value-cta a {
+      padding-block: 6px;
+      min-block-size: 44px;
+      /* WCAG 2.5.5 touch target */
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  /* -------------------------------------------------------
+     15. Reduced motion / transparency / data
+     ------------------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+    .value-card {
+      transition: none;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .value-card:hover {
+        --vs-lift: 0px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .value-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: light-dark(rgb(255 255 255 / 0.98),
+          rgb(17 24 39 / 0.98));
+    }
+  }
+
+  @media (prefers-reduced-data: reduce) {
+    .value-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  /* -------------------------------------------------------
+     16. Contrast preferences
+     ------------------------------------------------------- */
+  @media (prefers-contrast: more) {
+    .value-card {
+      border-color: var(--vs-text);
+      box-shadow: none;
+    }
+
+    .value-card p,
+    .value-cta p {
+      color: var(--vs-text);
+    }
+  }
+
+  /* -------------------------------------------------------
+     17. Windows High Contrast / forced colors
+     ------------------------------------------------------- */
+  @media (forced-colors: active) {
+    .value-section {
+      --vs-card-top: Canvas;
+      --vs-card-bottom: Canvas;
+      --vs-icon-tint-a: Canvas;
+      --vs-icon-tint-b: Canvas;
+    }
+
+    .value-card {
+      background: Canvas;
+      border: 1px solid CanvasText;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .value-card:hover,
+    .value-card:focus-within {
+      border-color: Highlight;
+    }
+
+    .value-icon {
+      border: 1px solid CanvasText;
+    }
+
+    .value-card li::before {
+      background: CanvasText;
+    }
+
+    .value-cta a {
+      color: LinkText;
+    }
+
+    .eyebrow {
+      background: Canvas;
+      border: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+
+  /* -------------------------------------------------------
+     18. Print
+     ------------------------------------------------------- */
+  @media print {
+    .value-section {
+      margin: 0;
+      padding: 0;
+      scrollbar-gutter: auto;
+    }
+
+    .value-card {
+      background: none;
+      box-shadow: none;
+      border: 1px solid #999;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      break-inside: avoid;
+      content-visibility: visible;
+      translate: 0;
+    }
+
+    .value-card p {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+    }
+
+    .value-cta a {
+      color: inherit;
+      text-decoration: underline;
+    }
+
+    .eyebrow {
+      background: none;
+      border: 1px solid #999;
+      color: inherit;
+    }
+  }
+
+  /* -------------------------------------------------------
+     19. Entry animation – modern browsers only
+     ------------------------------------------------------- */
+  @supports (transition-behavior: allow-discrete) {
+    @starting-style {
+      .value-card {
+        opacity: 0;
+        translate: 0 8px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    @supports (transition-behavior: allow-discrete) {
+      @starting-style {
+        .value-card {
+          opacity: 1;
+          translate: 0;
+        }
+      }
+    }
+  }
+
+  /* -------------------------------------------------------
+     20. Micro polish – selection & scrollbars
+     ------------------------------------------------------- */
+  .value-section ::selection {
+    background: color-mix(in srgb, var(--vs-primary) 28%, transparent);
+    color: var(--vs-text);
+  }
+
+  .value-section :where(*) {
+    scrollbar-width: thin;
+    scrollbar-color:
+      color-mix(in srgb, var(--vs-primary) 40%, transparent) transparent;
+  }
+}
+
+/* ---------------------------------------------------------
+   21. View Transitions hook (opt-in, no JS required here)
+       Fires automatically whenever the theme attribute flips
+       on <html data-theme>, if the page enables
+       document.startViewTransition().
+   --------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 180ms;
+    animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
 }

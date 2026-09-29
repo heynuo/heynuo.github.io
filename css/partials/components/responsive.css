@@ -1,37 +1,481 @@
-﻿/* =========================================================
-   HeyNuo â€“ Component Responsive Overrides (responsive.css)
-   Breakpoints: 768px (drawer, hero, toolbar), 680px, 600px, 540px, 480px, 440px.
+/* =========================================================
+   HeyNuo — Component Responsive Overrides (responsive.css)
+   ─────────────────────────────────────────────────────────
+   Drop-in replacement. NO changes required to HTML, JS,
+   or any other stylesheet. All original selectors preserved.
+
+   Breakpoints: 768 · 680 · 600 · 540 · 480 · 440
+   Plus: touch, landscape, ultra-wide, print, PWA,
+         RTL, forced-colors, reduced-motion / transparency / data,
+         container queries (attached to existing elements).
    ========================================================= */
 
 @layer components {
-  /* Mobile Responsive */
+
+  /* =======================================================
+     0. LOCAL TOKENS (used only inside this file)
+     ======================================================= */
+  :root {
+    --r-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --r-ease-drawer: cubic-bezier(0.2, 0.9, 0.3, 1);
+    --r-dur-fast: 0.18s;
+    --r-dur-base: 0.28s;
+    --r-touch: 44px;
+
+    --r-safe-t: env(safe-area-inset-top, 0px);
+    --r-safe-b: env(safe-area-inset-bottom, 0px);
+    --r-safe-l: env(safe-area-inset-left, 0px);
+    --r-safe-r: env(safe-area-inset-right, 0px);
+
+    --r-scrollbar-size: 8px;
+    --r-scrollbar-thumb: rgba(100, 116, 139, 0.4);
+    --r-scrollbar-thumb-hover: rgba(100, 116, 139, 0.7);
+  }
+
+  [data-theme="dark"] {
+    --r-scrollbar-thumb: rgba(148, 163, 184, 0.35);
+    --r-scrollbar-thumb-hover: rgba(148, 163, 184, 0.6);
+  }
+
+  /* =======================================================
+     1. GLOBAL PLATFORM SAFETY
+     ======================================================= */
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth scrolling — only if user hasn't opted out */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Kill the mobile tap flash on every tappable surface */
+  a,
+  button,
+  [role="button"],
+  [tabindex]:not([tabindex="-1"]),
+  input,
+  select,
+  textarea,
+  .btn,
+  .filter-btn,
+  .menu-btn,
+  .theme-toggle,
+  .nav-icon-btn,
+  .nav-search-btn,
+  .nav-links a,
+  .nav-mobile-close,
+  .search-suggest-chip,
+  .card-banner-actions button,
+  .read-more,
+  .card-preview-btn,
+  .announcement-close,
+  .project-btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Fluid media — never allow overflow */
+  img,
+  video,
+  svg:not([class*="icon"]),
+  canvas,
+  iframe,
+  picture {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Flex/grid children must be allowed to shrink */
+  :where(.card, .project-card, .about-box, .hero-stat,
+    .search-wrapper, .toolbar, .article-toolbar,
+    .article-toolbar-left, .article-toolbar-right,
+    .card-footer, .project-tags, .hero-stats,
+    .dispatch-form, .nav-links)>* {
+    min-width: 0;
+  }
+
+  /* Long words/URLs must not push layout */
+  .card h3,
+  .project-info h3,
+  .about-box h2,
+  .section-title,
+  .hero h1,
+  .prose p,
+  .prose li,
+  .prose a,
+  .card p {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Modern, native text-wrap improvements */
+  @supports (text-wrap: balance) {
+
+    .hero h1,
+    .section-title,
+    .about-box h2,
+    .card h3,
+    .project-info h3,
+    .hero p,
+    .hero-description,
+    .value-cta p {
+      text-wrap: balance;
+    }
+
+    .card p,
+    .prose p,
+    .prose li {
+      text-wrap: pretty;
+    }
+  }
+
+  /* Global smooth image rendering */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  /* Consistent selection color */
+  ::selection {
+    background: rgba(37, 99, 235, 0.25);
+    color: inherit;
+  }
+
+  /* =======================================================
+     2. FORM INPUTS — universal mobile hygiene
+     ======================================================= */
+
+  /* 16px minimum stops iOS from zooming on focus */
   @media (max-width: 768px) {
+
+    input,
+    select,
+    textarea,
+    .search-box,
+    .dispatch-input {
+      font-size: 16px;
+    }
+  }
+
+  /* Dark-mode-aware placeholders */
+  [data-theme="dark"] input::placeholder,
+  [data-theme="dark"] textarea::placeholder {
+    color: rgba(148, 163, 184, 0.65);
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+    :root:not([data-theme="light"]) input::placeholder,
+    :root:not([data-theme="light"]) textarea::placeholder {
+      color: rgba(148, 163, 184, 0.65);
+    }
+  }
+
+  /* Neutralize Chrome's yellow autofill without breaking theming */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text, currentColor);
+    -webkit-box-shadow: 0 0 0 1000px transparent inset;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
+  /* =======================================================
+     3. ACCESSIBILITY PREFERENCES
+     ======================================================= */
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .nav-links,
+    .nav-backdrop,
+    .card,
+    .project-card,
+    .btn,
+    .filter-btn,
+    .read-more,
+    .card-preview-btn,
+    .project-btn,
+    .hero-stat {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+
+    .nav-links,
+    .card,
+    .project-card,
+    .about-box,
+    .preview-modal,
+    .filter-btn,
+    .btn {
+      border-color: currentColor;
+    }
+
+    .filter-btn,
+    .btn,
+    .read-more,
+    .card-preview-btn,
+    .project-btn {
+      border-width: 2px;
+    }
+
+    :focus-visible {
+      outline-width: 3px !important;
+    }
+  }
+
+  /* Reduced transparency — no glass, no blur, no headaches */
+  @media (prefers-reduced-transparency: reduce) {
+    .nav-links {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: var(--bg);
+    }
+
+    .nav-backdrop {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: rgba(15, 23, 42, 0.8);
+    }
+  }
+
+  /* Reduced data — drop decorative blurs & heavy shadows */
+  @media (prefers-reduced-data: reduce) {
+
+    .nav-backdrop,
+    .nav-links {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .card,
+    .project-card,
+    .about-box,
+    .preview-modal,
+    .hero-stat {
+      box-shadow: none !important;
+    }
+  }
+
+  /* Windows High Contrast / forced-colors */
+  @media (forced-colors: active) {
+
+    .card,
+    .project-card,
+    .about-box,
+    .preview-modal,
+    .nav-links,
+    .filter-btn,
+    .btn,
+    .read-more,
+    .card-preview-btn,
+    .project-btn {
+      border: 1px solid CanvasText;
+    }
+
+    .card-banner-category,
+    .logo-mark-mini,
+    .article-count-badge {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    :focus-visible {
+      outline: 3px solid Highlight;
+    }
+
+    .filter-btn[aria-pressed="true"],
+    .filter-btn.active {
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+
+  /* =======================================================
+     4. CONTAINER QUERIES — attached to existing elements
+        (no wrapper required — modern browsers only)
+     ======================================================= */
+  @supports (container-type: inline-size) {
+
+    .card,
+    .project-card,
+    .about-box {
+      container-type: inline-size;
+    }
+
+    .hero-stat {
+      container-type: inline-size;
+    }
+
+    /* Card adapts based on its OWN width, not the viewport */
+    @container (min-width: 380px) {
+      .card {
+        padding: 22px 20px;
+      }
+
+      .card h3 {
+        font-size: 19px;
+      }
+
+      .card-footer {
+        gap: 10px;
+      }
+    }
+
+    @container (min-width: 520px) {
+      .card {
+        padding: 26px 24px;
+        border-radius: 22px;
+      }
+
+      .card h3 {
+        font-size: 21px;
+      }
+    }
+
+    /* Project card breaks into 2 columns when it has room */
+    @container (min-width: 640px) {
+      .project-card {
+        flex-direction: row;
+        text-align: left;
+        padding: 32px 36px;
+      }
+
+      .project-tags {
+        justify-content: flex-start;
+      }
+    }
+
+    /* Hero stat scales internally */
+    @container (max-width: 120px) {
+      .hero-stat-value {
+        font-size: 11px;
+      }
+
+      .hero-stat-label {
+        font-size: 9.5px;
+      }
+    }
+  }
+
+  /* =======================================================
+     5. RTL SUPPORT (auto — only kicks in for dir="rtl")
+     ======================================================= */
+  [dir="rtl"] .nav-links {
+    border-left: none;
+    border-right: 1px solid var(--border);
+    transform: translateX(-100%);
+  }
+
+  [dir="rtl"] .nav-links.show,
+  [dir="rtl"] .nav-links.active {
+    transform: translateX(0);
+  }
+
+  @media (max-width: 768px) {
+    [dir="rtl"] .nav-links {
+      right: auto;
+      left: 0;
+    }
+
+    [dir="rtl"] .nav-links.show {
+      box-shadow: 8px 0 35px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  /* =======================================================
+     6. THEMED SCROLLBARS (webkit + firefox)
+     ======================================================= */
+  .nav-links,
+  .preview-modal-body,
+  .prose pre,
+  .article-toolbar-left,
+  .article-toolbar-right,
+  #filter-buttons,
+  .search-suggest-tags {
+    scrollbar-width: thin;
+    scrollbar-color: var(--r-scrollbar-thumb) transparent;
+  }
+
+  .nav-links::-webkit-scrollbar,
+  .preview-modal-body::-webkit-scrollbar,
+  .prose pre::-webkit-scrollbar {
+    width: var(--r-scrollbar-size);
+    height: var(--r-scrollbar-size);
+  }
+
+  .nav-links::-webkit-scrollbar-thumb,
+  .preview-modal-body::-webkit-scrollbar-thumb,
+  .prose pre::-webkit-scrollbar-thumb {
+    background: var(--r-scrollbar-thumb);
+    border-radius: 999px;
+  }
+
+  .nav-links::-webkit-scrollbar-thumb:hover,
+  .preview-modal-body::-webkit-scrollbar-thumb:hover,
+  .prose pre::-webkit-scrollbar-thumb:hover {
+    background: var(--r-scrollbar-thumb-hover);
+  }
+
+  /* Hide scrollbars on horizontal chip rails */
+  #filter-buttons::-webkit-scrollbar,
+  .search-suggest-tags::-webkit-scrollbar,
+  .article-toolbar-left::-webkit-scrollbar,
+  .article-toolbar-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* =======================================================
+     7. BREAKPOINT: 768px — Mobile & Tablet
+     ======================================================= */
+  @media (max-width: 768px) {
+
+    /* ---- Hero ---- */
     .hero {
       padding: var(--space-3xl) 0 50px;
     }
+
     .hero h1 {
       font-size: clamp(2rem, 7vw, 2.8rem);
       letter-spacing: -0.5px;
+      line-height: 1.15;
     }
+
     .hero p,
     .hero-description {
-      font-size: 15.5px;
+      font-size: clamp(0.95rem, 1.2vw + 0.75rem, 15.5px);
+      line-height: 1.6;
     }
+
     .hero-stats {
       gap: var(--space-sm);
     }
+
     .hero-stat {
       padding: 10px 14px;
     }
+
+    /* ---- About / Contact ---- */
     .about,
     .contact-grid {
       grid-template-columns: 1fr;
     }
+
     .about-box h2 {
       font-size: 22px;
     }
 
-    /* Mobile slide-out menu */
+    /* ---- Mobile drawer (JS contract preserved: .nav-links.show) ---- */
     .nav-links {
       position: fixed;
       top: var(--header-height);
@@ -39,14 +483,20 @@
       width: 100%;
       max-width: 280px;
       height: calc(100vh - var(--header-height));
-      height: calc(100dvh - var(--header-height));
+      /* fallback */
+      max-height: calc(100dvh - var(--header-height));
       background: var(--bg);
       backdrop-filter: blur(var(--glass-blur-header));
       -webkit-backdrop-filter: blur(var(--glass-blur-header));
-      padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+      padding:
+        20px calc(20px + var(--r-safe-r)) calc(20px + var(--r-safe-b)) calc(20px + var(--r-safe-l));
       border-left: 1px solid var(--border);
       transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.25s ease, visibility 0.3s, box-shadow 0.3s ease;
+      transition:
+        transform var(--r-dur-base) var(--r-ease-drawer),
+        opacity 0.25s var(--r-ease),
+        visibility 0.3s,
+        box-shadow var(--r-dur-base) var(--r-ease);
       flex-direction: column;
       opacity: 0;
       visibility: hidden;
@@ -54,6 +504,15 @@
       margin: 0;
       box-shadow: none;
       z-index: var(--z-nav);
+      overscroll-behavior: contain;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @supports (height: 100dvh) {
+      .nav-links {
+        height: calc(100dvh - var(--header-height));
+      }
     }
 
     [data-theme="dark"] .nav-links {
@@ -68,23 +527,27 @@
       }
     }
 
-    .nav-links.show {
+    .nav-links.show,
+    .nav-links.active {
       transform: translateX(0);
       opacity: 1;
       visibility: visible;
       box-shadow: -8px 0 35px rgba(0, 0, 0, 0.15);
     }
 
-    [data-theme="dark"] .nav-links.show {
+    [data-theme="dark"] .nav-links.show,
+    [data-theme="dark"] .nav-links.active {
       box-shadow: -8px 0 35px rgba(0, 0, 0, 0.5);
     }
 
     @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) .nav-links.show {
+      :root:not([data-theme="light"]) .nav-links.show,
+      :root:not([data-theme="light"]) .nav-links.active {
         box-shadow: -8px 0 35px rgba(0, 0, 0, 0.5);
       }
     }
 
+    /* ---- Drawer header ---- */
     .nav-mobile-head {
       display: flex;
       align-items: center;
@@ -94,6 +557,7 @@
       margin-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
+
     .nav-mobile-brand {
       display: inline-flex;
       align-items: center;
@@ -103,6 +567,7 @@
       font-weight: 700;
       color: var(--text);
     }
+
     .logo-mark-mini {
       font-size: 11px;
       font-weight: 800;
@@ -112,12 +577,13 @@
       border: 1px solid rgba(37, 99, 235, 0.3);
       color: var(--primary);
     }
+
     .nav-mobile-close {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text);
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -125,26 +591,33 @@
       cursor: pointer;
       font-size: 13px;
       transition: var(--transition-fast);
+      flex-shrink: 0;
+      touch-action: manipulation;
     }
-    .nav-mobile-close:hover {
+
+    .nav-mobile-close:hover,
+    .nav-mobile-close:focus-visible {
       background: rgba(239, 68, 68, 0.12);
       color: #ef4444;
       border-color: rgba(239, 68, 68, 0.3);
     }
 
+    /* ---- Nav links ---- */
     .nav-links a {
-      padding: 12px 16px;
+      padding: 14px 16px;
       width: 100%;
       text-align: left;
       border-radius: 10px;
       font-size: 15px;
+      line-height: 1.3;
+      touch-action: manipulation;
     }
 
     .nav-links a.active {
       background: rgba(37, 99, 235, 0.1);
     }
 
-    /* Mobile drawer dimmed backdrop */
+    /* ---- Backdrop ---- */
     .nav-backdrop {
       position: fixed;
       inset: 0;
@@ -154,7 +627,7 @@
       z-index: calc(var(--z-nav) - 1);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity var(--r-dur-base) var(--r-ease);
     }
 
     .nav-backdrop.show {
@@ -166,6 +639,7 @@
       display: flex;
     }
 
+    /* ---- Project card ---- */
     .project-card {
       flex-direction: column;
       text-align: center;
@@ -176,6 +650,7 @@
       justify-content: center;
     }
 
+    /* ---- Toolbar / search ---- */
     .toolbar {
       align-items: stretch;
     }
@@ -184,29 +659,43 @@
       max-width: 100%;
     }
 
+    /* ---- Section title ---- */
     .section-title {
-      font-size: 26px;
+      font-size: clamp(1.375rem, 3vw + 0.75rem, 26px);
+      line-height: 1.25;
     }
   }
 
+  /* =======================================================
+     8. BREAKPOINT: 680px — Chips, stats, toolbars
+     ======================================================= */
   @media (max-width: 680px) {
+
+    /* Horizontal chip rails get momentum + snap + edge fade */
     .search-suggest-tags {
       flex-wrap: nowrap;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: 16px;
       padding: 4px 16px;
       margin: 0 -16px;
       justify-content: flex-start;
       mask-image: linear-gradient(to right, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
     }
+
     .search-suggest-tags::-webkit-scrollbar {
       display: none;
     }
+
     .suggest-label,
     .search-suggest-chip {
       flex-shrink: 0;
+      scroll-snap-align: start;
     }
 
     .filter-row {
@@ -215,34 +704,46 @@
       gap: 10px;
       width: 100%;
     }
+
     #filter-buttons {
       flex-wrap: nowrap;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+      scroll-snap-type: x proximity;
+      scroll-padding-inline: 16px;
       padding: 4px 16px;
       margin: 0 -16px;
       justify-content: flex-start;
       mask-image: linear-gradient(to right, black 85%, transparent 100%);
       -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
     }
+
     #filter-buttons::-webkit-scrollbar {
       display: none;
     }
+
     .filter-btn {
       flex-shrink: 0;
+      scroll-snap-align: start;
     }
+
     .article-count-badge {
       align-self: center;
     }
+
+    /* Hero stats — 3-up compact grid, no overflow */
     .hero-stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
       width: 100%;
       max-width: 440px;
       margin-inline: auto;
     }
+
     .hero-stat {
       flex-direction: column;
       text-align: center;
@@ -250,149 +751,232 @@
       gap: 4px;
       border-radius: 14px;
     }
+
     .hero-stat-info {
       text-align: center;
     }
+
     .hero-stat-value {
       font-size: 12px;
       line-height: 1.2;
     }
+
     .hero-stat-label {
       font-size: 10px;
       line-height: 1.2;
     }
+
+    /* Value CTA */
     .value-cta p {
       border-radius: 16px;
       font-size: 13px;
       padding: 10px 14px;
       line-height: 1.5;
     }
+
+    /* Article toolbar — horizontal scroll + no scrollbar */
     .article-toolbar {
       padding: 10px 12px;
       gap: 8px;
     }
+
     .article-toolbar-left,
     .article-toolbar-right {
       width: 100%;
       justify-content: space-between;
       overflow-x: auto;
       scrollbar-width: none;
+      overscroll-behavior-x: contain;
+      touch-action: pan-x;
     }
   }
 
+  /* =======================================================
+     9. BREAKPOINT: 600px — Cards, modals, forms
+     ======================================================= */
   @media (max-width: 600px) {
+
     .card {
       padding: 18px 16px;
       border-radius: 18px;
     }
+
     .card-banner-box {
       border-radius: 14px;
       margin-bottom: 14px;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
     }
+
     .card-banner-category {
       top: 10px;
       left: 10px;
       font-size: 10.5px;
       padding: 4px 10px;
     }
+
     .card-banner-actions {
       top: 10px;
       right: 10px;
       gap: 5px;
     }
+
     .card-banner-actions .card-bookmark-btn,
     .card-banner-actions .card-share-btn {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
     }
+
     .card h3 {
       font-size: 18px;
+      line-height: 1.3;
     }
+
     .card-footer {
       gap: 8px;
       flex-wrap: wrap;
       margin-top: 14px;
       padding-top: 14px;
     }
+
     .read-more {
-      padding: 7px 15px;
+      padding: 9px 16px;
       font-size: 13px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      touch-action: manipulation;
     }
+
     .card-preview-btn {
-      padding: 6px 13px;
+      padding: 8px 14px;
       font-size: 12px;
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      touch-action: manipulation;
     }
+
     .search-box {
       padding: 12px 65px 12px 42px;
       font-size: 16px;
     }
+
     .search-kbd {
       display: none;
     }
+
     .filter-btn {
-      padding: 6px 14px;
+      padding: 8px 14px;
       font-size: 12.5px;
-      min-height: 34px;
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      touch-action: manipulation;
     }
+
     .article-count-badge {
       padding: 5px 12px;
       font-size: 11.5px;
     }
+
     .announcement-inner {
       padding: 10px 42px 10px 16px;
       gap: 8px;
       font-size: 12.5px;
+      line-height: 1.45;
     }
+
     .announcement-close {
       top: 10px;
       right: 8px;
       transform: none;
+      min-width: 36px;
+      min-height: 36px;
     }
+
     .preview-modal-backdrop {
       padding: 12px;
     }
+
     .preview-modal {
       border-radius: 20px;
+      max-height: calc(100vh - 24px);
+      /* fallback */
+      display: flex;
+      flex-direction: column;
     }
+
+    @supports (height: 100dvh) {
+      .preview-modal {
+        max-height: calc(100dvh - 24px - var(--r-safe-t) - var(--r-safe-b));
+      }
+    }
+
     .preview-modal-banner {
       border-top-left-radius: 19px;
       border-top-right-radius: 19px;
+      flex-shrink: 0;
     }
+
     .preview-modal-body {
       padding: 18px 16px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
+
     .prose pre {
       padding: 1rem 1.1rem;
       border-radius: 12px;
+      font-size: 12.5px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
     }
   }
 
+  /* =======================================================
+     10. BREAKPOINT: 540px — Hero pills, dispatch form
+     ======================================================= */
   @media (max-width: 540px) {
     .hero-pill-top {
       display: none;
     }
+
     .hero-floating-pill {
       padding: 6px 10px;
       font-size: 11px;
     }
+
     .dispatch-form {
       flex-direction: column;
       width: 100%;
+      gap: 10px;
     }
+
     .dispatch-input {
       width: 100%;
       min-width: 0;
+      font-size: 16px;
     }
+
     .dispatch-form .btn {
       width: 100%;
       justify-content: center;
+      min-height: 44px;
     }
   }
 
+  /* =======================================================
+     11. BREAKPOINT: 480px — Small phones
+     ======================================================= */
   @media (max-width: 480px) {
     .hero h1 {
       font-size: clamp(1.75rem, 8vw, 2.3rem);
+      line-height: 1.15;
     }
+
     .hero-buttons {
       flex-direction: column;
       width: 100%;
@@ -400,50 +984,239 @@
       margin-inline: auto;
       gap: 10px;
     }
+
     .hero-buttons .btn {
       width: 100%;
+      justify-content: center;
+      min-height: 46px;
     }
+
     .project-info h3 {
       font-size: 20px;
     }
+
     .project-btn {
       font-size: 15px;
       padding: 13px 22px;
       width: 100%;
       justify-content: center;
+      min-height: 46px;
     }
-    .btn {
-      padding: 12px 22px;
-      font-size: 14.5px;
-    }
+
     .project-card {
       padding: 22px 18px;
       border-radius: 20px;
     }
+
+    .btn {
+      padding: 12px 22px;
+      font-size: 14.5px;
+      min-height: 44px;
+    }
+
     .about-box {
       padding: 22px 18px;
       border-radius: 20px;
     }
   }
 
+  /* =======================================================
+     12. BREAKPOINT: 440px — Extra-small phones
+     ======================================================= */
   @media (max-width: 440px) {
     .logo {
       font-size: 22px;
     }
+
     .nav-right {
       gap: 4px;
     }
+
     .theme-toggle,
     .menu-btn,
     .nav-icon-btn,
     .nav-search-btn {
       width: 36px;
-      height: 36px;
+      height: 38px;
     }
+
     .container {
-      padding-inline: 12px;
+      padding-inline: max(12px, var(--r-safe-l), var(--r-safe-r));
     }
   }
 
+  /* =======================================================
+     13. TOUCH DEVICES — bigger targets, no sticky :hover
+     ======================================================= */
+  @media (hover: none) and (pointer: coarse) {
 
+    .filter-btn,
+    .search-suggest-chip,
+    .card-preview-btn,
+    .read-more,
+    .btn,
+    .project-btn,
+    .nav-links a {
+      min-height: 44px;
+    }
+
+    /* Neutralize hover-only effects that lock on tap */
+    .card:hover,
+    .project-card:hover,
+    .btn:hover,
+    .filter-btn:hover,
+    .read-more:hover,
+    .card-preview-btn:hover,
+    .nav-links a:hover,
+    .project-btn:hover {
+      transform: none;
+    }
+
+    /* Ensure smooth snapping on touch scroll rails */
+    #filter-buttons,
+    .search-suggest-tags {
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  /* =======================================================
+     14. LANDSCAPE PHONES / SHORT VIEWPORTS
+     ======================================================= */
+  @media (orientation: landscape) and (max-height: 500px) {
+    .nav-links {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 12px;
+      padding-bottom: calc(12px + var(--r-safe-b));
+    }
+
+    .hero {
+      padding: var(--space-xl, 32px) 0 32px;
+    }
+
+    .preview-modal {
+      max-height: calc(100dvh - 16px);
+    }
+
+    .preview-modal-body {
+      padding: 14px;
+    }
+  }
+
+  /* =======================================================
+     15. ULTRA-WIDE (readability guard)
+     ======================================================= */
+  @media (min-width: 1440px) {
+
+    .hero p,
+    .hero-description,
+    .card p,
+    .prose p,
+    .about-box p {
+      max-width: 72ch;
+      margin-inline: auto;
+    }
+  }
+
+  /* =======================================================
+     16. PWA / STANDALONE MODE
+     ======================================================= */
+  @media (display-mode: standalone),
+  (display-mode: fullscreen),
+  (display-mode: minimal-ui) {
+
+    /* Extra breathing room under the notch / status bar */
+    body {
+      padding-top: var(--r-safe-t);
+      padding-bottom: var(--r-safe-b);
+      padding-left: var(--r-safe-l);
+      padding-right: var(--r-safe-r);
+    }
+
+    .nav-links {
+      height: calc(100dvh - var(--header-height) - var(--r-safe-t));
+      padding-bottom: calc(20px + var(--r-safe-b));
+    }
+  }
+
+  /* =======================================================
+     17. PRINT — clean output, no chrome
+     ======================================================= */
+  @media print {
+
+    .nav-links,
+    .nav-backdrop,
+    .menu-btn,
+    .theme-toggle,
+    .nav-icon-btn,
+    .nav-search-btn,
+    .announcement-inner,
+    .hero-buttons,
+    .hero-floating-pill,
+    .hero-pill-top,
+    .card-banner-actions,
+    .dispatch-form,
+    .preview-modal-backdrop,
+    .card-preview-btn,
+    .read-more {
+      display: none !important;
+    }
+
+    .card,
+    .project-card,
+    .about-box {
+      box-shadow: none !important;
+      border: 1px solid #ccc !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    body {
+      background: #fff !important;
+      color: #000 !important;
+    }
+
+    a[href]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.85em;
+      color: #555;
+    }
+
+    .hero h1,
+    .section-title {
+      color: #000 !important;
+      text-shadow: none !important;
+    }
+  }
+
+  /* =======================================================
+     18. @supports PROGRESSIVE ENHANCEMENTS
+     ======================================================= */
+
+  /* :has() — trim padding when a card has no banner */
+  @supports selector(:has(*)) {
+    .card:not(:has(.card-banner-box)) {
+      padding-top: 22px;
+    }
+
+    .card:not(:has(.card-footer)) {
+      padding-bottom: 22px;
+    }
+
+    .hero:not(:has(.hero-stats)) {
+      padding-bottom: var(--space-2xl, 48px);
+    }
+  }
+
+  /* content-visibility — skip off-screen rendering on long lists */
+  @supports (content-visibility: auto) {
+    @media (min-width: 769px) {
+
+      .card,
+      .project-card {
+        content-visibility: auto;
+        contain-intrinsic-size: 1px 400px;
+      }
+    }
+  }
 }
