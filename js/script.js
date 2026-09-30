@@ -400,6 +400,7 @@ function initScrollToTop() {
   if (!btn) return;
   const circle = $.get('#scrollProgressCircle');
 
+  let ticking = false;
   const updateScroll = () => {
     const scrollY = window.scrollY;
     const docH = document.documentElement.scrollHeight - window.innerHeight;
@@ -409,9 +410,17 @@ function initScrollToTop() {
       const scrollPercent = Math.min(Math.max((scrollY / docH) * 100, 0), 100);
       circle.style.strokeDashoffset = (100 - scrollPercent).toFixed(1);
     }
+    ticking = false;
   };
 
-  $.on(window, 'scroll', updateScroll, { passive: true });
+  const onScroll = () => {
+    if (!ticking) {
+      requestAnimationFrame(updateScroll);
+      ticking = true;
+    }
+  };
+
+  $.on(window, 'scroll', onScroll, { passive: true });
   updateScroll();
 
   $.on(btn, 'click', () => {
@@ -1838,14 +1847,24 @@ function initReadingProgress() {
   // Only show on article pages, not home
   if (Page.isHome()) return;
 
+  let ticking = false;
   const updateProgress = () => {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
-    if (docH <= 0) return;
-    const progress = (window.scrollY / docH) * 100;
-    bar.style.width = `${Math.min(progress, 100)}%`;
+    if (docH > 0) {
+      const progress = (window.scrollY / docH) * 100;
+      bar.style.width = `${Math.min(progress, 100)}%`;
+    }
+    ticking = false;
   };
 
-  $.on(window, 'scroll', updateProgress, { passive: true });
+  const onScroll = () => {
+    if (!ticking) {
+      requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  };
+
+  $.on(window, 'scroll', onScroll, { passive: true });
   updateProgress();
 }
 
@@ -2837,16 +2856,29 @@ function initTiltEffect() {
   if (prefersReducedMotion()) return;
   const boxes = $.getAll('.card-showcase-box, .featured-banner');
   boxes.forEach(box => {
+    let ticking = false;
+    let lastE = null;
+
     $.on(box, 'mousemove', (e) => {
-      const rect = box.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -4;
-      const rotateY = ((x - centerX) / centerX) * 4;
-      box.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
-    });
+      lastE = e;
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (lastE) {
+            const rect = box.getBoundingClientRect();
+            const x = lastE.clientX - rect.left;
+            const y = lastE.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -4;
+            const rotateY = ((x - centerX) / centerX) * 4;
+            box.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px)`;
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+
     $.on(box, 'mouseleave', () => {
       box.style.transform = '';
     });
@@ -2857,12 +2889,25 @@ function initTiltEffect() {
 function initSpotlightEffect() {
   if (prefersReducedMotion()) return;
   const spotlightSelector = '.card, .featured-banner, .value-card, .about-box, .dispatch-card, .hero-stat, .contact-card, .channel-card, .presence-card, .sidebar-featured-box, .expect-card, .faq-item';
+  let ticking = false;
+  let lastEvent = null;
+
   document.addEventListener('mousemove', (e) => {
-    const card = e.target.closest(spotlightSelector);
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-    card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    lastEvent = e;
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        if (lastEvent) {
+          const card = lastEvent.target.closest(spotlightSelector);
+          if (card) {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mouse-x', `${lastEvent.clientX - rect.left}px`);
+            card.style.setProperty('--mouse-y', `${lastEvent.clientY - rect.top}px`);
+          }
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
   }, { passive: true });
 }
 
@@ -3571,43 +3616,53 @@ function initServiceWorker() {
   });
 }
 
+function safeRun(label, fn) {
+  try {
+    fn();
+  } catch (err) {
+    if (CONFIG.debug) {
+      console.warn(`[HeyNuo Init] ${label} encountered an issue:`, err);
+    }
+  }
+}
+
 // ---------- Initialization ----------
 function init() {
-  initServiceWorker();
-  initTheme();
-  initThemeToggle();
-  initAnnouncementBanner();
-  initMobileMenu();
-  initActiveNav();
-  initSmoothScroll();
-  initScrollToTop();
-  initSkipLink();
-  initReadingProgress();
+  safeRun('ServiceWorker', initServiceWorker);
+  safeRun('Theme', initTheme);
+  safeRun('ThemeToggle', initThemeToggle);
+  safeRun('AnnouncementBanner', initAnnouncementBanner);
+  safeRun('MobileMenu', initMobileMenu);
+  safeRun('ActiveNav', initActiveNav);
+  safeRun('SmoothScroll', initSmoothScroll);
+  safeRun('ScrollToTop', initScrollToTop);
+  safeRun('SkipLink', initSkipLink);
+  safeRun('ReadingProgress', initReadingProgress);
   if (Page.isHome()) {
-    Articles.init();
-    initHeroParticles();
-    initHeroRotator();
-    initQuickTopicPills();
-    initAnimatedCounters();
+    safeRun('Articles', () => Articles.init());
+    safeRun('HeroParticles', initHeroParticles);
+    safeRun('HeroRotator', initHeroRotator);
+    safeRun('QuickTopicPills', initQuickTopicPills);
+    safeRun('AnimatedCounters', initAnimatedCounters);
   }
   if (Page.getCurrentPage() === 'contact.html') {
-    initContactForm();
-    initHeroParticles();
+    safeRun('ContactForm', initContactForm);
+    safeRun('ContactHeroParticles', initHeroParticles);
   }
-  initContactEnhancements();
-  initAboutPage();
-  initCodeCopyButtons();
-  initArticleSuite();
-  initArticleNav();
-  CommandPalette.init();
-  initScrollReveal();
-  initCopyEmail();
-  initDispatchForm();
-  initShortcutsModal();
-  initTiltEffect();
-  initSpotlightEffect();
-  initArticlePreviewModal();
-  initFeaturedResource();
+  safeRun('ContactEnhancements', initContactEnhancements);
+  safeRun('AboutPage', initAboutPage);
+  safeRun('CodeCopyButtons', initCodeCopyButtons);
+  safeRun('ArticleSuite', initArticleSuite);
+  safeRun('ArticleNav', initArticleNav);
+  safeRun('CommandPalette', () => CommandPalette.init());
+  safeRun('ScrollReveal', initScrollReveal);
+  safeRun('CopyEmail', initCopyEmail);
+  safeRun('DispatchForm', initDispatchForm);
+  safeRun('ShortcutsModal', initShortcutsModal);
+  safeRun('TiltEffect', initTiltEffect);
+  safeRun('SpotlightEffect', initSpotlightEffect);
+  safeRun('ArticlePreviewModal', initArticlePreviewModal);
+  safeRun('FeaturedResource', initFeaturedResource);
 
   log('log', `✨ HeyNuo ready – ${Page.getCurrentPage()}`);
 }

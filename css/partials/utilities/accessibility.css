@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    HeyNuo – Accessibility Overrides (accessibility.css)
    Version: 4.0 (Enterprise-Grade, Zero-Dependency)
    =========================================================
@@ -2118,228 +2118,182 @@
      =====================================================
      Page title is descriptive.
   */
-  head title {
-    /* No CSS needed — ensure HTML title is descriptive */
-    display: none;
-  }
-
   /* =====================================================
-     SECTION BK — NEW 2026: FOCUS ORDER (WCAG 2.4.3)
+     SECTION BK — FOCUS ORDER (WCAG 2.4.3)
      =====================================================
-     Focus order follows meaningful sequence.
+     Ensure focusable elements have a clean, visible focus state.
   */
-  [tabindex]:not([tabindex="-1"]):not([tabindex="0"]) {
-    /* Avoid positive tabindex unless necessary */
-    outline: 2px dashed #d32f2f;
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--accent, #4f46e5);
+    outline-offset: 2px;
   }
 
   /* =====================================================
-     SECTION BL — NEW 2026: LINK PURPOSE (WCAG 2.4.4)
+     SECTION BL — LINK PURPOSE (WCAG 2.4.4)
      =====================================================
-     Link purpose is clear from link text alone.
+     Links without href or accessible name.
   */
   a:not([href]):not([aria-label]):not([title]) {
-    /* Links without href or accessible name */
     text-decoration: none;
     cursor: default;
   }
 
   /* =====================================================
-     SECTION BM — NEW 2026: MULTIPLE WAYS (WCAG 2.4.5)
+     SECTION BM — MULTIPLE WAYS (WCAG 2.4.5)
      =====================================================
      Multiple ways to locate content.
   */
   nav[aria-label="Primary"],
   nav[aria-label="Main"],
   [role="navigation"] {
-    /* Ensure navigation is present */
     display: block;
   }
 
   /* =====================================================
-     SECTION BN — NEW 2026: HEADINGS AND LABELS (WCAG 2.4.6)
+     SECTION BN — HEADINGS AND LABELS (WCAG 2.4.6)
      =====================================================
-     Headings and labels are descriptive.
+     Headings are visible and properly structured.
   */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    /* Ensure headings are visible and descriptive */
+  h1, h2, h3, h4, h5, h6 {
     display: block;
   }
 
   /* =====================================================
-     SECTION BO — NEW 2026: FOCUS VISIBLE (WCAG 2.4.7)
+     SECTION BO — FOCUS VISIBLE (WCAG 2.4.7)
      =====================================================
-     Keyboard focus indicator is visible.
+     Keyboard focus indicator is always clear.
   */
   :focus-visible {
-    /* Already styled — ensure always visible */
-    outline-width: 3px !important;
+    outline-width: 2px;
   }
 
   /* =====================================================
-     SECTION BP — NEW 2026: CONTRAST MINIMUM (WCAG 1.4.3)
+     SECTION BP — CONTRAST ENHANCEMENT (WCAG 1.4.3 / 1.4.6)
      =====================================================
-     Text has sufficient contrast.
+     Enhanced contrast when user explicitly requests it.
   */
   @media (prefers-contrast: more) {
-
-    body,
-    p,
-    li,
-    span,
-    div {
-      color: #000;
-      background: #fff;
+    :root {
+      --border-color: currentColor;
+    }
+    a:not(.btn):not(.tag):not(.badge) {
+      text-decoration: underline !important;
+    }
+    .btn,
+    .btn-secondary,
+    .card,
+    input,
+    textarea,
+    select {
+      border: 2px solid currentColor !important;
     }
   }
 
   /* =====================================================
-     SECTION BQ — NEW 2026: RESIZE TEXT (WCAG 1.4.4)
+     SECTION BQ — RESIZE TEXT (WCAG 1.4.4)
      =====================================================
-     Text can be resized up to 200%.
+     Text can be resized smoothly up to 200%.
   */
   html {
     font-size: 100%;
   }
 
   /* =====================================================
-     SECTION BR — NEW 2026: IMAGES OF TEXT (WCAG 1.4.5)
+     SECTION BR — IMAGES OF TEXT (WCAG 1.4.5)
      =====================================================
-     Avoid images of text.
+     Ensure image elements scale fluidly.
   */
-  img[src*="text"],
-  img[alt*="text"] {
-    /* Ensure alt text is provided */
-    min-height: 1px;
+  img {
+    max-width: 100%;
+    height: auto;
   }
 
   /* =====================================================
-     SECTION BS — NEW 2026: CONTRAST ENHANCED (WCAG 1.4.6)
+     SECTION BT — AUDIO CONTROLS (WCAG 1.4.7)
      =====================================================
-     Enhanced contrast for AAA.
-  */
-  @media (prefers-contrast: more) {
-
-    a,
-    button,
-    input,
-    textarea,
-    select {
-      border-width: 2px;
-    }
-  }
-
-  /* =====================================================
-     SECTION BT — NEW 2026: LOW OR NO BACKGROUND AUDIO (WCAG 1.4.7)
-     =====================================================
-     Audio can be paused or stopped.
+     Audio controls are always accessible.
   */
   audio {
-    /* Ensure audio controls are available */
     min-height: 44px;
   }
 
   /* =====================================================
-     SECTION BU — NEW 2026: VISUAL PRESENTATION (WCAG 1.4.8)
+     SECTION BU — VISUAL PRESENTATION & RTL SAFETY (WCAG 1.4.8)
      =====================================================
-     Text is not justified, line length is reasonable.
+     Ensure comfortable line lengths in prose, avoid full justification,
+     and strictly preserve RTL alignment for Arabic/Islamic texts.
   */
-  p,
-  li,
-  blockquote {
-    text-align: left !important;
-    max-width: 72ch;
+  :is(article, .prose, .article-prose, main) :is(p, blockquote) {
+    max-width: 75ch;
+  }
+
+  [dir="rtl"],
+  [lang="ar"],
+  .verse-arabic,
+  .ruqyah-arabic {
+    direction: rtl !important;
+    text-align: right !important;
   }
 
   /* =====================================================
-     SECTION BV — NEW 2026: IMAGES OF TEXT (NO EXCEPTION) (WCAG 1.4.9)
+     SECTION BW — RESPONSIVE REFLOW (WCAG 1.4.10)
      =====================================================
-     No images of text.
-  */
-  [style*="background-image"] {
-    /* Ensure text alternatives exist */
-    min-height: 1px;
-  }
-
-  /* =====================================================
-     SECTION BW — NEW 2026: RE-FLOW (WCAG 1.4.10)
-     =====================================================
-     Content reflows without horizontal scrolling.
+     Ensure media elements reflow without horizontal spill.
   */
   @media (max-width: 480px) {
-    * {
+    img, video, canvas, svg, table, iframe {
       max-width: 100%;
     }
   }
 
   /* =====================================================
-     SECTION BX — NEW 2026: NON-TEXT CONTRAST (WCAG 1.4.11)
+     SECTION BY — TEXT SPACING (WCAG 1.4.12)
      =====================================================
-     UI components have sufficient contrast.
+     Comfortable line height for reading prose without breaking compact UI.
   */
-  @media (prefers-contrast: more) {
-
-    button,
-    input,
-    textarea,
-    select,
-    .btn,
-    .btn-secondary {
-      border: 2px solid currentColor !important;
-    }
+  :is(article, .prose, .article-prose) :is(p, dd, dt) {
+    line-height: 1.7;
   }
 
   /* =====================================================
-     SECTION BY — NEW 2026: TEXT SPACING (WCAG 1.4.12)
+     SECTION BZ — CONTENT ON HOVER OR FOCUS (WCAG 1.4.13)
      =====================================================
-     Text spacing can be adjusted.
-  */
-  p,
-  li,
-  dd,
-  dt {
-    line-height: 1.6 !important;
-  }
-
-  /* =====================================================
-     SECTION BZ — NEW 2026: CONTENT ON HOVER OR FOCUS (WCAG 1.4.13)
-     =====================================================
-     Additional content on hover/focus is dismissible.
+     Tooltips are dismissible and readable.
   */
   [data-tooltip]:hover::after,
   [data-tooltip]:focus::after {
     content: attr(data-tooltip);
     position: absolute;
-    background: #333;
-    color: #fff;
-    padding: 0.5em;
-    border-radius: 4px;
-    font-size: 0.85em;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg, #1e293b);
+    color: var(--text, #f8fafc);
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
     z-index: 9999;
-    max-width: 250px;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
   /* =====================================================
-     SECTION CA — NEW 2026: KEYBOARD (WCAG 2.1.1)
+     SECTION CA — KEYBOARD ACCESSIBILITY (WCAG 2.1.1)
      =====================================================
-     All functionality is keyboard accessible.
   */
-  [onclick]:not(button):not(a):not(input):not(select):not(textarea) {
+  [role="button"],
+  button,
+  summary {
     cursor: pointer;
   }
 
   /* =====================================================
-     SECTION CB — NEW 2026: NO KEYBOARD TRAP (WCAG 2.1.2)
+     SECTION CB — NO KEYBOARD TRAP (WCAG 2.1.2)
      =====================================================
-     Keyboard focus can move away from any component.
   */
-  [role="dialog"]:focus-within {
-    /* Ensure focus can escape */
+  [role="dialog"] {
     outline: none;
   }
 
