@@ -1,155 +1,692 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Command Palette Modal (command-palette.css)
-   Ctrl+K launcher, search input, recent history chips, results list.
+   HeyNuo – Command Palette Modal (command-palette.css)
+   Ctrl+K launcher · search input · recent history chips · results list
+   v4 — cutting-edge CSS, zero-integration, drop-in compatible
    ========================================================= */
+
+/* ---------------------------------------------------------
+   Registered custom properties (top-level — required by spec)
+   Enables smooth animation of otherwise non-animatable values
+   --------------------------------------------------------- */
+@property --cmd-open {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --cmd-hover-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --cmd-hover-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --cmd-glow {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
 
 @layer features {
   /* ============================================
      Command Palette (Ctrl+K / Search Modal)
      ============================================ */
+
+  /* --------------------------------------------
+     Scoped design tokens
+     -------------------------------------------- */
   .cmd-palette-backdrop {
+    /* --- accent (OKLCH, with sRGB fallbacks) --- */
+    --cmd-accent-rgb: 37, 99, 235;
+    --cmd-accent: var(--primary, #2563eb);
+    --cmd-accent: var(--primary, oklch(0.55 0.22 265));
+    --cmd-accent-soft: rgba(var(--cmd-accent-rgb), 0.08);
+    --cmd-accent-soft: color-mix(in srgb, var(--cmd-accent) 10%, transparent);
+    --cmd-accent-softer: rgba(var(--cmd-accent-rgb), 0.05);
+    --cmd-accent-softer: color-mix(in srgb, var(--cmd-accent) 6%, transparent);
+    --cmd-accent-ring: rgba(var(--cmd-accent-rgb), 0.22);
+    --cmd-accent-ring: color-mix(in srgb, var(--cmd-accent) 28%, transparent);
+
+    /* --- surfaces (light-dark() when available) --- */
+    --cmd-surface: var(--card-bg, #ffffff);
+    --cmd-border: var(--border, rgba(15, 23, 42, 0.12));
+    --cmd-border-strong: rgba(15, 23, 42, 0.18);
+    --cmd-text: var(--text, #0f172a);
+    --cmd-muted: var(--muted, #64748b);
+    --cmd-glass: var(--glass-bg, rgba(255, 255, 255, 0.6));
+    --cmd-selection: rgba(var(--cmd-accent-rgb), 0.2);
+
+    /* --- geometry --- */
+    --cmd-radius: 20px;
+    --cmd-radius-item: 12px;
+    --cmd-radius-sm: 8px;
+
+    /* --- motion --- */
+    --cmd-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --cmd-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --cmd-ease-spring: linear(0, 0.4 8%, 0.78 17%, 0.95 24%, 1.02 33%,
+        1.03 40%, 1.01 55%, 1 100%);
+    --cmd-dur: 220ms;
+    --cmd-dur-fast: 140ms;
+
+    /* --- layout metrics --- */
+    --cmd-row-h: 48px;
+
+    /* --- overlay --- */
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    z-index: calc(var(--z-modal) + 20);
+    z-index: calc(var(--z-modal, 1000) + 20);
+
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 80px 20px 20px;
+
+    padding: clamp(16px, 8vh, 88px) 20px 20px;
+    padding-top: max(clamp(16px, 8vh, 88px), env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+
+    background:
+      radial-gradient(1200px 600px at 50% -10%,
+        color-mix(in srgb, var(--cmd-accent) 16%, transparent),
+        transparent 60%),
+      rgba(15, 23, 42, 0.72);
+
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    overscroll-behavior: contain;
+    -webkit-tap-highlight-color: transparent;
+
+    /* --cmd-open drives the fade so we can use @starting-style */
+    transition:
+      --cmd-open var(--cmd-dur) var(--cmd-ease),
+      opacity var(--cmd-dur) var(--cmd-ease),
+      display var(--cmd-dur) allow-discrete;
+    opacity: calc(var(--cmd-open));
+    display: none;
   }
 
   .cmd-palette-backdrop.open {
-    opacity: 1;
+    --cmd-open: 1;
     pointer-events: auto;
+    display: flex;
   }
 
+  /* Native entry animation — no JS required to see the fade */
+  @starting-style {
+    .cmd-palette-backdrop.open {
+      --cmd-open: 0;
+    }
+  }
+
+  /* subtle film-grain (pure CSS, no assets) */
+  .cmd-palette-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image:
+      radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+      radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 2px 3px;
+    mix-blend-mode: overlay;
+  }
+
+  /* Native <dialog> integration — if your JS uses <dialog> instead
+     of a div, the palette still gets styled correctly. */
+  dialog.cmd-palette-backdrop,
+  dialog.cmd-palette-modal {
+    border: 0;
+    padding: 0;
+    max-width: none;
+    max-height: none;
+    color: inherit;
+  }
+
+  dialog.cmd-palette-backdrop::backdrop {
+    background: rgba(15, 23, 42, 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+  }
+
+  dialog.cmd-palette-backdrop[open] {
+    --cmd-open: 1;
+    display: flex;
+  }
+
+  /* Native [popover] support — same story */
+  [popover].cmd-palette-backdrop {
+    border: 0;
+    padding: clamp(16px, 8vh, 88px) 20px 20px;
+    margin: 0;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    background: rgba(15, 23, 42, 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+  }
+
+  [popover].cmd-palette-backdrop::backdrop {
+    background: transparent;
+  }
+
+  /* --------------------------------------------
+     Modal shell
+     -------------------------------------------- */
   .cmd-palette-modal {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 620px;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+    max-height: min(560px, calc(100dvh - 140px));
+
+    /* container for adaptive inner layout */
+    container-type: inline-size;
+    container-name: cmd-modal;
+
+    background: var(--cmd-surface);
+    border: 1px solid var(--cmd-border);
+    border-radius: var(--cmd-radius);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+      0 25px 70px rgba(0, 0, 0, 0.45),
+      0 8px 24px rgba(0, 0, 0, 0.18),
+      0 2px 8px rgba(0, 0, 0, 0.12);
     overflow: hidden;
-    transform: translateY(-16px) scale(0.97);
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    isolation: isolate;
+    outline: none;
+
+    /* Driven by --cmd-open so the same variable animates the shell */
+    transform:
+      translateY(calc((1 - var(--cmd-open)) * -16px)) scale(calc(0.97 + var(--cmd-open) * 0.03));
+    opacity: var(--cmd-open);
+
+    transition:
+      --cmd-open var(--cmd-dur) var(--cmd-ease),
+      transform var(--cmd-dur) var(--cmd-ease),
+      opacity var(--cmd-dur) var(--cmd-ease),
+      display var(--cmd-dur) allow-discrete;
+    display: none;
   }
 
   .cmd-palette-backdrop.open .cmd-palette-modal {
-    transform: translateY(0) scale(1);
+    --cmd-open: 1;
+    display: flex;
   }
 
+  @starting-style {
+    .cmd-palette-backdrop.open .cmd-palette-modal {
+      --cmd-open: 0;
+    }
+  }
+
+  /* accent top-rail (auto-drawn, no HTML change) */
+  .cmd-palette-modal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent,
+        var(--cmd-accent),
+        transparent);
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* magnetic cursor spotlight — pure CSS using registered props.
+     Only lights up when the parent has [data-cursor] (opt-in). */
+  .cmd-palette-modal[data-cursor]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(240px circle at var(--cmd-hover-x) var(--cmd-hover-y),
+        var(--cmd-accent-softer),
+        transparent 70%);
+    opacity: 0;
+    transition: opacity var(--cmd-dur) var(--cmd-ease);
+    z-index: 0;
+  }
+
+  .cmd-palette-modal[data-cursor]:hover::after {
+    opacity: 1;
+  }
+
+  /* --------------------------------------------
+     Input row
+     -------------------------------------------- */
   .cmd-palette-input-wrap {
+    position: relative;
     display: flex;
     align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
     gap: 12px;
+    flex: 0 0 auto;
+    padding: 16px 20px;
     background: rgba(0, 0, 0, 0.02);
+    border-bottom: 1px solid var(--cmd-border);
+    transition: background var(--cmd-dur-fast) var(--cmd-ease);
+    z-index: 1;
   }
 
   [data-theme="dark"] .cmd-palette-input-wrap {
     background: rgba(255, 255, 255, 0.02);
   }
 
+  .cmd-palette-input-wrap:focus-within {
+    background: var(--cmd-accent-softer);
+    box-shadow: inset 0 -1px 0 var(--cmd-accent);
+  }
+
+  .cmd-palette-input-wrap:focus-within::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 24px;
+    background: linear-gradient(to bottom,
+        var(--cmd-accent-ring),
+        transparent);
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .cmd-palette-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: 18px;
+    line-height: 1;
     opacity: 0.7;
+    flex-shrink: 0;
+    color: var(--cmd-muted);
+    transition:
+      color var(--cmd-dur-fast) var(--cmd-ease),
+      transform var(--cmd-dur) var(--cmd-ease-spring),
+      opacity var(--cmd-dur-fast) var(--cmd-ease);
+  }
+
+  .cmd-palette-input-wrap:focus-within .cmd-palette-icon {
+    color: var(--cmd-accent);
+    opacity: 1;
+    transform: scale(1.06);
   }
 
   .cmd-palette-input {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     border: none;
     background: transparent;
-    font-family: var(--font-body);
+    font-family: var(--font-body, inherit);
     font-size: 16px;
-    color: var(--text);
+    /* ≥16px prevents iOS zoom-on-focus */
+    line-height: 1.4;
+    color: var(--cmd-text);
+    caret-color: var(--cmd-accent);
     outline: none;
+    appearance: none;
+    position: relative;
+    z-index: 1;
+
+    /* progressive: auto-size to content (Chrome 123+) */
+    field-sizing: content;
+
+    /* progressive: nice wrapping of long placeholder text */
+    text-wrap: pretty;
+  }
+
+  .cmd-palette-input::placeholder {
+    color: var(--cmd-muted);
+    opacity: 0.75;
+    transition: opacity var(--cmd-dur-fast) var(--cmd-ease);
+  }
+
+  .cmd-palette-input:focus::placeholder {
+    opacity: 0.45;
+  }
+
+  .cmd-palette-input::selection,
+  .cmd-palette-modal ::selection {
+    background: var(--cmd-selection);
+    color: var(--cmd-text);
+  }
+
+  /* native validation styling — harmless if you never set `required` */
+  .cmd-palette-input:user-invalid {
+    color: #dc2626;
+  }
+
+  /* kill search-field decorations (Safari/Edge) */
+  .cmd-palette-input[type="search"]::-webkit-search-decoration,
+  .cmd-palette-input[type="search"]::-webkit-search-cancel-button,
+  .cmd-palette-input[type="search"]::-webkit-search-results-button,
+  .cmd-palette-input[type="search"]::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .cmd-palette-input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
   }
 
   .cmd-palette-esc-badge {
-    font-family: monospace;
+    flex-shrink: 0;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
     font-size: 11px;
-    padding: 3px 7px;
+    line-height: 1;
+    padding: 4px 7px;
     border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--glass-bg);
-    color: var(--muted);
+    border: 1px solid var(--cmd-border);
+    background: var(--cmd-glass);
+    color: var(--cmd-muted);
+    cursor: pointer;
+    transition: var(--transition-fast, 150ms ease);
+    user-select: none;
   }
 
+  .cmd-palette-esc-badge:hover {
+    color: var(--cmd-text);
+    border-color: var(--cmd-muted);
+    background: var(--cmd-accent-softer);
+  }
+
+  .cmd-palette-esc-badge:active {
+    transform: translateY(1px);
+  }
+
+  .cmd-palette-esc-badge:focus-visible {
+    outline: 2px solid var(--cmd-accent);
+    outline-offset: 2px;
+  }
+
+  /* --------------------------------------------
+     Results list
+     -------------------------------------------- */
   .cmd-palette-results {
-    max-height: 380px;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 10px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    -webkit-overflow-scrolling: touch;
+
+    /* stable gutter avoids layout shift when scrollbar appears */
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--cmd-border) transparent;
+
+    /* Soft fade shadows on the top/bottom scroll edges */
+    background:
+      linear-gradient(var(--cmd-surface) 30%, transparent),
+      linear-gradient(transparent, var(--cmd-surface) 70%) 0 100%,
+      radial-gradient(farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.14),
+        transparent),
+      radial-gradient(farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.14),
+        transparent) 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 22px, 100% 22px, 100% 8px, 100% 8px;
+    background-attachment: local, local, scroll, scroll;
   }
 
+  [data-theme="dark"] .cmd-palette-results {
+    background:
+      linear-gradient(var(--cmd-surface) 30%, transparent),
+      linear-gradient(transparent, var(--cmd-surface) 70%) 0 100%,
+      radial-gradient(farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.4),
+        transparent),
+      radial-gradient(farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.4),
+        transparent) 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 22px, 100% 22px, 100% 8px, 100% 8px;
+    background-attachment: local, local, scroll, scroll;
+  }
+
+  .cmd-palette-results::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .cmd-palette-results::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .cmd-palette-results::-webkit-scrollbar-thumb {
+    background: var(--cmd-border);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+    transition: background-color var(--cmd-dur-fast) var(--cmd-ease);
+  }
+
+  .cmd-palette-results:hover::-webkit-scrollbar-thumb {
+    background: var(--cmd-muted);
+    background-clip: content-box;
+  }
+
+  /* Long lists: skip rendering offscreen items (perf) */
+  .cmd-palette-item,
+  .cmd-palette-section-title {
+    content-visibility: auto;
+    contain-intrinsic-size: auto var(--cmd-row-h);
+  }
+
+  /* --------------------------------------------
+     Recent history chips
+     -------------------------------------------- */
   .cmd-palette-history-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 8px 12px;
-    flex-wrap: wrap;
-    border-bottom: 1px dashed var(--border);
     margin-bottom: 6px;
+    border-bottom: 1px dashed var(--cmd-border);
   }
 
   .cmd-history-chip {
-    background: var(--glass-bg);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    position: relative;
     font-size: 11.5px;
     font-weight: 600;
-    padding: 3px 9px;
+    padding: 4px 10px;
     border-radius: 999px;
+    border: 1px solid var(--cmd-border);
+    background: var(--cmd-glass);
+    color: var(--cmd-muted);
     cursor: pointer;
-    transition: var(--transition-fast);
+    white-space: nowrap;
+    transition:
+      color var(--cmd-dur-fast) var(--cmd-ease),
+      border-color var(--cmd-dur-fast) var(--cmd-ease),
+      background-color var(--cmd-dur-fast) var(--cmd-ease),
+      transform var(--cmd-dur-fast) var(--cmd-ease),
+      box-shadow var(--cmd-dur-fast) var(--cmd-ease);
   }
 
   .cmd-history-chip:hover {
-    color: var(--primary);
-    border-color: var(--primary);
-    background: rgba(37, 99, 235, 0.08);
+    color: var(--cmd-accent);
+    border-color: var(--cmd-accent);
+    background: var(--cmd-accent-soft);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px -4px var(--cmd-accent-ring);
   }
 
+  .cmd-history-chip:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .cmd-history-chip:focus-visible {
+    outline: 2px solid var(--cmd-accent);
+    outline-offset: 2px;
+  }
+
+  /* --------------------------------------------
+     Section titles
+     -------------------------------------------- */
   .cmd-palette-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 3px;
     font-size: 10.5px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--muted);
-    padding: 8px 12px 3px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    color: var(--cmd-muted);
+    user-select: none;
   }
 
+  .cmd-palette-section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--cmd-border);
+    opacity: 0.6;
+    margin-left: 4px;
+  }
+
+  /* --------------------------------------------
+     Result items
+     -------------------------------------------- */
   .cmd-palette-item {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 9px 12px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: var(--text);
-    cursor: pointer;
-    border: none;
-    background: transparent;
+    gap: 12px;
     width: 100%;
+    padding: 9px 12px;
+    border: none;
+    border-radius: var(--cmd-radius-item);
+    background: transparent;
+    color: var(--cmd-text);
     text-align: left;
-    transition: var(--transition-fast);
+    text-decoration: none;
+    cursor: pointer;
+    scroll-margin-block: 8px;
+    transition:
+      background-color var(--cmd-dur-fast) var(--cmd-ease),
+      transform var(--cmd-dur-fast) var(--cmd-ease);
   }
 
-  .cmd-palette-item:hover,
+  /* CSS-only staggered entrance */
+  .cmd-palette-backdrop.open .cmd-palette-item,
+  .cmd-palette-backdrop.open .cmd-palette-section-title,
+  .cmd-palette-backdrop.open .cmd-palette-history-row {
+    animation: cmd-palette-item-in 320ms var(--cmd-ease-out) both;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(1) {
+    animation-delay: 20ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(2) {
+    animation-delay: 40ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(3) {
+    animation-delay: 60ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(4) {
+    animation-delay: 80ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(5) {
+    animation-delay: 100ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(6) {
+    animation-delay: 120ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(7) {
+    animation-delay: 140ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(8) {
+    animation-delay: 160ms;
+  }
+
+  .cmd-palette-backdrop.open .cmd-palette-item:nth-child(n+9) {
+    animation-delay: 180ms;
+  }
+
+  @keyframes cmd-palette-item-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cmd-palette-item:hover {
+    background: var(--cmd-accent-soft);
+  }
+
+  .cmd-palette-item:active {
+    transform: scale(0.995);
+  }
+
   .cmd-palette-item.is-selected {
-    background: rgba(37, 99, 235, 0.08);
+    background: var(--cmd-accent-soft);
+  }
+
+  .cmd-palette-item.is-selected::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--cmd-accent);
+    box-shadow: 0 0 12px var(--cmd-accent-ring);
+  }
+
+  .cmd-palette-item:focus-visible {
+    outline: 2px solid var(--cmd-accent);
+    outline-offset: -2px;
+  }
+
+  .cmd-palette-item[aria-disabled="true"],
+  .cmd-palette-item:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: transparent;
+  }
+
+  .cmd-palette-item[aria-disabled="true"]::before {
+    display: none;
   }
 
   [data-theme="dark"] .cmd-palette-item:hover,
@@ -161,21 +698,92 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex: 1 1 auto;
     min-width: 0;
-    flex: 1;
   }
 
   .cmd-palette-item-icon {
-    font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     width: 32px;
     height: 32px;
+    font-size: 16px;
+    line-height: 1;
     border-radius: 8px;
-    background: var(--glass-bg);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
+    border: 1px solid var(--cmd-border);
+    background: var(--cmd-glass);
+    transition:
+      border-color var(--cmd-dur-fast) var(--cmd-ease),
+      color var(--cmd-dur-fast) var(--cmd-ease),
+      transform var(--cmd-dur) var(--cmd-ease-spring),
+      background-color var(--cmd-dur-fast) var(--cmd-ease);
+  }
+
+  .cmd-palette-item:hover .cmd-palette-item-icon,
+  .cmd-palette-item.is-selected .cmd-palette-item-icon {
+    border-color: var(--cmd-accent);
+    color: var(--cmd-accent);
+    background: var(--cmd-accent-softer);
+    transform: scale(1.06);
+  }
+
+  /* Auto color-code icons via data-type (opt-in) */
+  .cmd-palette-item[data-type="page"] .cmd-palette-item-icon {
+    color: #2563eb;
+  }
+
+  .cmd-palette-item[data-type="post"] .cmd-palette-item-icon {
+    color: #7c3aed;
+  }
+
+  .cmd-palette-item[data-type="project"] .cmd-palette-item-icon {
+    color: #0891b2;
+  }
+
+  .cmd-palette-item[data-type="action"] .cmd-palette-item-icon {
+    color: #16a34a;
+  }
+
+  .cmd-palette-item[data-type="danger"] .cmd-palette-item-icon {
+    color: #dc2626;
+  }
+
+  .cmd-palette-item[data-type="setting"] .cmd-palette-item-icon {
+    color: #f59e0b;
+  }
+
+  .cmd-palette-item[data-type="external"] .cmd-palette-item-icon {
+    color: #0ea5e9;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="page"] .cmd-palette-item-icon {
+    color: #60a5fa;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="post"] .cmd-palette-item-icon {
+    color: #a78bfa;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="project"] .cmd-palette-item-icon {
+    color: #22d3ee;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="action"] .cmd-palette-item-icon {
+    color: #4ade80;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="danger"] .cmd-palette-item-icon {
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="setting"] .cmd-palette-item-icon {
+    color: #fbbf24;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="external"] .cmd-palette-item-icon {
+    color: #38bdf8;
   }
 
   .cmd-palette-item-main {
@@ -186,22 +794,40 @@
   }
 
   .cmd-palette-item-title {
-    font-family: var(--font-display);
+    font-family: var(--font-display, inherit);
     font-size: 14px;
     font-weight: 700;
-    color: var(--text);
+    color: var(--cmd-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-wrap: pretty;
   }
 
   .cmd-palette-item-desc {
     font-size: 12px;
-    color: var(--muted);
+    color: var(--cmd-muted);
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  /* Highlighted query match — <mark class="cmd-palette-match"> */
+  .cmd-palette-match {
+    background: rgba(250, 204, 21, 0.28);
+    color: inherit;
+    border-radius: 3px;
+    padding: 0 1px;
+    font-weight: 800;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  [data-theme="dark"] .cmd-palette-match {
+    background: rgba(250, 204, 21, 0.22);
+    color: #fde68a;
   }
 
   .cmd-palette-item-right {
@@ -216,36 +842,102 @@
     font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.03em;
     padding: 3px 8px;
     border-radius: 6px;
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--primary);
+    background: var(--cmd-accent-soft);
+    color: var(--cmd-accent);
+    white-space: nowrap;
+  }
+
+  .cmd-palette-item[data-type="post"] .cmd-palette-item-tag {
+    background: rgba(124, 58, 237, 0.1);
+    color: #7c3aed;
+  }
+
+  .cmd-palette-item[data-type="project"] .cmd-palette-item-tag {
+    background: rgba(8, 145, 178, 0.1);
+    color: #0891b2;
+  }
+
+  .cmd-palette-item[data-type="action"] .cmd-palette-item-tag {
+    background: rgba(22, 163, 74, 0.1);
+    color: #16a34a;
+  }
+
+  .cmd-palette-item[data-type="danger"] .cmd-palette-item-tag {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+  }
+
+  .cmd-palette-item[data-type="setting"] .cmd-palette-item-tag {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="post"] .cmd-palette-item-tag {
+    background: rgba(167, 139, 250, 0.16);
+    color: #a78bfa;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="project"] .cmd-palette-item-tag {
+    background: rgba(34, 211, 238, 0.16);
+    color: #22d3ee;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="action"] .cmd-palette-item-tag {
+    background: rgba(74, 222, 128, 0.16);
+    color: #4ade80;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="danger"] .cmd-palette-item-tag {
+    background: rgba(248, 113, 113, 0.16);
+    color: #f87171;
+  }
+
+  [data-theme="dark"] .cmd-palette-item[data-type="setting"] .cmd-palette-item-tag {
+    background: rgba(251, 191, 36, 0.16);
+    color: #fbbf24;
   }
 
   .cmd-palette-item-kbd {
-    font-family: monospace;
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
     font-size: 10.5px;
     font-weight: 700;
-    padding: 2px 6px;
+    line-height: 1;
+    padding: 3px 6px;
     border-radius: 5px;
+    border: 1px solid var(--cmd-border);
     background: rgba(0, 0, 0, 0.06);
-    border: 1px solid var(--border);
-    color: var(--muted);
+    color: var(--cmd-muted);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
   }
 
   [data-theme="dark"] .cmd-palette-item-kbd {
     background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4) inset;
   }
 
+  .cmd-palette-item:hover .cmd-palette-item-kbd,
+  .cmd-palette-item.is-selected .cmd-palette-item-kbd {
+    color: var(--cmd-accent);
+    border-color: var(--cmd-accent-ring);
+  }
+
+  /* --------------------------------------------
+     Footer
+     -------------------------------------------- */
   .cmd-palette-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+    flex: 0 0 auto;
     padding: 10px 18px;
     background: rgba(0, 0, 0, 0.03);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--cmd-border);
     font-size: 11.5px;
-    color: var(--muted);
+    color: var(--cmd-muted);
   }
 
   [data-theme="dark"] .cmd-palette-footer {
@@ -254,27 +946,368 @@
 
   .cmd-palette-hints {
     display: flex;
+    align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
   }
 
-  .cmd-palette-hint kbd {
-    font-family: monospace;
-    background: var(--glass-bg);
-    border: 1px solid var(--border);
-    padding: 1px 5px;
-    border-radius: 4px;
+  .cmd-palette-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .cmd-palette-hint kbd,
+  .cmd-palette-footer kbd {
+    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
     font-size: 10px;
+    line-height: 1;
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid var(--cmd-border);
+    background: var(--cmd-glass);
+    color: inherit;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  }
+
+  [data-theme="dark"] .cmd-palette-hint kbd,
+  [data-theme="dark"] .cmd-palette-footer kbd {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4) inset;
   }
 
   .cmd-palette-badge {
     font-weight: 600;
     opacity: 0.8;
+    white-space: nowrap;
   }
 
+  /* --------------------------------------------
+     Empty / loading / error states
+     -------------------------------------------- */
   .cmd-palette-empty {
-    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 34px 20px;
     text-align: center;
-    color: var(--muted);
+    color: var(--cmd-muted);
+    font-size: 13px;
+    animation: cmd-palette-fade-in 260ms var(--cmd-ease-out) both;
   }
 
+  .cmd-palette-empty-icon {
+    font-size: 26px;
+    opacity: 0.5;
+    margin-bottom: 2px;
+  }
+
+  .cmd-palette-empty strong {
+    color: var(--cmd-text);
+    font-weight: 700;
+  }
+
+  @keyframes cmd-palette-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .cmd-palette-loader {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--cmd-border);
+    border-top-color: var(--cmd-accent);
+    animation: cmd-palette-spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes cmd-palette-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .cmd-palette-skeleton {
+    height: var(--cmd-row-h);
+    border-radius: var(--cmd-radius-item);
+    background: linear-gradient(90deg,
+        var(--cmd-accent-softer) 25%,
+        var(--cmd-accent-soft) 37%,
+        var(--cmd-accent-softer) 63%);
+    background-size: 400% 100%;
+    animation: cmd-palette-shimmer 1.4s ease infinite;
+  }
+
+  @keyframes cmd-palette-shimmer {
+    0% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0 50%;
+    }
+  }
+
+  /* --------------------------------------------
+     Container-query adaptations
+     (fires on the modal itself; padding/typography shift when narrow)
+     -------------------------------------------- */
+  @container cmd-modal (max-width: 420px) {
+    .cmd-palette-input-wrap {
+      padding: 13px 16px;
+    }
+
+    .cmd-palette-item-tag,
+    .cmd-palette-item-kbd {
+      display: none;
+    }
+
+    .cmd-palette-item-desc {
+      display: none;
+    }
+
+    .cmd-palette-footer {
+      padding: 9px 14px;
+    }
+  }
+
+  /* --------------------------------------------
+     Responsive
+     -------------------------------------------- */
+  @media (max-width: 560px) {
+    .cmd-palette-backdrop {
+      padding: 12px;
+      align-items: flex-start;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .cmd-palette-backdrop::before {
+      opacity: 0.3;
+    }
+
+    .cmd-palette-modal {
+      max-width: 100%;
+      max-height: calc(100dvh - 24px);
+      border-radius: 16px;
+    }
+
+    .cmd-palette-input-wrap {
+      padding: 13px 16px;
+    }
+
+    .cmd-palette-input {
+      font-size: 16px;
+      /* keep — prevents iOS zoom */
+    }
+
+    .cmd-palette-results {
+      padding: 8px;
+    }
+
+    .cmd-palette-item {
+      padding: 10px;
+    }
+
+    .cmd-palette-item-tag,
+    .cmd-palette-item-kbd,
+    .cmd-palette-esc-badge {
+      display: none;
+    }
+
+    .cmd-palette-footer {
+      padding: 9px 14px;
+    }
+
+    .cmd-palette-hints {
+      gap: 10px;
+    }
+  }
+
+  @media (max-height: 480px) {
+    .cmd-palette-backdrop {
+      padding-top: 12px;
+    }
+
+    .cmd-palette-modal {
+      max-height: calc(100dvh - 24px);
+    }
+
+    .cmd-palette-item-desc {
+      display: none;
+    }
+
+    .cmd-palette-history-row {
+      padding: 6px 10px;
+      margin-bottom: 4px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .cmd-palette-input-wrap {
+      padding: 11px 13px;
+      gap: 8px;
+    }
+
+    .cmd-palette-item-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+    }
+
+    .cmd-palette-item-title {
+      font-size: 13px;
+    }
+  }
+
+  /* --------------------------------------------
+     Accessibility / preference fallbacks
+     -------------------------------------------- */
+  @media (prefers-reduced-motion: reduce) {
+
+    .cmd-palette-backdrop,
+    .cmd-palette-modal,
+    .cmd-palette-item,
+    .cmd-history-chip,
+    .cmd-palette-icon,
+    .cmd-palette-item-icon,
+    .cmd-palette-input::placeholder {
+      transition-duration: 0.01ms !important;
+    }
+
+    .cmd-palette-modal,
+    .cmd-palette-backdrop.open .cmd-palette-modal {
+      transform: none;
+    }
+
+    .cmd-palette-loader,
+    .cmd-palette-skeleton,
+    .cmd-palette-backdrop.open .cmd-palette-item,
+    .cmd-palette-backdrop.open .cmd-palette-section-title,
+    .cmd-palette-backdrop.open .cmd-palette-history-row,
+    .cmd-palette-empty {
+      animation: none !important;
+    }
+
+    .cmd-history-chip:hover,
+    .cmd-palette-item:active,
+    .cmd-palette-item:hover .cmd-palette-item-icon,
+    .cmd-palette-item.is-selected .cmd-palette-item-icon {
+      transform: none;
+    }
+
+    .cmd-palette-input-wrap:focus-within .cmd-palette-icon {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+
+    .cmd-palette-backdrop,
+    dialog.cmd-palette-backdrop::backdrop,
+    [popover].cmd-palette-backdrop {
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      background: rgba(15, 23, 42, 0.92);
+    }
+
+    .cmd-palette-backdrop::before {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .cmd-palette-modal {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+      background: Canvas;
+    }
+
+    .cmd-palette-modal::before {
+      background: Highlight;
+    }
+
+    .cmd-palette-item.is-selected {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    .cmd-palette-item.is-selected::before {
+      background: Highlight;
+    }
+
+    .cmd-palette-match {
+      background: Highlight;
+      color: HighlightText;
+    }
+
+    .cmd-palette-item-icon,
+    .cmd-history-chip,
+    .cmd-palette-item-tag,
+    .cmd-palette-item-kbd,
+    .cmd-palette-esc-badge,
+    .cmd-palette-hint kbd,
+    .cmd-palette-footer kbd {
+      border: 1px solid CanvasText;
+    }
+
+    .cmd-palette-loader {
+      border-color: CanvasText;
+      border-top-color: Highlight;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .cmd-palette-modal {
+      border-color: var(--cmd-text);
+    }
+
+    .cmd-palette-item.is-selected {
+      outline: 2px solid var(--cmd-accent);
+      outline-offset: -2px;
+    }
+
+    .cmd-palette-item-desc,
+    .cmd-palette-section-title,
+    .cmd-palette-badge {
+      color: var(--cmd-text);
+      opacity: 0.9;
+    }
+  }
+
+  /* --------------------------------------------
+     View Transitions API (progressive enhancement)
+     The palette gets a shared-element name so you can animate
+     from a launcher button if your app opts in — ignored otherwise.
+     -------------------------------------------- */
+  @supports (view-transition-name: none) {
+    .cmd-palette-modal {
+      view-transition-name: cmd-palette;
+    }
+
+    ::view-transition-old(cmd-palette),
+    ::view-transition-new(cmd-palette) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  }
+
+  /* --------------------------------------------
+     Print — palette never prints
+     -------------------------------------------- */
+  @media print {
+
+    .cmd-palette-backdrop,
+    dialog.cmd-palette-backdrop,
+    [popover].cmd-palette-backdrop {
+      display: none !important;
+    }
+  }
 }

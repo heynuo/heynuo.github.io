@@ -1,106 +1,815 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Digital Dispatch Newsletter (dispatch.css)
+   HeyNuo — Digital Dispatch Newsletter (dispatch.css)
    Newsletter subscription card, badge, responsive grid form.
+   v4 — zero HTML changes required.
    ========================================================= */
+
+/* ---------- Registered custom properties ----------
+   Lets browsers interpolate these smoothly in transitions. */
+@property --dispatch-shine {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -120%;
+}
 
 @layer features {
   /* ============================================
      NEW: Digital Dispatch / Newsletter Card
      ============================================ */
+
   .dispatch-section {
-    margin: 20px 0 var(--space-5xl);
+    /* ---- local design tokens ---- */
+    --dispatch-radius: 28px;
+    --dispatch-radius-sm: 22px;
+    --dispatch-pad-y: clamp(26px, 3.4vw, 42px);
+    --dispatch-pad-x: clamp(22px, 3.6vw, 46px);
+    --dispatch-gap: clamp(22px, 3vw, 36px);
+    --dispatch-ring: rgba(37, 99, 235, 0.22);
+    --dispatch-ring-dark: rgba(59, 130, 246, 0.34);
+    --dispatch-danger: #ef4444;
+    --dispatch-danger-ring: rgba(239, 68, 68, 0.18);
+    --dispatch-success: #059669;
+    --dispatch-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --dispatch-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    margin: 20px 0 var(--space-5xl, 64px);
+    position: relative;
+    isolation: isolate;
+
+    /* enables container queries below */
+    container-type: inline-size;
+    container-name: dispatch;
+
+    /* keeps anchor jumps from hiding the card under a sticky header */
+    scroll-margin-top: 96px;
   }
+
+  /* ---------- Card ---------- */
 
   .dispatch-card {
     position: relative;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.07) 0%, rgba(8, 145, 178, 0.05) 50%, rgba(139, 92, 246, 0.07) 100%);
-    border: 1.5px solid rgba(37, 99, 235, 0.22);
-    border-radius: 28px;
-    padding: 38px 42px;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.04);
+    isolation: isolate;
     overflow: hidden;
+
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.07) 0%,
+        rgba(8, 145, 178, 0.05) 50%,
+        rgba(139, 92, 246, 0.07) 100%);
+    border: 1.5px solid rgba(37, 99, 235, 0.22);
+    border-radius: var(--dispatch-radius);
+    padding: var(--dispatch-pad-y) var(--dispatch-pad-x);
+
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+    box-shadow:
+      0 10px 35px rgba(0, 0, 0, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+    transition:
+      border-color 0.4s var(--dispatch-ease),
+      box-shadow 0.4s var(--dispatch-ease),
+      transform 0.4s var(--dispatch-ease);
+
+    /* paint/layout containment — big win for long pages */
+    contain: layout style paint;
+
+    /* skip painting off-screen — keeps the rest of the page snappy */
+    content-visibility: auto;
+    contain-intrinsic-size: 240px;
   }
 
-  [data-theme="dark"] .dispatch-card {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(17, 24, 39, 0.85) 50%, rgba(139, 92, 246, 0.1) 100%);
-    border-color: rgba(59, 130, 246, 0.25);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+  /* decorative top-right glow */
+  .dispatch-card::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(37, 99, 235, 0.18) 0%,
+        transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 0.5s ease, transform 0.6s var(--dispatch-ease);
   }
+
+  /* subtle bottom-left accent glow */
+  .dispatch-card::after {
+    content: "";
+    position: absolute;
+    bottom: -140px;
+    left: -100px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        rgba(139, 92, 246, 0.14) 0%,
+        transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 0.5s ease, transform 0.6s var(--dispatch-ease);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .dispatch-card:hover {
+      border-color: rgba(37, 99, 235, 0.36);
+      box-shadow:
+        0 20px 50px rgba(37, 99, 235, 0.12),
+        0 4px 12px rgba(37, 99, 235, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(-3px);
+    }
+
+    .dispatch-card:hover::before {
+      transform: scale(1.08);
+      opacity: 0.9;
+    }
+
+    .dispatch-card:hover::after {
+      transform: scale(1.1);
+      opacity: 0.85;
+    }
+  }
+
+  .dispatch-card:focus-within {
+    border-color: rgba(37, 99, 235, 0.48);
+    box-shadow:
+      0 14px 40px rgba(37, 99, 235, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  /* ---------- Layout ---------- */
 
   .dispatch-grid {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
     align-items: center;
-    gap: 32px;
+    gap: var(--dispatch-gap);
   }
 
-  @media (max-width: 820px) {
-    .dispatch-grid {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
-    .dispatch-form {
-      justify-content: center;
-    }
-  }
+  /* ---------- Badge ---------- */
 
   .dispatch-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     background: rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(37, 99, 235, 0.18);
     color: var(--primary);
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 5px 13px;
+    border-radius: 999px;
     font-size: 11.5px;
     font-weight: 700;
+    line-height: 1;
     text-transform: uppercase;
     letter-spacing: 0.6px;
-    margin-bottom: 12px;
+    white-space: nowrap;
+    margin-bottom: 14px;
     font-family: var(--font-display);
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
+
+  /* animated "live" dot — auto-hides if you drop an <svg>/<i>/<img> in */
+  .dispatch-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex: none;
+    animation: dispatch-pulse 2.4s var(--dispatch-ease) infinite;
+  }
+
+  .dispatch-badge:has(svg)::before,
+  .dispatch-badge:has(i)::before,
+  .dispatch-badge:has(img)::before {
+    display: none;
+  }
+
+  .dispatch-badge svg,
+  .dispatch-badge i {
+    width: 13px;
+    height: 13px;
+    flex: none;
+    transition: transform 0.3s var(--dispatch-ease-bounce);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+
+    .dispatch-badge:hover svg,
+    .dispatch-badge:hover i {
+      transform: rotate(-8deg) scale(1.12);
+    }
+  }
+
+  @keyframes dispatch-pulse {
+
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 currentColor;
+      opacity: 1;
+    }
+
+    50% {
+      box-shadow: 0 0 0 4px transparent;
+      opacity: 0.7;
+    }
+  }
+
+  /* ---------- Copy ---------- */
 
   .dispatch-info h3 {
     font-family: var(--font-display);
     font-size: clamp(1.4rem, 2.5vw, 1.85rem);
     font-weight: 800;
     color: var(--text);
-    margin-bottom: 10px;
+    margin: 0 0 10px;
     line-height: 1.25;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    background: linear-gradient(120deg,
+        var(--text) 0%,
+        var(--text) 55%,
+        var(--primary) 130%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    .dispatch-info h3 {
+      background: none;
+      -webkit-text-fill-color: currentColor;
+      color: var(--text);
+    }
   }
 
   .dispatch-info p {
     color: var(--muted);
     font-size: 15px;
     line-height: 1.7;
-    margin-bottom: 0;
+    margin: 0;
+    max-width: 46ch;
+    text-wrap: pretty;
   }
+
+  /* links inside the description text */
+  .dispatch-info a {
+    color: var(--primary);
+    text-decoration-line: underline;
+    text-decoration-color: rgba(37, 99, 235, 0.35);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.25s ease, color 0.25s ease;
+  }
+
+  .dispatch-info a:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .dispatch-info a:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- Form ---------- */
 
   .dispatch-form {
     display: flex;
+    align-items: stretch;
     gap: 10px;
     flex-wrap: wrap;
+    margin: 0;
+    position: relative;
   }
 
   .dispatch-input {
-    flex: 1;
-    min-width: 200px;
+    flex: 1 1 220px;
+    min-width: 0;
     padding: 13px 18px;
     border-radius: 12px;
     border: 1.5px solid var(--border);
     background: var(--card-bg);
     color: var(--text);
+    caret-color: var(--primary);
     font-family: var(--font-body);
     font-size: 16px;
+    /* ≥16px prevents iOS zoom-on-focus */
+    line-height: 1.4;
     outline: none;
-    transition: var(--transition-default);
+    appearance: none;
+    -webkit-appearance: none;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease,
+      transform 0.25s var(--dispatch-ease);
   }
 
-  .dispatch-input:focus {
+  .dispatch-input::placeholder {
+    color: var(--muted);
+    opacity: 0.72;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .dispatch-input:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+  }
+
+  .dispatch-input:focus::placeholder {
+    opacity: 0.45;
+    transform: translateX(2px);
+  }
+
+  .dispatch-input:focus,
+  .dispatch-input:focus-visible {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 3px var(--dispatch-ring);
+    background: color-mix(in srgb, var(--card-bg) 92%, var(--primary) 8%);
   }
 
+  /* validation feedback (only after user interaction) */
+  .dispatch-input:user-invalid {
+    border-color: var(--dispatch-danger);
+    box-shadow: 0 0 0 3px var(--dispatch-danger-ring);
+    animation: dispatch-shake 0.4s var(--dispatch-ease);
+  }
+
+  .dispatch-input:user-valid {
+    border-color: rgba(5, 150, 105, 0.5);
+  }
+
+  @keyframes dispatch-shake {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    25% {
+      transform: translateX(-4px);
+    }
+
+    75% {
+      transform: translateX(4px);
+    }
+  }
+
+  /* Chrome autofill */
+  .dispatch-input:-webkit-autofill,
+  .dispatch-input:-webkit-autofill:hover,
+  .dispatch-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text);
+    caret-color: var(--text);
+    box-shadow: 0 0 0 100px var(--card-bg) inset;
+    transition: background-color 9999s ease-out 0s;
+  }
+
+  /* number-input spinners */
+  .dispatch-input::-webkit-outer-spin-button,
+  .dispatch-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .dispatch-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* ---------- Consent / helper text ----------
+     Styles any <small> or .dispatch-consent inside the form.
+     No-op if you don't have one. */
+
+  .dispatch-form small,
+  .dispatch-consent {
+    flex-basis: 100%;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 2px 0 0;
+  }
+
+  .dispatch-form small a,
+  .dispatch-consent a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ---------- Submit button ----------
+     Only affects `.dispatch-btn` — won't clash with `.btn`. */
+
+  .dispatch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 13px 24px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), #0891b2);
+    background-size: 200% 200%;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+    transition:
+      transform 0.25s var(--dispatch-ease),
+      box-shadow 0.3s var(--dispatch-ease),
+      background-position 0.6s var(--dispatch-ease),
+      filter 0.25s ease;
+  }
+
+  /* sheen sweep — driven by a registered custom property */
+  .dispatch-btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.35) 50%,
+        transparent 70%);
+    transform: translateX(var(--dispatch-shine));
+    transition: --dispatch-shine 0.7s var(--dispatch-ease);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .dispatch-btn:hover {
+    transform: translateY(-2px);
+    background-position: 100% 50%;
+    box-shadow: 0 10px 26px rgba(37, 99, 235, 0.36);
+    filter: brightness(1.05);
+  }
+
+  .dispatch-btn:hover::after {
+    --dispatch-shine: 120%;
+  }
+
+  .dispatch-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+  }
+
+  .dispatch-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  .dispatch-btn[disabled],
+  .dispatch-btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    filter: none;
+  }
+
+  /* busy/loading state — set aria-busy="true" on the form OR button */
+  .dispatch-btn[aria-busy="true"],
+  .dispatch-form[aria-busy="true"] .dispatch-btn {
+    cursor: progress;
+    color: transparent;
+    pointer-events: none;
+  }
+
+  .dispatch-btn[aria-busy="true"]::before,
+  .dispatch-form[aria-busy="true"] .dispatch-btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    animation: dispatch-spin 0.7s linear infinite;
+  }
+
+  @keyframes dispatch-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ---------- Inline status / feedback ---------- */
+
+  .dispatch-status {
+    flex-basis: 100%;
+    margin: 2px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .dispatch-status--error {
+    color: var(--dispatch-danger);
+  }
+
+  .dispatch-status--success {
+    color: var(--dispatch-success);
+  }
+
+  /* ---------- Text selection inside the card ---------- */
+
+  .dispatch-card ::selection {
+    background: rgba(37, 99, 235, 0.22);
+    color: var(--text);
+  }
+
+  /* ---------- Responsive ----------
+     Container queries first — grid reacts to the CARD's width,
+     not the viewport. Media queries act as a fallback. */
+
+  @container dispatch (max-width: 820px) {
+    .dispatch-grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 26px;
+    }
+
+    .dispatch-info p {
+      margin-inline: auto;
+    }
+
+    .dispatch-form {
+      justify-content: center;
+    }
+  }
+
+  @container dispatch (max-width: 560px) {
+    .dispatch-input {
+      flex-basis: 100%;
+      text-align: center;
+    }
+
+    .dispatch-btn {
+      width: 100%;
+    }
+  }
+
+  /* Media query fallbacks for browsers without container queries */
+  @supports not (container-type: inline-size) {
+    @media (max-width: 820px) {
+      .dispatch-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 26px;
+      }
+
+      .dispatch-info p {
+        margin-inline: auto;
+      }
+
+      .dispatch-form {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .dispatch-input {
+        flex-basis: 100%;
+        text-align: center;
+      }
+
+      .dispatch-btn {
+        width: 100%;
+      }
+    }
+  }
+
+  @media (max-width: 560px) {
+    .dispatch-section {
+      --dispatch-radius: var(--dispatch-radius-sm);
+      --dispatch-pad-y: 26px;
+      --dispatch-pad-x: 22px;
+    }
+
+    .dispatch-card::before,
+    .dispatch-card::after {
+      opacity: 0.7;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .dispatch-info h3 {
+      font-size: 1.25rem;
+    }
+
+    .dispatch-info p {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-height: 520px) and (orientation: landscape) {
+    .dispatch-section {
+      --dispatch-pad-y: 20px;
+    }
+  }
+
+  /* ---------- Dark theme ---------- */
+
+  [data-theme="dark"] .dispatch-card {
+    background: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.12) 0%,
+        rgba(17, 24, 39, 0.85) 50%,
+        rgba(139, 92, 246, 0.1) 100%);
+    border-color: rgba(59, 130, 246, 0.25);
+    box-shadow:
+      0 15px 45px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  [data-theme="dark"] .dispatch-card::before {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+  }
+
+  [data-theme="dark"] .dispatch-card::after {
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.26) 0%, transparent 70%);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    [data-theme="dark"] .dispatch-card:hover {
+      border-color: rgba(96, 165, 250, 0.44);
+      box-shadow:
+        0 20px 55px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(96, 165, 250, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  [data-theme="dark"] .dispatch-badge {
+    background: rgba(59, 130, 246, 0.16);
+    border-color: rgba(96, 165, 250, 0.24);
+    color: #93c5fd;
+  }
+
+  [data-theme="dark"] .dispatch-info h3 {
+    background: linear-gradient(120deg, #f9fafb 0%, #f9fafb 55%, #60a5fa 130%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  [data-theme="dark"] .dispatch-info a {
+    color: #93c5fd;
+    text-decoration-color: rgba(147, 197, 253, 0.4);
+  }
+
+  [data-theme="dark"] .dispatch-input {
+    caret-color: #60a5fa;
+  }
+
+  [data-theme="dark"] .dispatch-input:focus,
+  [data-theme="dark"] .dispatch-input:focus-visible {
+    box-shadow: 0 0 0 3px var(--dispatch-ring-dark);
+  }
+
+  [data-theme="dark"] .dispatch-btn {
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  [data-theme="dark"] .dispatch-card ::selection {
+    background: rgba(96, 165, 250, 0.3);
+    color: #f9fafb;
+  }
+
+  /* ---------- Accessibility preferences ---------- */
+
+  @media (prefers-contrast: more) {
+    .dispatch-card {
+      border-color: var(--primary);
+    }
+
+    .dispatch-input {
+      border-width: 2px;
+    }
+
+    .dispatch-badge {
+      border-width: 2px;
+    }
+
+    .dispatch-info p {
+      color: var(--text);
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    .dispatch-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: var(--card-bg);
+      border-color: var(--border);
+    }
+
+    .dispatch-card::before,
+    .dispatch-card::after {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    .dispatch-card,
+    .dispatch-card::before,
+    .dispatch-card::after,
+    .dispatch-input,
+    .dispatch-btn,
+    .dispatch-btn::after,
+    .dispatch-badge,
+    .dispatch-badge svg,
+    .dispatch-badge i {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .dispatch-card:hover,
+    .dispatch-btn:hover,
+    .dispatch-card:hover::before,
+    .dispatch-card:hover::after {
+      transform: none;
+    }
+
+    .dispatch-btn:hover::after {
+      --dispatch-shine: -120%;
+    }
+  }
+
+  /* ---------- Print ---------- */
+
+  @media print {
+    .dispatch-section {
+      container-type: normal;
+      content-visibility: visible;
+      contain: none;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .dispatch-form {
+      display: none;
+    }
+
+    .dispatch-card {
+      border: 1px solid #ccc;
+      box-shadow: none;
+      background: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .dispatch-card::before,
+    .dispatch-card::after {
+      display: none;
+    }
+
+    .dispatch-info h3 {
+      -webkit-text-fill-color: currentColor;
+      background: none;
+    }
+  }
+
+  /* ---------- Windows High Contrast ---------- */
+
+  @media (forced-colors: active) {
+
+    .dispatch-card,
+    .dispatch-input,
+    .dispatch-badge,
+    .dispatch-btn {
+      border: 1px solid CanvasText;
+    }
+
+    .dispatch-btn {
+      background: ButtonFace;
+      color: ButtonText;
+    }
+
+    .dispatch-input:focus,
+    .dispatch-input:focus-visible {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+  }
 }

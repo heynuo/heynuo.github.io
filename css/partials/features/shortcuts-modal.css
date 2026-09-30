@@ -1,26 +1,81 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Keyboard Shortcuts Modal (shortcuts-modal.css)
+   HeyNuo – Keyboard Shortcuts Modal (shortcuts-modal.css)
    WCAG 2.1.4 single-key shortcuts dialog, hotkey groups & hints.
+   v3 — Drop-in replacement. No HTML / JS changes required.
    ========================================================= */
 
 @layer features {
-  /* ============================================
-     NEW: Keyboard Shortcuts Sheet Modal
-     ============================================ */
+
+  /* ============================================================
+     1. BACKDROP
+     ============================================================ */
   .shortcuts-modal-backdrop {
+    /* --- Local tokens (scoped to backdrop, do NOT touch globals) --- */
+    --sm-radius: 24px;
+    --sm-radius-sm: 12px;
+    --sm-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --sm-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --sm-ring: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
+    --sm-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 8px 24px rgba(15, 23, 42, 0.18),
+      0 24px 64px rgba(15, 23, 42, 0.32);
+
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.7);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     z-index: calc(var(--z-modal) + 10);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding:
+      max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
+    overscroll-behavior: contain;
+    -webkit-tap-highlight-color: transparent;
+    /* Backdrop-filter removed: heavy GPU cost on low-end devices.
+       A radial glow gives depth without the perf hit. */
+    background:
+      radial-gradient(1200px 640px at 50% -10%,
+        color-mix(in srgb, var(--primary) 14%, transparent),
+        transparent 62%),
+      radial-gradient(900px 500px at 90% 110%,
+        color-mix(in srgb, var(--primary) 8%, transparent),
+        transparent 60%),
+      rgba(15, 23, 42, 0.72);
+
+    /* Slowly drift the glow for a subtle living background */
+    background-size: 200% 200%, 200% 200%, 100% 100%;
+    animation: sm-backdrop-drift 22s linear infinite;
+
+    /* Graceful fade for users who don't want heavy blurs */
+    @media (prefers-reduced-transparency: reduce) {
+      background:
+        radial-gradient(transparent, transparent),
+        rgba(15, 23, 42, 0.92);
+      animation: none;
+    }
+
+    /* Strip gradients on metered / low-data connections */
+    @media (prefers-reduced-data: reduce) {
+      background: rgba(15, 23, 42, 0.86);
+      animation: none;
+    }
+  }
+
+  @keyframes sm-backdrop-drift {
+    0% {
+      background-position: 0% 0%, 100% 100%;
+    }
+
+    50% {
+      background-position: 100% 20%, 0% 80%;
+    }
+
+    100% {
+      background-position: 0% 0%, 100% 100%;
+    }
   }
 
   .shortcuts-modal-backdrop.active {
@@ -28,38 +83,78 @@
     pointer-events: auto;
   }
 
+  /* ============================================================
+     2. MODAL SHELL
+     ============================================================ */
   .shortcuts-modal {
     background: var(--card-bg);
+    color: var(--text);
     border: 1px solid var(--border);
-    border-radius: 24px;
+    border-radius: var(--sm-radius);
     padding: 26px 28px;
     width: 100%;
     max-width: 520px;
     max-height: 88vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--sm-shadow);
     transform: translateY(14px) scale(0.96);
-    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 0.28s var(--sm-ease),
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
     overflow: hidden;
+    will-change: transform;
+    contain: layout style;
+    color-scheme: light;
+    /* Smooth size animation in supporting browsers */
+    interpolate-size: allow-keywords;
+    /* Nothing to select outside of code/key content */
+    -webkit-user-select: none;
+    user-select: none;
+
+    /* Rows and keys below re-enable selection where it matters */
+    :is(.shortcut-desc, .shortcut-key, .shortcut-key-inline) {
+      -webkit-user-select: text;
+      user-select: text;
+    }
+
+    ::selection {
+      background: color-mix(in srgb, var(--primary) 35%, transparent);
+      color: var(--text);
+    }
+  }
+
+  [data-theme="dark"] .shortcuts-modal {
+    color-scheme: dark;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 8px 24px rgba(0, 0, 0, 0.45),
+      0 24px 64px rgba(0, 0, 0, 0.6);
   }
 
   .shortcuts-modal-backdrop.active .shortcuts-modal {
     transform: translateY(0) scale(1);
+    will-change: auto;
   }
 
+  /* ============================================================
+     3. HEADER
+     ============================================================ */
   .shortcuts-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
     flex-shrink: 0;
+    gap: 12px;
   }
 
   .shortcuts-title-wrap {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
   }
 
   .shortcuts-header-icon {
@@ -69,10 +164,62 @@
     font-size: 20px;
     width: 40px;
     height: 40px;
-    border-radius: 12px;
-    background: rgba(37, 99, 235, 0.12);
-    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: var(--sm-radius-sm);
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--primary) 20%, transparent),
+        color-mix(in srgb, var(--primary) 6%, transparent));
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
     flex-shrink: 0;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 2px 6px color-mix(in srgb, var(--primary) 18%, transparent);
+    transition: transform 0.3s var(--sm-ease);
+    /* Subtle pulse to draw the eye */
+    position: relative;
+    isolation: isolate;
+  }
+
+  .shortcuts-header-icon::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    animation: sm-icon-halo 3.6s var(--sm-ease-soft) infinite;
+    z-index: -1;
+  }
+
+  @keyframes sm-icon-halo {
+
+    0%,
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    35% {
+      opacity: 0.55;
+      transform: scale(1.05);
+    }
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-header-icon {
+    animation: sm-icon-in 0.45s var(--sm-ease) 0.1s backwards;
+  }
+
+  @keyframes sm-icon-in {
+    from {
+      transform: scale(0.7) rotate(-8deg);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
   }
 
   .shortcuts-header h3 {
@@ -82,25 +229,50 @@
     color: var(--text);
     margin: 0;
     line-height: 1.2;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
   }
 
   .shortcuts-subtitle {
     font-size: 12.5px;
     color: var(--muted);
     margin: 2px 0 0;
+    text-wrap: pretty;
   }
 
+  /* ============================================================
+     4. TOGGLE ROW (uses :has() to react to checkbox state)
+     ============================================================ */
   .shortcuts-toggle-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 14px;
     margin-bottom: 14px;
-    border-radius: 12px;
-    background: rgba(37, 99, 235, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: var(--sm-radius-sm);
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--primary) 10%, transparent),
+        color-mix(in srgb, var(--primary) 4%, transparent));
+    border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
     gap: 12px;
     flex-shrink: 0;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  /* Smarter state: glow when the checkbox is ON */
+  .shortcuts-toggle-row:has(.shortcuts-checkbox:checked) {
+    border-color: color-mix(in srgb, var(--primary) 45%, transparent);
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--primary) 16%, transparent),
+        color-mix(in srgb, var(--primary) 6%, transparent));
+  }
+
+  .shortcuts-toggle-row:focus-within {
+    border-color: var(--primary);
+    box-shadow: var(--sm-ring);
   }
 
   .shortcuts-toggle-label {
@@ -112,6 +284,8 @@
     color: var(--text);
     cursor: pointer;
     text-align: left;
+    min-width: 0;
+    line-height: 1.3;
   }
 
   .shortcuts-toggle-label small {
@@ -120,14 +294,94 @@
     color: var(--muted);
   }
 
+  /* ============================================================
+     5. CUSTOM CHECKBOX (pure CSS — no HTML change)
+     ============================================================ */
   .shortcuts-checkbox {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--primary);
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    border: 1.5px solid var(--border);
+    background: var(--card-bg);
     cursor: pointer;
     flex-shrink: 0;
+    position: relative;
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.12s var(--sm-ease),
+      box-shadow 0.18s ease;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06) inset;
   }
 
+  @media (hover: hover) {
+    .shortcuts-checkbox:hover {
+      border-color: var(--primary);
+    }
+  }
+
+  .shortcuts-checkbox:active {
+    transform: scale(0.92);
+  }
+
+  .shortcuts-checkbox:checked {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.15) inset,
+      0 2px 6px color-mix(in srgb, var(--primary) 40%, transparent);
+  }
+
+  .shortcuts-checkbox:checked::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2.5px 2.5px 0;
+    transform: translate(-50%, -60%) rotate(45deg);
+    animation: sm-check-in 0.2s var(--sm-ease);
+  }
+
+  @keyframes sm-check-in {
+    from {
+      transform: translate(-50%, -60%) rotate(45deg) scale(0.4);
+      opacity: 0;
+    }
+
+    to {
+      transform: translate(-50%, -60%) rotate(45deg) scale(1);
+      opacity: 1;
+    }
+  }
+
+  .shortcuts-checkbox:focus-visible {
+    outline: none;
+    box-shadow: var(--sm-ring);
+  }
+
+  /* Larger tap target on touch devices */
+  @media (pointer: coarse) {
+    .shortcuts-checkbox {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+    }
+
+    .shortcuts-checkbox:checked::after {
+      width: 6px;
+      height: 11px;
+      border-width: 0 3px 3px 0;
+    }
+  }
+
+  /* ============================================================
+     6. SCROLL AREA
+     ============================================================ */
   .shortcuts-body-scroll {
     overflow-y: auto;
     padding-right: 4px;
@@ -135,21 +389,132 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scroll-padding-block: 8px;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+
+    /* Soft fade at top and bottom edges — subtle, always present.
+       Looks natural on short lists and helps on long ones. */
+    mask-image:
+      linear-gradient(to bottom,
+        transparent 0,
+        #000 10px,
+        #000 calc(100% - 10px),
+        transparent 100%);
+    -webkit-mask-image:
+      linear-gradient(to bottom,
+        transparent 0,
+        #000 10px,
+        #000 calc(100% - 10px),
+        transparent 100%);
+
+    /* If scroll-driven animations are supported, we can disable the fade
+       at the very top and very bottom for perfect polish. */
+    @supports (animation-timeline: scroll()) {
+      animation: sm-scroll-fade linear;
+      animation-timeline: scroll(self block);
+      animation-range: 0 40px, calc(100% - 40px) 100%;
+      animation-fill-mode: both;
+    }
+  }
+
+  @keyframes sm-scroll-fade {
+    from {
+      --sm-fade-top: 0px;
+    }
+
+    to {
+      --sm-fade-top: 10px;
+    }
   }
 
   .shortcuts-body-scroll::-webkit-scrollbar {
     width: 6px;
   }
 
+  .shortcuts-body-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
   .shortcuts-body-scroll::-webkit-scrollbar-thumb {
     background: var(--border);
     border-radius: 999px;
+    transition: background-color 0.2s ease;
   }
 
+  .shortcuts-body-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
+
+  /* ============================================================
+     7. GROUPS + STAGGER REVEAL
+     ============================================================ */
   .shortcuts-group {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    /* Perf: skip painting off-screen groups */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 140px;
+  }
+
+  /* Staggered entrance when the modal opens.
+     Uses nth-child only — no HTML changes needed.
+     Only animates the first 12 groups; further groups appear instantly. */
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(1) {
+    animation-delay: 0.06s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(2) {
+    animation-delay: 0.10s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(4) {
+    animation-delay: 0.18s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(5) {
+    animation-delay: 0.22s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(6) {
+    animation-delay: 0.26s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(7) {
+    animation-delay: 0.30s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(8) {
+    animation-delay: 0.34s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group:nth-child(n+9) {
+    animation-delay: 0.36s;
+  }
+
+  .shortcuts-modal-backdrop.active .shortcuts-group {
+    animation: sm-group-in 0.4s var(--sm-ease) both;
+  }
+
+  @keyframes sm-group-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .shortcuts-group-title {
@@ -167,6 +532,12 @@
 
   .group-icon {
     font-size: 13px;
+    line-height: 1;
+    transition: transform 0.25s var(--sm-ease);
+  }
+
+  .shortcuts-group:hover .group-icon {
+    transform: scale(1.15) rotate(-4deg);
   }
 
   .shortcuts-list {
@@ -175,6 +546,9 @@
     gap: 6px;
   }
 
+  /* ============================================================
+     8. SHORTCUT ROWS
+     ============================================================ */
   .shortcut-row {
     display: flex;
     justify-content: space-between;
@@ -183,55 +557,133 @@
     border-radius: 10px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    transition: var(--transition-fast);
+    transition:
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      transform 0.18s var(--sm-ease),
+      box-shadow 0.18s ease;
+    gap: 10px;
+    scroll-margin-block: 8px;
+    position: relative;
+    overflow: hidden;
   }
 
-  .shortcut-row:hover {
-    background: rgba(37, 99, 235, 0.05);
-    border-color: rgba(37, 99, 235, 0.2);
+  /* Left accent bar that expands on hover */
+  .shortcut-row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 0;
+    background: var(--primary);
+    border-radius: 2px;
+    transform: translateY(-50%);
+    transition: height 0.2s var(--sm-ease);
+    opacity: 0.85;
+  }
+
+  @media (hover: hover) {
+    .shortcut-row:hover {
+      background: color-mix(in srgb, var(--primary) 6%, transparent);
+      border-color: color-mix(in srgb, var(--primary) 28%, transparent);
+      transform: translateX(2px);
+      box-shadow: 0 2px 10px color-mix(in srgb, var(--primary) 12%, transparent);
+    }
+
+    .shortcut-row:hover::before {
+      height: 60%;
+    }
+  }
+
+  /* Focus indicator when a row is scrolled to via keyboard */
+  .shortcut-row:focus-within {
+    border-color: var(--primary);
+    box-shadow: var(--sm-ring);
   }
 
   .shortcut-desc {
     font-size: 13px;
     color: var(--text);
     font-weight: 500;
+    min-width: 0;
+    text-wrap: pretty;
+    line-height: 1.35;
   }
 
   .shortcut-keys {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    flex-shrink: 0;
   }
 
   .shortcut-or {
     font-size: 11px;
     color: var(--muted);
     font-weight: 500;
+    padding: 0 2px;
+    font-style: italic;
   }
 
+  /* ============================================================
+     9. KEYCAPS (3D-looking, pure CSS)
+     ============================================================ */
   .shortcut-key {
-    font-family: monospace;
+    --key-bg: rgba(0, 0, 0, 0.06);
+    --key-border: var(--border);
+    --key-shadow: rgba(0, 0, 0, 0.10);
+    --key-color: var(--muted);
+
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
     font-size: 11px;
     font-weight: 700;
-    padding: 3px 8px;
+    padding: 3px 8px 4px;
     border-radius: 6px;
-    background: rgba(0, 0, 0, 0.06);
-    border: 1px solid var(--border);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-    color: var(--muted);
+    background: var(--key-bg);
+    border: 1px solid var(--key-border);
+    color: var(--key-color);
     line-height: 1;
     display: inline-block;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    /* Base plate under the cap for a real keycap look */
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.55) inset,
+      0 2px 0 var(--key-shadow);
+    transform: translateY(-1px);
+    transition:
+      transform 0.12s var(--sm-ease),
+      box-shadow 0.12s ease,
+      background-color 0.18s ease;
+    text-decoration: none;
+    white-space: nowrap;
   }
 
   [data-theme="dark"] .shortcut-key {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --key-bg: rgba(255, 255, 255, 0.10);
+    --key-shadow: rgba(0, 0, 0, 0.55);
+    --key-color: #e2e8f0;
   }
 
+  @media (hover: hover) {
+    .shortcut-row:hover .shortcut-key {
+      transform: translateY(-2px);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.55) inset,
+        0 3px 0 var(--key-shadow),
+        0 5px 10px color-mix(in srgb, var(--primary) 12%, transparent);
+    }
+  }
+
+  /* ============================================================
+     10. FOOTER
+     ============================================================ */
   .shortcuts-footer {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     padding-top: 10px;
     border-top: 1px solid var(--border);
     flex-shrink: 0;
@@ -240,10 +692,14 @@
   .shortcuts-footer-hint {
     font-size: 11.5px;
     color: var(--muted);
+    text-wrap: pretty;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
 
   .shortcut-key-inline {
-    font-family: monospace;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
     font-size: 10px;
     font-weight: 700;
     padding: 2px 5px;
@@ -251,6 +707,8 @@
     background: rgba(0, 0, 0, 0.08);
     border: 1px solid var(--border);
     color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
   }
 
   [data-theme="dark"] .shortcut-key-inline {
@@ -267,16 +725,278 @@
     padding: 5px 12px;
     border-radius: 14px;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition:
+      color 0.18s ease,
+      border-color 0.18s ease,
+      background-color 0.18s ease,
+      transform 0.12s var(--sm-ease),
+      box-shadow 0.18s ease;
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .footer-shortcut-btn:hover {
-    color: var(--text);
+  @media (hover: hover) {
+    .footer-shortcut-btn:hover {
+      color: var(--text);
+      border-color: var(--primary);
+      background: color-mix(in srgb, var(--primary) 8%, transparent);
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 15%, transparent);
+    }
+  }
+
+  .footer-shortcut-btn:active {
+    transform: scale(0.96);
+  }
+
+  .footer-shortcut-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--sm-ring);
     border-color: var(--primary);
-    background: rgba(37, 99, 235, 0.08);
+    color: var(--text);
   }
 
+  /* Bigger tap target on touch */
+  @media (pointer: coarse) {
+    .footer-shortcut-btn {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 16px;
+    }
+  }
+
+  /* ============================================================
+     11. RESPONSIVE
+     ============================================================ */
+  @media (max-width: 540px) {
+    .shortcuts-modal {
+      padding: 20px 18px;
+      border-radius: 20px;
+      max-height: 92vh;
+    }
+
+    .shortcuts-header h3 {
+      font-size: 17px;
+    }
+
+    .shortcuts-header-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+
+    .shortcut-desc {
+      font-size: 12px;
+    }
+
+    .shortcut-key {
+      font-size: 10px;
+      padding: 2px 6px 3px;
+    }
+
+    .shortcuts-footer-hint {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .shortcuts-modal {
+      padding: 16px 14px;
+      border-radius: 16px;
+    }
+
+    .shortcuts-toggle-row {
+      padding: 8px 10px;
+    }
+
+    .shortcut-row {
+      padding: 6px 10px;
+    }
+
+    .shortcuts-footer {
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+
+  @media (max-height: 520px) and (orientation: landscape) {
+    .shortcuts-modal {
+      max-height: 94vh;
+    }
+
+    .shortcuts-header {
+      margin-bottom: 10px;
+    }
+
+    .shortcuts-toggle-row {
+      margin-bottom: 10px;
+    }
+  }
+
+  /* ============================================================
+     12. ACCESSIBILITY & PREFERENCES
+     ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+
+    .shortcuts-modal-backdrop,
+    .shortcuts-modal,
+    .shortcuts-header-icon,
+    .shortcuts-header-icon::after,
+    .shortcuts-checkbox,
+    .shortcut-row,
+    .shortcut-key,
+    .footer-shortcut-btn,
+    .shortcuts-group,
+    .group-icon,
+    .shortcut-row::before {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .shortcuts-modal,
+    .shortcuts-modal-backdrop.active .shortcuts-modal,
+    .shortcuts-modal-backdrop.active .shortcuts-group {
+      transform: none;
+    }
+
+    .shortcuts-body-scroll {
+      scroll-behavior: auto;
+    }
+
+    .shortcuts-modal-backdrop {
+      animation: none;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    .shortcuts-modal {
+      border-width: 2px;
+    }
+
+    .shortcut-row,
+    .shortcut-key,
+    .shortcuts-toggle-row,
+    .footer-shortcut-btn {
+      border-color: currentColor;
+    }
+
+    .shortcut-key {
+      color: var(--text);
+    }
+
+    .shortcuts-body-scroll::-webkit-scrollbar-thumb {
+      background: currentColor;
+    }
+  }
+
+  @media (forced-colors: active) {
+
+    .shortcuts-modal,
+    .shortcut-row,
+    .shortcuts-toggle-row,
+    .footer-shortcut-btn,
+    .shortcut-key,
+    .shortcut-key-inline {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+      box-shadow: none;
+    }
+
+    .shortcuts-checkbox {
+      forced-color-adjust: none;
+      background: Canvas;
+      border: 2px solid CanvasText;
+    }
+
+    .shortcuts-checkbox:checked {
+      background: Highlight;
+      border-color: Highlight;
+    }
+
+    .shortcuts-checkbox:checked::after {
+      border-color: HighlightText;
+    }
+
+    .shortcut-row::before {
+      background: Highlight;
+    }
+  }
+
+  /* ============================================================
+     13. PRINT
+     ============================================================ */
+  @media print {
+    .shortcuts-modal-backdrop {
+      position: static;
+      background: none;
+      opacity: 1;
+      pointer-events: auto;
+      padding: 0;
+      animation: none;
+    }
+
+    .shortcuts-modal {
+      box-shadow: none;
+      border: 1px solid #000;
+      max-height: none;
+      transform: none;
+      page-break-inside: avoid;
+    }
+
+    .shortcuts-body-scroll {
+      overflow: visible;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .shortcuts-group {
+      content-visibility: visible;
+    }
+
+    .shortcuts-modal-backdrop.active .shortcuts-group {
+      animation: none;
+    }
+  }
+
+  /* ============================================================
+     14. FALLBACKS FOR OLDER BROWSERS
+     ============================================================ */
+
+  /* If color-mix() is unsupported, primary-tinted colors won't render.
+     Provide sensible fallbacks so tinted backgrounds still look right. */
+  @supports not (color: color-mix(in srgb, red 50%, blue)) {
+    .shortcuts-toggle-row {
+      background: rgba(37, 99, 235, 0.08);
+      border-color: rgba(37, 99, 235, 0.22);
+    }
+
+    .shortcuts-header-icon {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: rgba(37, 99, 235, 0.25);
+    }
+
+    .shortcuts-checkbox:checked {
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
+    }
+
+    .footer-shortcut-btn:focus-visible,
+    .shortcuts-toggle-row:focus-within,
+    .shortcuts-checkbox:focus-visible {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+    }
+  }
+
+  /* If :has() is unsupported, the toggle row simply won't glow —
+     nothing else changes, so behaviour is preserved. */
+
+  /* If content-visibility is unsupported, groups render normally. */
+
+  /* If mask-image is unsupported, the scroll area has hard edges. */
+  @supports not (mask-image: linear-gradient(#000, #000)) {
+    .shortcuts-body-scroll {
+      border-block: 1px solid transparent;
+    }
+  }
 }

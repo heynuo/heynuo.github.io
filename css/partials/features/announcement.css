@@ -1,41 +1,170 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Top Announcement Banner (announcement.css)
+   HeyNuo – Top Announcement Banner (announcement.css)
    Dismissible top notification banner, pulse pill, action link.
+   Fully self-contained — no HTML/JS/other-file changes required.
    ========================================================= */
 
+/* Register custom properties for smooth interpolation (progressive) */
+@property --banner-sheen-pos {
+  syntax: "<percentage>";
+  initial-value: -20%;
+  inherits: false;
+}
+
 @layer features {
+
   /* ============================================
-     NEW: Top Announcement Banner
+     Top Announcement Banner
      ============================================ */
   .announcement-banner {
-    background: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 0%, rgba(8, 145, 178, 0.12) 50%, rgba(139, 92, 246, 0.12) 100%);
-    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* --- Scoped theming tokens --- */
+    --banner-bg-start: rgba(37, 99, 235, 0.12);
+    --banner-bg-mid: rgba(8, 145, 178, 0.12);
+    --banner-bg-end: rgba(139, 92, 246, 0.12);
+    --banner-border: rgba(37, 99, 235, 0.2);
+    --banner-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+    --banner-radius: 20px;
+    --banner-close-size: 30px;
+    --banner-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --banner-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --banner-duration: 0.35s;
+
+    background: linear-gradient(90deg,
+        var(--banner-bg-start) 0%,
+        var(--banner-bg-mid) 50%,
+        var(--banner-bg-end) 100%);
+    border-block-end: 1px solid var(--banner-border);
+    box-shadow: var(--banner-shadow);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
     position: relative;
     z-index: calc(var(--z-nav) + 5);
     font-size: 13.5px;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--text);
+
+    /* Text rendering polish */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    /* Layout & containment */
+    max-height: 300px;
+    overflow: hidden;
+    contain: layout style paint;
+    content-visibility: auto;
+    /* skip work when scrolled off-screen */
+    will-change: transform, opacity;
+
+    /* Visibility handled here so dismissed banner leaves tab order */
+    visibility: visible;
+
+    transition:
+      max-height var(--banner-duration) var(--banner-ease),
+      opacity 0.25s ease,
+      transform var(--banner-duration) var(--banner-ease),
+      border-block-end-width var(--banner-duration) var(--banner-ease),
+      box-shadow var(--banner-duration) var(--banner-ease),
+      visibility 0s linear 0s;
+
+    /* Animated gradient + entrance */
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    animation:
+      bannerSlideIn 0.5s var(--banner-ease) both,
+      gradientShift 10s ease-in-out infinite;
+
+    /* iOS safe areas */
+    padding-inline-start: env(safe-area-inset-left, 0);
+    padding-inline-end: env(safe-area-inset-right, 0);
+
+    /* Container queries for embedded use */
+    container-type: inline-size;
+
+    /* Anchor offset if something links into the banner */
+    scroll-margin-block-start: 8px;
+
+    /* Never let horizontal text overflow */
+    overflow-wrap: anywhere;
   }
 
+  /* Fallback when backdrop-filter is unsupported */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .announcement-banner {
+      background: linear-gradient(90deg,
+          rgba(37, 99, 235, 0.16) 0%,
+          rgba(8, 145, 178, 0.14) 50%,
+          rgba(139, 92, 246, 0.14) 100%);
+    }
+  }
+
+  /* Modern entrance: @starting-style (progressive enhancement) */
+  @supports (transition-behavior: allow-discrete) {
+    @starting-style {
+      .announcement-banner {
+        opacity: 0;
+        transform: translateY(-100%);
+      }
+    }
+  }
+
+  /* Pause gradient while user hovers/reads */
+  .announcement-banner:hover {
+    animation-play-state: paused, paused;
+  }
+
+  /* Whole-banner focus glow */
+  .announcement-banner:focus-within {
+    box-shadow:
+      var(--banner-shadow),
+      0 0 0 2px color-mix(in srgb, var(--primary) 40%, transparent);
+  }
+
+  /* ============================================
+     Dark theme
+     ============================================ */
   [data-theme="dark"] .announcement-banner {
-    background: linear-gradient(90deg, rgba(37, 99, 235, 0.2) 0%, rgba(8, 145, 178, 0.18) 50%, rgba(139, 92, 246, 0.18) 100%);
-    border-bottom-color: rgba(59, 130, 246, 0.25);
+    --banner-bg-start: rgba(37, 99, 235, 0.2);
+    --banner-bg-mid: rgba(8, 145, 178, 0.18);
+    --banner-bg-end: rgba(139, 92, 246, 0.18);
+    --banner-border: rgba(59, 130, 246, 0.25);
+    --banner-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
   }
 
+  /* color-mix progressive enhancement for dark theme */
+  @supports (color: color-mix(in srgb, red, blue)) {
+    [data-theme="dark"] .announcement-banner {
+      background: linear-gradient(90deg,
+          color-mix(in srgb, var(--primary) 22%, transparent) 0%,
+          color-mix(in srgb, var(--secondary) 20%, transparent) 50%,
+          color-mix(in srgb, var(--primary) 20%, transparent) 100%);
+      border-block-end-color: color-mix(in srgb, var(--primary) 28%, transparent);
+    }
+  }
+
+  /* ============================================
+     Inner layout
+     ============================================ */
   .announcement-inner {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    padding: 10px 24px;
+    padding-block: 10px;
+    padding-inline: 24px;
     text-align: center;
     flex-wrap: wrap;
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
+    min-height: 24px;
+    overscroll-behavior: contain;
   }
 
+  /* ============================================
+     Pill — pulse + shimmer
+     ============================================ */
   .announcement-pill {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
@@ -43,16 +172,54 @@
     font-weight: 800;
     letter-spacing: 0.8px;
     padding: 3px 9px;
-    border-radius: 20px;
+    border-radius: var(--banner-radius);
     text-transform: uppercase;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    animation: pillPulse 2.4s ease-in-out infinite;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
   }
 
+  /* Shimmer sheen sweeping across the pill */
+  .announcement-pill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.35) 50%,
+        transparent 70%);
+    transform: translateX(var(--banner-sheen-pos));
+    animation: pillShimmer 3.6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* ============================================
+     Message
+     ============================================ */
   .announcement-message {
     color: var(--text);
     font-weight: 500;
+    line-height: 1.4;
+    min-width: 0;
+    /* allow flex shrink */
+    text-wrap: pretty;
   }
 
+  /* Modern balance when supported */
+  @supports (text-wrap: balance) {
+    .announcement-message {
+      text-wrap: balance;
+    }
+  }
+
+  /* ============================================
+     CTA link
+     ============================================ */
   .announcement-cta {
     color: var(--primary);
     font-weight: 700;
@@ -60,7 +227,35 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    transition: transform 0.2s ease, color 0.2s ease;
+    position: relative;
+    flex-shrink: 0;
+    transition:
+      transform 0.2s ease,
+      color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Direction-aware animated underline */
+  .announcement-cta::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -2px;
+    block-size: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s var(--banner-ease);
+    border-radius: 2px;
+  }
+
+  [dir="rtl"] .announcement-cta::after {
+    transform-origin: right;
+  }
+
+  .announcement-cta:hover::after,
+  .announcement-cta:focus-visible::after {
+    transform: scaleX(1);
   }
 
   .announcement-cta:hover {
@@ -68,9 +263,22 @@
     transform: translateX(3px);
   }
 
+  [dir="rtl"] .announcement-cta:hover {
+    transform: translateX(-3px);
+  }
+
+  .announcement-cta:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ============================================
+     Close button
+     ============================================ */
   .announcement-close {
     position: absolute;
-    right: 14px;
+    inset-inline-end: 14px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
@@ -84,26 +292,354 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition-fast);
+    min-inline-size: var(--banner-close-size);
+    min-block-size: var(--banner-close-size);
+    transition:
+      color 0.2s ease,
+      background 0.2s ease,
+      transform 0.2s var(--banner-ease);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    user-select: none;
   }
 
   .announcement-close:hover {
     color: var(--text);
     background: rgba(0, 0, 0, 0.08);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .announcement-close:active {
+    transform: translateY(-50%) scale(0.94);
   }
 
   [data-theme="dark"] .announcement-close:hover {
     background: rgba(255, 255, 255, 0.12);
   }
 
-  .announcement-banner.dismissed {
-    transform: translateY(-100%);
-    opacity: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    border: none;
+  .announcement-close:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 50%;
   }
 
+  /* ============================================
+     Dismissed state
+     Fully animated, focusable elements removed
+     from tab order via visibility, clicks ignored
+     ============================================ */
+  .announcement-banner.dismissed {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-100%);
+    border-block-end-width: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    pointer-events: none;
+    visibility: hidden;
+    animation: none;
+    will-change: auto;
+    contain: strict;
+    /* Defer visibility change until collapse finishes */
+    transition:
+      max-height var(--banner-duration) var(--banner-ease),
+      opacity 0.25s ease,
+      transform var(--banner-duration) var(--banner-ease),
+      border-block-end-width var(--banner-duration) var(--banner-ease),
+      box-shadow var(--banner-duration) var(--banner-ease),
+      visibility 0s linear var(--banner-duration);
+  }
+
+  /* ============================================
+     Responsive
+     ============================================ */
+  @media (max-width: 640px) {
+    .announcement-inner {
+      padding-block: 8px;
+      padding-inline: 14px 40px;
+      gap: 6px;
+      font-size: 12.5px;
+    }
+
+    .announcement-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      letter-spacing: 0.6px;
+    }
+
+    .announcement-message,
+    .announcement-cta {
+      font-size: 12.5px;
+    }
+
+    .announcement-cta {
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .announcement-inner {
+      flex-direction: column;
+      gap: 4px;
+      padding-block: 10px;
+      padding-inline: 12px 40px;
+    }
+
+    .announcement-message {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      hyphens: auto;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .announcement-inner {
+      font-size: 12px;
+    }
+
+    .announcement-pill {
+      letter-spacing: 0.4px;
+    }
+  }
+
+  /* Short viewports (landscape phones) — compact */
+  @media (max-height: 480px) and (orientation: landscape) {
+    .announcement-inner {
+      padding-block: 6px;
+    }
+
+    .announcement-pill {
+      font-size: 10px;
+    }
+  }
+
+  /* Container query for embedded banners */
+  @container (max-width: 500px) {
+    .announcement-inner {
+      flex-direction: column;
+    }
+  }
+
+  /* ============================================
+     Touch / hover differentiation
+     ============================================ */
+  @media (hover: none) and (pointer: coarse) {
+    .announcement-close {
+      min-inline-size: 44px;
+      min-block-size: 44px;
+      inset-inline-end: 6px;
+    }
+
+    .announcement-cta {
+      padding-block: 6px;
+      padding-inline: 4px;
+    }
+
+    .announcement-cta:hover {
+      transform: none;
+      color: var(--primary);
+    }
+
+    .announcement-banner:hover {
+      animation-play-state: running, running;
+    }
+
+    .announcement-close:hover {
+      background: transparent;
+      color: var(--muted);
+      transform: translateY(-50%);
+    }
+  }
+
+  /* ============================================
+     Accessibility & user preferences
+     ============================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .announcement-banner {
+      animation: none;
+      transition:
+        opacity 0.01ms linear,
+        max-height 0.01ms linear,
+        transform 0.01ms linear,
+        visibility 0s;
+    }
+
+    .announcement-pill,
+    .announcement-pill::after {
+      animation: none;
+    }
+
+    .announcement-cta,
+    .announcement-close {
+      transition: none;
+    }
+
+    .announcement-cta:hover {
+      transform: none;
+    }
+
+    .announcement-close:hover,
+    .announcement-close:active {
+      transform: translateY(-50%);
+    }
+  }
+
+  /* E-ink / slow-refresh displays */
+  @media (update: slow) {
+
+    .announcement-banner,
+    .announcement-pill,
+    .announcement-pill::after {
+      animation: none;
+    }
+
+    .announcement-banner {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
+
+  /* Data-saver preference */
+  @media (prefers-reduced-data: reduce) {
+    .announcement-banner {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .announcement-pill,
+    .announcement-pill::after {
+      animation: none;
+    }
+  }
+
+  /* High contrast preference */
+  @media (prefers-contrast: more) {
+    .announcement-banner {
+      border-block-end-width: 2px;
+      border-block-end-color: currentColor;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .announcement-pill {
+      border: 1px solid currentColor;
+    }
+
+    .announcement-cta {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  /* Windows High Contrast / Forced Colors */
+  @media (forced-colors: active) {
+    .announcement-banner {
+      border-block-end: 2px solid ButtonText;
+      background: Canvas;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    .announcement-pill {
+      border: 1px solid ButtonText;
+      background: Highlight;
+      color: HighlightText;
+      animation: none;
+      text-shadow: none;
+    }
+
+    .announcement-pill::after {
+      display: none;
+    }
+
+    .announcement-cta {
+      color: LinkText;
+      forced-color-adjust: none;
+    }
+
+    .announcement-close {
+      color: ButtonText;
+    }
+  }
+
+  /* ============================================
+     Print — never print the banner
+     ============================================ */
+  @media print {
+    .announcement-banner {
+      display: none !important;
+    }
+  }
+
+  /* ============================================
+     Selection color inside banner only
+     ============================================ */
+  .announcement-banner ::selection {
+    background: color-mix(in srgb, var(--primary) 30%, transparent);
+    color: var(--text);
+  }
+
+  /* ============================================
+     Animations
+     ============================================ */
+  @keyframes bannerSlideIn {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes gradientShift {
+
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes pillPulse {
+
+    0%,
+    100% {
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+
+    50% {
+      box-shadow: 0 2px 14px rgba(37, 99, 235, 0.55);
+    }
+  }
+
+  @keyframes pillShimmer {
+
+    0%,
+    60% {
+      --banner-sheen-pos: -120%;
+    }
+
+    100% {
+      --banner-sheen-pos: 120%;
+    }
+  }
+
+  /* Fallback for browsers without @property support */
+  @supports not (background: paint(x)) {
+    .announcement-pill::after {
+      transform: translateX(-120%);
+    }
+  }
 }

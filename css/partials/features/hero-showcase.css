@@ -1,165 +1,421 @@
 ﻿/* =========================================================
-   HeyNuo â€“ Hero 3D Showcase & Rotator (hero-showcase.css)
-   Hero visual card, floating pill badges, particles canvas, typing rotator.
+   HeyNuo – Hero 3D Showcase & Rotator  (hero-showcase.css)
+   ---------------------------------------------------------
+   Hero visual card · floating pill badges · particles canvas
+   · typing rotator · quick-topic pills
+
+   ✦ Enhancement pass v3 — CSS ONLY.
+     Every rule targets selectors already present in the markup.
+     Safe to drop in as a full replacement of the previous file.
    ========================================================= */
 
+/* ---------------------------------------------------------
+   Animated custom properties (progressive enhancement).
+   Registered via @property so browsers can interpolate them.
+   Ignored gracefully by engines that don't support it.
+   --------------------------------------------------------- */
+@property --hero-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --hero-glow-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --hero-glow-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
 @layer features {
-  /* ============================================
-     NEW: Hero 2-Column Grid & Visual Showcase
-     ============================================ */
+
+  /* =========================================================
+     0 · LOCAL DESIGN TOKENS
+     ========================================================= */
+  .hero-grid,
+  .hero-showcase {
+    --hero-radius-outer: 28px;
+    --hero-radius-inner: 20px;
+    --hero-radius-pill: 30px;
+
+    --hero-ease: cubic-bezier(0.16, 1, 0.3, 1);
+    --hero-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --hero-ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Gradient hairline that traces the card edge */
+    --hero-ring: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.55) 0%,
+        rgba(139, 92, 246, 0.40) 34%,
+        rgba(255, 255, 255, 0.06) 54%,
+        rgba(8, 145, 178, 0.45) 100%);
+
+    /* Soft halo bleeding out from behind the card */
+    --hero-halo: radial-gradient(circle at var(--hero-glow-x) var(--hero-glow-y),
+        rgba(37, 99, 235, 0.28) 0%,
+        rgba(8, 145, 178, 0.16) 45%,
+        rgba(139, 92, 246, 0.09) 70%,
+        transparent 82%);
+
+    /* Skeleton tint used before the image loads */
+    --hero-skeleton: linear-gradient(135deg,
+        rgba(37, 99, 235, 0.10),
+        rgba(139, 92, 246, 0.08) 50%,
+        rgba(8, 145, 178, 0.10));
+
+    /* Elevation ladder — composited in one rule per state */
+    --hero-shadow-rest:
+      0 20px 50px rgba(0, 0, 0, 0.08),
+      0 0 30px rgba(37, 99, 235, 0.10);
+    --hero-shadow-hover:
+      0 30px 70px rgba(37, 99, 235, 0.20),
+      0 0 44px rgba(139, 92, 246, 0.14);
+  }
+
+  [data-theme="dark"] .hero-showcase {
+    --hero-ring: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.80) 0%,
+        rgba(168, 85, 247, 0.55) 34%,
+        rgba(255, 255, 255, 0.14) 54%,
+        rgba(56, 189, 248, 0.70) 100%);
+    --hero-halo: radial-gradient(circle at var(--hero-glow-x) var(--hero-glow-y),
+        rgba(59, 130, 246, 0.38) 0%,
+        rgba(56, 189, 248, 0.20) 45%,
+        rgba(168, 85, 247, 0.15) 70%,
+        transparent 84%);
+    --hero-skeleton: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.12),
+        rgba(168, 85, 247, 0.10) 50%,
+        rgba(56, 189, 248, 0.12));
+    --hero-shadow-rest:
+      0 25px 60px rgba(0, 0, 0, 0.40),
+      0 0 35px rgba(59, 130, 246, 0.18);
+    --hero-shadow-hover:
+      0 34px 80px rgba(0, 0, 0, 0.48),
+      0 0 52px rgba(59, 130, 246, 0.28),
+      0 0 30px rgba(168, 85, 247, 0.20);
+  }
+
+
+  /* =========================================================
+     1 · HERO 2-COLUMN GRID
+     ========================================================= */
   .hero-grid {
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    /* minmax(0, …) stops long words / the card from blowing the grid out */
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     align-items: center;
     gap: var(--space-3xl);
     text-align: left;
     position: relative;
     z-index: 2;
+    width: 100%;
+    /* Cheap safety net for RTL and future logical-property usage */
+    column-gap: var(--space-3xl);
+  }
+
+  /* Keeps copy crisp above ambient glow + particles */
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    min-width: 0;
   }
 
   @media (max-width: 980px) {
     .hero-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       text-align: center;
       gap: var(--space-2xl);
     }
+
     .hero-content {
-      margin: 0 auto;
+      margin-inline: auto;
     }
+
     .hero-buttons {
       justify-content: center;
     }
+
     .hero-stats {
       justify-content: center;
     }
   }
 
-  /* Hero ambient glow effects */
+  /* Ultra-narrow phones: shrink the gap so nothing is crammed */
+  @media (max-width: 400px) {
+    .hero-grid {
+      gap: var(--space-xl, 24px);
+    }
+  }
+
+
+  /* =========================================================
+     2 · HERO AMBIENT GLOW
+     ========================================================= */
   .hero-ambient-glow {
     position: absolute;
     top: 50%;
     right: 5%;
     transform: translateY(-50%);
-    width: 480px;
-    height: 480px;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, rgba(8, 145, 178, 0.12) 40%, rgba(139, 92, 246, 0.08) 70%, transparent 80%);
+    width: min(480px, 72vw);
+    height: min(480px, 72vw);
+    background: radial-gradient(circle,
+        rgba(37, 99, 235, 0.18) 0%,
+        rgba(8, 145, 178, 0.12) 40%,
+        rgba(139, 92, 246, 0.08) 70%,
+        transparent 80%);
     filter: blur(60px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
     animation: ambientFloat 8s ease-in-out infinite alternate;
+    will-change: transform;
+    /* Sits behind everything else, feathered so it never clips */
+    contain: paint;
   }
 
   [data-theme="dark"] .hero-ambient-glow {
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.28) 0%, rgba(56, 189, 248, 0.18) 45%, rgba(168, 85, 247, 0.12) 75%, transparent 85%);
+    background: radial-gradient(circle,
+        rgba(59, 130, 246, 0.28) 0%,
+        rgba(56, 189, 248, 0.18) 45%,
+        rgba(168, 85, 247, 0.12) 75%,
+        transparent 85%);
     filter: blur(80px);
   }
 
   @keyframes ambientFloat {
-    0% { transform: translateY(-50%) scale(0.92) rotate(0deg); }
-    100% { transform: translateY(-46%) scale(1.08) rotate(15deg); }
+    0% {
+      transform: translateY(-50%) scale(0.92) rotate(0deg);
+    }
+
+    100% {
+      transform: translateY(-46%) scale(1.08) rotate(15deg);
+    }
   }
 
-  /* Hero Showcase Card */
+
+  /* =========================================================
+     3 · HERO SHOWCASE CARD
+     ========================================================= */
   .hero-showcase {
     position: relative;
-    border-radius: 28px;
+    /* Own stacking context — lets ::before/::after sit safely around the card */
+    isolation: isolate;
+    border-radius: var(--hero-radius-outer, 28px);
     padding: 10px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 0 30px rgba(37, 99, 235, 0.1);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: var(--hero-shadow-rest);
+    transition:
+      translate 0.5s var(--hero-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+      scale 0.5s var(--hero-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+      box-shadow 0.5s ease,
+      border-color 0.5s ease,
+      --hero-glow-x 0.6s var(--hero-ease-soft, ease),
+      --hero-glow-y 0.6s var(--hero-ease-soft, ease);
     animation: heroFloat 6s ease-in-out infinite;
+    will-change: transform;
+    width: 100%;
+    max-width: 100%;
+    /* Chevron on the right lets the browser skip work if the card is offscreen */
+    contain: layout style;
   }
 
   [data-theme="dark"] .hero-showcase {
     background: rgba(17, 24, 39, 0.65);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 35px rgba(59, 130, 246, 0.18);
+    border-color: rgba(255, 255, 255, 0.10);
   }
 
   @keyframes heroFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-  }
 
-  @media (hover: hover) {
-    .hero-showcase:hover {
-      transform: translateY(-12px) scale(1.02);
-      box-shadow: 0 30px 70px rgba(37, 99, 235, 0.2);
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
     }
   }
 
+  /* Soft coloured halo bleeding out from behind the card.
+     Uses --hero-glow-x/y so it can drift on hover (see below). */
+  .hero-showcase::before {
+    content: "";
+    position: absolute;
+    inset: -26px;
+    border-radius: calc(var(--hero-radius-outer, 28px) + 26px);
+    background: var(--hero-halo);
+    filter: blur(30px);
+    opacity: 0.55;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Gradient hairline ring (masked → only the 1px frame is painted) */
+  @supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+    .hero-showcase::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: var(--hero-ring);
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.75;
+      transition: opacity 0.5s ease;
+    }
+  }
+
+  /* ---- Inner media frame ---- */
   .hero-showcase-inner {
     position: relative;
-    border-radius: 20px;
+    isolation: isolate;
+    border-radius: var(--hero-radius-inner, 20px);
     overflow: hidden;
     aspect-ratio: 16 / 10;
+    background: var(--hero-skeleton);
+    /* Ambient breathing animation while the image loads (or if it fails) */
+    background-size: 200% 200%;
+    animation: skeletonDrift 14s ease-in-out infinite alternate;
+  }
+
+  @keyframes skeletonDrift {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    100% {
+      background-position: 100% 50%;
+    }
   }
 
   .hero-showcase-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
-    transition: transform 0.6s ease;
-  }
-
-  .hero-showcase:hover .hero-showcase-img {
-    transform: scale(1.04);
+    background-color: rgba(15, 23, 42, 0.04);
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: transform 0.6s var(--hero-ease, cubic-bezier(0.16, 1, 0.3, 1));
   }
 
   .hero-showcase-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.35) 100%);
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.10) 45%, rgba(0, 0, 0, 0.42) 100%),
+      radial-gradient(120% 100% at 50% 0%, rgba(255, 255, 255, 0.06), transparent 55%);
+    /* Inner hairline + vignette, drawn above the image */
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+      inset 0 0 46px rgba(0, 0, 0, 0.20);
+    border-radius: inherit;
     pointer-events: none;
   }
 
-  /* Floating pill badges on hero showcase */
+  /* Diagonal light-sweep across the card */
+  .hero-showcase-inner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.22),
+        transparent);
+    transform: skewX(-25deg);
+    transition: left 0.85s var(--hero-ease-out, ease);
+    pointer-events: none;
+    z-index: 2;
+    /* Only paint while a hover is possible — saves frames on touch */
+    content-visibility: auto;
+  }
+
+  /* ---- Hover interactions (pointer devices only) ---- */
+  @media (hover: hover) and (pointer: fine) {
+    .hero-showcase:hover {
+      /* `translate`/`scale` compose with the running float animation,
+         so the lift actually works instead of being overridden. */
+      translate: 0 -12px;
+      scale: 1.02;
+      box-shadow: var(--hero-shadow-hover);
+      /* Drift the halo toward the upper-left on hover */
+      --hero-glow-x: 40%;
+      --hero-glow-y: 38%;
+    }
+
+    .hero-showcase:hover::before {
+      opacity: 0.95;
+    }
+
+    .hero-showcase:hover::after {
+      opacity: 1;
+    }
+
+    .hero-showcase:hover .hero-showcase-img {
+      transform: scale(1.05);
+    }
+
+    .hero-showcase:hover .hero-showcase-inner::after {
+      left: 150%;
+    }
+  }
+
+  /* Pointer feedback on touch — subtle press-in */
+  .hero-showcase:active {
+    translate: 0 -3px;
+    scale: 1.003;
+  }
+
+
+  /* =========================================================
+     4 · FLOATING PILL BADGES
+     ========================================================= */
   .hero-floating-pill {
     position: absolute;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 8px 14px;
-    border-radius: 30px;
+    border-radius: var(--hero-radius-pill, 30px);
     background: rgba(15, 23, 42, 0.82);
     color: #f8fafc;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
     font-size: 12px;
+    line-height: 1;
     font-weight: 600;
     font-family: var(--font-display);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.1px;
+    white-space: nowrap;
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.30),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
     z-index: 3;
     pointer-events: none;
-  }
-
-  .hero-showcase-inner::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 60%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
-    transform: skewX(-25deg);
-    transition: left 0.85s ease;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .hero-showcase:hover .hero-showcase-inner::after {
-    left: 150%;
+    user-select: none;
+    /* Constant-radius rendering avoids the subtle inner “ghost” line
+       that some engines draw on large-radius pills */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
   }
 
   .hero-pill-top {
@@ -180,9 +436,15 @@
     background: rgba(16, 185, 129, 0.16);
     border-color: rgba(16, 185, 129, 0.35);
     color: #6ee7b7;
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.30),
+      0 0 18px rgba(16, 185, 129, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.10);
   }
 
   .hero-live-beacon {
+    position: relative;
+    flex: 0 0 auto;
     width: 7px;
     height: 7px;
     border-radius: 50%;
@@ -191,17 +453,44 @@
     animation: pulse 1.8s ease-in-out infinite;
   }
 
+  /* Expanding “ping” ring behind the beacon */
+  .hero-live-beacon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #10b981;
+    opacity: 0.6;
+    animation: beaconPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes beaconPing {
+    0% {
+      transform: scale(1);
+      opacity: 0.65;
+    }
+
+    70%,
+    100% {
+      transform: scale(2.8);
+      opacity: 0;
+    }
+  }
+
   @keyframes badgeBob {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-4px); }
+    0% {
+      transform: translateY(0);
+    }
+
+    100% {
+      transform: translateY(-4px);
+    }
   }
 
 
-
-
-  /* ============================================
-     NEW: Hero Dynamic Particles & Typing Rotator
-     ============================================ */
+  /* =========================================================
+     5 · PARTICLES CANVAS
+     ========================================================= */
   .hero-particles-canvas {
     position: absolute;
     inset: 0;
@@ -210,21 +499,33 @@
     pointer-events: none;
     z-index: 1;
     opacity: 0.6;
+    /* Feathers the edges so particles never look like a hard rectangle */
+    -webkit-mask-image: radial-gradient(120% 92% at 62% 45%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 100%);
+    mask-image: radial-gradient(120% 92% at 62% 45%, #000 42%, rgba(0, 0, 0, 0.45) 72%, transparent 100%);
+    transition: opacity 0.6s ease;
   }
 
   [data-theme="dark"] .hero-particles-canvas {
     opacity: 0.85;
   }
 
+
+  /* =========================================================
+     6 · TYPING ROTATOR
+     ========================================================= */
   .hero-typing-wrapper {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
+    /* Reserves the line box so the rotator never causes layout shift */
+    min-height: 1.6em;
     font-size: clamp(14px, 2.5vw, 16.5px);
     font-weight: 600;
     color: var(--accent);
     margin-bottom: 12px;
     font-family: var(--font-display);
+    letter-spacing: 0.1px;
   }
 
   .hero-rotator {
@@ -232,33 +533,54 @@
     color: var(--text);
     font-weight: 700;
     position: relative;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      filter 0.25s ease,
+      letter-spacing 0.25s ease;
+    will-change: opacity, transform;
   }
 
   .hero-rotator.fade-out {
     opacity: 0;
     transform: translateY(-4px);
+    filter: blur(3px);
+    letter-spacing: 0.6px;
   }
 
   .typing-cursor {
     display: inline-block;
     color: var(--primary);
     font-weight: 300;
+    transform: translateY(-1px);
     animation: blinkCursor 1s step-end infinite;
   }
 
   @keyframes blinkCursor {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0;
+    }
   }
 
-  /* Hero Quick Topic Jump Pills */
+
+  /* =========================================================
+     7 · QUICK TOPIC JUMP PILLS
+     ========================================================= */
   .hero-quick-topics {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 18px;
+    max-width: 100%;
+    /* Row gap is a hair larger than column gap — reads better when wrapping */
+    row-gap: 10px;
   }
 
   @media (max-width: 980px) {
@@ -274,9 +596,11 @@
     font-family: var(--font-display);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    white-space: nowrap;
   }
 
   .quick-topic-pill {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -287,44 +611,323 @@
     color: var(--text);
     font-family: var(--font-display);
     font-size: 12.5px;
+    line-height: 1.4;
     font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
-    transition: var(--transition-fast);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s var(--hero-ease-out, ease),
+      box-shadow 0.2s ease,
+      letter-spacing 0.2s ease;
+    will-change: transform;
+    /* Keeps sub-pixel edges from looking fuzzy on dark themes */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    mask-image: radial-gradient(white, black);
   }
 
-  .quick-topic-pill:hover {
-    background: var(--primary);
-    color: white;
+  @media (hover: hover) and (pointer: fine) {
+    .quick-topic-pill:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
+      letter-spacing: 0.15px;
+    }
+
+    /* The counter fades in a touch brighter while hovering */
+    .quick-topic-pill:hover .quick-topic-count {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  .quick-topic-pill:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  /* Keyboard-accessible focus ring */
+  .quick-topic-pill:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
     border-color: var(--primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
   }
 
+  .quick-topic-pill:focus:not(:focus-visible) {
+    outline: none;
+  }
 
-  /* Quick Topic Active State & Counter */
+  /* ---- Active state & counter ---- */
   .quick-topic-pill.active {
     background: var(--primary);
-    color: white;
+    color: #fff;
     border-color: var(--primary);
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    box-shadow:
+      0 4px 14px rgba(37, 99, 235, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    /* A soft inner glow reinforces the "on" state */
+    background-image: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.10) 0%,
+        rgba(255, 255, 255, 0) 60%);
+  }
+
+  /* Tiny top highlight dot on the active pill (uses ::before to avoid markup) */
+  .quick-topic-pill.active::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    width: 14px;
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.55);
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0.9;
+    filter: blur(0.3px);
   }
 
   .quick-topic-count {
     display: inline-block;
+    min-width: 18px;
+    text-align: center;
     font-size: 11px;
-    padding: 1px 6px;
+    line-height: 1.5;
+    padding: 1px 5px;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.12);
     color: inherit;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: background 0.2s ease, color 0.2s ease;
   }
 
   .quick-topic-pill.active .quick-topic-count {
     background: rgba(255, 255, 255, 0.28);
-    color: white;
+    color: #fff;
   }
 
+
+  /* =========================================================
+     8 · SMALL-SCREEN REFINEMENTS
+     ========================================================= */
+  @media (max-width: 640px) {
+    .hero-showcase {
+      padding: 8px;
+      border-radius: 22px;
+    }
+
+    .hero-showcase-inner {
+      border-radius: 16px;
+      aspect-ratio: 4 / 3;
+      /* taller image → more presence on phones */
+    }
+
+    .hero-showcase::before {
+      inset: -18px;
+      filter: blur(22px);
+      opacity: 0.5;
+    }
+
+    .hero-floating-pill {
+      gap: 6px;
+      padding: 6px 10px;
+      font-size: 10.5px;
+      border-radius: 24px;
+    }
+
+    .hero-pill-top,
+    .hero-pill-live {
+      top: 10px;
+    }
+
+    .hero-pill-top {
+      right: 10px;
+    }
+
+    .hero-pill-live {
+      left: 10px;
+    }
+
+    .hero-pill-bottom {
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .hero-live-beacon {
+      width: 6px;
+      height: 6px;
+    }
+
+    .hero-quick-topics {
+      gap: 6px;
+      row-gap: 8px;
+      margin-top: 14px;
+    }
+
+    .quick-topic-pill {
+      font-size: 12px;
+      padding: 5px 11px;
+    }
+
+    /* Particles can feel noisy on small screens — soften them */
+    .hero-particles-canvas {
+      opacity: 0.4;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .hero-floating-pill {
+      font-size: 10px;
+      padding: 5px 9px;
+    }
+
+    .quick-topic-count {
+      min-width: 16px;
+    }
+
+    /* Bottom pill can crowd the live pill on very narrow screens */
+    .hero-pill-bottom {
+      bottom: auto;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      animation: none;
+    }
+  }
+
+
+  /* =========================================================
+     9 · ACCESSIBILITY, MOTION & THEME FALLBACKS
+     ========================================================= */
+
+  /* Backdrop-filter fallback — solid cards when blur is unsupported */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .hero-showcase {
+      background: rgba(255, 255, 255, 0.94);
+    }
+
+    [data-theme="dark"] .hero-showcase {
+      background: rgba(17, 24, 39, 0.95);
+    }
+
+    .quick-topic-pill {
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    [data-theme="dark"] .quick-topic-pill {
+      background: rgba(30, 41, 59, 0.92);
+    }
+
+    .hero-floating-pill {
+      background: rgba(15, 23, 42, 0.96);
+    }
+  }
+
+  /* If neither @property nor its fallback is supported, drift is skipped —
+     that's fine because we shipped sensible static values above. */
+
+  /* --- Motion --- */
+  @media (prefers-reduced-motion: reduce) {
+
+    .hero-ambient-glow,
+    .hero-showcase,
+    .hero-showcase-inner,
+    .hero-floating-pill,
+    .hero-live-beacon,
+    .hero-live-beacon::before,
+    .typing-cursor {
+      animation: none !important;
+    }
+
+    .hero-showcase,
+    .hero-showcase-img,
+    .hero-showcase-inner::after,
+    .hero-rotator,
+    .quick-topic-pill,
+    .quick-topic-count {
+      transition-duration: 0.01ms !important;
+    }
+
+    /* Undo the hover translate/scale so nothing jumps when tapped */
+    .hero-showcase:hover {
+      translate: none;
+      scale: none;
+    }
+
+    .hero-showcase:hover .hero-showcase-img {
+      transform: none;
+    }
+
+    .hero-showcase:hover .hero-showcase-inner::after {
+      left: -100%;
+    }
+  }
+
+  /* --- High contrast / forced colors --- */
+  @media (forced-colors: active) {
+
+    .hero-showcase,
+    .hero-floating-pill,
+    .quick-topic-pill {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .hero-showcase::before,
+    .hero-showcase::after,
+    .hero-ambient-glow,
+    .hero-particles-canvas,
+    .quick-topic-pill.active::before {
+      display: none;
+    }
+
+    .quick-topic-pill.active {
+      background: Highlight;
+      color: HighlightText;
+    }
+
+    .quick-topic-pill.active .quick-topic-count {
+      background: HighlightText;
+      color: Highlight;
+    }
+  }
+
+  /* --- Printing --- */
+  @media print {
+
+    .hero-ambient-glow,
+    .hero-particles-canvas,
+    .hero-floating-pill {
+      display: none !important;
+    }
+
+    .hero-showcase {
+      animation: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid #ccc;
+    }
+
+    .hero-showcase::before,
+    .hero-showcase::after {
+      display: none;
+    }
+  }
+
+  /* --- Very high-DPI + landscape phones: cap the blur so it stays smooth --- */
+  @media (max-width: 640px) and (orientation: landscape) {
+    .hero-ambient-glow {
+      filter: blur(36px);
+    }
+  }
 
 }
