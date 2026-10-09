@@ -158,16 +158,23 @@
       <div class="quran-tab-switcher" role="tablist" aria-label="Quran Sections">
         <a href="quran.html" class="quran-tab-btn" role="tab" aria-selected="false">📖 Full Quran (114 Surahs)</a>
         <a href="quran-verses.html" class="quran-tab-btn" role="tab" aria-selected="false">📜 108 Master Verses</a>
-        <a href="ruqyah.html" class="quran-tab-btn active" role="tab" aria-selected="true">🛡️ Ruqyah Healing Verses</a>
+        <a href="#ruqyahGrid" class="quran-tab-btn active" role="tab" aria-selected="true" aria-current="page">🛡️ Ruqyah Healing Verses</a>
         <a href="quran.html#pdf-downloads" class="quran-tab-btn" role="tab" aria-selected="false">📥 Quran PDF Downloads</a>
       </div>
 
       <!-- Live Stats Dashboard -->
-                  <div class="ruqyah-stats-dashboard" id="ruqyahStats" aria-label="Ruqyah statistics">
+      <div class="ruqyah-stats-dashboard" id="ruqyahStats" aria-label="Ruqyah statistics">
         <div class="ruqyah-stat-chip">&#128214; <strong>60</strong> Ruqyah Verses</div>
         <div class="ruqyah-stat-chip">&#127991;&#65039; <strong>9</strong> Categories</div>
         <div class="ruqyah-stat-chip">&#11088; <strong id="statFavCount">0</strong> Favorites</div>
         <div class="ruqyah-stat-chip">&#127897;&#65039; <strong id="statReciterName">Qari Muhammad Ashiq</strong></div>
+      </div>
+
+      <!-- Medical & Mental Health Notice -->
+      <div class="info-card" style="margin-top: 1.25rem; border-left: 4px solid var(--accent, #eab308); background: var(--glass-bg, rgba(255,255,255,0.04)); padding: 1rem 1.25rem; border-radius: var(--radius-md, 10px);">
+        <p style="margin: 0; font-size: 0.9rem; line-height: 1.55;">
+          <strong>🩺 Important Health &amp; Scholarly Notice:</strong> Quranic Ruqyah and prayer are spiritual acts of worship and supplication. They accompany, and never replace, professional medical treatment, clinical therapy, or psychiatric healthcare. Prophet Muhammad ﷺ explicitly commanded: <em>“Make use of medical treatment, for Allah has not created a disease without appointing a remedy for it”</em> (Abu Dawud). Core Prophetic remedies (e.g., Al-Fatihah, Ayat al-Kursi, Al-Mu'awwidhatayn) represent authentic Sunnah practice; other thematic passages are gathered for contemplation and Quranic reflection.
+        </p>
       </div>
     </section>
 
@@ -203,23 +210,23 @@
         </button>
       </div>
 
-                                          <div class="ruqyah-filter-strip" id="ruqyahFilters" aria-label="Ruqyah categories">
+      <div class="ruqyah-filter-strip" id="ruqyahFilters" aria-label="Ruqyah categories">
         <button type="button" class="ruqyah-filter-pill active" data-category="all"><span>&#10024; All</span> <span class="filter-count-badge">60</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Foundational"><span>Foundational</span> <span class="filter-count-badge">5</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Protection &amp; Silencing"><span>Protection &amp; Silencing</span> <span class="filter-count-badge">6</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Foundational"><span>Foundational</span> <span class="filter-count-badge">6</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Protection &amp; Silencing"><span>Protection &amp; Silencing</span> <span class="filter-count-badge">8</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="Subduing Enemies"><span>Subduing Enemies</span> <span class="filter-count-badge">5</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="Love &amp; Harmony"><span>Love &amp; Harmony</span> <span class="filter-count-badge">5</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Breaking Knots"><span>Breaking Knots</span> <span class="filter-count-badge">5</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Jinn Expulsion"><span>Jinn Expulsion</span> <span class="filter-count-badge">12</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Victory &amp; Authority"><span>Victory &amp; Authority</span> <span class="filter-count-badge">10</span></button>
-        <button type="button" class="ruqyah-filter-pill" data-category="Special Purposes"><span>Special Purposes</span> <span class="filter-count-badge">7</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Breaking Knots"><span>Breaking Knots</span> <span class="filter-count-badge">3</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Jinn Expulsion"><span>Jinn Expulsion</span> <span class="filter-count-badge">11</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Victory &amp; Authority"><span>Victory &amp; Authority</span> <span class="filter-count-badge">8</span></button>
+        <button type="button" class="ruqyah-filter-pill" data-category="Special Purposes"><span>Special Purposes</span> <span class="filter-count-badge">9</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="Spiritual Strength"><span>Spiritual Strength</span> <span class="filter-count-badge">5</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="favorites"><span>&#11088; Favorites</span> <span class="filter-count-badge">0</span></button>
       </div>
 
       <div class="results-info-bar">
         <span id="resultStats">Showing all <strong>60</strong> Ruqyah verses</span>
-        <span style="font-size:0.78rem;">Audio streams directly from Al-Islam Quran Cloud with EveryAyah fallback with EveryAyah fallback with EveryAyah fallback with EveryAyah fallback with EveryAyah fallback</span>
+        <span style="font-size:0.78rem;">Audio streams from Al-Islam Quran Cloud, with EveryAyah as a fallback.</span>
       </div>
     </section>
 
@@ -344,7 +351,7 @@
 
           <!-- Arabic Text Box -->
           <div class="arabic-box">
-            <div class="arabic-text" dir="rtl" lang="ar">ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَ��ِيمُ</div>
+            <div class="arabic-text" dir="rtl" lang="ar">ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ</div>
           </div>
 
           <!-- English Transliteration -->
@@ -824,7 +831,7 @@
           <!-- English Transliteration -->
           <div class="translit-box">
             <span class="translit-label">Transliteration (Pronunciation)</span>
-            <div class="translit-text">Haazaa yawmu laa uantiqoon</div>
+            <div class="translit-text">Haazaa yawmu laa yantiqoon</div>
           </div>
 
           <!-- English Translation -->
@@ -1271,7 +1278,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">At-Tariq (86:4)</h3>
+            <h3 class="card-reference">At-Tariq (86:4) — Protection Verse</h3>
           </div>
 
           <div class="card-purpose-callout">
@@ -1299,7 +1306,7 @@
           <div class="card-audio-player">
             <div class="player-main-row">
               <div class="player-left-group">
-                <button type="button" class="play-toggle-btn" data-action="play" data-id="14" aria-label="Play recitation of At-Tariq (86:4)">
+                <button type="button" class="play-toggle-btn" data-action="play" data-id="14" aria-label="Play recitation of At-Tariq (86:4) — Protection Verse">
                   &#9654;
                 </button>
                 <div class="player-track-info">
@@ -2904,7 +2911,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">As-Saffat (37:1–182)</h3>
+            <h3 class="card-reference">As-Saffat (37:1–10)</h3>
           </div>
 
           <div class="card-purpose-callout">
@@ -2934,7 +2941,7 @@
           <div class="card-audio-player">
             <div class="player-main-row">
               <div class="player-left-group">
-                <button type="button" class="play-toggle-btn" data-action="play" data-id="35" aria-label="Play recitation of As-Saffat (37:1–182)">
+                <button type="button" class="play-toggle-btn" data-action="play" data-id="35" aria-label="Play recitation of As-Saffat (37:1–10)">
                   &#9654;
                 </button>
                 <div class="player-track-info">
@@ -2987,7 +2994,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">An-Najm (53:1–62)</h3>
+            <h3 class="card-reference">An-Najm (53:1–5, 57–62)</h3>
           </div>
 
           <div class="card-purpose-callout">
@@ -3017,7 +3024,7 @@
           <div class="card-audio-player">
             <div class="player-main-row">
               <div class="player-left-group">
-                <button type="button" class="play-toggle-btn" data-action="play" data-id="36" aria-label="Play recitation of An-Najm (53:1–62)">
+                <button type="button" class="play-toggle-btn" data-action="play" data-id="36" aria-label="Play recitation of An-Najm (53:1–5, 57–62)">
                   &#9654;
                 </button>
                 <div class="player-track-info">
@@ -3070,7 +3077,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">Al-Qamar (54:1–55)</h3>
+            <h3 class="card-reference">Al-Qamar (54:1–5, 54–55)</h3>
           </div>
 
           <div class="card-purpose-callout">
@@ -3100,7 +3107,7 @@
           <div class="card-audio-player">
             <div class="player-main-row">
               <div class="player-left-group">
-                <button type="button" class="play-toggle-btn" data-action="play" data-id="37" aria-label="Play recitation of Al-Qamar (54:1–55)">
+                <button type="button" class="play-toggle-btn" data-action="play" data-id="37" aria-label="Play recitation of Al-Qamar (54:1–5, 54–55)">
                   &#9654;
                 </button>
                 <div class="player-track-info">
@@ -3153,7 +3160,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">At-Tariq (86:1–17)</h3>
+            <h3 class="card-reference">At-Tariq (86:1–17) — Complete Surah</h3>
           </div>
 
           <div class="card-purpose-callout">
@@ -3181,7 +3188,7 @@
           <div class="card-audio-player">
             <div class="player-main-row">
               <div class="player-left-group">
-                <button type="button" class="play-toggle-btn" data-action="play" data-id="38" aria-label="Play recitation of At-Tariq (86:1–17)">
+                <button type="button" class="play-toggle-btn" data-action="play" data-id="38" aria-label="Play recitation of At-Tariq (86:1–17) — Complete Surah">
                   &#9654;
                 </button>
                 <div class="player-track-info">
@@ -4179,7 +4186,7 @@
 
           <!-- Arabic Text Box -->
           <div class="arabic-box">
-            <div class="arabic-text" dir="rtl" lang="ar">۞ إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌۭ مِّنَ ٱلَّذِينَ مَعَكَ ۚ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ ۙ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِ��لِ ٱللَّهِ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا ۚ وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍۢ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًۭا وَأَعْظَمَ أَجْرًۭا ۚ وَٱسْتَغْفِرُوا۟ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۢ</div>
+            <div class="arabic-text" dir="rtl" lang="ar">۞ إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌۭ مِّنَ ٱلَّذِينَ مَعَكَ ۚ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ ۙ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا ۚ وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍۢ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًۭا وَأَعْظَمَ أَجْرًۭا ۚ وَٱسْتَغْفِرُوا۟ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۢ</div>
           </div>
 
           <!-- English Transliteration -->
@@ -5015,7 +5022,7 @@
               </span>
               <span class="footer-badge">
                 <span class="badge-icon-txt" aria-hidden="true">♿</span>
-                <span>WCAG 2.1 AAA</span>
+                <span>Targeting WCAG 2.1 AA</span>
               </span>
             </div>
             <div class="footer-social-row" aria-label="Social profiles">
@@ -5236,7 +5243,7 @@
             </div>
             <div class="shortcut-row">
               <span class="shortcut-desc">Sepia Comfort / Slate Night Mode</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Palette / Menu</kbd></span>
             </div>
           </div>
         </div>

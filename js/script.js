@@ -2674,7 +2674,19 @@ function initQuickTopicPills() {
   const pills = $.getAll('.quick-topic-pill');
   if (!pills.length) return;
 
+  // Dynamically sync counts from POSTS dataset
   pills.forEach(pill => {
+    const category = pill.dataset.category;
+    const countEl = pill.querySelector('.quick-topic-count');
+    if (countEl && typeof POSTS !== 'undefined') {
+      if (category === 'all') {
+        countEl.textContent = POSTS.length;
+      } else {
+        const matching = POSTS.filter(p => p.category && p.category.toLowerCase() === category.toLowerCase()).length;
+        countEl.textContent = matching;
+      }
+    }
+
     $.on(pill, 'click', () => {
       const category = pill.dataset.category;
       if (!category) return;

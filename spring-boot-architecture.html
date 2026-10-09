@@ -241,7 +241,7 @@ public record CreateOrderRequest(
     BigDecimal totalAmount,
 
     @NotEmpty(message = "Order must contain at least one item SKU")
-    List<String> itemSkus
+    List&lt;String&gt; itemSkus
 ) {}
 
 // 2. Controller Layer
@@ -255,7 +255,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody CreateOrderRequest request) {
+    public ResponseEntity&lt;OrderResponse&gt; placeOrder(@Valid @RequestBody CreateOrderRequest request) {
         OrderResponse response = orderService.processOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -314,13 +314,13 @@ public class GlobalExceptionHandler {
 
     // Catch Bean Validation errors (@Valid)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> fieldErrors = new HashMap<>();
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleValidationErrors(MethodArgumentNotValidException ex) {
+        Map&lt;String, String&gt; fieldErrors = new HashMap&lt;&gt;();
         ex.getBindingResult().getFieldErrors().forEach(err -> 
             fieldErrors.put(err.getField(), err.getDefaultMessage())
         );
 
-        Map<String, Object> body = Map.of(
+        Map&lt;String, Object&gt; body = Map.of(
             "timestamp", Instant.now(),
             "status", HttpStatus.BAD_REQUEST.value(),
             "error", "Validation Failed",
@@ -331,7 +331,7 @@ public class GlobalExceptionHandler {
 
     // Catch Domain Exceptions
     @ExceptionHandler(HighValueOrderReviewException.class)
-    public ResponseEntity<Map<String, Object>> handleHighValue(HighValueOrderReviewException ex) {
+    public ResponseEntity&lt;Map&lt;String, Object&gt;&gt; handleHighValue(HighValueOrderReviewException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(Map.of(
             "timestamp", Instant.now(),
             "status", 422,
@@ -359,11 +359,11 @@ HTTP/1.1 400 Bad Request
 
           <h2 id="hands-on-challenge">5. Hands-On Challenge: Idempotent Payment Processor</h2>
           <div class="info-card">
-            🎯 <strong>Challenge Prompt:</strong> Design a payment processing endpoint that prevents duplicate charge requests when a network glitch causes the mobile app to retry. Requirements:
+            🎯 <strong>Challenge Prompt:</strong> Design a payment processing service that prevents duplicate charges when network retries occur. Requirements:
             <ul>
-              <li>Extract an <code>Idempotency-Key</code> HTTP header using <code>@RequestHeader</code>.</li>
-              <li>Verify if the key has been processed in a distributed cache (e.g. Redis). If yes, return the previous response with <code>200 OK</code> immediately without re-charging.</li>
-              <li>If novel, execute the charge and record the key.</li>
+              <li>Extract an <code>Idempotency-Key</code> HTTP request header.</li>
+              <li>Atomically check and record the key to avoid race conditions during concurrent retries.</li>
+              <li><em>Production Note:</em> In distributed microservices, use Redis <code>SETNX</code> / <code>setIfAbsent()</code> with TTL. Below, we implement an atomic single-node in-memory solution using <code>ConcurrentHashMap.computeIfAbsent()</code>.</li>
             </ul>
           </div>
 
@@ -372,31 +372,26 @@ HTTP/1.1 400 Bad Request
               <span>☕ IdempotentPaymentService.java (Challenge Solution)</span>
               <div class="code-demo-tabs">
                 <button type="button" class="code-demo-tab active" data-view="code">Solution Code</button>
-                <button type="button" class="code-demo-tab" data-view="output">▶ Verified Execution</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
               </div>
             </div>
             <div class="code-demo-code">
               <pre><code class="language-java">@Service
 public class PaymentProcessingService {
-    private final ConcurrentMap<String, PaymentReceipt> idempotencyStore = new ConcurrentHashMap<>();
+    // Single-node demonstration store. (In multi-instance clusters, use Redis SETNX with TTL).
+    private final ConcurrentMap&lt;String, PaymentReceipt&gt; idempotencyStore = new ConcurrentHashMap&lt;&gt;();
 
     public PaymentReceipt processPayment(String idempotencyKey, PaymentRequest req) {
-        // Fast path: Idempotent replay protection
-        if (idempotencyStore.containsKey(idempotencyKey)) {
-            System.out.println("⚠️ Duplicate request detected for key: " + idempotencyKey);
-            return idempotencyStore.get(idempotencyKey);
-        }
-
-        // Execute payment gateway transaction
-        PaymentReceipt receipt = new PaymentReceipt(
-            "TX-" + UUID.randomUUID().toString().substring(0, 8),
-            req.amount(),
-            "SUCCESS",
-            Instant.now()
-        );
-
-        idempotencyStore.put(idempotencyKey, receipt);
-        return receipt;
+        // Atomic computeIfAbsent: executes charge logic once, even under concurrent retry races
+        return idempotencyStore.computeIfAbsent(idempotencyKey, key -> {
+            System.out.println("✓ Executing charge for novel key: " + key + " -> $" + req.amount());
+            return new PaymentReceipt(
+                "TX-" + UUID.randomUUID().toString().substring(0, 8),
+                req.amount(),
+                "SUCCESS",
+                Instant.now()
+            );
+        });
     }
 }
 
@@ -406,7 +401,7 @@ PaymentRequest req = new PaymentRequest(new BigDecimal("75.00"), "CARD-9012");
 String key = "req-uuid-9901-alpha";
 
 PaymentReceipt first = service.processPayment(key, req);
-PaymentReceipt second = service.processPayment(key, req); // Replay attack or retry
+PaymentReceipt second = service.processPayment(key, req); // Replay retry: returns cached instance
 
 System.out.println("First call TX ID:  " + first.transactionId());
 System.out.println("Second call TX ID: " + second.transactionId());
@@ -414,8 +409,7 @@ System.out.println("Instances identical: " + (first == second));</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
               <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
-✓ Executing charge for novel key: req-uuid-9901-alpha -> TX-7B32F190 ($75.00)
-⚠️ Duplicate request detected for key: req-uuid-9901-alpha
+✓ Executing charge for novel key: req-uuid-9901-alpha -> $75.00
 First call TX ID:  TX-7B32F190
 Second call TX ID: TX-7B32F190
 Instances identical: true
@@ -508,7 +502,7 @@ Instances identical: true
               </span>
               <span class="footer-badge">
                 <span class="badge-icon-txt" aria-hidden="true">♿</span>
-                <span>WCAG 2.1 AAA</span>
+                <span>Targeting WCAG 2.1 AA</span>
               </span>
             </div>
             <div class="footer-social-row" aria-label="Social profiles">
@@ -730,7 +724,7 @@ Instances identical: true
             </div>
             <div class="shortcut-row">
               <span class="shortcut-desc">Sepia Comfort / Slate Night Mode</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Palette / Menu</kbd></span>
             </div>
           </div>
         </div>

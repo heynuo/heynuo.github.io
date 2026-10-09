@@ -215,11 +215,9 @@ System.out.println("Balance: $" + acc.getBalance());
 // acc.balance = 500; // ❌ Compile Error: balance has private access in BankAccount</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
-              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
-$ javac BankAccount.java && java Main
-✓ Initialized account: id=BA-9021
-✓ Deposited: $250.00
-✓ Current balance via getter: $250.00
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java BankAccount
+Balance: $250.0
 [Encapsulation]: Direct field mutation blocked. State remains protected.
             </div>
           </div>
@@ -231,7 +229,7 @@ $ javac BankAccount.java && java Main
               <span>☕ VehicleInheritance.java</span>
               <div class="code-demo-tabs">
                 <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
-                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
               </div>
             </div>
             <div class="code-demo-code">
@@ -251,8 +249,8 @@ myCar.honk();
 myCar.drive();</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
-              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
-$ javac VehicleInheritance.java && java Main
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java VehicleInheritance
 Beep beep!
 Tesla is cruising with 4 wheels.
 [Inheritance]: Car accessed inherited 'brand' field and 'honk()' method seamlessly.
@@ -266,7 +264,7 @@ Tesla is cruising with 4 wheels.
               <span>☕ AnimalPolymorphism.java</span>
               <div class="code-demo-tabs">
                 <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
-                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
               </div>
             </div>
             <div class="code-demo-code">
@@ -276,7 +274,13 @@ Tesla is cruising with 4 wheels.
 
 class Cat extends Animal { 
     @Override 
-    void sound() { System.out.println("Meow! 🐱"); } 
+    void sound() { System.out.println("Meow! 🐱"); } // Method Overriding (Dynamic dispatch)
+
+    // Method Overloading (Compile-time polymorphism)
+    void sound(int repeat) {
+        for (int i = 0; i < repeat; i++) System.out.print("Meow! 🐱 ");
+        System.out.println();
+    }
 }
 
 class Dog extends Animal { 
@@ -287,15 +291,19 @@ class Dog extends Animal {
 // Execution:
 Animal a1 = new Cat();
 Animal a2 = new Dog();
-a1.sound(); // Dispatched to Cat.sound() at runtime
-a2.sound(); // Dispatched to Dog.sound() at runtime</code></pre>
+a1.sound(); // Runtime dynamic dispatch to Cat.sound()
+a2.sound(); // Runtime dynamic dispatch to Dog.sound()
+
+Cat myCat = new Cat();
+myCat.sound(2); // Compile-time method overloading invoked</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
-              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
-$ javac AnimalPolymorphism.java && java Main
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java AnimalPolymorphism
 Meow! 🐱
 Woof! 🐶
-[Dynamic Dispatch]: Virtual method table resolved specific subclasses via runtime polymorphism.
+Meow! 🐱 Meow! 🐱 
+[Polymorphism]: Dynamic method table resolved overriding; parameter signature resolved overloading.
             </div>
           </div>
 
@@ -306,13 +314,47 @@ Woof! 🐶
             🎯 <strong>Pro Tip:</strong> Always favor composition over inheritance when possible, and remember: “Program to an interface, not an implementation.” This keeps your code flexible.
           </div>
 
-          <h2 id="payroll-case-study">Real-World Example: Employee Payroll Management</h2>
+          <div class="code-demo-box">
+            <div class="code-demo-header">
+              <span>☕ PaymentContract.java (Interface Abstraction)</span>
+              <div class="code-demo-tabs">
+                <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
+              </div>
+            </div>
+            <div class="code-demo-code">
+              <pre><code class="language-java">// 1. Contract specification (What, not How)
+interface PaymentGateway {
+    void process(double amount);
+}
+
+// 2. Concrete implementation hidden from caller
+class StripeGateway implements PaymentGateway {
+    @Override
+    public void process(double amount) {
+        System.out.println("💳 Processed $" + amount + " securely via Stripe API");
+    }
+}
+
+// 3. Client code couples exclusively to interface contract
+PaymentGateway gateway = new StripeGateway();
+gateway.process(99.0);</code></pre>
+            </div>
+            <div class="code-demo-output" style="display: none;">
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java PaymentContract
+💳 Processed $99.0 securely via Stripe API
+[Abstraction]: Client code interacts exclusively with PaymentGateway contract without implementation coupling.
+            </div>
+          </div>
+
+          <h2 id="payroll-case-study">5. Enterprise Case Study: Polymorphic Payroll Service</h2>
           <div class="code-demo-box">
             <div class="code-demo-header">
               <span>☕ PayrollService.java</span>
               <div class="code-demo-tabs">
                 <button type="button" class="code-demo-tab active" data-view="code">Source Code</button>
-                <button type="button" class="code-demo-tab" data-view="output">▶ Run Output</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
               </div>
             </div>
             <div class="code-demo-code">
@@ -325,26 +367,27 @@ Woof! 🐶
 class FullTimeEmployee extends Employee {
     double baseSalary = 50000;
     FullTimeEmployee(String name) { super(name); }
+    @Override
     double calculateSalary() { return baseSalary; }
 }
 
 class InternEmployee extends Employee {
     double stipend = 15000;
     InternEmployee(String name) { super(name); }
+    @Override
     double calculateSalary() { return stipend; }
 }
 
 // Polymorphic Payroll Processing in Spring Boot:
-List<Employee> staff = List.of(new FullTimeEmployee("Sarah"), new InternEmployee("Alex"));
+List&lt;Employee&gt; staff = List.of(new FullTimeEmployee("Sarah"), new InternEmployee("Alex"));
 staff.forEach(e -> System.out.println(e.name + ": $" + e.calculateSalary()));</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
-              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
-$ javac PayrollService.java && java Main
-Processing Monthly Payroll Dispatch:
-✓ Sarah (FullTime): $50000.0
-✓ Alex (Intern):    $15000.0
-[Abstraction]: Payroll service interacts exclusively with the Employee abstraction.
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java PayrollService
+Sarah: $50000.0
+Alex: $15000.0
+[Abstraction &amp; Polymorphism]: Payroll service interacts exclusively with the Employee abstraction.
             </div>
           </div>
           <p>Now you can process any Employee polymorphically — a foundational pattern used throughout enterprise Spring architectures.</p>
@@ -352,11 +395,12 @@ Processing Monthly Payroll Dispatch:
           <h2 id="hands-on-exercise">6. Hands-On Coding Challenge: Immutable Value Object</h2>
           <p>In enterprise Java architecture, mutating object state directly creates subtle bugs and race conditions. A resilient pattern is the <strong>Immutable Value Object</strong>.</p>
           <div class="info-card">
-            🎯 <strong>Challenge Prompt:</strong> Design a <code>Money</code> value object that stores an <code>amount</code> and a 3-letter currency code (e.g. <code>"USD"</code>). Requirements:
+            🎯 <strong>Challenge Prompt:</strong> Design a <code>Money</code> value object that stores a <code>BigDecimal amount</code> and a 3-letter currency code (e.g. <code>"USD"</code>). Requirements:
             <ul>
               <li>All fields must be <code>private final</code>.</li>
-              <li>Constructor must validate that amount is not negative and currency is not null/empty.</li>
+              <li>Constructor must validate that amount is not null/negative and currency is not null, empty, or blank.</li>
               <li>Provide an <code>add(Money other)</code> method that returns a brand new <code>Money</code> instance after verifying identical currency.</li>
+              <li>Override <code>equals()</code> and <code>hashCode()</code> to enforce structural equality rather than reference identity.</li>
             </ul>
           </div>
 
@@ -365,22 +409,28 @@ Processing Monthly Payroll Dispatch:
               <span>☕ MoneyValueObject.java (Interactive Exercise)</span>
               <div class="code-demo-tabs">
                 <button type="button" class="code-demo-tab active" data-view="code">Solution Code</button>
-                <button type="button" class="code-demo-tab" data-view="output">▶ Verified JVM Output</button>
+                <button type="button" class="code-demo-tab" data-view="output">▶ Console Output</button>
               </div>
             </div>
             <div class="code-demo-code">
-              <pre><code class="language-java">import java.util.Objects;
+              <pre><code class="language-java">import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
 public final class Money {
-    private final double amount;
+    private final BigDecimal amount;
     private final String currency;
 
-    public Money(double amount, String currency) {
-        if (amount < 0) {
+    public Money(BigDecimal amount, String currency) {
+        Objects.requireNonNull(amount, "Amount must not be null");
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Amount cannot be negative: " + amount);
         }
-        this.amount = amount;
-        this.currency = Objects.requireNonNull(currency, "Currency must not be null");
+        if (currency == null || currency.isBlank()) {
+            throw new IllegalArgumentException("Currency must not be null or blank");
+        }
+        this.amount = amount.setScale(2, RoundingMode.HALF_UP);
+        this.currency = currency.trim().toUpperCase();
     }
 
     public Money add(Money other) {
@@ -388,33 +438,47 @@ public final class Money {
         if (!this.currency.equalsIgnoreCase(other.currency)) {
             throw new IllegalArgumentException("Mismatched currency: " + this.currency + " vs " + other.currency);
         }
-        return new Money(this.amount + other.amount, this.currency);
+        return new Money(this.amount.add(other.amount), this.currency);
     }
 
-    public double getAmount() { return amount; }
+    public BigDecimal getAmount() { return amount; }
     public String getCurrency() { return currency; }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return amount.compareTo(money.amount) == 0 && currency.equals(money.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount.stripTrailingZeros(), currency);
+    }
+
+    @Override
     public String toString() {
-        return String.format("%.2f %s", amount, currency);
+        return amount + " " + currency;
     }
 }
 
 // Execution & Invariant Verification:
-Money salary = new Money(4500.00, "USD");
-Money bonus = new Money(500.00, "USD");
+Money salary = new Money(new BigDecimal("4500.00"), "USD");
+Money bonus = new Money(new BigDecimal("500.00"), "USD");
 Money total = salary.add(bonus);
 
 System.out.println("Original salary intact: " + salary);
-System.out.println("Computed total compensation: " + total);</code></pre>
+System.out.println("Computed total compensation: " + total);
+System.out.println("Equals check (same amount & currency): " + salary.equals(new Money(new BigDecimal("4500.00"), "USD")));</code></pre>
             </div>
             <div class="code-demo-output" style="display: none;">
-              <div class="code-demo-output-title"><span>⚡ JVM Output Console</span></div>
-$ javac Money.java && java Main
-✓ Initialized immutable Money: 4500.00 USD
-✓ Added 500.00 USD bonus -> created new instance: 5000.00 USD
-✓ Original salary unmodified: 4500.00 USD
-[Immutability & Encapsulation]: Zero side-effects, thread-safe value object verified.
+              <div class="code-demo-output-title"><span>⚡ JVM Console Output</span></div>
+$ java Money
+Original salary intact: 4500.00 USD
+Computed total compensation: 5000.00 USD
+Equals check (same amount & currency): true
+[Value Object]: Thread-safe, immutable BigDecimal representation with structural equality.
             </div>
           </div>
 
@@ -501,7 +565,7 @@ $ javac Money.java && java Main
               </span>
               <span class="footer-badge">
                 <span class="badge-icon-txt" aria-hidden="true">♿</span>
-                <span>WCAG 2.1 AAA</span>
+                <span>Targeting WCAG 2.1 AA</span>
               </span>
             </div>
             <div class="footer-social-row" aria-label="Social profiles">
@@ -723,7 +787,7 @@ $ javac Money.java && java Main
             </div>
             <div class="shortcut-row">
               <span class="shortcut-desc">Sepia Comfort / Slate Night Mode</span>
-              <span class="shortcut-keys"><kbd class="shortcut-key">Ctrl + K</kbd></span>
+              <span class="shortcut-keys"><kbd class="shortcut-key">Palette / Menu</kbd></span>
             </div>
           </div>
         </div>

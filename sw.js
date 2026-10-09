@@ -3,7 +3,7 @@
    Caches app shell, article pages, CSS, JS, and Ruqyah text.
    ========================================================= */
 
-const CACHE_NAME = 'heynuo-cache-v2';
+const CACHE_NAME = 'heynuo-cache-v3';
 
 const PRECACHE_URLS = [
   './',
@@ -96,14 +96,19 @@ const PRECACHE_URLS = [
   'assets/icons/star.png'
 ];
 
-// Install Event - Pre-cache essential app shell and content
+// Install Event - Resiliently Pre-cache essential app shell and content
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.warn('[Service Worker] Non-critical precache item skipped:', err);
-      });
+      // Use Promise.allSettled so a single missing asset does not abort the entire precache
+      return Promise.allSettled(
+        PRECACHE_URLS.map((url) =>
+          cache.add(url).catch((err) => {
+            console.warn(`[Service Worker] Precache item skipped for ${url}:`, err);
+          })
+        )
+      );
     })
   );
 });

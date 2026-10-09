@@ -44,7 +44,7 @@ const RUQYAH_VERSES = [
     "category": "Foundational",
     "purpose": "Ayatul Kursi – the greatest verse of protection",
     "source": "Sahih Muslim",
-    "arabic": "ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَ��ِيمُ",
+    "arabic": "ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
     "transliteration": "Allahu laaa ilaaha illaa Huwal Haiyul Qaiyoom; laa taakhuzuhoo sinatunw wa laa nawm; lahoo maa fissamaawaati wa maa fil ard; man zal lazee yashfa'u 'indahoo illaa bi-iznih; ya'lamu maa baina aydeehim wa maa khalfahum wa laa yuheetoona bishai'im min 'ilmihee illaa bimaa shaaa'; wasi'a Kursiyyuhus samaawaati wal arda wa laa ya'ooduhoo hifzuhumaa; wa Huwal Aliyyul 'Azeem",
     "translation": "Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.",
     "alislamAppUrl": "https://www.alislam.org/quran/app/2:255"
@@ -171,7 +171,7 @@ const RUQYAH_VERSES = [
     "purpose": "Silence before the reckoning",
     "source": "Traditional",
     "arabic": "هَٰذَا يَوْمُ لَا يَنطِقُونَ",
-    "transliteration": "Haazaa yawmu laa uantiqoon",
+    "transliteration": "Haazaa yawmu laa yantiqoon",
     "translation": "This is a Day they will not speak,",
     "alislamAppUrl": "https://www.alislam.org/quran/app/77:35"
   },
@@ -272,7 +272,7 @@ const RUQYAH_VERSES = [
   },
   {
     "id": 14,
-    "reference": "At-Tariq (86:4)",
+    "reference": "At-Tariq (86:4) — Protection Verse",
     "surahName": "At-Tariq",
     "surah": 86,
     "startAyah": 4,
@@ -678,7 +678,7 @@ const RUQYAH_VERSES = [
   },
   {
     "id": 35,
-    "reference": "As-Saffat (37:1–182)",
+    "reference": "As-Saffat (37:1–10)",
     "surahName": "As-Saffat",
     "surah": 37,
     "startAyah": 1,
@@ -706,7 +706,7 @@ const RUQYAH_VERSES = [
   },
   {
     "id": 36,
-    "reference": "An-Najm (53:1–62)",
+    "reference": "An-Najm (53:1–5, 57–62)",
     "surahName": "An-Najm",
     "surah": 53,
     "startAyah": 1,
@@ -735,7 +735,7 @@ const RUQYAH_VERSES = [
   },
   {
     "id": 37,
-    "reference": "Al-Qamar (54:1–55)",
+    "reference": "Al-Qamar (54:1–5, 54–55)",
     "surahName": "Al-Qamar",
     "surah": 54,
     "startAyah": 1,
@@ -760,7 +760,7 @@ const RUQYAH_VERSES = [
   },
   {
     "id": 38,
-    "reference": "At-Tariq (86:1–17)",
+    "reference": "At-Tariq (86:1–17) — Complete Surah",
     "surahName": "At-Tariq",
     "surah": 86,
     "startAyah": 1,
@@ -1040,7 +1040,7 @@ const RUQYAH_VERSES = [
     "category": "Special Purposes",
     "purpose": "Recite what is easy of the Quran; know that Allah will forgive and punish",
     "source": "Quran",
-    "arabic": "۞ إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌۭ مِّنَ ٱلَّذِينَ مَعَكَ ۚ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ ۙ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِ��لِ ٱللَّهِ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا ۚ وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍۢ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًۭا وَأَعْظَمَ أَجْرًۭا ۚ وَٱسْتَغْفِرُوا۟ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۢ",
+    "arabic": "۞ إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌۭ مِّنَ ٱلَّذِينَ مَعَكَ ۚ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ ۚ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ ۚ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ ۙ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ ۙ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ ۖ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ ۚ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًۭا ۚ وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍۢ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًۭا وَأَعْظَمَ أَجْرًۭا ۚ وَٱسْتَغْفِرُوا۟ ٱللَّهَ ۖ إِنَّ ٱللَّهَ غَفُورٌۭ رَّحِيمٌۢ",
     "transliteration": "Inna Rabbaka ya'lamu annaka taqoomu adnaa min sulusa yil laili wa nisfahoo wa sulusahoo wa taaa'ifatum minal lazeena ma'ak; wal laahu yuqaddirul laila wanna haar; 'alima al lan tuhsoohu fataaba 'alaikum faqra'oo maa tayassara minal quraan; 'alima an sa yakoonu minkum mardaa wa aakharoona yadriboona fil ardi yabtaghoona min fadlil laahi wa aakharoona yuqaatiloona fee sabeelil laahi faqra'oo ma tayassara minhu wa aqeemus salaata wa aatuz zakaata wa aqridul laaha qardan hasanaa; wa maa tuqadimoo li anfusikum min khairin tajidoohu 'indal laahi huwa khayranw wa a'zama ajraa; wastaghfirul laahaa innal laaha ghafoorur raheem.",
     "translation": "Indeed, your Lord knows, [O Muhammad], that you stand [in prayer] almost two thirds of the night or half of it or a third of it, and [so do] a group of those with you. And Allah determines [the extent of] the night and the day. He has known that you [Muslims] will not be able to do it and has turned to you in forgiveness, so recite what is easy [for you] of the Qur'an. He has known that there will be among you those who are ill and others traveling throughout the land seeking [something] of the bounty of Allah and others fighting for the cause of Allah. So recite what is easy from it and establish prayer and give zakah and loan Allah a goodly loan. And whatever good you put forward for yourselves - you will find it with Allah. It is better and greater in reward. And seek forgiveness of Allah. Indeed, Allah is Forgiving and Merciful.",
     "alislamAppUrl": "https://www.alislam.org/quran/app/73:20"

@@ -1855,12 +1855,16 @@
       }
 
       if (e.code === 'Space') {
-        e.preventDefault();
-        if (playingVerseId !== null) {
-          togglePlayVerse(playingVerseId);
-        } else {
-          const list = getActiveVerseList();
-          if (list && list.length) playVerse(list[0].id, 0);
+        // Only intercept Space if audio is actively playing or a player control is focused, preserving native page scrolling
+        const isPlayerFocused = document.activeElement && document.activeElement.closest && document.activeElement.closest('.mv-player-bottom-bar, .mv-verse-card, #mvGlobalPlayer');
+        if (playingVerseId !== null || isPlayerFocused) {
+          e.preventDefault();
+          if (playingVerseId !== null) {
+            togglePlayVerse(playingVerseId);
+          } else {
+            const list = getActiveVerseList();
+            if (list && list.length) playVerse(list[0].id, 0);
+          }
         }
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();

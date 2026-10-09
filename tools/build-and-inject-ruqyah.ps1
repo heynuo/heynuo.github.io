@@ -179,7 +179,7 @@ $ruqyahHtml = [System.Text.RegularExpressions.Regex]::Replace(
 )
 
 $ruqyahHtml = $ruqyahHtml.Replace('<span id="resultStats">Loading verses...</span>', '<span id="resultStats">Showing all <strong>60</strong> Ruqyah verses</span>')
-$ruqyahHtml = $ruqyahHtml.Replace('Audio streams directly from Al-Islam Quran Cloud', 'Audio streams directly from Al-Islam Quran Cloud with EveryAyah fallback')
+$ruqyahHtml = [regex]::Replace($ruqyahHtml, 'Audio streams.*?(?=</span>)', 'Audio streams from Al-Islam Quran Cloud, with EveryAyah as a fallback.')
 
 # Replace grid with pre-rendered cards
 $newGrid = @"
