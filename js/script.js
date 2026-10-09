@@ -146,6 +146,30 @@ function escapeHTML(str) {
     .replace(/'/g, "&#039;");
 }
 
+async function copyToClipboard(text) {
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (_) {}
+  }
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch (_) {
+    return false;
+  }
+}
+
 // ---------- Toast Notifications ----------
 function showToast(message, icon = '✨', duration = 2800) {
   let container = $.get('#toastContainer');
@@ -264,6 +288,8 @@ function initThemeToggle() {
           pseudoElement: '::view-transition-new(root)'
         }
       );
+    }).catch(() => {
+      // Gracefully handle skipped transitions on rapid clicks
     });
 
     showToast(
@@ -355,24 +381,21 @@ function initMobileMenu() {
 
 // ---------- Active Navigation ----------
 function initActiveNav() {
-  const currentPath = window.location.pathname;
+  const currentPage = Page.getCurrentPage();
   $.getAll('.nav-links a').forEach(link => {
     let href = link.getAttribute('href');
-    if (!href) return;
+    if (!href || href.startsWith('#')) return;
 
-    if (href.startsWith('http')) {
-      try {
-        const url = new URL(href);
-        href = url.pathname.split('/').pop() || 'index.html';
-      } catch {
-        href = href.split('/').pop() || 'index.html';
-      }
+    let linkPage = '';
+    try {
+      const url = new URL(href, window.location.href);
+      linkPage = url.pathname.split('/').pop() || 'index.html';
+    } catch {
+      linkPage = href.split('/').pop() || 'index.html';
     }
+    if (!linkPage) linkPage = 'index.html';
 
-    const linkPath = new URL(href, window.location.origin).pathname;
-    const isActive = linkPath === currentPath ||
-      (currentPath === '/' && (linkPath === '/' || linkPath.endsWith('index.html')));
-
+    const isActive = (linkPage === currentPage);
     link.classList.toggle('active', isActive);
     if (isActive) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
@@ -384,13 +407,15 @@ function initSmoothScroll() {
   $.getAll('a[href^="#"]').forEach(anchor => {
     $.on(anchor, 'click', (e) => {
       const targetId = anchor.getAttribute('href');
-      if (targetId === '#') return;
-      const targetEl = $.get(targetId);
-      if (targetEl) {
-        e.preventDefault();
-        targetEl.scrollIntoView({ behavior: CONFIG.smoothScrollBehavior, block: 'start' });
-        history.pushState(null, null, targetId);
-      }
+      if (!targetId || targetId === '#') return;
+      try {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: CONFIG.smoothScrollBehavior, block: 'start' });
+          history.pushState(null, null, targetId);
+        }
+      } catch (_) {}
     });
   });
 }
@@ -937,10 +962,10 @@ const Articles = {
       if (shareBtn) {
         const relUrl = shareBtn.dataset.url;
         const fullUrl = new URL(relUrl, window.location.origin).href;
-        try {
-          await navigator.clipboard.writeText(fullUrl);
+        const copied = await copyToClipboard(fullUrl);
+        if (copied) {
           showToast('Article link copied to clipboard!', '<img src="assets/icons/share.png" width="16" height="16" alt="">');
-        } catch {
+        } else {
           showToast('Could not copy link', '⚠️');
         }
       }
@@ -1078,11 +1103,10 @@ function initContactForm() {
 
       const copyBtn = $.get('#copySubmittedDraftBtn');
       if (copyBtn) {
-        $.on(copyBtn, 'click', () => {
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(formattedBody).then(() => {
-              showToast('Formatted draft copied to clipboard!', '📋');
-            });
+        $.on(copyBtn, 'click', async () => {
+          const copied = await copyToClipboard(formattedBody);
+          if (copied) {
+            showToast('Formatted draft copied to clipboard!', '📋');
           } else {
             showToast('Draft ready to send via email', '✉️');
           }
@@ -1210,7 +1234,11 @@ function initContactEnhancements() {
     $.on(contactForm, 'keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
-        contactForm.requestSubmit ? contactForm.requestSubmit() : contactForm.submit();
+        if (typeof contactForm.requestSubmit === 'function') {
+          contactForm.requestSubmit();
+        } else {
+          contactForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+        }
       }
     });
   }
@@ -1306,14 +1334,14 @@ function initAboutPage() {
   if (copyBioBtn && bioText) {
     $.on(copyBioBtn, 'click', async () => {
       const text = bioText.textContent.trim();
-      try {
-        await navigator.clipboard.writeText(text);
+      const copied = await copyToClipboard(text);
+      if (copied) {
         showToast('Short bio copied to clipboard!', '📋');
         copyBioBtn.textContent = '✅ Copied!';
         setTimeout(() => {
           copyBioBtn.textContent = '📋 Copy Bio';
         }, 2000);
-      } catch {
+      } else {
         showToast('Failed to copy bio', '⚠️');
       }
     });
@@ -1348,8 +1376,8 @@ function initCodeCopyButtons() {
 
         $.on(copyBtn, 'click', async () => {
           const code = codeEl?.textContent || pre.textContent;
-          try {
-            await navigator.clipboard.writeText(code);
+          const copied = await copyToClipboard(code);
+          if (copied) {
             copyBtn.classList.add('copied');
             copyBtn.innerHTML = `<span class="copy-icon">✓</span> <span class="copy-text">Copied!</span>`;
             showToast('Code copied to clipboard!', '📋');
@@ -1357,7 +1385,7 @@ function initCodeCopyButtons() {
               copyBtn.classList.remove('copied');
               copyBtn.innerHTML = `<span class="copy-icon">📋</span> <span class="copy-text">Copy</span>`;
             }, 2000);
-          } catch {
+          } else {
             showToast('Failed to copy', '⚠️');
           }
         });
@@ -1409,8 +1437,8 @@ function initCodeCopyButtons() {
 
     $.on(copyBtn, 'click', async () => {
       const code = codeEl?.textContent || pre.textContent;
-      try {
-        await navigator.clipboard.writeText(code);
+      const copied = await copyToClipboard(code);
+      if (copied) {
         copyBtn.classList.add('copied');
         if (copyIcon) copyIcon.textContent = '✓';
         if (copyText) copyText.textContent = 'Copied!';
@@ -1420,7 +1448,7 @@ function initCodeCopyButtons() {
           if (copyIcon) copyIcon.textContent = '📋';
           if (copyText) copyText.textContent = 'Copy';
         }, 2000);
-      } catch {
+      } else {
         if (copyText) copyText.textContent = 'Failed';
         setTimeout(() => {
           if (copyText) copyText.textContent = 'Copy';
@@ -1604,10 +1632,10 @@ function initArticleSuite() {
         if (err.name === 'AbortError') return;
       }
     }
-    try {
-      await navigator.clipboard.writeText(window.location.href);
+    const copied = await copyToClipboard(window.location.href);
+    if (copied) {
       showToast('Article link copied to clipboard!', '🔗');
-    } catch {
+    } else {
       showToast('Could not copy link', '⚠️');
     }
   });
@@ -1807,11 +1835,12 @@ function getContactEmail(el) {
 function initCopyEmail() {
   const emailBtns = document.querySelectorAll('.copy-email-btn');
   emailBtns.forEach(btn => {
-    $.on(btn, 'click', (e) => {
+    $.on(btn, 'click', async (e) => {
       e.preventDefault();
       const email = getContactEmail(btn);
       if (!email) return;
-      navigator.clipboard?.writeText(email).then(() => {
+      const copied = await copyToClipboard(email);
+      if (copied) {
         showToast(`Copied ${email} to clipboard!`, '✉️');
         const origHtml = btn.innerHTML;
         btn.innerHTML = '<span>✓ Copied!</span>';
@@ -1820,9 +1849,9 @@ function initCopyEmail() {
           btn.innerHTML = origHtml;
           btn.classList.remove('copied');
         }, 2000);
-      }).catch(() => {
+      } else {
         showToast(`Email: ${email}`, '✉️');
-      });
+      }
     });
   });
 
@@ -2449,6 +2478,7 @@ function initHeroParticles() {
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = rect.width;
     height = rect.height;
@@ -2760,14 +2790,6 @@ function initShortcutsModal() {
     if (e.target === backdrop) closeModal();
   });
 
-  const backTop = $.get('#footerBackTop');
-  if (backTop) {
-    $.on(backTop, 'click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-    });
-  }
-
   const singleKeyToggle = $.get('#toggleSingleShortcuts');
   let singleShortcutsEnabled = localStorage.getItem('heynuo_shortcuts_enabled') !== 'false';
   if (singleKeyToggle) {
@@ -3068,20 +3090,10 @@ function initFeaturedResource() {
   if (shareBtn) {
     $.on(shareBtn, 'click', async () => {
       const url = 'https://heynuo.github.io/heynuo.github.io-ruqyah-guide/';
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(url);
-          showToast('Ruqyah Guide link copied to clipboard!', '✨');
-        } else {
-          const temp = document.createElement('input');
-          temp.value = url;
-          document.body.appendChild(temp);
-          temp.select();
-          document.execCommand('copy');
-          document.body.removeChild(temp);
-          showToast('Ruqyah Guide link copied to clipboard!', '✨');
-        }
-      } catch (err) {
+      const copied = await copyToClipboard(url);
+      if (copied) {
+        showToast('Ruqyah Guide link copied to clipboard!', '✨');
+      } else {
         showToast('Link: ' + url, '🔗');
       }
     });
@@ -3560,40 +3572,14 @@ function initFeaturedResource() {
       const v = verses[currentVerseIndex];
       if (!v) return;
       const textToCopy = `${v.title}\n\n${v.arabic}\n\nTransliteration:\n${v.translit}\n\nTranslation:\n${v.translation}\n\nReference: ${v.meta}\nSource: HeyNuo Ruqyah Guide`;
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(textToCopy);
-        } else {
-          const temp = document.createElement('textarea');
-          temp.value = textToCopy;
-          document.body.appendChild(temp);
-          temp.select();
-          document.execCommand('copy');
-          document.body.removeChild(temp);
-        }
+      const copied = await copyToClipboard(textToCopy);
+      if (copied) {
         showToast(`${v.title} copied to clipboard!`, '📋');
-      } catch (err) {
+      } else {
         showToast('Could not copy verse', '⚠️');
       }
     });
   }
-}
-
-// ---------- Digital Dispatch Form ----------
-function initDispatchForm() {
-  const form = $.get('#dispatchForm');
-  if (!form) return;
-  $.on(form, 'submit', (e) => {
-    e.preventDefault();
-    const emailInput = $.get('#dispatchEmail', form);
-    const email = emailInput ? emailInput.value.trim() : '';
-    if (!email || !email.includes('@')) {
-      showToast('Please enter a valid email address.', '⚠️');
-      return;
-    }
-    showToast('Subscribed! For tracker-free updates, subscribe to rss.xml', '📬', 4500);
-    emailInput.value = '';
-  });
 }
 
 // ---------- Service Worker & Offline PWA ----------

@@ -4,13 +4,6 @@
    Fully self-contained — no HTML/JS/other-file changes required.
    ========================================================= */
 
-/* Register custom properties for smooth interpolation (progressive) */
-@property --banner-sheen-pos {
-  syntax: "<percentage>";
-  initial-value: -20%;
-  inherits: false;
-}
-
 @layer features {
 
   /* ============================================
@@ -152,7 +145,7 @@
     justify-content: center;
     gap: 12px;
     padding-block: 10px;
-    padding-inline: 24px;
+    padding-inline: 24px 52px;
     text-align: center;
     flex-wrap: wrap;
     position: relative;
@@ -192,7 +185,7 @@
         transparent 30%,
         rgba(255, 255, 255, 0.35) 50%,
         transparent 70%);
-    transform: translateX(var(--banner-sheen-pos));
+    transform: translateX(-120%);
     animation: pillShimmer 3.6s ease-in-out infinite;
     pointer-events: none;
     z-index: -1;
@@ -357,7 +350,7 @@
   @media (max-width: 640px) {
     .announcement-inner {
       padding-block: 8px;
-      padding-inline: 14px 40px;
+      padding-inline: 14px 52px;
       gap: 6px;
       font-size: 12.5px;
     }
@@ -383,7 +376,7 @@
       flex-direction: column;
       gap: 4px;
       padding-block: 10px;
-      padding-inline: 12px 40px;
+      padding-inline: 12px 52px;
     }
 
     .announcement-message {
@@ -431,6 +424,10 @@
       min-inline-size: 44px;
       min-block-size: 44px;
       inset-inline-end: 6px;
+    }
+
+    .announcement-inner {
+      padding-inline-end: 56px;
     }
 
     .announcement-cta {
@@ -628,18 +625,12 @@
 
     0%,
     60% {
-      --banner-sheen-pos: -120%;
+      transform: translateX(-120%);
     }
 
     100% {
-      --banner-sheen-pos: 120%;
+      transform: translateX(120%);
     }
   }
 
-  /* Fallback for browsers without @property support */
-  @supports not (background: paint(x)) {
-    .announcement-pill::after {
-      transform: translateX(-120%);
-    }
-  }
 }

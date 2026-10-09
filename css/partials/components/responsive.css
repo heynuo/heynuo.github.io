@@ -101,7 +101,7 @@
   /* Long words/URLs must not push layout */
   .card h3,
   .project-info h3,
-  .about-box h2,
+  .about-box :is(h2, h3),
   .section-title,
   .hero h1,
   .prose p,
@@ -117,7 +117,7 @@
 
     .hero h1,
     .section-title,
-    .about-box h2,
+    .about-box :is(h2, h3),
     .card h3,
     .project-info h3,
     .hero p,
@@ -442,7 +442,7 @@
 
     /* ---- Hero ---- */
     .hero {
-      padding: var(--space-3xl) 0 50px;
+      padding-block: var(--space-3xl) 50px;
     }
 
     .hero h1 {
@@ -471,7 +471,7 @@
       grid-template-columns: 1fr;
     }
 
-    .about-box h2 {
+    .about-box :is(h2, h3) {
       font-size: 22px;
     }
 
@@ -1091,7 +1091,7 @@
     }
 
     .hero {
-      padding: var(--space-xl, 32px) 0 32px;
+      padding-block: var(--space-xl, 32px) 32px;
     }
 
     .preview-modal {

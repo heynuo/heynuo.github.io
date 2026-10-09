@@ -93,11 +93,16 @@
 
     // If same card and same ayah, and paused, resume
     if (playingCardId === cardId && playingAyahIndex === ayahIndex && currentAudio) {
-      if (currentAudio.paused) {
-        currentAudio.play().then(() => {
+      const audio = currentAudio;
+      if (audio.paused) {
+        audio.play().then(() => {
+          if (audio !== currentAudio) return;
           isAudioPlaying = true;
           updateCardPlayerUI(cardId);
-        }).catch(handleAudioError);
+        }).catch(error => {
+          if (audio !== currentAudio) return;
+          handleAudioError(error);
+        });
         return;
       }
     }
@@ -119,24 +124,29 @@
       ? getFallbackAudioUrl(item.surah, currentAyahNumber)
       : getAlIslamAudioUrl(item.surah, currentAyahNumber, currentReciter);
 
-    currentAudio = new Audio(url);
-    currentAudio.preload = 'auto';
+    const audio = new Audio(url);
+    currentAudio = audio;
+    audio.preload = 'auto';
 
-    currentAudio.onplay = () => {
+    audio.onplay = () => {
+      if (audio !== currentAudio) return;
       isAudioPlaying = true;
       updateCardPlayerUI(cardId);
     };
 
-    currentAudio.onpause = () => {
+    audio.onpause = () => {
+      if (audio !== currentAudio) return;
       isAudioPlaying = false;
       updateCardPlayerUI(cardId);
     };
 
-    currentAudio.ontimeupdate = () => {
+    audio.ontimeupdate = () => {
+      if (audio !== currentAudio) return;
       updateCardProgressUI(cardId);
     };
 
-    currentAudio.onended = () => {
+    audio.onended = () => {
+      if (audio !== currentAudio) return;
       // If there are more verses in this sequence, auto-advance!
       if (playingAyahIndex + 1 < item.audioVerses.length) {
         playAyah(cardId, playingAyahIndex + 1);
@@ -147,14 +157,19 @@
       }
     };
 
-    currentAudio.onerror = () => {
+    audio.onerror = () => {
+      if (audio !== currentAudio) return;
       handleAudioError();
     };
 
-    currentAudio.play().then(() => {
+    audio.play().then(() => {
+      if (audio !== currentAudio) return;
       isAudioPlaying = true;
       updateCardPlayerUI(cardId);
-    }).catch(handleAudioError);
+    }).catch(error => {
+      if (audio !== currentAudio) return;
+      handleAudioError(error);
+    });
   }
 
   function togglePlayCard(cardId) {

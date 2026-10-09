@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   HeyNuo â€“ CSS Reset Layer (reset.css)
+/* =========================================================
+   HeyNuo — CSS Reset Layer (reset.css)
    Normalizes margins, paddings, and box-sizing across browsers.
    ========================================================= */
 
@@ -10,5 +10,26 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
   }
 }

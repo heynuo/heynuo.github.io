@@ -163,6 +163,31 @@
     display: flex;
   }
 
+  [popover].cmd-palette-backdrop:popover-open {
+    --cmd-open: 1;
+    display: flex;
+  }
+
+  dialog.cmd-palette-backdrop[open] .cmd-palette-modal {
+    --cmd-open: 1;
+    display: flex;
+  }
+
+  [popover].cmd-palette-backdrop:popover-open .cmd-palette-modal {
+    --cmd-open: 1;
+    display: flex;
+  }
+
+  dialog.cmd-palette-modal[open] {
+    --cmd-open: 1;
+    display: flex;
+  }
+
+  [popover].cmd-palette-modal:popover-open {
+    --cmd-open: 1;
+    display: flex;
+  }
+
   /* Native [popover] support — same story */
   [popover].cmd-palette-backdrop {
     border: 0;
@@ -1082,8 +1107,13 @@
      Responsive
      -------------------------------------------- */
   @media (max-width: 560px) {
-    .cmd-palette-backdrop {
-      padding: 12px;
+    .cmd-palette-backdrop,
+    [popover].cmd-palette-backdrop {
+      padding:
+        max(12px, env(safe-area-inset-top, 0px))
+        max(12px, env(safe-area-inset-right, 0px))
+        max(12px, env(safe-area-inset-bottom, 0px))
+        max(12px, env(safe-area-inset-left, 0px));
       align-items: flex-start;
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
@@ -1095,7 +1125,11 @@
 
     .cmd-palette-modal {
       max-width: 100%;
-      max-height: calc(100dvh - 24px);
+      max-height: calc(
+        100dvh
+        - max(12px, env(safe-area-inset-top, 0px))
+        - max(12px, env(safe-area-inset-bottom, 0px))
+      );
       border-radius: 16px;
     }
 
@@ -1133,11 +1167,16 @@
 
   @media (max-height: 480px) {
     .cmd-palette-backdrop {
-      padding-top: 12px;
+      padding-top: max(12px, env(safe-area-inset-top, 0px));
+      padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
     }
 
     .cmd-palette-modal {
-      max-height: calc(100dvh - 24px);
+      max-height: calc(
+        100dvh
+        - max(12px, env(safe-area-inset-top, 0px))
+        - max(20px, env(safe-area-inset-bottom, 0px))
+      );
     }
 
     .cmd-palette-item-desc {

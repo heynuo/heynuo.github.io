@@ -1,8 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Theme Initialization: Prevents Flash of Unstyled Content (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('heynuo-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var savedReading = localStorage.getItem('heynuo-reading-theme');
+        if (savedReading && savedReading !== 'default') {
+          document.documentElement.setAttribute('data-reading-theme', savedReading);
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta name="robots" content="index, follow">
   <title>Pure HTML, CSS &amp; JavaScript Web Dev Guide | HeyNuo</title>
   <meta name="description" content="Build a fast, clean website with pure HTML, CSS, and JavaScript. Learn semantic markup, responsive design, performance, and accessibility.">
@@ -62,7 +80,7 @@
 </head>
 <body>
   <!-- Include once, anywhere after <body> opens (or in <head> with defer) -->
-  <script src="/assets/js/quran-player.js" defer></script>
+  <script src="assets/js/quran-player.js" defer></script>
 
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -154,8 +172,9 @@
               <li><a href="#semantic-html">1. Semantic HTML5 Architecture</a></li>
               <li><a href="#modern-css">2. Modern CSS Techniques &amp; Layouts</a></li>
               <li><a href="#vanilla-js">3. Vanilla JavaScript Interactivity</a></li>
-              <li><a href="#web-performance">4. Performance Optimization &amp; Core Web Vitals</a></li>
-              <li><a href="#free-hosting">5. Free Production Hosting on GitHub Pages</a></li>
+              <li><a href="#web-performance">4. Performance &amp; Accessibility</a></li>
+              <li><a href="#free-hosting">5. Free Deployment on GitHub Pages</a></li>
+              <li><a href="#best-practices">6. Best Practices &amp; Tooling</a></li>
             </ol>
           </nav>
 
@@ -167,7 +186,7 @@
   &lt;p&gt;Content...&lt;/p&gt;
 &lt;/article&gt;</code></pre>
 
-          <h2>🎨 2. Modern CSS Techniques</h2>
+          <h2 id="modern-css">🎨 2. Modern CSS Techniques</h2>
           <p>Leverage Flexbox, CSS Grid, custom properties (variables), and modern CSS layers. Here’s a responsive card grid:</p>
           <div class="code-demo-box">
             <div class="code-demo-header">
@@ -202,7 +221,7 @@
             </div>
           </div>
 
-          <h2>⚡ 3. Vanilla JavaScript Interactivity</h2>
+          <h2 id="vanilla-js">⚡ 3. Vanilla JavaScript Interactivity</h2>
           <p>No build steps — use modern ES6+ for DOM manipulation, smooth event handling, and dynamic theme switching.</p>
           <div class="code-demo-box">
             <div class="code-demo-header">
@@ -231,18 +250,19 @@ toggleBtn?.addEventListener('click', () => {
             </div>
           </div>
 
+          <h2 id="web-performance">⚡ Performance &amp; Accessibility</h2>
           <div class="info-card success">
             🚀 <strong>Performance tip:</strong> Use debounced search, lazy loading images, and `prefers-reduced-motion` media queries for inclusive experiences — exactly as implemented in HeyNuo’s global script.
           </div>
 
-          <h2>🛠 4. Free Deployment: GitHub Pages</h2>
+          <h2 id="free-hosting">🛠 4. Free Deployment: GitHub Pages</h2>
           <p>1. Push your code to a GitHub repository.<br>
              2. Go to Settings → Pages → Branch: <code>main</code> (or <code>gh-pages</code>).<br>
              3. Your site goes live at <code>https://username.github.io/repo</code> or custom domain.<br>
              No hosting costs, SSL included, CDN delivery.</p>
           <p>This site (HeyNuo) itself is deployed exactly that way. All articles are static, blazing fast.</p>
 
-          <h2>🔧 Best Practices & Tooling</h2>
+          <h2 id="best-practices">🔧 Best Practices &amp; Tooling</h2>
           <ul>
             <li>✔️ Mobile-first design & viewport meta.</li>
             <li>✔️ Use <code>:focus-visible</code> for keyboard accessibility.</li>
@@ -461,23 +481,11 @@ toggleBtn?.addEventListener('click', () => {
               <span>Shortcuts</span>
               <kbd class="footer-kbd">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
-              <span>Top</span>
-            </a>
           </div>
         </div>
       </div>
     </footer>
   </div>
-
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
-    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
-      <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-      <path class="progress-ring-circle" id="scrollProgressCircle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-    </svg>
-    <span class="scroll-arrow">↑</span>
-  </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 

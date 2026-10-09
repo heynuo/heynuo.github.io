@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Theme Initialization: Prevents Flash of Unstyled Content (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('heynuo-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var savedReading = localStorage.getItem('heynuo-reading-theme');
+        if (savedReading && savedReading !== 'default') {
+          document.documentElement.setAttribute('data-reading-theme', savedReading);
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="20jAEe9y_iie23-LX0l0yjH4KSEUyTmoF-9H5tOpkxA">
 
@@ -81,7 +99,7 @@
 
 <body>
   <!-- Include once, anywhere after <body> opens (or in <head> with defer) -->
-  <script src="/assets/js/quran-player.js" defer></script>
+  <script src="assets/js/quran-player.js" defer></script>
 
   <!-- Reading Progress Bar -->
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
@@ -588,8 +606,14 @@
 
       <!-- ===== Articles ===== -->
       <section id="articles">
-        <h2 class="section-title"><img src="assets/icons/books.png" alt="" class="inline-title-icon" width="26"
-            height="26"> Latest <span>Articles</span></h2>
+        <div class="article-section-heading">
+          <div class="article-heading-copy">
+            <p class="section-kicker">THE KNOWLEDGE LIBRARY</p>
+            <h2 class="section-title">Explore <span>Articles</span></h2>
+            <p class="article-section-intro">Practical programming guides and carefully researched notes, organized to
+              help you find the next useful idea.</p>
+          </div>
+        </div>
         <div class="toolbar">
           <div class="search-wrapper" id="searchWrapper">
             <span class="search-icon" aria-hidden="true"><img src="assets/icons/search.png" alt="" width="18"
@@ -716,7 +740,7 @@
             <div class="card-body">
               <div class="card-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14"
                     height="14"> Jun 2, 2026</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon"
-                    width="14" height="14"> 15 min read</span></div>
+                    width="14" height="14"> 12 min read</span></div>
               <h3><a href="jinn-islamic-theology.html">Jinn in Islamic Theology: Meaning, Types &amp; Quran</a></h3>
               <p>Explore jinn in Islamic theology: Quranic references, creation, types, free will, and differences from
                 angels in clear, referenced notes.</p>
@@ -752,7 +776,7 @@
             <div class="card-body">
               <div class="card-meta"><span><img src="assets/icons/calendar.png" alt="" class="meta-icon" width="14"
                     height="14"> Jun 2, 2026</span><span><img src="assets/icons/clock.png" alt="" class="meta-icon"
-                    width="14" height="14"> 10 min read</span></div>
+                    width="14" height="14"> 6 min read</span></div>
               <h3><a href="web-dev-guide.html">Pure HTML, CSS &amp; JavaScript Web Development Guide</a></h3>
               <p>Build a fast, clean website with pure HTML, CSS, and JavaScript. Learn semantic markup, responsive
                 design, performance, and accessibility.</p>
@@ -993,25 +1017,11 @@
               <span>Shortcuts</span>
               <kbd class="footer-kbd">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
-              <span>Top</span>
-            </a>
           </div>
         </div>
       </div>
     </footer>
   </div>
-
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
-    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
-      <path class="progress-ring-bg"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-      <path class="progress-ring-circle" id="scrollProgressCircle"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-    </svg>
-    <span class="scroll-arrow">↑</span>
-  </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 

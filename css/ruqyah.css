@@ -3,6 +3,7 @@
    Glassmorphism · Amiri Arabic Typography · Audio Player Controls · Dark Mode
    ========================================================================== */
 
+@layer components {
 /* --- Page Layout & Ambient Background --- */
 .ruqyah-page {
   padding-top: 36px;
@@ -1374,7 +1375,7 @@
 
 .ruqyah-conditions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 24px;
   margin-bottom: 32px;
 }
@@ -1570,4 +1571,5 @@
     border: 1px solid #ccc;
     background: transparent;
   }
+}
 }

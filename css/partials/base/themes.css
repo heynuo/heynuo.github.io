@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    HeyNuo — Theme Overrides (themes.css)
    Dark · Light · Sepia · Slate  +  Serif reading mode
    =========================================================
@@ -337,6 +337,7 @@
 
     :where([data-theme], [data-reading-theme]) ::backdrop {
       backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 
@@ -344,6 +345,7 @@
   @media (prefers-reduced-data: reduce) {
     :where([data-theme], [data-reading-theme]) ::backdrop {
       backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   }
 

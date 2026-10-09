@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   HeyNuo â€“ Flagship Resource Showcase (featured-showcase.css)
+/* =========================================================
+   HeyNuo — Flagship Resource Showcase (featured-showcase.css)
    Featured resource banner, holographic sheen, tabbed preview panel.
    ========================================================= */
 
@@ -72,9 +72,13 @@
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1.15fr 0.95fr;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
     align-items: center;
     gap: 36px;
+  }
+
+  .featured-banner-grid > * {
+    min-width: 0;
   }
 
   @media (max-width: 960px) {
@@ -112,6 +116,7 @@
     text-transform: uppercase;
     box-shadow: 0 2px 10px rgba(245, 158, 11, 0.12);
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   [data-theme="dark"] .project-featured-badge {
@@ -334,6 +339,7 @@
     padding: 3px;
     gap: 4px;
     backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   @media (max-width: 960px) {
@@ -494,6 +500,10 @@
     opacity: 1;
   }
 
+  .featured-banner-preview:focus-within .preview-hover-overlay {
+    opacity: 1;
+  }
+
   .preview-launch-btn {
     background: #ffffff;
     color: #0f172a !important;
@@ -514,10 +524,79 @@
     transform: translateY(0);
   }
 
+  .featured-banner-preview:focus-within .preview-launch-btn {
+    transform: translateY(0);
+  }
+
+  @media (hover: none) {
+    .preview-hover-overlay {
+      align-items: flex-end;
+      padding: 12px;
+      opacity: 1;
+      background: linear-gradient(transparent 45%, rgba(15, 23, 42, 0.55));
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .preview-launch-btn {
+      transform: none;
+    }
+  }
+
   .preview-launch-btn:hover {
     background: #f8fafc;
     transform: scale(1.05);
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  }
+
+  @media (max-width: 480px) {
+    .featured-actions {
+      align-items: stretch;
+    }
+
+    .featured-actions > a {
+      flex: 1 1 100%;
+      justify-content: center;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .featured-share-btn {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .featured-banner,
+    .featured-banner::after,
+    .pulse-beacon,
+    .featured-highlight-item,
+    .project-btn,
+    .project-btn .btn-arrow,
+    .featured-share-btn,
+    .preview-mode-tab,
+    .preview-tab-panel,
+    .featured-banner-preview .preview-main-img,
+    .featured-banner-preview .preview-floating-badge,
+    .preview-hover-overlay,
+    .preview-launch-btn,
+    .preview-mini-waves span {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .featured-banner:hover,
+    .featured-banner:hover::after,
+    .featured-highlight-item:hover,
+    .project-btn:hover,
+    .project-btn:hover .btn-arrow,
+    .featured-share-btn:hover,
+    .featured-banner-preview:hover .preview-main-img,
+    .featured-banner-preview:hover .preview-floating-badge,
+    .preview-launch-btn:hover {
+      transform: none;
+    }
   }
 
 }

@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   HeyNuo â€“ Article Prose & Code Runner (article-prose.css)
+/* =========================================================
+   HeyNuo — Article Prose & Code Runner (article-prose.css)
    Article layouts, code block runner, reading toolbar, prose typography.
    ========================================================= */
 
@@ -148,6 +148,7 @@
   .article-nav-card {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     padding: 16px 18px;
     border-radius: 14px;
     background: var(--card-bg);
@@ -159,11 +160,11 @@
   }
 
   .article-nav-card.prev {
-    text-align: left;
+    text-align: start;
   }
 
   .article-nav-card.next {
-    text-align: right;
+    text-align: end;
   }
 
   .article-nav-label {
@@ -182,6 +183,7 @@
     line-height: 1.35;
     color: var(--text);
     transition: color 0.2s ease;
+    overflow-wrap: anywhere;
   }
 
   .article-nav-card:hover {
@@ -268,7 +270,8 @@
 
   .prose ul,
   .prose ol {
-    margin: 1rem 0 1.2rem 1.8rem;
+    margin-block: 1rem 1.2rem;
+    margin-inline-start: 1.8rem;
     color: var(--muted);
   }
 
@@ -277,7 +280,7 @@
   }
 
   .prose blockquote {
-    border-left: 4px solid var(--primary);
+    border-inline-start: 4px solid var(--primary);
     background: rgba(59, 130, 246, 0.08);
     padding: 1rem 1.5rem;
     border-radius: 24px;

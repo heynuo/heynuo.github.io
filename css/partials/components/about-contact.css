@@ -1,10 +1,10 @@
-﻿/* =========================================================
+/* =========================================================
    HeyNuo – About & Contact (about-contact.css) — v5
    ---------------------------------------------------------
    v5 additions over v4 (all HTML-aware):
      • .about-hero modifier (matches <section class="hero about-hero">)
      • .inline-title-icon / .badge-icon rules (icons live in HTML)
-     • .about-box h2 with embedded <img> — proper baseline alignment
+     • .about-box h2/h3 with embedded <img> — proper baseline alignment
      • Auto-adapts padding when .about has 4 children (Values grid)
      • External-link arrow via [target="_blank"]::after
      • Section rhythm scoped to .about pages only
@@ -14,13 +14,10 @@
      • Fallback for browsers without :has() (no broken layouts)
    ========================================================= */
 
-/* ---------- Layer order ---------- */
-@layer reset, tokens, themes, base, components, states, utilities;
-
 /* =========================================================
    TOKENS
    ========================================================= */
-@layer tokens {
+@layer base {
 
   @property --ac-hover-y {
     syntax: "<length>";
@@ -83,7 +80,7 @@
 /* =========================================================
    THEMES
    ========================================================= */
-@layer themes {
+@layer base {
   html[data-theme="light"] {
     color-scheme: light;
   }
@@ -161,7 +158,7 @@
         --ac-card-pad: var(--ac-card-pad-sm);
       }
 
-      >.about-box h2 {
+      >.about-box :is(h2, h3) {
         font-size: clamp(1.05rem, 1.4cqi + .9rem, 1.25rem);
       }
 
@@ -230,7 +227,7 @@
     }
 
     /* --- Heading --- */
-    h2 {
+    :is(h2, h3) {
       margin-block-end: 14px;
       font-size: clamp(1.25rem, 2cqi + .9rem, 1.6rem);
       font-weight: 700;
@@ -730,7 +727,7 @@
 /* =========================================================
    STATES
    ========================================================= */
-@layer states {
+@layer components {
 
   .about-box a:focus-visible,
   .contact-link:focus-visible,
@@ -759,7 +756,7 @@
         padding: 1.25rem;
       }
 
-      .about-box h2 {
+      .about-box :is(h2, h3) {
         font-size: 1.15rem;
       }
     }

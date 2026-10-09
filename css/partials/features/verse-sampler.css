@@ -426,16 +426,6 @@
     gap: 4px;
   }
 
-  /* NEW · Soft tap feedback on touch devices only */
-  @media (any-pointer: coarse) {
-
-    .sampler-chip,
-    .sampler-tool-btn,
-    .featured-topic-pill {
-      min-height: 32px;
-    }
-  }
-
   /* ---------------------------------------------- Text blocks */
 
   .sampler-arabic {
@@ -476,7 +466,6 @@
     line-height: 1.6;
     font-style: italic;
     background: var(--sampler-tint-05);
-    border-left: 2.5px solid var(--sampler-accent);
     border-inline-start: 2.5px solid var(--sampler-accent);
     padding: 6px 10px;
     border-radius: 4px;
@@ -1386,12 +1375,14 @@
      I · RESPONSIVE — CONTAINER QUERIES
      ========================================================= */
 
-  @container sampler (max-width: 460px) {
+  @media (max-width: 460px) {
     .featured-sampler-card {
       padding: 18px;
       border-radius: 16px;
     }
+  }
 
+  @container sampler (max-width: 460px) {
     .sampler-player {
       flex-direction: column;
       align-items: stretch;
@@ -1529,6 +1520,17 @@
     .sampler-arabic {
       font-size: 17px;
       line-height: 1.7;
+    }
+  }
+
+  @media (any-pointer: coarse) {
+    .sampler-chip,
+    .sampler-tool-btn,
+    .featured-topic-pill,
+    .sampler-play-btn,
+    .sampler-ctrl-btn {
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 

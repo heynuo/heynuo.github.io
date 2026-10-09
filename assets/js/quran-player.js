@@ -860,7 +860,7 @@
       drawStaticVisualizer();
       return;
     }
-    if (audioCtx.state === 'suspended') {
+    if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => { });
     }
     if (visualizerAnimId) return; // already running
@@ -1320,8 +1320,9 @@
       updateMediaSessionState();
       hideToast();
       if (isOpen(dom.modal)) startVisualizerLoop();
-    }).catch(() => {
-      // Autoplay blocked. Persist intent and show resume toast.
+    }).catch((error) => {
+      // Preserve playback intent only when the browser blocks playback until a user gesture.
+      if (!error || error.name !== 'NotAllowedError') return;
       isPlaying = false;
       ls.set(STORAGE_KEYS.IS_PLAYING, 'true');
       updatePlayIcons();

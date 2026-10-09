@@ -114,6 +114,16 @@
     .container--prose {
       padding-inline: 12px;
     }
+
+    @supports (padding: max(0px)) {
+
+      .container,
+      .container--narrow,
+      .container--wide,
+      .container--prose {
+        padding-inline: max(12px, env(safe-area-inset-left, 0px)) max(12px, env(safe-area-inset-right, 0px));
+      }
+    }
   }
 
   /* =========================================================
@@ -483,7 +493,7 @@
     .ratio {
       position: relative;
       height: 0;
-      padding-bottom: calc(100% / (16 / 9));
+      padding-bottom: 56.25%;
     }
 
     .ratio--square {
@@ -520,20 +530,20 @@
   }
 
   .u-hide-mobile {
-    display: none;
+    display: block;
   }
 
   .u-hide-desktop {
-    display: block;
+    display: none;
   }
 
   @media (min-width: 768px) {
     .u-hide-mobile {
-      display: block;
+      display: none;
     }
 
     .u-hide-desktop {
-      display: none;
+      display: block;
     }
   }
 

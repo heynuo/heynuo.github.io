@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Theme Initialization: Prevents Flash of Unstyled Content (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('heynuo-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var savedReading = localStorage.getItem('heynuo-reading-theme');
+        if (savedReading && savedReading !== 'default') {
+          document.documentElement.setAttribute('data-reading-theme', savedReading);
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
 
   <!-- Perf: colour-scheme hint for the browser chrome -->
   <meta name="color-scheme" content="light dark">
@@ -46,7 +64,7 @@
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
-  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <link rel="sitemap" type="application/xml" href="sitemap.xml">
 
   <!-- Structured data: ProfilePage + Person + Website + Breadcrumbs -->
   <script type="application/ld+json">
@@ -131,8 +149,7 @@
   <!-- Fallback for no-JS: hide JS-dependent chrome -->
   <noscript>
     <style>
-      .reading-progress,
-      .scroll-to-top {
+      .reading-progress {
         display: none !important;
       }
     </style>
@@ -140,7 +157,7 @@
 </head>
 
 <body>
-  <script src="/assets/js/quran-player.js" defer></script>
+  <script src="assets/js/quran-player.js" defer></script>
 
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -851,25 +868,11 @@
               <span>Shortcuts</span>
               <kbd class="footer-kbd">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
-              <span>Top</span>
-            </a>
           </div>
         </div>
       </div>
     </footer>
   </div>
-
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
-    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
-      <path class="progress-ring-bg"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-      <path class="progress-ring-circle" id="scrollProgressCircle"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-    </svg>
-    <span class="scroll-arrow" aria-hidden="true">↑</span>
-  </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 

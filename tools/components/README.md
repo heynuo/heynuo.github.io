@@ -23,7 +23,7 @@ This directory houses the single source of truth for global, canonical site comp
    - **Engineering Column**: Spring Boot Enterprise Architecture, Java OOP Masterclass, Web Dev Guide
    - **Site & Author Column**: Home Dashboard, About Zahiruddin, Direct Contact, GitHub Repository
    - **Trust & Feed Column**: Privacy & Academic Sources, RSS 2.0 Syndication Feed, XML Sitemap
-   - **Bottom Utility Bar**: Copyright notice, Shortcuts trigger (`#shortcutHelpBtn`), and Back-to-Top button (`#footerBackTop`)
+   - **Bottom Utility Bar**: Copyright notice and Shortcuts trigger (`#shortcutHelpBtn`)
 
 3. **`shortcuts-modal.html`**:
    - WCAG 2.1.4 compliant keyboard modal dialog (`#shortcutsModal`)

@@ -28,7 +28,7 @@
     overflow-x: clip;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    scroll-padding-top: 5rem;
+    scroll-padding-top: var(--scroll-offset, 5rem);
     scroll-padding-bottom: 2rem;
     font-size: 100%;
   }
@@ -969,10 +969,7 @@
   }
 
   .skip-link,
-  .skip-to-content,
-  a[href^="#main"],
-  a[href^="#content"],
-  a[href^="#skip"] {
+  .skip-to-content {
     position: absolute;
     top: -200px;
     left: 1rem;
@@ -987,10 +984,7 @@
   }
 
   .skip-link:focus,
-  .skip-to-content:focus,
-  a[href^="#main"]:focus,
-  a[href^="#content"]:focus,
-  a[href^="#skip"]:focus {
+  .skip-to-content:focus {
     top: 0;
     outline: 3px solid #fff !important;
     outline-offset: -6px !important;
@@ -1014,18 +1008,6 @@
 
   .nav-links [aria-current] {
     border-bottom: 2px solid currentColor;
-  }
-
-  [aria-expanded="true"]::after {
-    content: " ▲";
-    font-size: 0.7em;
-    speak: none;
-  }
-
-  [aria-expanded="false"]::after {
-    content: " ▼";
-    font-size: 0.7em;
-    speak: none;
   }
 
   [aria-selected="true"] {
@@ -2106,8 +2088,7 @@
      Skip to main content mechanism.
   */
   .skip-link,
-  a[href^="#main"],
-  a[href^="#content"] {
+  .skip-to-content {
     /* Already styled above — ensure always available */
     position: absolute;
     z-index: 999999;

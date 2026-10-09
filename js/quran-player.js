@@ -860,7 +860,7 @@
       drawStaticVisualizer();
       return;
     }
-    if (audioCtx.state === 'suspended') {
+    if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => { });
     }
     if (visualizerAnimId) return; // already running

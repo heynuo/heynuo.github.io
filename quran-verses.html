@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Theme Initialization: Prevents Flash of Unstyled Content (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('heynuo-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var savedReading = localStorage.getItem('heynuo-reading-theme');
+        if (savedReading && savedReading !== 'default') {
+          document.documentElement.setAttribute('data-reading-theme', savedReading);
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta name="robots" content="index, follow">
 
   <!-- Primary SEO -->
@@ -526,7 +544,7 @@
             <!-- Keyboard Shortcuts Trigger -->
             <button
               type="button"
-              class="mv-action-icon-btn mv-shortcuts-trigger-btn"
+              class="mv-action-icon-btn mv-shortcuts-trigger-btn shortcut-help-btn"
               id="mvShortcutsBtn"
               title="View Keyboard Shortcuts (Hot-keys)"
               aria-label="Keyboard Shortcuts"
@@ -798,10 +816,6 @@
               <span>Shortcuts</span>
               <kbd class="footer-kbd">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
-              <span>Top</span>
-            </a>
           </div>
         </div>
       </div>
@@ -855,10 +869,10 @@
         <button type="button" class="mv-audio-bar-btn primary-toggle" id="mvAudioBarPlayBtn" aria-label="Play or pause recitation (Space)" title="Play or pause recitation (Space)">▶</button>
         <button type="button" class="mv-audio-bar-btn" id="mvAudioBarNextBtn" title="Next Ayah (Right Arrow)" aria-label="Next Ayah">⏭</button>
       </div>
-
-      <!-- Dismiss Button -->
-      <button type="button" class="mv-audio-bar-dismiss" id="mvAudioBarCloseBtn" aria-label="Close audio player" title="Close player (Esc)">✕</button>
     </div>
+
+    <!-- Dismiss Button -->
+    <button type="button" class="mv-audio-bar-dismiss" id="mvAudioBarCloseBtn" aria-label="Close audio player" title="Close player (Esc)">✕</button>
   </div>
 
   <!-- Bonus Verses Modal Dialog -->
@@ -970,13 +984,15 @@
             </div>
           </div>
         </div>
-      </div>
-
       <div class="shortcuts-footer">
         <span class="shortcuts-footer-hint">💡 Press <kbd class="shortcut-key-inline">Esc</kbd> or click outside to dismiss</span>
       </div>
     </div>
   </div>
+
+  <!-- Toast Notification Container for Copied / Bookmarked Verses -->
+  <div class="mv-toast-popup" id="mvToast" aria-live="polite" aria-atomic="true"></div>
+
   <script src="buttons.js" defer></script>
   <script src="js/script.js" defer></script>
   <script src="js/data/master-verses-data.js"></script>

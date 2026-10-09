@@ -82,7 +82,18 @@ const PRECACHE_URLS = [
   'assets/icons/moon.png',
   'assets/icons/sun.png',
   'assets/icons/menu.png',
-  'assets/icons/email.png'
+  'assets/icons/email.png',
+  'assets/icons/astronaut.png',
+  'assets/icons/bookmark.png',
+  'assets/icons/books.png',
+  'assets/icons/calendar.png',
+  'assets/icons/clock.png',
+  'assets/icons/html5.png',
+  'assets/icons/java.png',
+  'assets/icons/lightning.png',
+  'assets/icons/open-book.png',
+  'assets/icons/share.png',
+  'assets/icons/star.png'
 ];
 
 // Install Event - Pre-cache essential app shell and content
@@ -138,7 +149,8 @@ self.addEventListener('fetch', (event) => {
           // Fetch updated version in background to keep cache fresh
           fetch(request).then((networkResponse) => {
             if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => cache.put(request, networkResponse));
+              const responseToCache = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
             }
           }).catch(() => {/* Offline fallback handles it */});
           return cachedResponse;
@@ -154,7 +166,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {
           // If HTML page failed offline, serve cached index or 404
           if (request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('index.html') || caches.match('404.html');
+            return caches.match('index.html').then((res) => res || caches.match('404.html'));
           }
         });
       })

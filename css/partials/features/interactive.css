@@ -1,5 +1,5 @@
-﻿/* =========================================================
-   HeyNuo â€“ Interactive Widgets & UI (interactive.css)
+/* =========================================================
+   HeyNuo — Interactive Widgets & UI (interactive.css)
    Shimmer effect, view transitions, skill meters, timeline, FAQ, 404.
    ========================================================= */
 
@@ -175,6 +175,7 @@
     border-radius: var(--radius-xl);
     padding: 24px 28px;
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
   }

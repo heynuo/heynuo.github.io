@@ -1,4 +1,4 @@
-﻿/* =========================================================
+/* =========================================================
    HeyNuo — Typography & Global Elements (typography.css)
    Layer: base
 
@@ -154,9 +154,10 @@
   }
 
   /* Optical trim of leading — tightens heading rhythm.
-     Only applied where the engine supports it (Chrome 133+). */
+     Only applied where the engine supports it (Chrome 133+).
+     Exclude card headings to avoid layout box height truncation on multi-line titles. */
   @supports (text-box: trim-both cap alphabetic) {
-    :where(h1, h2, h3, h4, h5, h6) {
+    :where(h1, h2, h3, h4, h5, h6):not(.card h3):not(.card-body h3) {
       text-box: trim-both cap alphabetic;
     }
   }

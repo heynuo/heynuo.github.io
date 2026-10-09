@@ -16,6 +16,9 @@
     online: () => navigator.onLine !== false,
     sleep: (ms, signal) =>
       new Promise((resolve, reject) => {
+        if (signal?.aborted) {
+          return reject(signal.reason ?? new DOMException('Aborted', 'AbortError'));
+        }
         const t = setTimeout(resolve, ms);
         signal?.addEventListener(
           'abort',
@@ -119,7 +122,11 @@
      ========================================================= */
   function setState(btn, state, detail) {
     btn.dataset.btnState = state;
-    btn.toggleAttribute('aria-busy', state === 'loading');
+    if (state === 'loading') {
+      btn.setAttribute('aria-busy', 'true');
+    } else {
+      btn.removeAttribute('aria-busy');
+    }
     btn.dispatchEvent(
       new CustomEvent('btn:state', {
         detail: { state, ...detail },
@@ -180,7 +187,7 @@
     if (tabLock && typeof BroadcastChannel !== 'undefined') {
       if (!tabLocks.has(tabLock)) tabLocks.set(tabLock, new BroadcastChannel(tabLock));
       const ch = tabLocks.get(tabLock);
-      const claim = `claim:${crypto.randomUUID?.() ?? Date.now()}`;
+      const claim = `claim:${typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now()}`;
       let lost = false;
       const onMsg = (e) => {
         if (typeof e.data === 'string' && e.data.startsWith('claim:') && e.data !== claim) {
@@ -215,8 +222,9 @@
       }
     }
 
+    let timeoutId = null;
     if (timeout) {
-      setTimeout(
+      timeoutId = setTimeout(
         () => ac.abort(new DOMException('Timeout', 'TimeoutError')),
         timeout
       );
@@ -233,7 +241,10 @@
         const wait = Math.max(0, minDuration - (env.now() - t0));
         if (wait) await env.sleep(wait, ac.signal);
 
-        if (runControllers.get(btn) !== ac) return result;
+        if (runControllers.get(btn) !== ac) {
+          if (timeoutId) clearTimeout(timeoutId);
+          return result;
+        }
 
         setState(btn, 'success', { result });
         runHook('afterRun', btn, result, opts);
@@ -246,10 +257,14 @@
           setState(btn, 'idle');
           runControllers.delete(btn);
         }
+        if (timeoutId) clearTimeout(timeoutId);
         releaseLock();
         return result;
       } catch (err) {
-        if (err?.name === 'AbortError' && runControllers.get(btn) !== ac) return;
+        if (err?.name === 'AbortError' && runControllers.get(btn) !== ac) {
+          if (timeoutId) clearTimeout(timeoutId);
+          return;
+        }
         lastErr = err;
         attempt++;
         if (attempt <= retries) {
@@ -261,12 +276,16 @@
             })
           );
           try { await env.sleep(backoff, ac.signal); }
-          catch { return; }
+          catch {
+            if (timeoutId) clearTimeout(timeoutId);
+            return;
+          }
         }
       }
     }
 
     /* --- error path --- */
+    if (timeoutId) clearTimeout(timeoutId);
     setState(btn, 'error', { error: lastErr });
     runHook('onError', btn, lastErr, opts);
     btn.dispatchEvent(new CustomEvent('btn:error', { detail: lastErr, bubbles: true }));
@@ -401,7 +420,12 @@
     if (!pop) return;
 
     const sync = () => {
-      const open = pop.matches(':popover-open');
+      let open = false;
+      try {
+        open = pop.matches(':popover-open');
+      } catch (_) {
+        open = false;
+      }
       btn.setAttribute('aria-expanded', String(open));
       btn.dispatchEvent(
         new CustomEvent(open ? 'btn:opened' : 'btn:closed', { bubbles: true })
@@ -451,7 +475,10 @@
         try { opts = JSON.parse(raw); }
         catch {
           opts = Object.fromEntries(
-            raw.split(',').map((p) => p.split('=').map((s) => s.trim()))
+            raw.split(',').map((p) => {
+              const parts = p.split('=');
+              return [parts[0].trim(), (parts[1] || 'true').trim()];
+            })
           );
         }
       }
@@ -481,7 +508,11 @@
     const apply = () => {
       document.querySelectorAll('[data-offline-disable]').forEach((btn) => {
         const isOffline = !navigator.onLine;
-        btn.toggleAttribute('aria-disabled', isOffline);
+        if (isOffline) {
+          btn.setAttribute('aria-disabled', 'true');
+        } else {
+          btn.removeAttribute('aria-disabled');
+        }
         btn.classList.toggle('is-disabled', isOffline);
       });
     };

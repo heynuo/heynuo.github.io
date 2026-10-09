@@ -45,9 +45,84 @@
   --qp-transition-spring: 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* --------------------------------------------------------------------------
+   THEME OVERRIDES: Light Mode & Sepia Reading Mode
+   -------------------------------------------------------------------------- */
+[data-theme="light"] {
+  --qp-bg-dark: #f8fafc;
+  --qp-bg-player: rgba(255, 255, 255, 0.92);
+  --qp-bg-card: rgba(248, 250, 252, 0.96);
+  --qp-bg-elevated: #ffffff;
+  --qp-bg-pill: rgba(241, 245, 249, 0.96);
+
+  --qp-text-main: #0f172a;
+  --qp-text-secondary: #475569;
+  --qp-text-muted: #64748b;
+
+  --qp-border: rgba(15, 23, 42, 0.10);
+  --qp-border-active: rgba(16, 185, 129, 0.65);
+}
+
+[data-reading-theme="sepia"] {
+  --qp-bg-dark: #fbf0d9;
+  --qp-bg-player: rgba(253, 248, 237, 0.94);
+  --qp-bg-card: rgba(251, 240, 217, 0.96);
+  --qp-bg-elevated: #fffbf2;
+  --qp-bg-pill: rgba(243, 229, 204, 0.96);
+
+  --qp-text-main: #3c2f21;
+  --qp-text-secondary: #5c4732;
+  --qp-text-muted: #786450;
+
+  --qp-border: rgba(120, 80, 30, 0.14);
+  --qp-border-active: rgba(217, 119, 6, 0.65);
+}
+
+/* Focus-visible accessibility for all interactive controls */
+.qp-btn:focus-visible,
+.qp-play-btn:focus-visible,
+.qp-fav-btn:focus-visible,
+.qp-reciter-chip:focus-visible,
+.qp-mobile-play-btn:focus-visible,
+.qp-icon-btn:focus-visible,
+.qp-modal-close:focus-visible,
+.qp-drawer-chip-btn:focus-visible,
+.qp-surah-item:focus-visible,
+.qp-reciter-card:focus-visible {
+  outline: 2px solid var(--qp-primary-light);
+  outline-offset: 2px;
+}
+
+/* Light / Sepia Mode Surface Refinements */
+[data-theme="light"] .qp-player-bar,
+[data-reading-theme="sepia"] .qp-player-bar {
+  box-shadow: 0 16px 44px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .qp-player-bar.is-playing,
+[data-reading-theme="sepia"] .qp-player-bar.is-playing {
+  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.16), 0 0 25px rgba(16, 185, 129, 0.22), 0 0 0 1px rgba(16, 185, 129, 0.4);
+}
+
+[data-theme="light"] .qp-eq-bars {
+  background: rgba(248, 250, 252, 0.65);
+}
+
+[data-theme="light"] .qp-btn:hover {
+  background: rgba(16, 185, 129, 0.14);
+}
+
+[data-theme="light"] .qp-modal-content {
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .qp-drawer {
+  box-shadow: -10px 0 35px rgba(15, 23, 42, 0.15);
+}
+
 /* Ensure bottom page content is never hidden under the floating player */
 body.has-qp-docked {
-  padding-bottom: calc(var(--qp-bar-height) + 36px) !important;
+  padding-bottom: calc(var(--qp-bar-height) + 36px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
 body.has-qp-docked .scroll-to-top {
@@ -1543,7 +1618,7 @@ body.has-qp-minimized {
     --qp-bar-height: 58px;
   }
   body.has-qp-docked {
-    padding-bottom: calc(var(--qp-bar-height) + 18px) !important;
+    padding-bottom: calc(var(--qp-bar-height) + 18px + env(safe-area-inset-bottom, 0px)) !important;
   }
   .qp-player-bar {
     bottom: calc(6px + env(safe-area-inset-bottom, 0px));
@@ -1598,7 +1673,7 @@ body.has-qp-minimized {
     padding: 0 12px 10px;
     gap: 6px;
   }
-  .qp-surah-row {
+  .qp-surah-item {
     padding: 10px 14px;
   }
 }

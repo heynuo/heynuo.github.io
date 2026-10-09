@@ -10,58 +10,57 @@
    5. features   - Interactive features, modals, audio sampler, prose
    6. utilities  - Accessibility overrides, atomic helpers, print
    ========================================================= */
-
 @layer reset, base, layout, components, features, utilities;
 
 /* ---------------------------------------------------------
    1. RESET LAYER
    --------------------------------------------------------- */
-@import url("./partials/reset.css") layer(reset);
+@import url("./partials/reset.css");
 
 /* ---------------------------------------------------------
    2. BASE LAYER
    --------------------------------------------------------- */
-@import url("./partials/base/tokens.css") layer(base);
-@import url("./partials/base/themes.css") layer(base);
-@import url("./partials/base/typography.css") layer(base);
+@import url("./partials/base/tokens.css");
+@import url("./partials/base/themes.css");
+@import url("./partials/base/typography.css");
 
 /* ---------------------------------------------------------
    3. LAYOUT LAYER
    --------------------------------------------------------- */
-@import url("./partials/layout/layout.css") layer(layout);
+@import url("./partials/layout/layout.css");
 
 /* ---------------------------------------------------------
    4. COMPONENTS LAYER
    --------------------------------------------------------- */
-@import url("./partials/components/header-nav.css") layer(components);
-@import url("./partials/components/hero.css") layer(components);
-@import url("./partials/components/buttons.css") layer(components);
-@import url("./partials/components/value-section.css") layer(components);
-@import url("./partials/components/featured-project.css") layer(components);
-@import url("./partials/components/search-toolbar.css") layer(components);
-@import url("./partials/components/cards.css") layer(components);
-@import url("./partials/components/about-contact.css") layer(components);
-@import url("./partials/components/footer.css") layer(components);
-@import url("./partials/components/widgets.css") layer(components);
-@import url("./partials/components/responsive.css") layer(components);
+@import url("./partials/components/header-nav.css");
+@import url("./partials/components/hero.css");
+@import url("./partials/components/buttons.css");
+@import url("./partials/components/value-section.css");
+@import url("./partials/components/featured-project.css");
+@import url("./partials/components/search-toolbar.css");
+@import url("./partials/components/cards.css");
+@import url("./partials/components/about-contact.css");
+@import url("./partials/components/footer.css");
+@import url("./partials/components/widgets.css");
+@import url("./partials/components/responsive.css");
 
 /* ---------------------------------------------------------
    5. FEATURES LAYER
    --------------------------------------------------------- */
-@import url("./partials/features/announcement.css") layer(features);
-@import url("./partials/features/hero-showcase.css") layer(features);
-@import url("./partials/features/featured-showcase.css") layer(features);
-@import url("./partials/features/verse-sampler.css") layer(features);
-@import url("./partials/features/dispatch.css") layer(features);
-@import url("./partials/features/shortcuts-modal.css") layer(features);
-@import url("./partials/features/preview-modal.css") layer(features);
-@import url("./partials/features/article-prose.css") layer(features);
-@import url("./partials/features/interactive.css") layer(features);
-@import url("./partials/features/command-palette.css") layer(features);
+@import url("./partials/features/announcement.css");
+@import url("./partials/features/hero-showcase.css");
+@import url("./partials/features/featured-showcase.css");
+@import url("./partials/features/verse-sampler.css");
+@import url("./partials/features/dispatch.css");
+@import url("./partials/features/shortcuts-modal.css");
+@import url("./partials/features/preview-modal.css");
+@import url("./partials/features/article-prose.css");
+@import url("./partials/features/interactive.css");
+@import url("./partials/features/command-palette.css");
 
 /* ---------------------------------------------------------
    6. UTILITIES LAYER
    --------------------------------------------------------- */
-@import url("./partials/utilities/accessibility.css") layer(utilities);
-@import url("./partials/utilities/helpers.css") layer(utilities);
-@import url("./partials/utilities/print.css") layer(utilities);
+@import url("./partials/utilities/accessibility.css");
+@import url("./partials/utilities/helpers.css");
+@import url("./partials/utilities/print.css");

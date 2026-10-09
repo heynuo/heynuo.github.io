@@ -1,9 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Theme Initialization: Prevents Flash of Unstyled Content (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('heynuo-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var savedReading = localStorage.getItem('heynuo-reading-theme');
+        if (savedReading && savedReading !== 'default') {
+          document.documentElement.setAttribute('data-reading-theme', savedReading);
+        }
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
   <meta name="robots" content="index, follow">
   <title>Jinn in Islamic Theology: Meaning, Types &amp; Quran | HeyNuo</title>
   <meta name="description"
@@ -72,7 +90,7 @@
 
 <body>
   <!-- Include once, anywhere after <body> opens (or in <head> with defer) -->
-  <script src="/assets/js/quran-player.js" defer></script>
+  <script src="assets/js/quran-player.js" defer></script>
 
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -167,9 +185,11 @@
             <ol class="toc-list" style="margin: 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.4rem;">
               <li><a href="#origin-nature">1. Origin &amp; Nature of Jinn</a></li>
               <li><a href="#abilities-interaction">2. Abilities &amp; Interaction with Humans</a></li>
-              <li><a href="#angels-vs-jinn">3. Differences Between Jinn &amp; Angels</a></li>
-              <li><a href="#ruqyah-verses-table">4. Authentic Ruqyah Healing Verses</a></li>
-              <li><a href="#scholarly-citations">5. Primary Sources &amp; Scholarly Citations</a></li>
+              <li><a href="#sihr-reality">3. Sihr (Magic) &amp; Reality</a></li>
+              <li><a href="#islamic-stance-myths">4. Islamic Stance &amp; Common Myths</a></li>
+              <li><a href="#daily-protection-duas">5. Daily Protection Duas</a></li>
+              <li><a href="#ruqyah-verses-table">6. Qur’anic Verses for Ruqyah &amp; Protection</a></li>
+              <li><a href="#scholarly-citations">7. Primary Sources &amp; Scholarly Citations</a></li>
             </ol>
           </nav>
 
@@ -179,7 +199,7 @@
             substance is fire, while humans are from clay.</p>
           <blockquote>“And the jinn We created before from scorching fire.” (Qur’an 15:27)</blockquote>
 
-          <h2>🕌 Abilities & Interaction with Humans</h2>
+          <h2 id="abilities-interaction">🕌 Abilities &amp; Interaction with Humans</h2>
           <p>Jinn can move rapidly, change form, and whisper insinuations (<em>waswas</em>). However, they have no power
             to benefit or harm except by Allah’s will. Possession (mas’h) is possible, but the prophetic cure is Ruqyah
             Shari’yah — reciting Qur’anic verses like <strong>Al-Fatihah, Ayat-ul-Kursi, Al-Mu'awwidhatain</strong>.</p>
@@ -198,12 +218,12 @@
             </div>
           </div>
 
-          <h2>⚠️ Sihr (Magic) & Reality</h2>
+          <h2 id="sihr-reality">⚠️ Sihr (Magic) &amp; Reality</h2>
           <p>Black magic involves seeking help from devils among the jinn to harm others — a major sin. The Qur’an
             teaches that only Allah has ultimate control. Treat sihr via sincere repentance, ruqyah, and increasing
             obedience to Allah, not by visiting sorcerers.</p>
 
-          <h2>🤲 Islamic Stance & Common Myths</h2>
+          <h2 id="islamic-stance-myths">🤲 Islamic Stance &amp; Common Myths</h2>
           <ul>
             <li><strong>Myth:</strong> Jinn can know the unseen → <strong>Truth:</strong> Only Allah knows
               <em>Al-Ghayb</em>.</li>
@@ -213,14 +233,14 @@
               Surah Al-Jinn 72:14.</li>
           </ul>
 
-          <h2>📖 Daily Protection Duas</h2>
+          <h2 id="daily-protection-duas">📖 Daily Protection Duas</h2>
           <p>Strengthen your daily protection with:<br />
             → Ayat-ul-Kursi (Al-Baqarah 255)<br />
             → Surah Al-Ikhlas, Al-Falaq, An-Nas (three times each morning/evening)<br />
             → “Bismillah alladhi la yadurru ma’a ismihi shay’un...” (Who recites it three times morning/evening nothing
             harms him).</p>
 
-          <h2>📚 Comprehensive Qur’anic Verses for Ruqyah, Protection & Spiritual Healing</h2>
+          <h2 id="ruqyah-verses-table">📚 Comprehensive Qur’anic Verses for Ruqyah, Protection &amp; Spiritual Healing</h2>
           <p>The following tables compile authentic verses from the Qur’an, categorized for specific needs. Recite with
             unwavering tawheed and trust in Allah.</p>
 
@@ -911,25 +931,11 @@
               <span>Shortcuts</span>
               <kbd class="footer-kbd">?</kbd>
             </button>
-            <a href="#main-content" class="footer-ctrl-btn footer-back-top" id="footerBackTop" aria-label="Back to top of page" title="Back to top">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"></path></svg>
-              <span>Top</span>
-            </a>
           </div>
         </div>
       </div>
     </footer>
   </div>
-
-  <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top" title="Scroll to top">
-    <svg class="progress-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true">
-      <path class="progress-ring-bg"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-      <path class="progress-ring-circle" id="scrollProgressCircle"
-        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-    </svg>
-    <span class="scroll-arrow">↑</span>
-  </button>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 

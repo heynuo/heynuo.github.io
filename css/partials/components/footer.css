@@ -352,6 +352,12 @@
     transition: color 0.2s var(--ft-ease), transform 0.2s var(--ft-ease);
   }
 
+  @media (pointer: coarse) {
+    .footer-nav-list a {
+      min-height: 44px;
+    }
+  }
+
   .footer-nav-list a>span:first-child {
     position: relative;
     display: inline-block;
@@ -519,6 +525,7 @@
     text-decoration: none;
     cursor: pointer;
     backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition:
       color 0.2s var(--ft-ease),
       border-color 0.2s var(--ft-ease),
@@ -550,13 +557,6 @@
     line-height: 1.5;
   }
 
-  .footer-back-top svg {
-    transition: transform 0.22s var(--ft-ease);
-  }
-
-  .footer-back-top:hover svg {
-    transform: translateY(-3px);
-  }
 
   /* ==========================================================================
      9. FOCUS VISIBILITY
@@ -630,7 +630,14 @@
     --ft-muted-soft: color-mix(in srgb, #94a3b8 70%, transparent);
   }
 
-  [data-theme="dark"] footer::after,
+  [data-theme="dark"] footer::after {
+    background:
+      radial-gradient(ellipse 60% 55% at 12% 0%,
+        color-mix(in srgb, var(--ft-accent) 18%, transparent), transparent 65%),
+      radial-gradient(ellipse 50% 40% at 88% 100%,
+        color-mix(in srgb, var(--ft-accent) 10%, transparent), transparent 70%);
+  }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) footer::after {
       background:
@@ -726,7 +733,6 @@
     }
 
     .footer-ctrl-btn,
-    .footer-back-top svg,
     .footer-badge,
     .footer-social-link,
     .footer-nav-list a,
