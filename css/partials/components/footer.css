@@ -282,8 +282,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     border: 1px solid var(--ft-border);
     border-radius: 10px;
     color: var(--ft-muted);
@@ -345,17 +345,11 @@
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
-    min-height: 26px;
+    min-height: 44px;
     color: var(--ft-muted);
     font-size: 0.875rem;
     text-decoration: none;
     transition: color 0.2s var(--ft-ease), transform 0.2s var(--ft-ease);
-  }
-
-  @media (pointer: coarse) {
-    .footer-nav-list a {
-      min-height: 44px;
-    }
   }
 
   .footer-nav-list a>span:first-child {
@@ -416,8 +410,8 @@
     padding: 2px 7px;
     border-radius: 999px;
     background: color-mix(in srgb, var(--ft-muted) 12%, transparent);
-    color: var(--ft-muted);
-    font-size: 0.62rem;
+    color: #475569;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     line-height: 1.4;
@@ -432,22 +426,22 @@
 
   .footer-pill-tag.audio-tag {
     background: color-mix(in srgb, #0ea5e9 16%, transparent);
-    color: #0284c7;
+    color: #075985;
   }
 
   .footer-pill-tag.shifa-tag {
     background: color-mix(in srgb, #10b981 16%, transparent);
-    color: #059669;
+    color: #065f46;
   }
 
   .footer-pill-tag.new-tag {
     background: color-mix(in srgb, #f59e0b 20%, transparent);
-    color: #b45309;
+    color: #92400e;
   }
 
   .footer-pill-tag.trust-tag {
     background: color-mix(in srgb, #8b5cf6 16%, transparent);
-    color: #7c3aed;
+    color: #6d28d9;
   }
 
   /* ==========================================================================
@@ -513,7 +507,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    min-height: 34px;
+    min-height: 44px;
     padding: 6px 13px;
     border: 1px solid var(--ft-border);
     border-radius: 999px;
@@ -620,6 +614,26 @@
       --ft-muted: #94a3b8;
       --ft-muted-soft: color-mix(in srgb, #94a3b8 70%, transparent);
     }
+
+    :root:not([data-theme="light"]) footer .footer-pill-tag {
+      color: #cbd5e1;
+    }
+
+    :root:not([data-theme="light"]) footer .footer-pill-tag.audio-tag {
+      color: #7dd3fc;
+    }
+
+    :root:not([data-theme="light"]) footer .footer-pill-tag.shifa-tag {
+      color: #6ee7b7;
+    }
+
+    :root:not([data-theme="light"]) footer .footer-pill-tag.new-tag {
+      color: #fcd34d;
+    }
+
+    :root:not([data-theme="light"]) footer .footer-pill-tag.trust-tag {
+      color: #c4b5fd;
+    }
   }
 
   [data-theme="dark"] footer {
@@ -628,6 +642,26 @@
     --ft-text: #e5e7eb;
     --ft-muted: #94a3b8;
     --ft-muted-soft: color-mix(in srgb, #94a3b8 70%, transparent);
+  }
+
+  [data-theme="dark"] footer .footer-pill-tag {
+    color: #cbd5e1;
+  }
+
+  [data-theme="dark"] footer .footer-pill-tag.audio-tag {
+    color: #7dd3fc;
+  }
+
+  [data-theme="dark"] footer .footer-pill-tag.shifa-tag {
+    color: #6ee7b7;
+  }
+
+  [data-theme="dark"] footer .footer-pill-tag.new-tag {
+    color: #fcd34d;
+  }
+
+  [data-theme="dark"] footer .footer-pill-tag.trust-tag {
+    color: #c4b5fd;
   }
 
   [data-theme="dark"] footer::after {
@@ -741,6 +775,17 @@
     .footer-brand-logo .logo-mark,
     .footer-ext-link svg {
       transition: none;
+    }
+
+    footer a:hover,
+    footer a:focus-visible,
+    footer a:active,
+    footer button:hover,
+    footer button:focus-visible,
+    footer button:active,
+    .footer-badge:hover,
+    .footer-ext-link:hover svg {
+      transform: none;
     }
 
     .footer-brand-logo:hover .logo-mark {

@@ -300,26 +300,14 @@
     background: var(--glass-bg);
   }
 
-  /* =======================================================
-     9 · SMOOTH THEME SWAP  (CSS-only — no JS class needed)
-     :where() keeps specificity at 0. Any component rule
-     that defines its own `transition` automatically wins,
-     so hover states and motion design stay untouched.
-     ======================================================= */
-  @media (prefers-reduced-motion: no-preference) {
-
-    :where([data-theme], [data-reading-theme]),
-    :where([data-theme], [data-reading-theme]) *,
-    :where([data-theme], [data-reading-theme]) *::before,
-    :where([data-theme], [data-reading-theme]) *::after {
-      transition:
-        background-color 260ms ease,
-        border-color 260ms ease,
-        color 260ms ease,
-        outline-color 260ms ease,
-        fill 260ms ease,
-        stroke 260ms ease;
-    }
+  /* Theme variables update immediately. Components animate their own
+     interactions; transitioning colors on every descendant made theme
+     changes repaint the entire page. */
+  :root.theme-switching,
+  :root.theme-switching *,
+  :root.theme-switching *::before,
+  :root.theme-switching *::after {
+    transition: none !important;
   }
 
   /* =======================================================

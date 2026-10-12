@@ -227,7 +227,6 @@
   background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(6, 182, 212, 0.03) 50%, transparent 70%);
   pointer-events: none;
   z-index: 0;
-  filter: blur(60px);
   /* Isolate for rendering performance */
   contain: paint;
 }
@@ -243,7 +242,6 @@
   background: radial-gradient(circle, rgba(245, 158, 11, 0.12) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 70%);
   pointer-events: none;
   z-index: 0;
-  filter: blur(60px);
   contain: paint;
 }
 
@@ -323,12 +321,10 @@
   0%, 100% {
     transform: scale(1);
     opacity: 0.7;
-    filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5));
   }
   50% {
-    transform: scale(1.12);
-    opacity: 1;
-    filter: drop-shadow(0 0 14px rgba(254, 240, 138, 0.85));
+    transform: scale(1.06);
+    opacity: 0.95;
   }
 }
 
@@ -564,7 +560,6 @@
   gap: 9px;
   transition: var(--mv-transition-smooth);
   cursor: pointer;
-  will-change: transform;
 }
 
 .mv-btn-gold {
@@ -2000,8 +1995,6 @@
   position: sticky;
   top: 0;
   z-index: 5;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .mv-canonical-table tbody td {
@@ -2238,15 +2231,12 @@
     0 20px 50px rgba(5, 150, 105, 0.16),
     0 0 0 1px rgba(254, 240, 138, 0.3) inset,
     0 8px 24px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
   z-index: 900;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
-  will-change: transform;
 }
 
 [data-theme="dark"] .mv-persistent-audio-bar {
@@ -2816,6 +2806,34 @@
   }
 }
 
+@media (max-width: 380px) {
+  .mv-page {
+    padding-bottom: calc(230px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .mv-audio-bar-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: center;
+    gap: 8px 4px;
+  }
+
+  .mv-audio-tool-btn {
+    min-width: 0;
+    max-width: 100%;
+    padding-inline: 6px;
+  }
+
+  .mv-audio-volume-cluster {
+    justify-content: center;
+  }
+
+  .mv-audio-nav-group {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+}
+
 /* ==========================================================================
    10. BONUS VERSES / SHORTCUTS MODAL
    ========================================================================== */
@@ -3004,7 +3022,7 @@
   }
 
   .mv-hero-manuscript {
-    padding: 34px 18px 30px;
+    padding: 28px 18px 26px;
     border-radius: 22px;
   }
 
@@ -3027,14 +3045,29 @@
   }
 
   .mv-hero-btn-row {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
+    gap: 10px;
   }
 
-  .mv-hero-btn-row .mv-btn-gold,
-  .mv-hero-btn-row .mv-btn-glass {
+  .mv-hero-btn-row .mv-btn-gold {
+    grid-column: 1 / -1;
     width: 100%;
     justify-content: center;
+  }
+
+  .mv-hero-btn-row .mv-btn-glass {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    padding-inline: 10px;
+    text-align: center;
+  }
+
+  .mv-cover-metrics-pill {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .mv-pdf-showcase {
@@ -3067,19 +3100,50 @@
 
   .mv-dropdown-group {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    align-items: center;
+    align-items: stretch;
   }
 
   .mv-select-wrap {
-    flex: 1 1 calc(50% - 10px);
-    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 5px;
+    flex: initial;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+  }
+
+  .mv-select-wrap label {
+    font-size: 0.74rem;
   }
 
   .mv-custom-select {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding-inline: 10px 28px;
+    font-size: 0.78rem;
+  }
+
+  .mv-dropdown-group > .mv-action-icon-btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .mv-fontsize-group {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+
+  .mv-shortcuts-trigger-btn {
+    min-width: 42px;
   }
 
   .mv-fontsize-group {
@@ -3131,9 +3195,23 @@
 
 @media (max-width: 420px) {
   .mv-cover-metrics-pill {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    width: 100%;
     border-radius: 16px;
     padding: 10px 14px;
+    white-space: normal;
+  }
+
+  .mv-cover-metrics-pill > span {
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .mv-hero-btn-row .mv-btn-glass[href="quran.html"] {
+    display: none;
   }
 
   .mv-medallion-badge {

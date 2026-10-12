@@ -1,5 +1,5 @@
 /* =========================================================
-   HeyNuo — Button System (buttons.css) v5.0
+   HeyNuo — Button System (buttons.css) v5.1
    Platform-native: @property, @starting-style, popover, anchor.
    Progressive enhancement throughout. Safe to drop in.
    ========================================================= */
@@ -159,6 +159,8 @@ components.buttons.a11y;
     gap: 8px;
     padding: var(--btn-pad-y) var(--btn-pad-x);
     border-radius: var(--btn-radius);
+    border: 1px solid transparent;
+    min-block-size: 44px;
     overflow: hidden;
 
     font-family: var(--font-display, inherit);
@@ -190,7 +192,7 @@ components.buttons.a11y;
     transition-duration: var(--btn-dur);
     transition-timing-function: var(--btn-ease);
 
-    &:focus {
+    &:focus:not(:focus-visible) {
       outline: none;
     }
 

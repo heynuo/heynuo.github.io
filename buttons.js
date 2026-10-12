@@ -19,13 +19,19 @@
         if (signal?.aborted) {
           return reject(signal.reason ?? new DOMException('Aborted', 'AbortError'));
         }
-        const t = setTimeout(resolve, ms);
+        const finish = () => {
+          signal?.removeEventListener('abort', onAbort);
+          resolve();
+        };
+        const t = setTimeout(finish, ms);
+        const onAbort = () => {
+          clearTimeout(t);
+          signal?.removeEventListener('abort', onAbort);
+          reject(signal.reason ?? new DOMException('Aborted', 'AbortError'));
+        };
         signal?.addEventListener(
           'abort',
-          () => {
-            clearTimeout(t);
-            reject(signal.reason ?? new DOMException('Aborted', 'AbortError'));
-          },
+          onAbort,
           { once: true }
         );
       }),
@@ -99,6 +105,7 @@
   const initializedRoots = new WeakSet();
   const popoverCleanups = new WeakMap();
   const runControllers = new WeakMap();
+  const runOriginalLabels = new WeakMap();
   const runQueues = new WeakMap();
   const tabLocks = new Map();
   const plugins = new Map();
@@ -164,6 +171,7 @@
         return next;
       }
       runControllers.get(btn)?.abort(new DOMException('Superseded', 'AbortError'));
+      runControllers.delete(btn);
     }
 
     /* --- offline --- */
@@ -209,9 +217,20 @@
     /* --- abort + a11y label --- */
     const ac = new AbortController();
     runControllers.set(btn, ac);
-    const prevLabel = btn.getAttribute('aria-label');
+    const prevLabel = runOriginalLabels.has(btn)
+      ? runOriginalLabels.get(btn)
+      : btn.getAttribute('aria-label');
+    if (!runOriginalLabels.has(btn)) runOriginalLabels.set(btn, prevLabel);
     const text = btn.textContent.trim();
     if (!prevLabel && text) btn.setAttribute('aria-label', `${text}, loading`);
+
+    const restoreLabel = () => {
+      btn.removeAttribute('aria-busy');
+      const originalLabel = runOriginalLabels.get(btn);
+      if (originalLabel !== null) btn.setAttribute('aria-label', originalLabel);
+      else btn.removeAttribute('aria-label');
+      runOriginalLabels.delete(btn);
+    };
 
     /* --- plugin hook --- */
     let finalTask = task;
@@ -243,6 +262,7 @@
 
         if (runControllers.get(btn) !== ac) {
           if (timeoutId) clearTimeout(timeoutId);
+          releaseLock();
           return result;
         }
 
@@ -251,9 +271,7 @@
         if (successDelay) await env.sleep(successDelay).catch(() => { });
 
         if (runControllers.get(btn) === ac) {
-          btn.removeAttribute('aria-busy');
-          if (prevLabel) btn.setAttribute('aria-label', prevLabel);
-          else btn.removeAttribute('aria-label');
+          restoreLabel();
           setState(btn, 'idle');
           runControllers.delete(btn);
         }
@@ -261,11 +279,13 @@
         releaseLock();
         return result;
       } catch (err) {
-        if (err?.name === 'AbortError' && runControllers.get(btn) !== ac) {
+        if (runControllers.get(btn) !== ac) {
           if (timeoutId) clearTimeout(timeoutId);
+          releaseLock();
           return;
         }
-        lastErr = err;
+        lastErr = ac.signal.aborted ? (ac.signal.reason ?? err) : err;
+        if (ac.signal.aborted) break;
         attempt++;
         if (attempt <= retries) {
           const backoff = retryDelay * Math.pow(2, attempt - 1) + Math.random() * 100;
@@ -276,9 +296,14 @@
             })
           );
           try { await env.sleep(backoff, ac.signal); }
-          catch {
-            if (timeoutId) clearTimeout(timeoutId);
-            return;
+          catch (sleepError) {
+            if (runControllers.get(btn) !== ac) {
+              if (timeoutId) clearTimeout(timeoutId);
+              releaseLock();
+              return;
+            }
+            lastErr = ac.signal.reason ?? sleepError;
+            break;
           }
         }
       }
@@ -292,9 +317,7 @@
     if (errorDelay) await env.sleep(errorDelay).catch(() => { });
 
     if (runControllers.get(btn) === ac) {
-      btn.removeAttribute('aria-busy');
-      if (prevLabel) btn.setAttribute('aria-label', prevLabel);
-      else btn.removeAttribute('aria-label');
+      restoreLabel();
       setState(btn, 'idle');
       runControllers.delete(btn);
     }

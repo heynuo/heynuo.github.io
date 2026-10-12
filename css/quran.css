@@ -444,6 +444,28 @@
   padding: 0 6px;
 }
 
+.quran-load-notice {
+  margin: 0 auto 18px;
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-left: 4px solid #10b981;
+  border-radius: 16px;
+  background: var(--card-bg);
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.quran-load-notice[hidden] {
+  display: none !important;
+}
+
+[data-theme="dark"] .quran-load-notice {
+  background: rgba(17, 24, 39, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left-color: #34d399;
+}
+
 /* --- Surah Cards Grid --- */
 .quran-grid {
   display: grid;
@@ -465,8 +487,8 @@
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
 }
 
 [data-theme="dark"] .surah-card {

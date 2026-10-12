@@ -2288,6 +2288,39 @@
     position: relative;
   }
 
+  /* =====================================================
+     SECTION CD — LOW-COST SCROLL SURFACES
+     Keep large, frequently repainted layers static.
+     ===================================================== */
+  .hero::before {
+    animation: none;
+    will-change: auto;
+  }
+
+  .hero-ambient-glow,
+  .featured-ambient-glow {
+    filter: none;
+    animation: none;
+    will-change: auto;
+  }
+
+  .hero-showcase,
+  .hero h1 span,
+  .featured-banner,
+  .card,
+  .value-card,
+  .about-box,
+  .dispatch-card,
+  .hero-stat {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .hero-showcase,
+  .hero h1 span {
+    animation: none;
+  }
+
 }
 
 /* end @layer utilities */

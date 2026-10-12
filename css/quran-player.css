@@ -145,8 +145,6 @@ body.has-qp-minimized {
   margin: 0 auto;
   height: var(--qp-bar-height);
   background: var(--qp-bg-player);
-  backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
   border: 1px solid var(--qp-border);
   border-radius: var(--qp-radius-lg);
   z-index: 9990;
@@ -876,8 +874,6 @@ body.has-qp-minimized {
   right: 24px;
   z-index: 9995;
   background: var(--qp-bg-pill);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid var(--qp-border);
   border-radius: var(--qp-radius-full);
   padding: 6px 14px 6px 8px;

@@ -1,0 +1,170 @@
+/* About page refinements */
+
+.about-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(360px, 48vw, 540px);
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 15%, transparent), transparent 58%),
+    var(--surface, var(--home-card-bg, #fff));
+}
+
+.about-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .32;
+  background-image: linear-gradient(color-mix(in srgb, var(--primary) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--primary) 10%, transparent) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+[data-theme="dark"] .about-hero {
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 22%, transparent), transparent 58%),
+    var(--surface, #0f172a);
+}
+
+.about-hero .hero-content {
+  max-width: 850px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.about-hero .hero-badge {
+  margin-inline: auto;
+}
+
+.about-hero .hero-description {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.about-hero .hero-buttons {
+  justify-content: center;
+}
+
+.about-hero .hero-buttons .btn {
+  min-width: 154px;
+}
+
+.section-spacing {
+  scroll-margin-top: 96px;
+}
+
+.section-title {
+  text-wrap: balance;
+}
+
+.about-box:hover,
+.card:hover,
+.timeline-card:hover,
+.bio-card:hover {
+  border-color: color-mix(in srgb, var(--primary) 32%, var(--border));
+}
+
+main > .section-spacing > .section-title {
+  max-width: 18ch;
+  margin-inline: auto;
+  text-align: center;
+}
+
+main > .section-spacing > .section-title::after {
+  content: "";
+  display: block;
+  width: 52px;
+  height: 3px;
+  margin: 14px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent, #06b6d4));
+}
+
+.skill-meter-track {
+  overflow: hidden;
+  position: relative;
+  height: 9px;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  background: color-mix(in srgb, var(--surface-2, #e2e8f0) 82%, transparent);
+}
+
+.skill-meter-fill {
+  min-width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent, #06b6d4));
+  box-shadow: 0 0 16px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+
+.timeline {
+  max-width: 860px;
+}
+
+.timeline-card {
+  background: color-mix(in srgb, var(--surface, #fff) 90%, var(--primary) 10%);
+}
+
+.bio-card {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.tech-pill {
+  transition: transform .2s ease, border-color .2s ease, background-color .2s ease;
+}
+
+.tech-pill:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+}
+
+.about-hero :is(a, button):focus-visible,
+.about-box :is(a, button):focus-visible,
+.card :is(a, button):focus-visible,
+.timeline-card :is(a, button):focus-visible,
+.bio-card :is(a, button):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 72%, white);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .about-hero {
+    min-height: 390px;
+  }
+
+  .about-hero .hero-description {
+    font-size: .98rem;
+  }
+
+  .about-hero .hero-buttons {
+    align-items: stretch;
+  }
+
+  .about-hero .hero-buttons > * {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tech-pill {
+    min-height: 48px;
+  }
+
+  main > .section-spacing > .section-title {
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-pill {
+    transition: none;
+  }
+
+  .tech-pill:hover {
+    transform: none;
+  }
+}

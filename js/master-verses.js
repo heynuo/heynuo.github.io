@@ -20,6 +20,42 @@
 (function () {
   'use strict';
 
+  // Storage may be blocked or full in private browsing. Keep the guide usable
+  // even when a preference cannot be read or saved.
+  function readStoredValue(key, fallback = null) {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function readStoredJSON(key, fallback) {
+    try {
+      const value = readStoredValue(key, null);
+      return value === null ? fallback : JSON.parse(value);
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writeStoredValue(key, value) {
+    try {
+      window.localStorage.setItem(key, String(value));
+    } catch (error) {
+      // Preference persistence is optional; the current page state still works.
+    }
+  }
+
+  function writeStoredJSON(key, value) {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      // Preference persistence is optional; the current page state still works.
+    }
+  }
+
   // Reciter Configuration (Multi-Provider: EveryAyah & Al-Islam Tilawat CDN)
   const RECITERS = {
     alafasy: { name: 'Mishary Rashid Alafasy', provider: 'everyayah', folder: 'Alafasy_128kbps' },
@@ -116,19 +152,37 @@
   ];
 
   // State Management
-  let currentReciter = localStorage.getItem('mv_reciter') || 'alafasy';
-  let favorites = JSON.parse(localStorage.getItem('mv_favorites') || '[]');
+  const savedReciter = readStoredValue('mv_reciter', 'alafasy') || 'alafasy';
+  let currentReciter = Object.prototype.hasOwnProperty.call(RECITERS, savedReciter) ? savedReciter : 'alafasy';
+  const knownVerseIds = new Map(
+    [...MASTER_VERSES_DATA, ...TOP_CROSS_REFERENCED_ADDITIONAL]
+      .map(verse => [String(verse.id), verse.id])
+  );
+  const savedFavorites = readStoredJSON('mv_favorites', []);
+  let favorites = Array.isArray(savedFavorites)
+    ? [...new Set(savedFavorites
+      .map(id => knownVerseIds.get(String(id)))
+      .filter(id => id !== undefined))]
+    : [];
   let activeCategory = 'all';
   let activeSource = 'all';
   let selectedSurah = 'all';
-  let currentView = localStorage.getItem('mv_view') || 'cards'; // 'cards' or 'table'
+  const savedView = readStoredValue('mv_view', 'cards');
+  let currentView = savedView === 'table' ? 'table' : 'cards';
   let searchQuery = '';
   let expandedTableRowId = null;
-  let autoAdvanceContinuous = localStorage.getItem('mv_autoadvance') === 'true';
-  let arabicFontScale = Number(localStorage.getItem('mv_font_scale')) || 100;
-  let currentSpeed = Number(localStorage.getItem('mv_speed')) || 1.0;
-  let isLooping = localStorage.getItem('mv_loop') === 'true';
-  let displayMode = localStorage.getItem('mv_display_mode') || 'all'; // 'all', 'aren', 'ar', 'en'
+  let autoAdvanceContinuous = readStoredValue('mv_autoadvance') === 'true';
+  const savedFontScale = Number(readStoredValue('mv_font_scale', '100'));
+  let arabicFontScale = Number.isFinite(savedFontScale)
+    ? Math.min(150, Math.max(80, savedFontScale))
+    : 100;
+  const playbackSpeeds = [0.75, 1.0, 1.25, 1.5];
+  const savedSpeed = Number(readStoredValue('mv_speed', '1'));
+  let currentSpeed = playbackSpeeds.includes(savedSpeed) ? savedSpeed : 1.0;
+  let isLooping = readStoredValue('mv_loop') === 'true';
+  const displayModes = ['all', 'aren', 'ar', 'en'];
+  const savedDisplayMode = readStoredValue('mv_display_mode', 'all');
+  let displayMode = displayModes.includes(savedDisplayMode) ? savedDisplayMode : 'all';
 
   // Audio Engine State
   let currentAudio = null;
@@ -137,9 +191,10 @@
   let isAudioPlaying = false;
   let isSeeking = false;
   let isBuffering = false;
-  let isMuted = localStorage.getItem('mv_muted') === 'true';
-  let currentVolume = parseFloat(localStorage.getItem('mv_volume'));
-  if (isNaN(currentVolume)) currentVolume = 1.0;
+  let isMuted = readStoredValue('mv_muted') === 'true';
+  let currentVolume = Number(readStoredValue('mv_volume', '1'));
+  if (!Number.isFinite(currentVolume)) currentVolume = 1.0;
+  currentVolume = Math.min(1, Math.max(0, currentVolume));
 
   // DOM Elements
   const cardsGridEl = document.getElementById('mvCardsGrid');
@@ -450,28 +505,27 @@
       }
     };
 
-    const tryFallbackOrError = function (err) {
+    const tryFallbackOrError = function () {
       if (audio !== currentAudio) return;
-      if (!triedFallback) {
-        triedFallback = true;
-        console.warn('Primary recitation stream failed, trying fallback CDN for Surah', item.surah, 'Ayah', currentAyahNum);
-        const fallbackUrl = getFallbackAudioUrl(item.surah, currentAyahNum, currentReciter);
-        audio.src = fallbackUrl;
-        audio.load();
-        audio.play().then(() => {
-          if (audio !== currentAudio) return;
-          isAudioPlaying = true;
-          isBuffering = false;
-          updateAllAudioUI();
-          updateAudioBar(item);
-        }).catch(fErr => {
-          if (audio !== currentAudio) return;
-          if (fErr && fErr.name === 'AbortError') return;
-          handleAudioError(fErr);
-        });
-      } else {
-        handleAudioError(err);
-      }
+      if (triedFallback) return;
+      triedFallback = true;
+      console.warn('Primary recitation stream failed, trying fallback CDN for Surah', item.surah, 'Ayah', currentAyahNum);
+      const fallbackUrl = getFallbackAudioUrl(item.surah, currentAyahNum, currentReciter);
+      audio.onerror = function (fallbackError) {
+        if (audio === currentAudio) handleAudioError(fallbackError);
+      };
+      audio.src = fallbackUrl;
+      audio.load();
+      audio.play().then(() => {
+        if (audio !== currentAudio) return;
+        isAudioPlaying = true;
+        isBuffering = false;
+        updateAllAudioUI();
+        updateAudioBar(item);
+      }).catch(fallbackError => {
+        if (audio !== currentAudio || (fallbackError && fallbackError.name === 'AbortError')) return;
+        handleAudioError(fallbackError);
+      });
     };
 
     audio.onerror = function (e) {
@@ -621,15 +675,20 @@
   }
 
   function handleAudioError(e) {
+    cleanupAudio();
     isAudioPlaying = false;
     isBuffering = false;
     updateAllAudioUI();
+    if (audioBarPlayBtn) {
+      audioBarPlayBtn.setAttribute('aria-label', 'Retry recitation');
+      audioBarPlayBtn.setAttribute('title', 'Retry recitation (Space)');
+    }
     showToast('Recitation audio stream temporarily unavailable for this Ayah', '⚠️');
   }
 
   function toggleMute() {
     isMuted = !isMuted;
-    localStorage.setItem('mv_muted', String(isMuted));
+    writeStoredValue('mv_muted', isMuted);
     if (currentAudio) {
       currentAudio.muted = isMuted;
       currentAudio.volume = isMuted ? 0 : currentVolume;
@@ -675,6 +734,7 @@
   function updateAudioBar(item) {
     if (!audioBarEl) return;
     audioBarEl.classList.add('is-visible');
+    audioBarEl.setAttribute('aria-busy', String(isBuffering));
     if (audioBarDiscEl) {
       audioBarDiscEl.classList.toggle('is-spinning', isAudioPlaying);
       audioBarDiscEl.classList.toggle('is-buffering', isBuffering);
@@ -696,8 +756,8 @@
         audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
         audioBarPlayBtn.classList.remove('is-loading');
       }
-      audioBarPlayBtn.setAttribute('title', isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
-      audioBarPlayBtn.setAttribute('aria-label', isAudioPlaying ? 'Pause' : 'Play');
+      audioBarPlayBtn.setAttribute('title', isBuffering ? 'Loading recitation' : isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
+      audioBarPlayBtn.setAttribute('aria-label', isBuffering ? 'Loading recitation' : isAudioPlaying ? 'Pause' : 'Play');
     }
     if (audioSpeedBtn) {
       audioSpeedBtn.textContent = `${currentSpeed}x`;
@@ -713,11 +773,16 @@
 
   // Update UI Elements during Audio Playback
   function updateAllAudioUI() {
+    if (audioBarEl) audioBarEl.setAttribute('aria-busy', String(isBuffering));
     // Card and table drawer buttons
     document.querySelectorAll('.mv-play-recite-btn').forEach(btn => {
       const vId = btn.getAttribute('data-verse-id');
       const match = (String(vId) === String(playingVerseId) && isAudioPlaying);
       const isCardBuffering = (String(vId) === String(playingVerseId) && isBuffering);
+      const verseLabel = (btn.getAttribute('aria-label') || '').replace(/^(Play|Pause|Loading) recitation for /, '') || 'this Ayah';
+      btn.setAttribute('aria-label', isCardBuffering
+        ? `Loading recitation for ${verseLabel}`
+        : match ? `Pause recitation for ${verseLabel}` : `Play recitation for ${verseLabel}`);
       if (match) {
         btn.classList.add('is-active');
         btn.innerHTML = '<span>⏸</span> <span>Pause</span><span class="mv-playing-wave" aria-hidden="true"><span></span><span></span><span></span></span>';
@@ -761,8 +826,8 @@
         audioBarPlayBtn.innerHTML = isAudioPlaying ? '⏸' : '▶';
         audioBarPlayBtn.classList.remove('is-loading');
       }
-      audioBarPlayBtn.setAttribute('title', isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
-      audioBarPlayBtn.setAttribute('aria-label', isAudioPlaying ? 'Pause' : 'Play');
+      audioBarPlayBtn.setAttribute('title', isBuffering ? 'Loading recitation' : isAudioPlaying ? 'Pause (Space)' : 'Play (Space)');
+      audioBarPlayBtn.setAttribute('aria-label', isBuffering ? 'Loading recitation' : isAudioPlaying ? 'Pause' : 'Play');
     }
 
     // Modal play button if open
@@ -785,7 +850,7 @@
       favorites.push(id);
       showToast('Saved to your bookmarks', '★');
     }
-    localStorage.setItem('mv_favorites', JSON.stringify(favorites));
+    writeStoredJSON('mv_favorites', favorites);
     updateBookmarksCountBadge();
     renderCategoryPills();
     render();
@@ -1010,7 +1075,7 @@
     // Switch to Cards View
     if (currentView !== 'cards') {
       currentView = 'cards';
-      localStorage.setItem('mv_view', 'cards');
+      writeStoredValue('mv_view', 'cards');
       if (viewCardsBtn) viewCardsBtn.classList.add('active');
       if (viewTableBtn) viewTableBtn.classList.remove('active');
     }
@@ -1086,7 +1151,7 @@
         // Switch to Cards view if in Table view
         if (currentView !== 'cards') {
           currentView = 'cards';
-          localStorage.setItem('mv_view', 'cards');
+          writeStoredValue('mv_view', 'cards');
           if (viewCardsBtn) viewCardsBtn.classList.add('active');
           if (viewTableBtn) viewTableBtn.classList.remove('active');
         }
@@ -1172,7 +1237,7 @@
 
     displayModeSelect.addEventListener('change', () => {
       displayMode = displayModeSelect.value;
-      localStorage.setItem('mv_display_mode', displayMode);
+      writeStoredValue('mv_display_mode', displayMode);
       applyDisplayMode(displayMode);
       showToast(`Display mode updated`, '👁️');
     });
@@ -1575,7 +1640,7 @@
     if (nextScale < 80) nextScale = 80;
     if (nextScale > 150) nextScale = 150;
     arabicFontScale = nextScale;
-    localStorage.setItem('mv_font_scale', String(arabicFontScale));
+    writeStoredValue('mv_font_scale', arabicFontScale);
     applyArabicFontSize(arabicFontScale);
     showToast(`Arabic Font: ${arabicFontScale}%`, '🔤');
   }
@@ -1592,7 +1657,7 @@
     if (viewCardsBtn) {
       viewCardsBtn.addEventListener('click', () => {
         currentView = 'cards';
-        localStorage.setItem('mv_view', 'cards');
+        writeStoredValue('mv_view', 'cards');
         viewCardsBtn.classList.add('active');
         if (viewTableBtn) viewTableBtn.classList.remove('active');
         render();
@@ -1602,7 +1667,7 @@
     if (viewTableBtn) {
       viewTableBtn.addEventListener('click', () => {
         currentView = 'table';
-        localStorage.setItem('mv_view', 'table');
+        writeStoredValue('mv_view', 'table');
         viewTableBtn.classList.add('active');
         if (viewCardsBtn) viewCardsBtn.classList.remove('active');
         render();
@@ -1612,7 +1677,7 @@
     if (tocTableJump) {
       tocTableJump.addEventListener('click', (e) => {
         currentView = 'table';
-        localStorage.setItem('mv_view', 'table');
+        writeStoredValue('mv_view', 'table');
         if (viewTableBtn) viewTableBtn.classList.add('active');
         if (viewCardsBtn) viewCardsBtn.classList.remove('active');
         render();
@@ -1649,7 +1714,7 @@
     reciterSelectEl.value = currentReciter;
     reciterSelectEl.addEventListener('change', () => {
       currentReciter = reciterSelectEl.value;
-      localStorage.setItem('mv_reciter', currentReciter);
+      writeStoredValue('mv_reciter', currentReciter);
       showToast(`Reciter set to ${RECITERS[currentReciter]?.name || currentReciter}`, '🎙️');
       if (isAudioPlaying && playingVerseId) {
         playVerse(playingVerseId, playingAyahIndex);
@@ -1663,7 +1728,7 @@
     autoAdvanceBtnEl.classList.toggle('active', autoAdvanceContinuous);
     autoAdvanceBtnEl.addEventListener('click', () => {
       autoAdvanceContinuous = !autoAdvanceContinuous;
-      localStorage.setItem('mv_autoadvance', String(autoAdvanceContinuous));
+      writeStoredValue('mv_autoadvance', autoAdvanceContinuous);
       autoAdvanceBtnEl.classList.toggle('active', autoAdvanceContinuous);
       showToast(autoAdvanceContinuous ? 'Continuous auto-play enabled' : 'Continuous auto-play disabled', '🔁');
     });
@@ -1739,8 +1804,8 @@
         const val = parseFloat(audioVolumeSlider.value);
         currentVolume = val;
         isMuted = (val === 0);
-        localStorage.setItem('mv_volume', String(currentVolume));
-        localStorage.setItem('mv_muted', String(isMuted));
+        writeStoredValue('mv_volume', currentVolume);
+        writeStoredValue('mv_muted', isMuted);
         if (currentAudio) {
           currentAudio.volume = isMuted ? 0 : currentVolume;
           currentAudio.muted = isMuted;
@@ -1756,7 +1821,7 @@
         const speeds = [0.75, 1.0, 1.25, 1.5];
         let idx = speeds.indexOf(currentSpeed);
         currentSpeed = speeds[(idx + 1) % speeds.length];
-        localStorage.setItem('mv_speed', String(currentSpeed));
+        writeStoredValue('mv_speed', currentSpeed);
         audioSpeedBtn.textContent = `${currentSpeed}x`;
         audioSpeedBtn.classList.toggle('is-active', currentSpeed !== 1.0);
         if (currentAudio) currentAudio.playbackRate = currentSpeed;
@@ -1769,7 +1834,7 @@
       audioLoopBtn.classList.toggle('is-active', isLooping);
       audioLoopBtn.addEventListener('click', () => {
         isLooping = !isLooping;
-        localStorage.setItem('mv_loop', String(isLooping));
+        writeStoredValue('mv_loop', isLooping);
         audioLoopBtn.innerHTML = isLooping ? '🔂 Repeat' : '🔁 Next';
         audioLoopBtn.classList.toggle('is-active', isLooping);
         showToast(isLooping ? 'Loop mode: Repeating active verse' : 'Sequence mode: Continuous advance', '🔁');
@@ -1877,8 +1942,8 @@
         let newVol = Math.min(1.0, currentVolume + 0.1);
         currentVolume = Math.round(newVol * 10) / 10;
         isMuted = false;
-        localStorage.setItem('mv_volume', String(currentVolume));
-        localStorage.setItem('mv_muted', 'false');
+        writeStoredValue('mv_volume', currentVolume);
+        writeStoredValue('mv_muted', false);
         if (currentAudio) {
           currentAudio.volume = currentVolume;
           currentAudio.muted = false;
@@ -1890,8 +1955,8 @@
         let newVol = Math.max(0.0, currentVolume - 0.1);
         currentVolume = Math.round(newVol * 10) / 10;
         isMuted = (currentVolume === 0);
-        localStorage.setItem('mv_volume', String(currentVolume));
-        localStorage.setItem('mv_muted', String(isMuted));
+        writeStoredValue('mv_volume', currentVolume);
+        writeStoredValue('mv_muted', isMuted);
         if (currentAudio) {
           currentAudio.volume = currentVolume;
           currentAudio.muted = isMuted;
@@ -1914,7 +1979,7 @@
       } else if (e.key === 't' || e.key === 'T') {
         e.preventDefault();
         currentView = (currentView === 'cards') ? 'table' : 'cards';
-        localStorage.setItem('mv_view', currentView);
+        writeStoredValue('mv_view', currentView);
         if (viewCardsBtn) viewCardsBtn.classList.toggle('active', currentView === 'cards');
         if (viewTableBtn) viewTableBtn.classList.toggle('active', currentView === 'table');
         render();

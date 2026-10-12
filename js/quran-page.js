@@ -223,7 +223,38 @@
   // State
   let searchQuery = '';
   let activeFilter = 'all';
-  let favorites = new Set(JSON.parse(localStorage.getItem('qp_favorites') || '[1, 36, 55, 67]'));
+  let searchRenderTimer = null;
+  const DEFAULT_FAVORITES = [1, 36, 55, 67];
+
+  function readStoredValue(key, fallback = null) {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writeStoredValue(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      // Keep search, filters, and favorites usable when storage is unavailable.
+    }
+  }
+
+  function readFavoriteIds() {
+    try {
+      const stored = JSON.parse(readStoredValue('qp_favorites', JSON.stringify(DEFAULT_FAVORITES)));
+      return Array.isArray(stored)
+        ? stored.map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= 114)
+        : DEFAULT_FAVORITES;
+    } catch (error) {
+      return DEFAULT_FAVORITES;
+    }
+  }
+
+  let favorites = new Set(readFavoriteIds());
 
   // DOM Elements
   const gridEl = document.getElementById('quranGrid');
@@ -301,12 +332,15 @@
       const idx = window.QuranPlayer.getCurrentIndex();
       return (idx >= 0 && idx < SURAHS.length) ? SURAHS[idx].id : 1;
     }
-    const saved = parseInt(localStorage.getItem('qp_track_index') || '0', 10);
-    return saved + 1;
+    const saved = parseInt(readStoredValue('qp_track_index', '0'), 10);
+    return Number.isInteger(saved) && saved >= 0 && saved < SURAHS.length ? saved + 1 : 1;
   }
 
   function isAudioPlayingCurrently() {
-    return localStorage.getItem('qp_is_playing') === 'true';
+    if (window.QuranPlayer && typeof window.QuranPlayer.getState === 'function') {
+      return Boolean(window.QuranPlayer.getState().isPlaying);
+    }
+    return readStoredValue('qp_is_playing', 'false') === 'true';
   }
 
   function updateHeroPlayerMeta() {
@@ -336,7 +370,7 @@
       if (searchQuery || activeFilter !== 'all') {
         statusBarEl.innerHTML = `<span>Showing <strong>${list.length}</strong> of 114 Surahs</span><span>Use controls below or click card to play</span>`;
       } else {
-        statusBarEl.innerHTML = `<span>Showing all <strong>114 Surahs</strong></span><span>Continuous recitation enabled</span>`;
+        statusBarEl.innerHTML = `<span>Showing all <strong>114 Surahs</strong></span><span>Press Play Audio to start listening</span>`;
       }
     }
 
@@ -351,6 +385,8 @@
       const btn = document.getElementById('resetQuranFiltersBtn');
       if (btn) {
         btn.onclick = () => {
+          if (searchRenderTimer) clearTimeout(searchRenderTimer);
+          searchRenderTimer = null;
           searchQuery = '';
           if (searchInputEl) searchInputEl.value = '';
           if (searchClearEl) searchClearEl.classList.remove('visible');
@@ -503,7 +539,7 @@
     } else {
       favorites.add(id);
     }
-    localStorage.setItem('qp_favorites', JSON.stringify(Array.from(favorites)));
+    writeStoredValue('qp_favorites', JSON.stringify(Array.from(favorites)));
     render();
   }
 
@@ -537,12 +573,18 @@
           if (searchQuery) searchClearEl.classList.add('visible');
           else searchClearEl.classList.remove('visible');
         }
-        render();
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = setTimeout(() => {
+          searchRenderTimer = null;
+          render();
+        }, 140);
       });
     }
 
     if (searchClearEl) {
       searchClearEl.addEventListener('click', () => {
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = null;
         searchQuery = '';
         searchInputEl.value = '';
         searchClearEl.classList.remove('visible');
@@ -555,6 +597,8 @@
       filterRowEl.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-filter]');
         if (!btn) return;
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = null;
         activeFilter = btn.dataset.filter;
         render();
       });
@@ -624,7 +668,6 @@
             window.QuranPlayer.playSurah(currentId);
           }
         }
-        setTimeout(render, 150);
       });
     }
 
@@ -635,36 +678,37 @@
         if (window.QuranPlayer) {
           window.QuranPlayer.playSurah(randomId);
         }
-        setTimeout(render, 150);
       });
     }
+
+    // Keep the catalog in sync with player actions in this tab without polling.
+    window.addEventListener('quranplayerchange', (e) => {
+      const playerFavorites = e.detail && e.detail.favorites;
+      if (Array.isArray(playerFavorites)) {
+        favorites = new Set(playerFavorites.map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= 114));
+      }
+      render();
+    });
 
     // Listen to audio changes from window.QuranPlayer
     window.addEventListener('storage', (e) => {
       if (e.key === 'qp_track_index' || e.key === 'qp_is_playing' || e.key === 'qp_favorites') {
         if (e.key === 'qp_favorites') {
-          favorites = new Set(JSON.parse(localStorage.getItem('qp_favorites') || '[]'));
+          favorites = new Set(readFavoriteIds());
         }
         render();
       }
     });
-
-    // Poll player state periodically while on page to sync playback highlight
-    setInterval(() => {
-      const currentPlaying = isAudioPlayingCurrently();
-      const currentId = getCurrentPlayingSurahId();
-      const activeCard = document.querySelector('.surah-card.is-playing');
-      const activeCardId = activeCard ? Number(activeCard.dataset.surah) : null;
-
-      if (currentPlaying && activeCardId !== currentId) {
-        render();
-      } else if (!currentPlaying && activeCard) {
-        render();
-      }
-    }, 1000);
   }
 
   function init() {
+    if (!window.QuranPlayer) {
+      const loadErrorEl = document.getElementById('quranLoadError');
+      if (loadErrorEl) {
+        loadErrorEl.textContent = 'Audio playback could not start. The Surah catalog and PDF downloads remain available.';
+        loadErrorEl.hidden = false;
+      }
+    }
     renderFilterPills();
     renderGrid();
     renderPdfSection();

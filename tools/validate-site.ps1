@@ -1,97 +1,174 @@
-# validate-site.ps1
-# Comprehensive validation of site integrity, internal links, assets, and metadata
+[CmdletBinding()]
+param(
+    [string]$Root = (Join-Path $PSScriptRoot '..')
+)
 
-$htmlFiles = Get-ChildItem -Path . -Filter "*.html" | Select-Object -ExpandProperty Name
-$errors = @()
-$warnings = @()
-$successCount = 0
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
 
-Write-Output "--- Starting Full Site Validation across $($htmlFiles.Count) HTML files ---"
+function Get-RelativePath {
+    param([string]$BasePath, [string]$Path)
+    return $Path.Substring($BasePath.Length).TrimStart([char[]]@('\', '/'))
+}
 
-foreach ($file in $htmlFiles) {
-    $content = [System.IO.File]::ReadAllText($file, [System.Text.Encoding]::UTF8)
-    
-    # 1. Check og:image banner
-    if ($content -match 'property="og:image"\s+content="([^"]+)"') {
-        $ogImg = $matches[1]
-        if ($ogImg.StartsWith("https://heynuo.github.io/")) {
-            $localImg = $ogImg.Replace("https://heynuo.github.io/", "").TrimStart("/")
-            if (-not (Test-Path $localImg)) {
-                $errors += "[$file] Broken og:image URL '$ogImg' -> local file '$localImg' not found!"
+function Get-LineNumber {
+    param([string]$Text, [int]$Index)
+    if ($Index -le 0) { return 1 }
+    return 1 + [System.Text.RegularExpressions.Regex]::Matches($Text.Substring(0, $Index), "`n").Count
+}
+
+function Test-LocalReference {
+    param(
+        [Parameter(Mandatory)][string]$Reference,
+        [Parameter(Mandatory)][string]$SourcePath,
+        [Parameter(Mandatory)][string]$SiteRoot,
+        [Parameter(Mandatory)][string]$Label,
+        [Parameter(Mandatory)][System.Collections.Generic.List[string]]$Errors
+    )
+
+    $referenceText = [System.Net.WebUtility]::HtmlDecode($Reference.Trim())
+    if ([string]::IsNullOrWhiteSpace($referenceText) -or $referenceText.StartsWith('#')) { return }
+    if ($referenceText -match '^(?:data:|blob:|javascript:|mailto:|tel:|sms:|intent:)' -or $referenceText.StartsWith('//')) {
+        return
+    }
+
+    $relativeReference = $referenceText
+    if ($referenceText -match '^https?://') {
+        $uri = $null
+        if (-not [System.Uri]::TryCreate($referenceText, [System.UriKind]::Absolute, [ref]$uri)) { return }
+        if ($uri.Host -notin @('heynuo.github.io', 'www.heynuo.github.io')) { return }
+        $relativeReference = $uri.AbsolutePath
+    } elseif ($referenceText -match '^[a-z][a-z0-9+.-]*:') {
+        return
+    }
+
+    $relativeReference = ($relativeReference -split '[?#]', 2)[0]
+    if ([string]::IsNullOrWhiteSpace($relativeReference)) { return }
+
+    try {
+        $decoded = [System.Uri]::UnescapeDataString($relativeReference).Replace('/', [System.IO.Path]::DirectorySeparatorChar)
+        if ([System.IO.Path]::IsPathRooted($decoded)) {
+            $targetPath = [System.IO.Path]::GetFullPath((Join-Path $SiteRoot $decoded.TrimStart([char[]]@('\', '/'))))
+        } else {
+            $sourceDirectory = [System.IO.Path]::GetDirectoryName($SourcePath)
+            $targetPath = [System.IO.Path]::GetFullPath((Join-Path $sourceDirectory $decoded))
+        }
+
+        $rootPrefix = $SiteRoot.TrimEnd([char[]]@('\', '/')) + [System.IO.Path]::DirectorySeparatorChar
+        $insideRoot = $targetPath.Equals($SiteRoot, [System.StringComparison]::OrdinalIgnoreCase) -or
+            $targetPath.StartsWith($rootPrefix, [System.StringComparison]::OrdinalIgnoreCase)
+        if (-not $insideRoot) {
+            $Errors.Add("[$(Get-RelativePath -BasePath $SiteRoot -Path $SourcePath)] $Label escapes the site root: '$Reference'.")
+            return
+        }
+
+        if ([System.IO.Directory]::Exists($targetPath)) { $targetPath = Join-Path $targetPath 'index.html' }
+        if (-not [System.IO.File]::Exists($targetPath)) {
+            $Errors.Add("[$(Get-RelativePath -BasePath $SiteRoot -Path $SourcePath)] missing $Label '$Reference'.")
+        }
+    } catch {
+        $Errors.Add("[$(Get-RelativePath -BasePath $SiteRoot -Path $SourcePath)] invalid $Label '$Reference': $($_.Exception.Message)")
+    }
+}
+
+try {
+    $siteRoot = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $Root -ErrorAction Stop).ProviderPath)
+    $htmlFiles = @(Get-ChildItem -LiteralPath $siteRoot -Filter '*.html' -File)
+    $cssRoot = Join-Path $siteRoot 'css'
+    $cssFiles = if ([System.IO.Directory]::Exists($cssRoot)) { @(Get-ChildItem -LiteralPath $cssRoot -Filter '*.css' -File -Recurse) } else { @() }
+
+    if ($htmlFiles.Count -eq 0) { throw "No HTML pages found in '$siteRoot'." }
+
+    $errors = [System.Collections.Generic.List[string]]::new()
+    $warnings = [System.Collections.Generic.List[string]]::new()
+    $htmlReferenceRegex = [System.Text.RegularExpressions.Regex]::new(
+        '\b(?:href|src|poster)\s*=\s*(?:"([^"]*)"|''([^'']*)'')',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    )
+    $cssUrlRegex = [System.Text.RegularExpressions.Regex]::new(
+        'url\(\s*(?:"([^"]+)"|''([^'']+)''|([^\)\s]+))\s*\)',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    )
+    $cssImportRegex = [System.Text.RegularExpressions.Regex]::new(
+        '@import\s+(?:"([^"]+)"|''([^'']+)''|url\(\s*["'']?([^"''\)]+)["'']?\s*\))',
+        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    )
+
+    foreach ($file in $htmlFiles) {
+        $content = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
+        $relativeFile = Get-RelativePath -BasePath $siteRoot -Path $file.FullName
+
+        if ($content -notmatch '<title\b[^>]*>\s*[^<]+</title>') { $warnings.Add("[$relativeFile] missing or empty document title.") }
+        if ($content -notmatch '<meta\s+[^>]*property="og:image"') { $warnings.Add("[$relativeFile] missing Open Graph image metadata.") }
+        if ($content -notmatch 'rel="manifest"') { $warnings.Add("[$relativeFile] missing web app manifest link.") }
+        if ($content -notmatch 'type="application/rss\+xml"') { $warnings.Add("[$relativeFile] missing RSS alternate link in <head>.") }
+        if ($content -notmatch 'id="shortcutsModal"') { $errors.Add("[$relativeFile] missing shortcuts modal markup.") }
+        if ($content -notmatch 'id="toggleSingleShortcuts"') { $errors.Add("[$relativeFile] missing single-key shortcut toggle.") }
+
+        $footerMatch = [System.Text.RegularExpressions.Regex]::Match($content, '<footer\b[^>]*>.*?</footer>', [System.Text.RegularExpressions.RegexOptions]::Singleline)
+        if (-not $footerMatch.Success) {
+            $errors.Add("[$relativeFile] missing footer element.")
+        } else {
+            if ($footerMatch.Value -notmatch 'href="privacy\.html"') { $errors.Add("[$relativeFile] footer is missing the privacy link.") }
+            if ($footerMatch.Value -notmatch 'href="rss\.xml"') { $errors.Add("[$relativeFile] footer is missing the RSS link.") }
+        }
+
+        foreach ($match in $htmlReferenceRegex.Matches($content)) {
+            $reference = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
+            if ([string]::IsNullOrWhiteSpace($reference)) { continue }
+            $label = if ($match.Value -match '\bsrc\s*=') { 'asset reference' } elseif ($match.Value -match '\bposter\s*=') { 'poster reference' } else { 'link' }
+            Test-LocalReference -Reference $reference -SourcePath $file.FullName -SiteRoot $siteRoot -Label $label -Errors $errors
+        }
+    }
+
+    foreach ($file in $cssFiles) {
+        $content = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
+        foreach ($regex in @($cssUrlRegex, $cssImportRegex)) {
+            foreach ($match in $regex.Matches($content)) {
+                $reference = $null
+                foreach ($groupIndex in 1..3) {
+                    if ($match.Groups[$groupIndex].Success) { $reference = $match.Groups[$groupIndex].Value; break }
+                }
+                if ([string]::IsNullOrWhiteSpace($reference)) { continue }
+                Test-LocalReference -Reference $reference -SourcePath $file.FullName -SiteRoot $siteRoot -Label 'CSS asset reference' -Errors $errors
             }
         }
     }
-    
-    # 2. Check Shortcuts modal
-    if (-not $content.Contains('id="shortcutsModal"')) {
-        $errors += "[$file] Missing shortcutsModal markup!"
-    }
-    
-    # 3. Check single key shortcut toggle
-    if (-not $content.Contains('id="toggleSingleShortcuts"')) {
-        $errors += "[$file] Missing toggleSingleShortcuts checkbox in shortcuts modal!"
-    }
-    
-    # 4. Check footer links
-    if (-not $content.Contains('privacy.html')) {
-        $errors += "[$file] Missing privacy.html link in footer!"
-    }
-    if (-not $content.Contains('rss.xml')) {
-        $errors += "[$file] Missing rss.xml link in footer!"
-    }
-    
-    # 5. Check manifest & RSS link in head
-    if (-not $content.Contains('rel="manifest"')) {
-        $warnings += "[$file] Missing <link rel=`"manifest`"> in <head>."
-    }
-    if (-not $content.Contains('type="application/rss+xml"')) {
-        $warnings += "[$file] Missing RSS alternate link in <head>."
-    }
-    
-    # 6. Check internal HTML links
-    $matches = [regex]::Matches($content, 'href="([^"#:]+\.html)"')
-    foreach ($m in $matches) {
-        $target = $m.Groups[1].Value
-        if (-not (Test-Path $target)) {
-            $errors += "[$file] Broken internal link href='$target'!"
-        }
-    }
-    
-    # 7. Check local icons and images
-    $imgMatches = [regex]::Matches($content, 'src="([^"#:]+\.(?:png|jpg|jpeg|svg|webp))"')
-    foreach ($m in $imgMatches) {
-        $target = $m.Groups[1].Value
-        if (-not (Test-Path $target)) {
-            $errors += "[$file] Broken image src='$target'!"
+
+    foreach ($requiredFile in @('manifest.json', 'sw.js', 'rss.xml', 'sitemap.xml', 'LICENSE')) {
+        if (-not [System.IO.File]::Exists((Join-Path $siteRoot $requiredFile))) {
+            $errors.Add("Missing required root file '$requiredFile'.")
         }
     }
 
-    # 8. Check <div> tag balance
-    $openDivs = [regex]::Matches($content, '<div\b').Count
-    $closeDivs = [regex]::Matches($content, '</div>').Count
-    if ($openDivs -ne $closeDivs) {
-        $errors += "[$file] Unbalanced <div> tags: $openDivs open vs $closeDivs close!"
+    $manifestPath = Join-Path $siteRoot 'manifest.json'
+    if ([System.IO.File]::Exists($manifestPath)) {
+        try { $null = ConvertFrom-Json -InputObject ([System.IO.File]::ReadAllText($manifestPath, [System.Text.Encoding]::UTF8)) }
+        catch { $errors.Add("[manifest.json] invalid JSON: $($_.Exception.Message)") }
     }
-    
-    $successCount++
-}
 
-# Check Service Worker & Manifest & RSS files
-if (-not (Test-Path "manifest.json")) { $errors += "manifest.json missing at root!" }
-if (-not (Test-Path "sw.js")) { $errors += "sw.js missing at root!" }
-if (-not (Test-Path "rss.xml")) { $errors += "rss.xml missing at root!" }
-if (-not (Test-Path "sitemap.xml")) { $errors += "sitemap.xml missing at root!" }
-if (-not (Test-Path "LICENSE")) { $errors += "LICENSE missing at root!" }
+    foreach ($xmlName in @('rss.xml', 'sitemap.xml')) {
+        $xmlPath = Join-Path $siteRoot $xmlName
+        if ([System.IO.File]::Exists($xmlPath)) {
+            try { $null = [xml][System.IO.File]::ReadAllText($xmlPath, [System.Text.Encoding]::UTF8) }
+            catch { $errors.Add("[$xmlName] invalid XML: $($_.Exception.Message)") }
+        }
+    }
 
-Write-Output "`nValidated $successCount files."
-if ($warnings.Count -gt 0) {
-    Write-Output "`n[WARNINGS] ($($warnings.Count)):"
-    $warnings | ForEach-Object { Write-Output "  - $_" }
-}
+    Write-Host "Validated $($htmlFiles.Count) HTML page(s) and $($cssFiles.Count) CSS file(s) under '$siteRoot'."
+    if ($warnings.Count -gt 0) {
+        Write-Host "Warnings ($($warnings.Count)):" -ForegroundColor Yellow
+        foreach ($warning in $warnings) { Write-Host "  - $warning" -ForegroundColor Yellow }
+    }
+    if ($errors.Count -gt 0) {
+        Write-Host "Validation failed with $($errors.Count) error(s):" -ForegroundColor Red
+        foreach ($errorMessage in $errors) { Write-Host "  - $errorMessage" -ForegroundColor Red }
+        exit 1
+    }
 
-if ($errors.Count -eq 0) {
-    Write-Output "`n[SUCCESS] All checks passed with 0 errors! All internal links, banners, footer links, shortcuts modals, and assets are 100% verified."
-} else {
-    Write-Output "`n[FAILED] Found $($errors.Count) errors:"
-    $errors | ForEach-Object { Write-Output "  - $_" }
+    Write-Host 'Validation passed.' -ForegroundColor Green
+    exit 0
+} catch {
+    Write-Error "Site validation could not complete: $($_.Exception.Message)"
+    exit 2
 }

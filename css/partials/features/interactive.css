@@ -36,7 +36,7 @@
   }
 
 
-  /* View Transition Support for Theme Ripple */
+  /* Layer browser-supported document view transitions. */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;

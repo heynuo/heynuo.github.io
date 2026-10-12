@@ -168,12 +168,9 @@
         rgba(8, 145, 178, 0.12) 40%,
         rgba(139, 92, 246, 0.08) 70%,
         transparent 80%);
-    filter: blur(60px);
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
-    animation: ambientFloat 8s ease-in-out infinite alternate;
-    will-change: transform;
     /* Sits behind everything else, feathered so it never clips */
     contain: paint;
   }
@@ -184,7 +181,6 @@
         rgba(56, 189, 248, 0.18) 45%,
         rgba(168, 85, 247, 0.12) 75%,
         transparent 85%);
-    filter: blur(80px);
   }
 
   @keyframes ambientFloat {
@@ -209,8 +205,6 @@
     padding: 10px;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
     box-shadow: var(--hero-shadow-rest);
     transition:
       translate 0.5s var(--hero-ease, cubic-bezier(0.16, 1, 0.3, 1)),
@@ -219,8 +213,6 @@
       border-color 0.5s ease,
       --hero-glow-x 0.6s var(--hero-ease-soft, ease),
       --hero-glow-y 0.6s var(--hero-ease-soft, ease);
-    animation: heroFloat 6s ease-in-out infinite;
-    will-change: transform;
     width: 100%;
     max-width: 100%;
     /* Chevron on the right lets the browser skip work if the card is offscreen */
@@ -398,8 +390,6 @@
     background: rgba(15, 23, 42, 0.82);
     color: #f8fafc;
     border: 1px solid rgba(255, 255, 255, 0.20);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
     font-size: 12px;
     line-height: 1;
     font-weight: 600;
@@ -421,13 +411,11 @@
   .hero-pill-top {
     top: 14px;
     right: 14px;
-    animation: badgeBob 4s ease-in-out infinite alternate;
   }
 
   .hero-pill-bottom {
     bottom: 14px;
     left: 14px;
-    animation: badgeBob 4s ease-in-out infinite alternate-reverse;
   }
 
   .hero-pill-live {
@@ -450,7 +438,6 @@
     border-radius: 50%;
     background: #10b981;
     box-shadow: 0 0 8px #10b981;
-    animation: pulse 1.8s ease-in-out infinite;
   }
 
   /* Expanding “ping” ring behind the beacon */
@@ -461,7 +448,6 @@
     border-radius: 50%;
     background: #10b981;
     opacity: 0.6;
-    animation: beaconPing 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 
   @keyframes beaconPing {
@@ -538,7 +524,6 @@
       transform 0.25s ease,
       filter 0.25s ease,
       letter-spacing 0.25s ease;
-    will-change: opacity, transform;
   }
 
   .hero-rotator.fade-out {
@@ -626,7 +611,6 @@
       transform 0.2s var(--hero-ease-out, ease),
       box-shadow 0.2s ease,
       letter-spacing 0.2s ease;
-    will-change: transform;
     /* Keeps sub-pixel edges from looking fuzzy on dark themes */
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     mask-image: radial-gradient(white, black);

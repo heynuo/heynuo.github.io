@@ -89,8 +89,7 @@
       radial-gradient(ellipse at 20% 50%, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
       radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
       radial-gradient(ellipse at 50% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
-    animation: hn-aurora-drift 22s ease-in-out infinite alternate;
-    will-change: transform;
+    /* Keep the large decorative layer static to avoid continuous repainting. */
   }
 
   @keyframes hn-aurora-drift {
@@ -183,7 +182,6 @@
 
   .hero-content>* {
     animation: hn-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-    will-change: transform, opacity;
   }
 
   .hero-content>.hero-badge {
@@ -270,7 +268,6 @@
     border: 1.5px solid currentColor;
     opacity: 0.8;
     animation: hn-radar-pulse 2s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-    will-change: transform, opacity;
   }
 
   @keyframes hn-radar-pulse {
@@ -316,8 +313,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: hn-gradient-flow 8s ease-in-out infinite;
-    will-change: background-position;
+    /* The text gradient stays static to avoid recurring paint work. */
   }
 
   @keyframes hn-gradient-flow {
@@ -399,8 +395,6 @@
     gap: 12px;
     isolation: isolate;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding-block: 14px;
@@ -409,7 +403,6 @@
       transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
       border-color 0.3s ease,
       box-shadow 0.35s ease;
-    will-change: transform;
   }
 
   /* Static gradient hairline (always visible) */

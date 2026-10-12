@@ -334,7 +334,10 @@
   let currentReciterId = ls.get(STORAGE_KEYS.RECITER, 'afs');
   if (!RECITERS.some(r => r.id === currentReciterId)) currentReciterId = 'afs';
 
-  let favorites = new Set(ls.getJSON(STORAGE_KEYS.FAVORITES, [1, 36, 55, 67]));
+  const savedFavorites = ls.getJSON(STORAGE_KEYS.FAVORITES, [1, 36, 55, 67]);
+  let favorites = new Set(Array.isArray(savedFavorites)
+    ? savedFavorites.map(Number).filter(id => Number.isInteger(id) && id >= 1 && id <= SURAHS.length)
+    : [1, 36, 55, 67]);
 
   // Sleep timer
   let sleepTimerMinutes = 0;   // 0 = off, >0 = minutes, -1 = end of surah
@@ -347,7 +350,8 @@
 
   // Audio engine
   const audio = new Audio();
-  audio.preload = 'metadata';
+  // Wait for a play action before requesting recitation audio.
+  audio.preload = 'none';
   audio.volume = volume;
   audio.playbackRate = playbackSpeed;
 
@@ -367,6 +371,16 @@
 
   function getCurrentReciter() {
     return RECITERS.find(r => r.id === currentReciterId) || RECITERS[0];
+  }
+
+  function publishStateChange() {
+    window.dispatchEvent(new CustomEvent('quranplayerchange', {
+      detail: {
+        index: currentIndex,
+        isPlaying,
+        favorites: Array.from(favorites)
+      }
+    }));
   }
 
   function getAudioUrl(surahId, reciterId) {
@@ -1088,6 +1102,7 @@
     }
     ls.setJSON(STORAGE_KEYS.FAVORITES, Array.from(favorites));
     updateFavoriteUI();
+    publishStateChange();
     if (activeCategory === 'favorites') {
       renderSurahList(dom.searchInput ? dom.searchInput.value : '');
     }
@@ -1320,8 +1335,9 @@
       updateMediaSessionState();
       hideToast();
       if (isOpen(dom.modal)) startVisualizerLoop();
-    }).catch(() => {
-      // Autoplay blocked. Persist intent and show resume toast.
+    }).catch((error) => {
+      // Preserve playback intent only when the browser blocks playback until a user gesture.
+      if (!error || error.name !== 'NotAllowedError') return;
       isPlaying = false;
       ls.set(STORAGE_KEYS.IS_PLAYING, 'true');
       updatePlayIcons();
@@ -1494,6 +1510,7 @@
     setText(dom.modalAyahs, `${surah.ayahs} Ayahs`);
     setText(dom.toastSurah, surah.name);
     setText(dom.reciterChipText, reciter.short);
+    publishStateChange();
   }
 
   function updatePlayIcons() {
@@ -1511,6 +1528,7 @@
     if (dom.playBtn) dom.playBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
     // Restart the queue render to refresh the "now playing" indicator
     if (isOpen(dom.drawer)) renderSurahList(dom.searchInput ? dom.searchInput.value : '');
+    publishStateChange();
   }
 
   function updateRepeatUI() {
@@ -1572,7 +1590,10 @@
     const reciter = getCurrentReciter();
     if (!surah) return;
     try {
-      const artwork = [{ src: COVER_ART_URL, sizes: '512x512', type: 'image/jpeg' }];
+      // Media Session rejects file:// artwork URLs in local previews. Keep the
+      // real cover on HTTPS, but use the inline fallback while developing locally.
+      const artworkSrc = window.location.protocol === 'file:' ? FALLBACK_COVER : COVER_ART_URL;
+      const artwork = [{ src: artworkSrc, sizes: '512x512', type: 'image/jpeg' }];
       navigator.mediaSession.metadata = new MediaMetadata({
         title: `Surah ${surah.name} (${surah.arabic})`,
         artist: reciter.name,
@@ -1813,6 +1834,7 @@
           else favorites.add(sId);
           ls.setJSON(STORAGE_KEYS.FAVORITES, Array.from(favorites));
           updateFavoriteUI();
+          publishStateChange();
           renderSurahList(dom.searchInput ? dom.searchInput.value : '');
           return;
         }

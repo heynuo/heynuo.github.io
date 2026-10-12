@@ -3,7 +3,7 @@
    Caches app shell, article pages, CSS, JS, and Ruqyah text.
    ========================================================= */
 
-const CACHE_NAME = 'heynuo-cache-v3';
+const CACHE_NAME = 'heynuo-cache-v4';
 
 const PRECACHE_URLS = [
   './',
@@ -58,11 +58,9 @@ const PRECACHE_URLS = [
   'css/quran-player.css',
   'css/master-verses.css',
   'buttons.js',
-  'js/buttons.js',
   'js/script.js',
   'js/ruqyah.js',
   'js/data/ruqyah-data.js',
-  'js/quran-player.js',
   'assets/js/quran-player.js',
   'js/quran-page.js',
   'js/master-verses.js',
@@ -96,20 +94,15 @@ const PRECACHE_URLS = [
   'assets/icons/star.png'
 ];
 
-// Install Event - Resiliently Pre-cache essential app shell and content
+// Install Event - Pre-cache the app shell before taking control.
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // Use Promise.allSettled so a single missing asset does not abort the entire precache
-      return Promise.allSettled(
-        PRECACHE_URLS.map((url) =>
-          cache.add(url).catch((err) => {
-            console.warn(`[Service Worker] Precache item skipped for ${url}:`, err);
-          })
-        )
-      );
-    })
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      // A missing optional asset should not prevent the site shell from installing.
+      await Promise.allSettled(PRECACHE_URLS.map(url => cache.add(url)));
+      await self.skipWaiting();
+    })()
   );
 });
 
@@ -119,7 +112,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((name) => {
-          if (name !== CACHE_NAME) {
+          if (name.startsWith('heynuo-cache-') && name !== CACHE_NAME) {
             return caches.delete(name);
           }
         })
@@ -128,7 +121,29 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Stale-while-revalidate for local assets; network-first for external audio
+const AUDIO_HOSTS = ['everyayah.com', 'alislam.cloud', 'mp3quran.net'];
+
+function isAudioRequest(request, url) {
+  return request.destination === 'audio' ||
+    url.pathname.toLowerCase().endsWith('.mp3') ||
+    AUDIO_HOSTS.some(host => url.hostname === host || url.hostname.endsWith(`.${host}`));
+}
+
+function isCacheableResponse(response) {
+  return response && response.ok && response.type === 'basic';
+}
+
+async function fetchAndCache(request, cache) {
+  const response = await fetch(request);
+  if (isCacheableResponse(response)) {
+    await cache.put(request, response.clone()).catch(() => {
+      // A cache quota error should not prevent a successful network response.
+    });
+  }
+  return response;
+}
+
+// Fetch Event - network-first pages and stale-while-revalidate local assets.
 self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
@@ -136,45 +151,34 @@ self.addEventListener('fetch', (event) => {
   // Skip non-GET requests
   if (request.method !== 'GET') return;
 
-  // Audio files (.mp3): direct stream over network to avoid bloat
-  if (url.pathname.endsWith('.mp3') || request.url.includes('everyayah.com') || request.url.includes('alislam.cloud') || request.url.includes('mp3quran.net')) {
-    event.respondWith(
-      fetch(request).catch(() => {
-        return new Response('Audio stream offline', { status: 503, statusText: 'Offline Audio' });
-      })
-    );
+  // Stream recitations directly; do not store large audio files in the app cache.
+  if (isAudioRequest(request, url)) {
+    event.respondWith(fetch(request));
     return;
   }
 
-  // Handle same-origin requests with Cache-First / Stale-While-Revalidate
-  if (url.origin === self.location.origin) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        if (cachedResponse) {
-          // Fetch updated version in background to keep cache fresh
-          fetch(request).then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              const responseToCache = networkResponse.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
-            }
-          }).catch(() => {/* Offline fallback handles it */});
-          return cachedResponse;
-        }
+  if (url.origin !== self.location.origin) return;
 
-        return fetch(request).then((networkResponse) => {
-          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-            return networkResponse;
-          }
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, responseToCache));
-          return networkResponse;
-        }).catch(() => {
-          // If HTML page failed offline, serve cached index or 404
-          if (request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('index.html').then((res) => res || caches.match('404.html'));
-          }
-        });
-      })
-    );
-  }
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+
+    if (request.mode === 'navigate') {
+      try {
+        return await fetchAndCache(request, cache);
+      } catch (error) {
+        return await cache.match(request) ||
+          await cache.match(new URL('index.html', self.registration.scope)) ||
+          await cache.match(new URL('404.html', self.registration.scope));
+      }
+    }
+
+    const cachedResponse = await cache.match(request);
+    if (cachedResponse) {
+      // Keep the update alive after returning the cached response to the page.
+      event.waitUntil(fetchAndCache(request, cache).catch(() => undefined));
+      return cachedResponse;
+    }
+
+    return fetchAndCache(request, cache);
+  })());
 });

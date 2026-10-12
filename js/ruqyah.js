@@ -13,6 +13,12 @@
 (function () {
   'use strict';
 
+  if (typeof RUQYAH_VERSES === 'undefined' || !Array.isArray(RUQYAH_VERSES)) {
+    const loadErrorEl = document.getElementById('ruqyahLoadError');
+    if (loadErrorEl) loadErrorEl.hidden = false;
+    return;
+  }
+
   // Reciters configuration from Al-Islam Quran App
   const RECITERS = {
     ashiq: { name: 'Qari Muhammad Ashiq', folder: 'ashiq' },
@@ -22,12 +28,54 @@
     'idir-iken': { name: 'Qari Idir Iken', folder: 'idir-iken' }
   };
 
+  function readStoredValue(key, fallback = null) {
+    try {
+      const value = window.localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writeStoredValue(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      // The guide remains usable when browser storage is disabled or full.
+    }
+  }
+
   // State
-  let currentReciter = localStorage.getItem('ruqyah_reciter') || 'ashiq';
-  let favorites = JSON.parse(localStorage.getItem('ruqyah_favorites') || '[]');
+  const savedReciter = readStoredValue('ruqyah_reciter', 'ashiq');
+  let currentReciter = RECITERS[savedReciter] ? savedReciter : 'ashiq';
+  let savedFavorites = [];
+  try {
+    savedFavorites = JSON.parse(readStoredValue('ruqyah_favorites', '[]'));
+  } catch (error) {
+    savedFavorites = [];
+  }
+  let favorites = Array.isArray(savedFavorites)
+    ? [...new Set(savedFavorites.map(Number).filter(Number.isInteger))]
+    : [];
   let activeCategory = 'all';
   let searchQuery = '';
   let isUsingFallbackAudio = false;
+  let searchRenderTimer = null;
+
+  const searchIndex = new Map(RUQYAH_VERSES.map(item => [
+    item.id,
+    [
+      item.reference,
+      item.surahName,
+      item.category,
+      item.purpose,
+      item.source,
+      item.transliteration,
+      item.translation,
+      item.arabic
+    ].join(' ').toLowerCase()
+  ]));
+  const verseById = new Map(RUQYAH_VERSES.map(item => [item.id, item]));
 
   // Audio Engine State
   let currentAudio = null;
@@ -44,6 +92,25 @@
   const resultStatsEl = document.getElementById('resultStats');
   const reciterSelectEl = document.getElementById('reciterSelect');
   const toastEl = document.getElementById('ruqyahToast');
+  const staticCards = new Map();
+  let emptyStateEl = null;
+  let openCopyDropdown = null;
+
+  function cacheStaticCards() {
+    if (!gridEl) return;
+
+    gridEl.querySelectorAll('.ruqyah-card[data-id]').forEach(card => {
+      staticCards.set(Number(card.dataset.id), card);
+    });
+
+    if (staticCards.size !== RUQYAH_VERSES.length || RUQYAH_VERSES.some(item => !staticCards.has(item.id))) {
+      staticCards.clear();
+    }
+  }
+
+  function getCardElement(cardId) {
+    return staticCards.get(cardId) || document.querySelector(`.ruqyah-card[data-id="${cardId}"]`);
+  }
 
   // Helper: show toast
   let toastTimer = null;
@@ -72,6 +139,7 @@
 
   // Audio Control Engine
   function stopCurrentAudio() {
+    const stoppedCardId = playingCardId;
     if (currentAudio) {
       currentAudio.pause();
       currentAudio.currentTime = 0;
@@ -81,11 +149,18 @@
       currentAudio = null;
     }
     isAudioPlaying = false;
-    updateAllCardPlayerUI();
+    if (stoppedCardId !== null) {
+      updateCardPlayerUI(stoppedCardId);
+      const card = getCardElement(stoppedCardId);
+      const progressFill = card?.querySelector('.audio-progress-fill');
+      const timeDisplay = card?.querySelector('.player-time-display');
+      if (progressFill) progressFill.style.width = '0%';
+      if (timeDisplay) timeDisplay.textContent = '0:00';
+    }
   }
 
   function playAyah(cardId, ayahIndex = 0, allowFallback = true) {
-    const item = RUQYAH_VERSES.find(v => v.id === cardId);
+    const item = verseById.get(cardId);
     if (!item || !item.audioVerses || !item.audioVerses.length) return;
 
     if (ayahIndex < 0) ayahIndex = 0;
@@ -182,13 +257,16 @@
   }
 
   function handleAudioError() {
-    const item = RUQYAH_VERSES.find(v => v.id === playingCardId);
+    const item = verseById.get(playingCardId);
     const ref = item ? item.reference : 'verse';
 
     // If primary failed and hasn't tried fallback yet, switch to EveryAyah CDN
     if (!isUsingFallbackAudio && item) {
       isUsingFallbackAudio = true;
       showToast(`Primary audio stream unavailable; switched to backup reciter (Sheikh Alafasy)`, '🔄', 3500);
+      // Clear the failed media element so playAyah builds a new one with the
+      // fallback URL instead of attempting to resume the failed primary URL.
+      stopCurrentAudio();
       playAyah(playingCardId, playingAyahIndex);
       return;
     }
@@ -207,7 +285,7 @@
   }
 
   function updateCardPlayerUI(cardId) {
-    const cardEl = document.querySelector(`.ruqyah-card[data-id="${cardId}"]`);
+    const cardEl = getCardElement(cardId);
     if (!cardEl) return;
 
     const playBtn = cardEl.querySelector('.play-toggle-btn');
@@ -215,20 +293,27 @@
     const prevBtn = cardEl.querySelector('.prev-ayah-btn');
     const nextBtn = cardEl.querySelector('.next-ayah-btn');
 
-    const item = RUQYAH_VERSES.find(v => v.id === cardId);
-    const totalAyahs = item ? item.audioVerses.length : 1;
+    const item = verseById.get(cardId);
+    if (!item) return;
+    const totalAyahs = item.audioVerses.length;
     const isThisCardActive = (playingCardId === cardId);
 
     if (isThisCardActive && isAudioPlaying) {
       cardEl.classList.add('is-playing');
-      if (playBtn) playBtn.innerHTML = '⏸';
+      if (playBtn) {
+        playBtn.textContent = '⏸';
+        playBtn.setAttribute('aria-label', 'Pause recitation of ' + item.reference);
+      }
       if (trackTitle) {
         const currentAyah = item.audioVerses[playingAyahIndex];
         trackTitle.innerHTML = `Ayah ${currentAyah} (${playingAyahIndex + 1}/${totalAyahs}) <div class="soundwave-bars"><span></span><span></span><span></span></div>`;
       }
     } else {
       cardEl.classList.remove('is-playing');
-      if (playBtn) playBtn.innerHTML = '▶';
+      if (playBtn) {
+        playBtn.textContent = '▶';
+        playBtn.setAttribute('aria-label', 'Play recitation of ' + item.reference);
+      }
       if (trackTitle) {
         trackTitle.innerHTML = totalAyahs > 1 ? `Recite ${totalAyahs} Ayahs` : `Recite Ayah`;
       }
@@ -238,20 +323,9 @@
     if (nextBtn) nextBtn.disabled = !isThisCardActive || playingAyahIndex >= totalAyahs - 1;
   }
 
-  function updateAllCardPlayerUI() {
-    document.querySelectorAll('.ruqyah-card').forEach(c => {
-      const id = Number(c.dataset.id);
-      updateCardPlayerUI(id);
-      const fill = c.querySelector('.audio-progress-fill');
-      const timeDisplay = c.querySelector('.player-time-display');
-      if (fill && playingCardId !== id) fill.style.width = '0%';
-      if (timeDisplay && playingCardId !== id) timeDisplay.textContent = '0:00';
-    });
-  }
-
   function updateCardProgressUI(cardId) {
     if (playingCardId !== cardId || !currentAudio) return;
-    const cardEl = document.querySelector(`.ruqyah-card[data-id="${cardId}"]`);
+    const cardEl = getCardElement(cardId);
     if (!cardEl) return;
 
     const fill = cardEl.querySelector('.audio-progress-fill');
@@ -270,7 +344,7 @@
   // Favorites management
   function toggleFavorite(id) {
     const idx = favorites.indexOf(id);
-    const item = RUQYAH_VERSES.find(v => v.id === id);
+    const item = verseById.get(id);
     if (idx > -1) {
       favorites.splice(idx, 1);
       showToast(`Removed ${item ? item.reference : 'verse'} from favorites`, '☆');
@@ -278,7 +352,7 @@
       favorites.push(id);
       showToast(`Saved ${item ? item.reference : 'verse'} to favorites`, '⭐');
     }
-    localStorage.setItem('ruqyah_favorites', JSON.stringify(favorites));
+    writeStoredValue('ruqyah_favorites', JSON.stringify(favorites));
     render();
   }
 
@@ -309,29 +383,15 @@
 
   // Search & Filtering
   function getFilteredVerses() {
-    const q = searchQuery.toLowerCase().trim();
+    const q = searchQuery.trim().toLowerCase();
     return RUQYAH_VERSES.filter(item => {
-      // Category filter
       if (activeCategory === 'favorites') {
         if (!favorites.includes(item.id)) return false;
       } else if (activeCategory !== 'all' && item.category !== activeCategory) {
         return false;
       }
 
-      // Search match
-      if (!q) return true;
-      const matchIn = [
-        item.reference,
-        item.surahName,
-        item.category,
-        item.purpose,
-        item.source,
-        item.transliteration,
-        item.translation,
-        item.arabic
-      ].join(' ').toLowerCase();
-
-      return matchIn.includes(q);
+      return !q || searchIndex.get(item.id).includes(q);
     });
   }
 
@@ -374,32 +434,54 @@
       'Spiritual Strength',
       'favorites'
     ];
-
     const counts = {};
-    RUQYAH_VERSES.forEach(v => counts[v.category] = (counts[v.category] || 0) + 1);
+    RUQYAH_VERSES.forEach(item => {
+      counts[item.category] = (counts[item.category] || 0) + 1;
+    });
 
-    filterStripEl.innerHTML = categories.map(cat => {
-      const isActive = activeCategory === cat;
-      let label = cat;
-      let count = 0;
+    let pills = new Map(
+      Array.from(filterStripEl.querySelectorAll('[data-category]'))
+        .map(button => [button.dataset.category, button])
+    );
 
-      if (cat === 'all') {
-        label = '✨ All';
-        count = RUQYAH_VERSES.length;
-      } else if (cat === 'favorites') {
-        label = '⭐ Favorites';
-        count = favorites.length;
-      } else {
-        count = counts[cat] || 0;
-      }
+    if (!categories.every(category => pills.has(category))) {
+      filterStripEl.replaceChildren();
+      pills = new Map();
+      categories.forEach(category => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ruqyah-filter-pill';
+        button.dataset.category = category;
 
-      return `
-        <button type="button" class="ruqyah-filter-pill ${isActive ? 'active' : ''}" data-category="${cat}">
-          <span>${label}</span>
-          <span class="filter-count-badge">${count}</span>
-        </button>
-      `;
-    }).join('');
+        const label = document.createElement('span');
+        const count = document.createElement('span');
+        count.className = 'filter-count-badge';
+        button.append(label, count);
+        filterStripEl.appendChild(button);
+        pills.set(category, button);
+      });
+    }
+
+    categories.forEach(category => {
+      const button = pills.get(category);
+      const label = category === 'all'
+        ? '✨ All'
+        : category === 'favorites'
+          ? '⭐ Favorites'
+          : category;
+      const count = category === 'all'
+        ? RUQYAH_VERSES.length
+        : category === 'favorites'
+          ? favorites.length
+          : counts[category] || 0;
+      const countBadge = button.querySelector('.filter-count-badge');
+      const labelElement = button.querySelector('span');
+
+      if (labelElement) labelElement.textContent = label;
+      if (countBadge) countBadge.textContent = count;
+      button.classList.toggle('active', activeCategory === category);
+      button.setAttribute('aria-pressed', String(activeCategory === category));
+    });
   }
 
   // Render Verse Cards
@@ -414,13 +496,75 @@
         resultStatsEl.innerHTML = `Showing all <strong>${list.length}</strong> Ruqyah verses`;
       }
     }
+    if (staticCards.size === RUQYAH_VERSES.length) {
+      const visibleIds = new Set(list.map(item => item.id));
+
+      RUQYAH_VERSES.forEach(item => {
+        const card = staticCards.get(item.id);
+        if (!card) return;
+
+        card.hidden = !visibleIds.has(item.id);
+
+        const favoriteButton = card.querySelector('.favorite-btn');
+        const isFavorite = favorites.includes(item.id);
+        if (favoriteButton) {
+          if (favoriteButton.getAttribute('aria-pressed') !== String(isFavorite)) {
+            favoriteButton.classList.toggle('active', isFavorite);
+            favoriteButton.textContent = isFavorite ? '⭐ Saved' : '☆ Save';
+            favoriteButton.title = isFavorite ? 'Remove from favorites' : 'Add to favorites';
+            favoriteButton.setAttribute('aria-pressed', String(isFavorite));
+            favoriteButton.setAttribute('aria-label', isFavorite ? 'Remove from favorites' : 'Add to favorites');
+          }
+        }
+
+        const sourceNote = card.querySelector('.player-source-note');
+        const reciterLabel = 'Al-Islam Quran Stream (' + (RECITERS[currentReciter]?.name || 'Qari Ashiq') + ')';
+        if (sourceNote && sourceNote.textContent !== reciterLabel) {
+          sourceNote.textContent = reciterLabel;
+        }
+      });
+
+      if (!emptyStateEl) {
+        emptyStateEl = document.createElement('div');
+        emptyStateEl.className = 'ruqyah-empty-state';
+        emptyStateEl.setAttribute('role', 'status');
+
+        const heading = document.createElement('h3');
+        heading.textContent = '🔍 No matching Ruqyah verses found';
+        const message = document.createElement('p');
+        message.textContent = 'Try searching for a different term like "Kursi", "Fatiha", "Jinn", or reset your category filter.';
+        const resetButton = document.createElement('button');
+        resetButton.type = 'button';
+        resetButton.className = 'ruqyah-filter-pill active';
+        resetButton.textContent = 'Reset Filters';
+        resetButton.addEventListener('click', () => {
+          if (searchRenderTimer) clearTimeout(searchRenderTimer);
+          searchRenderTimer = null;
+          searchQuery = '';
+          if (searchInputEl) searchInputEl.value = '';
+          if (searchClearBtnEl) searchClearBtnEl.classList.remove('visible');
+          activeCategory = 'all';
+          render();
+        });
+
+        emptyStateEl.append(heading, message, resetButton);
+        gridEl.appendChild(emptyStateEl);
+      }
+      emptyStateEl.hidden = list.length !== 0;
+
+      if (playingCardId) {
+        updateCardPlayerUI(playingCardId);
+        updateCardProgressUI(playingCardId);
+      }
+      return;
+    }
 
     if (!list.length) {
       gridEl.innerHTML = `
         <div class="ruqyah-empty-state">
           <h3>🔍 No matching Ruqyah verses found</h3>
           <p>Try searching for a different term like "Kursi", "Fatiha", "Jinn", or reset your category filter.</p>
-          <button type="button" class="ruqyah-filter-pill active" id="resetFiltersBtn" style="margin-top:14px;">Reset Filters</button>
+          <button type="button" class="ruqyah-filter-pill active" id="resetFiltersBtn">Reset Filters</button>
         </div>
       `;
       const resetBtn = document.getElementById('resetFiltersBtn');
@@ -515,7 +659,7 @@
 
               <div class="player-right-group">
                 <a href="${item.alislamAppUrl}" target="_blank" rel="noopener noreferrer" class="alislam-app-link" title="Open in official Al-Islam Quran app">
-                  <span>Al-Islam App</span> ↗
+                  <span>Al-Islam App</span>
                 </a>
               </div>
             </div>
@@ -538,6 +682,8 @@
         </article>
       `;
     }).join('');
+
+    if (list.length === RUQYAH_VERSES.length) cacheStaticCards();
 
     // Reconnect active player state if currently playing
     if (playingCardId) {
@@ -582,6 +728,11 @@
     syncUrl();
   }
 
+  function renderSearchResults() {
+    renderCards();
+    syncUrl();
+  }
+
   // Attach Global Event Listeners
   function initListeners() {
     // Search input
@@ -592,16 +743,22 @@
           if (searchQuery) searchClearBtnEl.classList.add('visible');
           else searchClearBtnEl.classList.remove('visible');
         }
-        render();
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = setTimeout(() => {
+          searchRenderTimer = null;
+          renderSearchResults();
+        }, 100);
       });
     }
 
     if (searchClearBtnEl) {
       searchClearBtnEl.addEventListener('click', () => {
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = null;
         searchQuery = '';
         searchInputEl.value = '';
         searchClearBtnEl.classList.remove('visible');
-        render();
+        renderSearchResults();
       });
     }
 
@@ -610,13 +767,12 @@
       reciterSelectEl.value = currentReciter;
       reciterSelectEl.addEventListener('change', (e) => {
         currentReciter = e.target.value;
-        localStorage.setItem('ruqyah_reciter', currentReciter);
+        writeStoredValue('ruqyah_reciter', currentReciter);
         showToast(`Reciter set to ${RECITERS[currentReciter]?.name}`, '🎙️');
         if (isAudioPlaying && playingCardId) {
           playAyah(playingCardId, playingAyahIndex);
-        } else {
-          render();
         }
+        render();
       });
     }
 
@@ -625,6 +781,8 @@
       filterStripEl.addEventListener('click', (e) => {
         const btn = e.target.closest('[data-category]');
         if (!btn) return;
+        if (searchRenderTimer) clearTimeout(searchRenderTimer);
+        searchRenderTimer = null;
         activeCategory = btn.dataset.category;
         render();
       });
@@ -633,17 +791,14 @@
     // Grid delegate actions (Play, Favorite, Copy, Seek, Prev/Next)
     if (gridEl) {
       gridEl.addEventListener('click', (e) => {
-        // Close other open copy dropdowns
-        if (!e.target.closest('.copy-menu-wrapper')) {
-          document.querySelectorAll('.copy-dropdown.show').forEach(d => d.classList.remove('show'));
-        }
+        if (!e.target.closest('.copy-menu-wrapper')) closeCopyDropdown();
 
         const actionTrigger = e.target.closest('[data-action]');
         if (!actionTrigger) return;
 
         const action = actionTrigger.dataset.action;
         const cardId = Number(actionTrigger.dataset.id);
-        const item = RUQYAH_VERSES.find(v => v.id === cardId);
+        const item = verseById.get(cardId);
 
         if (action === 'play') {
           togglePlayCard(cardId);
@@ -652,9 +807,13 @@
         } else if (action === 'copy-menu') {
           const dropdown = document.getElementById(`copyDropdown-${cardId}`);
           if (dropdown) {
-            const isShown = dropdown.classList.contains('show');
-            document.querySelectorAll('.copy-dropdown.show').forEach(d => d.classList.remove('show'));
-            if (!isShown) dropdown.classList.add('show');
+            if (openCopyDropdown === dropdown) {
+              closeCopyDropdown();
+            } else {
+              closeCopyDropdown();
+              dropdown.classList.add('show');
+              openCopyDropdown = dropdown;
+            }
           }
         } else if (action === 'prev-ayah') {
           if (playingCardId === cardId && playingAyahIndex > 0) {
@@ -673,7 +832,7 @@
         if (!copyBtn) return;
         const cardId = Number(copyBtn.dataset.id);
         const copyType = copyBtn.dataset.copyType;
-        const item = RUQYAH_VERSES.find(v => v.id === cardId);
+        const item = verseById.get(cardId);
         if (!item) return;
 
         if (copyType === 'arabic') {
@@ -701,7 +860,7 @@ Reference via HeyNuo Ruqyah Guide: https://heynuo.github.io/ruqyah.html`;
           copyText(fullText, `${item.reference} (Complete)`);
         }
 
-        document.querySelectorAll('.copy-dropdown.show').forEach(d => d.classList.remove('show'));
+        closeCopyDropdown();
       });
 
       // Progress bar click to seek
@@ -735,10 +894,14 @@ Reference via HeyNuo Ruqyah Guide: https://heynuo.github.io/ruqyah.html`;
 
     // Close copy dropdown when clicking outside
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.copy-menu-wrapper')) {
-        document.querySelectorAll('.copy-dropdown.show').forEach(d => d.classList.remove('show'));
-      }
+      if (!e.target.closest('.copy-menu-wrapper')) closeCopyDropdown();
     });
+  }
+
+  function closeCopyDropdown() {
+    if (!openCopyDropdown) return;
+    openCopyDropdown.classList.remove('show');
+    openCopyDropdown = null;
   }
 
   // Load URL params on initial load
@@ -758,6 +921,7 @@ Reference via HeyNuo Ruqyah Guide: https://heynuo.github.io/ruqyah.html`;
 
   // Init
   function init() {
+    cacheStaticCards();
     loadUrlParams();
     initListeners();
     render();

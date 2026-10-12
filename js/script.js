@@ -26,7 +26,7 @@ const CONFIG = Object.freeze({
   }
 });
 
-const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
+const REDUCED_MOTION = window.matchMedia?.('(prefers-reduced-motion: reduce)') || { matches: false };
 
 const state = {
   posts: [],
@@ -114,6 +114,20 @@ const $ = {
   setHtml: (el, html) => { if (el) el.innerHTML = html; }
 };
 
+// Browser storage is optional. Keep controls usable when access is blocked
+// by privacy settings, private browsing, or a full storage quota.
+const safeStorage = Object.freeze({
+  get(area, key) {
+    try { return window[area].getItem(key); } catch (_) { return null; }
+  },
+  set(area, key, value) {
+    try { window[area].setItem(key, String(value)); return true; } catch (_) { return false; }
+  },
+  remove(area, key) {
+    try { window[area].removeItem(key); return true; } catch (_) { return false; }
+  }
+});
+
 // Page detection
 const Page = {
   isHome: () => {
@@ -197,28 +211,32 @@ const Bookmarks = {
   key: 'heynuo-bookmarks',
   get() {
     try {
-      return JSON.parse(localStorage.getItem(this.key)) || [];
+      const stored = JSON.parse(safeStorage.get('localStorage', this.key));
+      return Array.isArray(stored)
+        ? stored.filter(bookmark => bookmark && typeof bookmark.url === 'string')
+        : [];
     } catch {
       return [];
     }
   },
   has(url) {
-    if (!url) return false;
+    if (typeof url !== 'string' || !url) return false;
     const cleanUrl = url.split('#')[0];
     return this.get().some(b => b.url.split('#')[0] === cleanUrl);
   },
   toggle(url, title) {
+    if (typeof url !== 'string' || !url) return false;
     let list = this.get();
     const cleanUrl = url.split('#')[0];
     const exists = list.some(b => b.url.split('#')[0] === cleanUrl);
     if (exists) {
       list = list.filter(b => b.url.split('#')[0] !== cleanUrl);
-      localStorage.setItem(this.key, JSON.stringify(list));
+      safeStorage.set('localStorage', this.key, JSON.stringify(list));
       showToast('Removed from bookmarks', '🗑️');
       return false;
     } else {
       list.push({ url, title, date: new Date().toISOString() });
-      localStorage.setItem(this.key, JSON.stringify(list));
+      safeStorage.set('localStorage', this.key, JSON.stringify(list));
       showToast('Saved to bookmarks ⭐', '⭐');
       return true;
     }
@@ -226,16 +244,29 @@ const Bookmarks = {
 };
 
 // ---------- Theme Management ----------
+let themeSwitchTimer = null;
+
 function initTheme() {
-  const saved = localStorage.getItem('heynuo-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
+  const saved = safeStorage.get('localStorage', 'heynuo-theme');
+  const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+  const theme = saved === 'dark' || saved === 'light'
+    ? saved
+    : (prefersDark ? 'dark' : 'light');
   applyTheme(theme);
 }
 
 function applyTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('heynuo-theme', theme);
+  const root = document.documentElement;
+  root.classList.add('theme-switching');
+  root.setAttribute('data-theme', theme);
+  safeStorage.set('localStorage', 'heynuo-theme', theme);
+
+  if (themeSwitchTimer !== null) clearTimeout(themeSwitchTimer);
+  themeSwitchTimer = setTimeout(() => {
+    root.classList.remove('theme-switching');
+    themeSwitchTimer = null;
+  }, 80);
+
   const btn = $.get('#theme-toggle');
   if (btn) {
     btn.innerHTML = theme === 'dark'
@@ -247,54 +278,13 @@ function applyTheme(theme) {
 function initThemeToggle() {
   const btn = $.get('#theme-toggle');
   if (!btn) return;
-  $.on(btn, 'click', (e) => {
-    btn.classList.add('rotating');
-    setTimeout(() => btn.classList.remove('rotating'), 400);
+  $.on(btn, 'click', () => {
     const current = document.documentElement.getAttribute('data-theme') || 'light';
     const next = current === 'dark' ? 'light' : 'dark';
-
-    if (!document.startViewTransition || prefersReducedMotion()) {
-      applyTheme(next);
-      showToast(
-        next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
-        next === 'dark' ? '🌙' : '☀️'
-      );
-      return;
-    }
-
-    const rect = btn.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    const transition = document.startViewTransition(() => {
-      applyTheme(next);
-    });
-
-    transition.ready.then(() => {
-      document.documentElement.animate(
-        {
-          clipPath: [
-            `circle(0px at ${x}px ${y}px)`,
-            `circle(${endRadius}px at ${x}px ${y}px)`
-          ]
-        },
-        {
-          duration: 480,
-          easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
-          pseudoElement: '::view-transition-new(root)'
-        }
-      );
-    }).catch(() => {
-      // Gracefully handle skipped transitions on rapid clicks
-    });
-
+    applyTheme(next);
     showToast(
       next === 'dark' ? 'Switched to Dark Mode' : 'Switched to Light Mode',
-      next === 'dark' ? '<img src="assets/icons/moon.png" width="16" height="16" alt="">' : '<img src="assets/icons/sun.png" width="16" height="16" alt="">'
+      next === 'dark' ? '🌙' : '☀️'
     );
   });
 }
@@ -893,7 +883,7 @@ const Articles = {
       state.activeCategory = btn.dataset.category;
       this.renderCards();
       this.syncUrl();
-      localStorage.setItem('activeCategory', state.activeCategory);
+      safeStorage.set('localStorage', 'activeCategory', state.activeCategory);
       if (typeof updateQuickTopicPills === 'function') updateQuickTopicPills(state.activeCategory);
     });
 
@@ -993,7 +983,8 @@ const Articles = {
     const params = new URLSearchParams(window.location.search);
     // Include saved in valid categories
     const validCategories = new Set(['all', ...new Set(state.posts.map(p => p.category)), 'saved']);
-    const requested = params.get('category') || localStorage.getItem('activeCategory');
+    const savedCategory = safeStorage.get('localStorage', 'activeCategory');
+    const requested = params.get('category') || savedCategory;
     state.activeCategory = validCategories.has(requested) ? requested : 'all';
     state.searchTerm = params.get('q') || '';
     if (this.elements.search) this.elements.search.value = state.searchTerm;
@@ -1114,7 +1105,7 @@ function initContactForm() {
       }
     }
 
-    try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+    safeStorage.remove('localStorage', 'heynuo_contact_draft');
     showToast('Mail client opened! You can also copy your draft.', '✉️', 4000);
   });
 }
@@ -1167,7 +1158,7 @@ function initContactEnhancements() {
 
     // Restore draft if present
     try {
-      const savedDraft = localStorage.getItem('heynuo_contact_draft');
+      const savedDraft = safeStorage.get('localStorage', 'heynuo_contact_draft');
       if (savedDraft) {
         const data = JSON.parse(savedDraft);
         if (data.name && nameInput && !nameInput.value) nameInput.value = data.name;
@@ -1180,7 +1171,7 @@ function initContactEnhancements() {
 
     const saveDraft = () => {
       try {
-        localStorage.setItem('heynuo_contact_draft', JSON.stringify({
+        safeStorage.set('localStorage', 'heynuo_contact_draft', JSON.stringify({
           name: nameInput?.value || '',
           email: emailInput?.value || '',
           subject: subjectInput?.value || '',
@@ -1212,7 +1203,7 @@ function initContactEnhancements() {
             pills.forEach(p => p.classList.remove('active'));
             if (topicHint) topicHint.textContent = 'Auto-tailors your subject line';
             updateCounter();
-            try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+            safeStorage.remove('localStorage', 'heynuo_contact_draft');
             showToast('Draft cleared', '🗑️');
           }
         }
@@ -1223,7 +1214,7 @@ function initContactEnhancements() {
     const form = $.get('#contact-form');
     if (form) {
       $.on(form, 'submit', () => {
-        try { localStorage.removeItem('heynuo_contact_draft'); } catch (_) {}
+        safeStorage.remove('localStorage', 'heynuo_contact_draft');
       });
     }
   }
@@ -1467,15 +1458,15 @@ function initArticleSuite() {
   if (!prose) return;
 
   // 1. Restore font size and reading comfort preferences
-  const savedFontSize = localStorage.getItem('heynuo-font-size');
-  if (savedFontSize) {
-    prose.style.fontSize = savedFontSize;
+  const savedFontSize = Number.parseFloat(safeStorage.get('localStorage', 'heynuo-font-size'));
+  if (Number.isFinite(savedFontSize) && savedFontSize >= 13 && savedFontSize <= 24) {
+    prose.style.fontSize = `${savedFontSize}px`;
   }
-  const savedReadingTheme = localStorage.getItem('heynuo-reading-theme');
-  if (savedReadingTheme) {
+  const savedReadingTheme = safeStorage.get('localStorage', 'heynuo-reading-theme');
+  if (savedReadingTheme === 'sepia' || savedReadingTheme === 'slate') {
     document.documentElement.setAttribute('data-reading-theme', savedReadingTheme);
   }
-  const savedFont = localStorage.getItem('heynuo-reading-font');
+  const savedFont = safeStorage.get('localStorage', 'heynuo-reading-font');
   if (savedFont === 'serif') {
     document.body.classList.add('reading-font-serif');
   }
@@ -1528,11 +1519,11 @@ function initArticleSuite() {
       const mode = pill.dataset.themeMode;
       if (mode === 'default') {
         document.documentElement.removeAttribute('data-reading-theme');
-        localStorage.removeItem('heynuo-reading-theme');
+        safeStorage.remove('localStorage', 'heynuo-reading-theme');
         showToast('Default theme restored', '✨');
       } else {
         document.documentElement.setAttribute('data-reading-theme', mode);
-        localStorage.setItem('heynuo-reading-theme', mode);
+        safeStorage.set('localStorage', 'heynuo-reading-theme', mode);
         showToast(mode === 'sepia' ? 'Sepia reading mode active 📜' : 'Slate night mode active 🌑', mode === 'sepia' ? '📜' : '🌑');
       }
     });
@@ -1546,7 +1537,7 @@ function initArticleSuite() {
     $.on(fontToggleBtn, 'click', () => {
       const nowSerif = document.body.classList.toggle('reading-font-serif');
       fontToggleBtn.textContent = nowSerif ? 'Sans' : 'Serif';
-      localStorage.setItem('heynuo-reading-font', nowSerif ? 'serif' : 'sans');
+      safeStorage.set('localStorage', 'heynuo-reading-font', nowSerif ? 'serif' : 'sans');
       showToast(nowSerif ? 'Editorial serif font active 🖋️' : 'Clean sans-serif font active 🔤', '🔤');
     });
   }
@@ -1600,18 +1591,18 @@ function initArticleSuite() {
 
   $.on(fontDec, 'click', () => {
     if (currentSize > 13) {
-      currentSize -= 1;
+      currentSize = Math.max(13, currentSize - 1);
       prose.style.fontSize = `${currentSize}px`;
-      localStorage.setItem('heynuo-font-size', `${currentSize}px`);
+      safeStorage.set('localStorage', 'heynuo-font-size', `${currentSize}px`);
       showToast(`Text size: ${currentSize}px`, '🔠');
     }
   });
 
   $.on(fontInc, 'click', () => {
     if (currentSize < 24) {
-      currentSize += 1;
+      currentSize = Math.min(24, currentSize + 1);
       prose.style.fontSize = `${currentSize}px`;
-      localStorage.setItem('heynuo-font-size', `${currentSize}px`);
+      safeStorage.set('localStorage', 'heynuo-font-size', `${currentSize}px`);
       showToast(`Text size: ${currentSize}px`, '🔠');
     }
   });
@@ -1880,8 +1871,8 @@ function initReadingProgress() {
   const updateProgress = () => {
     const docH = document.documentElement.scrollHeight - window.innerHeight;
     if (docH > 0) {
-      const progress = (window.scrollY / docH) * 100;
-      bar.style.width = `${Math.min(progress, 100)}%`;
+      const progress = Math.min(Math.max(window.scrollY / docH, 0), 1);
+      bar.style.transform = `scaleX(${progress})`;
     }
     ticking = false;
   };
@@ -2118,7 +2109,7 @@ const CommandPalette = {
         tag: 'Theme',
         run: () => {
           document.documentElement.setAttribute('data-reading-theme', 'sepia');
-          localStorage.setItem('heynuo-reading-theme', 'sepia');
+          safeStorage.set('localStorage', 'heynuo-reading-theme', 'sepia');
           showToast('Sepia reading mode active 📜', '📜');
         }
       },
@@ -2132,7 +2123,7 @@ const CommandPalette = {
         tag: 'Theme',
         run: () => {
           document.documentElement.setAttribute('data-reading-theme', 'slate');
-          localStorage.setItem('heynuo-reading-theme', 'slate');
+          safeStorage.set('localStorage', 'heynuo-reading-theme', 'slate');
           showToast('Slate night mode active 🌑', '🌑');
         }
       }
@@ -2238,15 +2229,17 @@ const CommandPalette = {
   saveSearchHistory(query) {
     if (!query || !query.trim()) return;
     try {
-      let history = JSON.parse(localStorage.getItem('heynuo-search-history')) || [];
-      history = [query.trim(), ...history.filter(item => item.toLowerCase() !== query.trim().toLowerCase())].slice(0, 5);
-      localStorage.setItem('heynuo-search-history', JSON.stringify(history));
+      const stored = JSON.parse(safeStorage.get('localStorage', 'heynuo-search-history'));
+      const history = Array.isArray(stored) ? stored.filter(item => typeof item === 'string') : [];
+      const next = [query.trim(), ...history.filter(item => item.toLowerCase() !== query.trim().toLowerCase())].slice(0, 5);
+      safeStorage.set('localStorage', 'heynuo-search-history', JSON.stringify(next));
     } catch {}
   },
 
   getSearchHistory() {
     try {
-      return JSON.parse(localStorage.getItem('heynuo-search-history')) || [];
+      const stored = JSON.parse(safeStorage.get('localStorage', 'heynuo-search-history'));
+      return Array.isArray(stored) ? stored.filter(item => typeof item === 'string').slice(0, 5) : [];
     } catch {
       return [];
     }
@@ -2441,14 +2434,15 @@ function initAnnouncementBanner() {
   const closeBtn = $.get('#announcementClose');
   if (!banner || !closeBtn) return;
 
-  if (sessionStorage.getItem('heynuo-announcement-dismissed') === 'true') {
+  const wasDismissed = safeStorage.get('sessionStorage', 'heynuo-announcement-dismissed') === 'true';
+  if (wasDismissed) {
     banner.style.display = 'none';
     return;
   }
 
   $.on(closeBtn, 'click', () => {
     banner.classList.add('dismissed');
-    sessionStorage.setItem('heynuo-announcement-dismissed', 'true');
+    safeStorage.set('sessionStorage', 'heynuo-announcement-dismissed', 'true');
     setTimeout(() => { banner.style.display = 'none'; }, 350);
   });
 }
@@ -2458,7 +2452,8 @@ function initHeroParticles() {
   const canvas = $.get('#heroParticlesCanvas');
   if (!canvas) return;
 
-  if (prefersReducedMotion()) {
+  const hasCoarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (prefersReducedMotion() || hasCoarsePointer) {
     canvas.style.display = 'none';
     return;
   }
@@ -2469,22 +2464,30 @@ function initHeroParticles() {
   let width = 0;
   let height = 0;
   let particles = [];
-  let animId = null;
+  let frameId = null;
+  let frameTimer = null;
   let isVisible = true;
   const mouse = { x: null, y: null, radius: 110 };
 
-  const PARTICLE_COUNT = 38;
+  const isLowPower = (navigator.hardwareConcurrency || 4) <= 4 || (navigator.deviceMemory || 4) <= 4;
+  const PARTICLE_COUNT = isLowPower ? 10 : 16;
+  const FRAME_INTERVAL = 1000 / (isLowPower ? 18 : 24);
   const CONNECT_DISTANCE = 90;
+  const CONNECT_DISTANCE_SQUARED = CONNECT_DISTANCE * CONNECT_DISTANCE;
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, isLowPower ? 1 : 1.25);
     width = rect.width;
     height = rect.height;
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const pixelWidth = Math.floor(width * dpr);
+    const pixelHeight = Math.floor(height * dpr);
+    if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+      canvas.width = pixelWidth;
+      canvas.height = pixelHeight;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
   }
 
   class Particle {
@@ -2539,19 +2542,22 @@ function initHeroParticles() {
   }
 
   function render() {
-    if (!isVisible) return;
+    frameId = null;
+    if (!isVisible || document.hidden) return;
+
     ctx.clearRect(0, 0, width, height);
     const colorRgb = getColorRgb();
+    particles.forEach(particle => particle.update());
 
-    // Connecting lines
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const distanceSquared = dx * dx + dy * dy;
 
-        if (dist < CONNECT_DISTANCE) {
-          const alpha = (1 - dist / CONNECT_DISTANCE) * 0.2;
+        if (distanceSquared < CONNECT_DISTANCE_SQUARED) {
+          const distance = Math.sqrt(distanceSquared);
+          const alpha = (1 - distance / CONNECT_DISTANCE) * 0.2;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
@@ -2562,23 +2568,46 @@ function initHeroParticles() {
       }
     }
 
-    particles.forEach(p => {
-      p.update();
-      p.draw(colorRgb);
-    });
+    particles.forEach(particle => particle.draw(colorRgb));
+    frameTimer = window.setTimeout(() => {
+      frameTimer = null;
+      startAnimation();
+    }, FRAME_INTERVAL);
+  }
 
-    animId = requestAnimationFrame(render);
+  function startAnimation() {
+    if (!isVisible || document.hidden || frameId !== null || frameTimer !== null) return;
+    frameId = window.requestAnimationFrame(render);
+  }
+
+  function stopAnimation() {
+    if (frameId !== null) window.cancelAnimationFrame(frameId);
+    if (frameTimer !== null) window.clearTimeout(frameTimer);
+    frameId = null;
+    frameTimer = null;
   }
 
   const heroSection = canvas.closest('.hero');
   if (heroSection) {
-    $.on(heroSection, 'mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
+    let pointerFrameId = null;
+    let latestPointerEvent = null;
+
+    $.on(heroSection, 'pointermove', (e) => {
+      latestPointerEvent = e;
+      if (pointerFrameId !== null) return;
+      pointerFrameId = window.requestAnimationFrame(() => {
+        pointerFrameId = null;
+        if (!latestPointerEvent) return;
+        const rect = heroSection.getBoundingClientRect();
+        mouse.x = latestPointerEvent.clientX - rect.left;
+        mouse.y = latestPointerEvent.clientY - rect.top;
+      });
     }, { passive: true });
 
-    $.on(heroSection, 'mouseleave', () => {
+    $.on(heroSection, 'pointerleave', () => {
+      latestPointerEvent = null;
+      if (pointerFrameId !== null) window.cancelAnimationFrame(pointerFrameId);
+      pointerFrameId = null;
       mouse.x = null;
       mouse.y = null;
     });
@@ -2586,16 +2615,17 @@ function initHeroParticles() {
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(([entry]) => {
         isVisible = entry.isIntersecting;
-        if (isVisible && !animId) {
-          render();
-        } else if (!isVisible && animId) {
-          cancelAnimationFrame(animId);
-          animId = null;
-        }
+        if (isVisible) startAnimation();
+        else stopAnimation();
       }, { threshold: 0.05 });
       observer.observe(heroSection);
     }
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAnimation();
+    else startAnimation();
+  });
 
   let resizeTimer = null;
   window.addEventListener('resize', () => {
@@ -2608,7 +2638,7 @@ function initHeroParticles() {
 
   resize();
   initParticles();
-  render();
+  startAnimation();
 }
 
 // ---------- Hero Dynamic Rotator / Typewriter ----------
@@ -2642,7 +2672,7 @@ function initHeroRotator() {
         phraseIdx = (phraseIdx + 1) % phrases.length;
         typingDelay = 400;
       } else {
-        typingDelay = 26;
+        typingDelay = 38;
       }
     } else {
       charIdx++;
@@ -2651,7 +2681,7 @@ function initHeroRotator() {
         isDeleting = true;
         typingDelay = 2500;
       } else {
-        typingDelay = 55 + Math.random() * 25;
+        typingDelay = 70 + Math.random() * 30;
       }
     }
 
@@ -2710,7 +2740,7 @@ function initDispatchForm() {
   if (!form || !input) return;
 
   const SUB_KEY = 'heynuo-newsletter-subscribed';
-  const savedSub = localStorage.getItem(SUB_KEY);
+  const savedSub = safeStorage.get('localStorage', SUB_KEY);
   const submitBtn = form.querySelector('button[type="submit"]');
 
   if (savedSub && submitBtn) {
@@ -2735,7 +2765,7 @@ function initDispatchForm() {
     }
 
     setTimeout(() => {
-      localStorage.setItem(SUB_KEY, email);
+      safeStorage.set('localStorage', SUB_KEY, email);
       if (submitBtn) {
         submitBtn.innerHTML = '✓ Subscribed!';
         submitBtn.style.background = 'var(--success, #10b981)';
@@ -2803,12 +2833,12 @@ function initShortcutsModal() {
   });
 
   const singleKeyToggle = $.get('#toggleSingleShortcuts');
-  let singleShortcutsEnabled = localStorage.getItem('heynuo_shortcuts_enabled') !== 'false';
+  let singleShortcutsEnabled = safeStorage.get('localStorage', 'heynuo_shortcuts_enabled') !== 'false';
   if (singleKeyToggle) {
     singleKeyToggle.checked = singleShortcutsEnabled;
     $.on(singleKeyToggle, 'change', (e) => {
       singleShortcutsEnabled = e.target.checked;
-      localStorage.setItem('heynuo_shortcuts_enabled', singleShortcutsEnabled ? 'true' : 'false');
+      safeStorage.set('localStorage', 'heynuo_shortcuts_enabled', singleShortcutsEnabled ? 'true' : 'false');
       showToast(singleShortcutsEnabled ? 'Single-key shortcuts enabled' : 'Single-key shortcuts disabled (WCAG 2.1.4)', '⌨️');
     });
   }
@@ -2887,8 +2917,8 @@ function initShortcutsModal() {
 
 // ---------- 3D Tilt Micro-Interaction ----------
 function initTiltEffect() {
-  if (prefersReducedMotion()) return;
-  const boxes = $.getAll('.card-showcase-box, .featured-banner');
+  if (prefersReducedMotion() || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+  const boxes = $.getAll('.card-showcase-box');
   boxes.forEach(box => {
     let ticking = false;
     let lastE = null;
@@ -2921,12 +2951,13 @@ function initTiltEffect() {
 
 // ---------- Interactive Card Spotlight Tracker (Linear / Vercel effect) ----------
 function initSpotlightEffect() {
-  if (prefersReducedMotion()) return;
+  if (prefersReducedMotion() || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   const spotlightSelector = '.card, .featured-banner, .value-card, .about-box, .dispatch-card, .hero-stat, .contact-card, .channel-card, .presence-card, .sidebar-featured-box, .expect-card, .faq-item';
+  if (!document.querySelector(spotlightSelector)) return;
   let ticking = false;
   let lastEvent = null;
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('pointermove', (e) => {
     lastEvent = e;
     if (!ticking) {
       requestAnimationFrame(() => {
@@ -2934,8 +2965,14 @@ function initSpotlightEffect() {
           const card = lastEvent.target.closest(spotlightSelector);
           if (card) {
             const rect = card.getBoundingClientRect();
-            card.style.setProperty('--mouse-x', `${lastEvent.clientX - rect.left}px`);
-            card.style.setProperty('--mouse-y', `${lastEvent.clientY - rect.top}px`);
+            const x = `${lastEvent.clientX - rect.left}px`;
+            const y = `${lastEvent.clientY - rect.top}px`;
+            card.style.setProperty('--mouse-x', x);
+            card.style.setProperty('--mouse-y', y);
+            if (card.classList.contains('featured-banner')) {
+              card.style.setProperty('--feat-x', x);
+              card.style.setProperty('--feat-y', y);
+            }
           }
         }
         ticking = false;
@@ -3088,20 +3125,11 @@ function initFeaturedResource() {
   const banner = $.get('#featuredRuqyahBanner');
   if (!banner) return;
 
-  // 1. Mouse-following radial glow spotlight
-  $.on(banner, 'mousemove', (e) => {
-    const rect = banner.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    banner.style.setProperty('--feat-x', `${x}px`);
-    banner.style.setProperty('--feat-y', `${y}px`);
-  });
-
-  // 2. Share / Copy Link button
+  // 1. Share / Copy Link button
   const shareBtn = $.get('#shareRuqyahBtn');
   if (shareBtn) {
     $.on(shareBtn, 'click', async () => {
-      const url = 'https://heynuo.github.io/heynuo.github.io-ruqyah-guide/';
+      const url = 'https://heynuo.github.io/ruqyah.html';
       const copied = await copyToClipboard(url);
       if (copied) {
         showToast('Ruqyah Guide link copied to clipboard!', '✨');
@@ -3111,7 +3139,7 @@ function initFeaturedResource() {
     });
   }
 
-  // 3. Showcase Tab Switching (App Showcase vs Live Audio & Verses)
+  // 2. Showcase Tab Switching (App Showcase vs Live Audio & Verses)
   const tabApp = $.get('#tabAppPreview');
   const tabSampler = $.get('#tabLiveSampler');
   const panelApp = $.get('#panelAppPreview');
@@ -3144,7 +3172,7 @@ function initFeaturedResource() {
     $.on(tabSampler, 'click', activateSamplerTab);
   }
 
-  // 4. Live Verse & Audio Sampler Data
+  // 3. Live Verse & Audio Sampler Data
   const verses = [
     {
       title: 'Ayat al-Kursi (2:255)',
@@ -3624,8 +3652,17 @@ function safeRun(label, fn) {
   }
 }
 
+function initFooterYear() {
+  const year = String(new Date().getFullYear());
+  $.getAll('[data-footer-year]').forEach((dateEl) => {
+    dateEl.textContent = year;
+    dateEl.setAttribute('datetime', year);
+  });
+}
+
 // ---------- Initialization ----------
 function init() {
+  safeRun('FooterYear', initFooterYear);
   safeRun('ServiceWorker', initServiceWorker);
   safeRun('Theme', initTheme);
   safeRun('ThemeToggle', initThemeToggle);
