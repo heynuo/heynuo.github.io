@@ -52,7 +52,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20fill='%232563eb'/%3E%3Ctext%20x='50'%20y='67'%20font-size='50'%20text-anchor='middle'%20fill='white'%20font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
@@ -62,7 +62,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/heynuo.css">
   <link rel="stylesheet" href="css/quran.css">
   <link rel="stylesheet" href="css/quran-player.css">
 </head>
@@ -78,7 +78,7 @@
 
   <!-- Header & Navigation -->
 
-  <header role="banner">
+  <header>
     <nav class="container" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
         <span class="logo-mark" aria-hidden="true">
@@ -152,12 +152,12 @@
       </p>
 
       <!-- Sub-Tab Switcher between Full Quran, 108 Verses, Ruqyah Guide, and PDF Downloads -->
-      <div class="quran-tab-switcher" role="tablist" aria-label="Quran Section Switcher">
-        <a href="quran.html" class="quran-tab-btn active" role="tab" aria-selected="true">📖 Full Quran (114 Surahs)</a>
-        <a href="quran-verses.html" class="quran-tab-btn" role="tab" aria-selected="false">📜 108 Master Verses</a>
-        <a href="ruqyah.html" class="quran-tab-btn" role="tab" aria-selected="false">🛡️ Ruqyah Healing Verses</a>
-        <a href="#pdf-downloads" class="quran-tab-btn" role="tab" aria-selected="false">📥 Quran &amp; Verses PDFs</a>
-      </div>
+      <nav class="quran-tab-switcher" aria-label="Quran Section Switcher">
+        <a href="quran.html" class="quran-tab-btn active" aria-current="page">📖 Full Quran (114 Surahs)</a>
+        <a href="quran-verses.html" class="quran-tab-btn">📜 108 Master Verses</a>
+        <a href="ruqyah.html" class="quran-tab-btn">🛡️ Ruqyah Healing Verses</a>
+        <a href="#pdf-downloads" class="quran-tab-btn">📥 Quran &amp; Verses PDFs</a>
+      </nav>
 
       <!-- Quick Action Buttons -->
       <div class="quran-actions">
@@ -213,7 +213,7 @@
         <button type="button" class="quran-search-clear" id="quranSearchClear" aria-label="Clear search">✕</button>
       </div>
 
-      <div class="filter-row" id="quranFilters" aria-label="Surah category filters"></div>
+      <div class="filter-row" id="quranFilters" role="group" aria-label="Surah category filters"></div>
 
       <div class="quran-status-bar" id="quranStatusBar" role="status" aria-live="polite" aria-atomic="true">
         <span>Loading all 114 Surahs...</span>
@@ -286,7 +286,7 @@
   </div>
 
   <!-- Footer -->
-  <footer role="contentinfo">
+  <footer>
       <div class="footer-container">
         <!-- Main 5-Column Grid -->
         <div class="footer-grid">
@@ -341,10 +341,10 @@
 
           <!-- Column 2: Sacred Sciences -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="quran.html" class="active" aria-current="page">
@@ -374,10 +374,10 @@
 
           <!-- Column 3: Engineering -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
@@ -400,10 +400,10 @@
 
           <!-- Column 4: Site & Author -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="index.html" data-nav="index">Home</a>
@@ -424,10 +424,10 @@
 
           <!-- Column 5: Trust & Access -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="privacy.html" data-nav="privacy">

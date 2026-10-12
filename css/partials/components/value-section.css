@@ -183,7 +183,7 @@
 
     /* Perf: skip painting off-screen cards */
     content-visibility: auto;
-    contain-intrinsic-size: 320px;
+    contain-intrinsic-size: auto none auto 320px;
 
     /* Card responds to its own width, not the viewport */
     container-type: inline-size;

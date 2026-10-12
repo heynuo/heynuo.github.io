@@ -135,6 +135,9 @@
   align-items: center;
   gap: 8px;
   white-space: nowrap;
+  /* Never shrink below the label width: the switcher scrolls instead of the
+     nowrap labels spilling over their neighbours on narrow screens. */
+  flex: 0 0 auto;
 }
 
 .quran-tab-btn:hover {
@@ -488,7 +491,7 @@
   position: relative;
   overflow: hidden;
   content-visibility: auto;
-  contain-intrinsic-size: auto 340px;
+  contain-intrinsic-size: auto none auto 340px;
 }
 
 [data-theme="dark"] .surah-card {

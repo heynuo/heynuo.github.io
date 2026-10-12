@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -39,7 +39,7 @@
   <meta name="twitter:title" content="Contact Me - HeyNuo | Get In Touch">
   <meta name="twitter:description" content="Reach out for collaborations, questions, or just to say hello!">
   <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20fill='%232563eb'/%3E%3Ctext%20x='50'%20y='67'%20font-size='50'%20text-anchor='middle'%20fill='white'%20font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
@@ -49,7 +49,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Shared stylesheet: global styles + components -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/heynuo.css">
   <!-- Dedicated Contact Page Modern Stylesheet -->
   <link rel="stylesheet" href="css/contact.css">
   <!-- Persistent Quran Auto-Listening Audio Player -->
@@ -62,7 +62,7 @@
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <header role="banner">
+  <header>
     <nav class="container" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
         <span class="logo-mark" aria-hidden="true">
@@ -313,7 +313,7 @@
           <div class="channel-card">
             <div class="channel-card-header">
               <div class="channel-icon-wrap" aria-hidden="true">
-                <img src="assets/icons/email.png" alt="" width="20" height="20">
+                <img src="assets/icons/email.png" alt="" width="20" height="20" decoding="async" loading="lazy">
               </div>
               <h3 class="channel-title">Direct Personal Email</h3>
             </div>
@@ -343,7 +343,7 @@
           <div class="channel-card">
             <div class="channel-card-header">
               <div class="channel-icon-wrap" aria-hidden="true">
-                <img src="assets/icons/github.png" alt="" width="20" height="20">
+                <img src="assets/icons/github.png" alt="" width="20" height="20" decoding="async" loading="lazy">
               </div>
               <h3 class="channel-title">GitHub Profile &amp; Discussions</h3>
             </div>
@@ -352,7 +352,7 @@
             </p>
             <div class="channel-actions">
               <a href="https://github.com/heynuo" target="_blank" rel="noopener noreferrer" class="channel-action-btn primary">
-                <img src="assets/icons/github.png" alt="" width="15" height="15">
+                <img src="assets/icons/github.png" alt="" width="15" height="15" decoding="async" loading="lazy">
                 <span>GitHub @heynuo ↗</span>
               </a>
             </div>
@@ -453,17 +453,17 @@
       </section>
 
       <!-- ===== Bottom Warm CTA Card ===== -->
-      <section class="contact-bottom-cta">
+      <div class="contact-bottom-cta">
         <p>Or just looking around? Explore educational notes across the website. 🤲</p>
         <div class="contact-bottom-links">
           <a href="index.html" class="btn btn-secondary">🏠 Back to Home</a>
           <a href="java-oop.html" class="btn btn-secondary">☕ Java OOP Tutorial</a>
           <a href="quran.html" class="btn btn-secondary">📖 Quran Library</a>
         </div>
-      </section>
+      </div>
     </main>
 
-    <footer role="contentinfo">
+    <footer>
       <div class="footer-container">
         <!-- Main 5-Column Grid -->
         <div class="footer-grid">
@@ -518,10 +518,10 @@
 
           <!-- Column 2: Sacred Sciences -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="quran.html" data-nav="quran">
@@ -551,10 +551,10 @@
 
           <!-- Column 3: Engineering -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
@@ -577,10 +577,10 @@
 
           <!-- Column 4: Site & Author -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="index.html" data-nav="index">Home</a>
@@ -601,10 +601,10 @@
 
           <!-- Column 5: Trust & Access -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="privacy.html" data-nav="privacy">

@@ -3,7 +3,7 @@
    Caches app shell, article pages, CSS, JS, and Ruqyah text.
    ========================================================= */
 
-const CACHE_NAME = 'heynuo-cache-v4';
+const CACHE_NAME = 'heynuo-cache-v6';
 
 const PRECACHE_URLS = [
   './',
@@ -21,36 +21,7 @@ const PRECACHE_URLS = [
   '404.html',
   'manifest.json',
   'rss.xml',
-  'css/style.css',
-  'css/partials/reset.css',
-  'css/partials/base/tokens.css',
-  'css/partials/base/themes.css',
-  'css/partials/base/typography.css',
-  'css/partials/layout/layout.css',
-  'css/partials/components/header-nav.css',
-  'css/partials/components/hero.css',
-  'css/partials/components/buttons.css',
-  'css/partials/components/value-section.css',
-  'css/partials/components/featured-project.css',
-  'css/partials/components/search-toolbar.css',
-  'css/partials/components/cards.css',
-  'css/partials/components/about-contact.css',
-  'css/partials/components/footer.css',
-  'css/partials/components/widgets.css',
-  'css/partials/components/responsive.css',
-  'css/partials/features/announcement.css',
-  'css/partials/features/hero-showcase.css',
-  'css/partials/features/featured-showcase.css',
-  'css/partials/features/verse-sampler.css',
-  'css/partials/features/dispatch.css',
-  'css/partials/features/shortcuts-modal.css',
-  'css/partials/features/preview-modal.css',
-  'css/partials/features/article-prose.css',
-  'css/partials/features/interactive.css',
-  'css/partials/features/command-palette.css',
-  'css/partials/utilities/accessibility.css',
-  'css/partials/utilities/helpers.css',
-  'css/partials/utilities/print.css',
+  'css/heynuo.css',
   'css/home.css',
   'css/contact.css',
   'css/ruqyah.css',
@@ -91,7 +62,9 @@ const PRECACHE_URLS = [
   'assets/icons/lightning.png',
   'assets/icons/open-book.png',
   'assets/icons/share.png',
-  'assets/icons/star.png'
+  'assets/icons/star.png',
+  'assets/icons/icon-192.png',
+  'assets/icons/icon-512.png'
 ];
 
 // Install Event - Pre-cache the app shell before taking control.

@@ -52,7 +52,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23059669'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20fill='%23059669'/%3E%3Ctext%20x='50'%20y='67'%20font-size='50'%20text-anchor='middle'%20fill='white'%20font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
 
@@ -62,7 +62,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/heynuo.css">
   <link rel="stylesheet" href="css/master-verses.css">
 </head>
 
@@ -84,7 +84,7 @@
 
   <!-- Header & Navigation -->
 
-  <header role="banner">
+  <header>
     <nav class="container" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
         <span class="logo-mark" aria-hidden="true">
@@ -161,7 +161,7 @@
       </div>
 
       <!-- Sacred Bismillah -->
-      <div class="mv-hero-bismillah" lang="ar" dir="rtl" aria-label="Bismillahi Ar-Rahmani Ar-Raheem">
+      <div class="mv-hero-bismillah" lang="ar" dir="rtl" role="img" aria-label="Bismillahi Ar-Rahmani Ar-Raheem">
         بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
       </div>
 
@@ -197,12 +197,12 @@
       </p>
 
       <!-- Sub-Tab Switcher between Full Quran, 108 Verses, Ruqyah Guide, and PDF Downloads -->
-      <div class="quran-tab-switcher" role="tablist" aria-label="Quran Sections Navigation">
-        <a href="quran.html" class="quran-tab-btn" role="tab" aria-selected="false">📖 Full Quran (114 Surahs)</a>
-        <a href="quran-verses.html" class="quran-tab-btn active" role="tab" aria-selected="true">📜 108 Master Verses</a>
-        <a href="ruqyah.html" class="quran-tab-btn" role="tab" aria-selected="false">🛡️ Ruqyah Healing Verses</a>
-        <a href="#pdf-document" class="quran-tab-btn" role="tab" aria-selected="false">📥 Download PDF</a>
-      </div>
+      <nav class="quran-tab-switcher" aria-label="Quran Sections Navigation">
+        <a href="quran.html" class="quran-tab-btn">📖 Full Quran (114 Surahs)</a>
+        <a href="quran-verses.html" class="quran-tab-btn active" aria-current="page">📜 108 Master Verses</a>
+        <a href="ruqyah.html" class="quran-tab-btn">🛡️ Ruqyah Healing Verses</a>
+        <a href="#pdf-document" class="quran-tab-btn">📥 Download PDF</a>
+      </nav>
 
       <!-- Hero Action Buttons -->
       <div class="mv-hero-btn-row">
@@ -262,7 +262,7 @@
         <div class="mv-pdf-media-block">
           <div class="mv-pdf-icon-emblem" aria-hidden="true">📑</div>
           <div class="mv-pdf-details">
-            <h3>Master Compilation of Quranic Verses (Official PDF Document)</h3>
+            <h2>Master Compilation of Quranic Verses (Official PDF Document)</h2>
             <p>
               The complete 13-page vector publication extracted and compiled via multi-agent parallel analysis. Contains the full scholarly methodology, thematic taxonomy, canonical 108-verse master table, and cross-referenced top 10 breakdown.
             </p>
@@ -363,7 +363,7 @@
         <div class="mv-taxonomy-card" data-category="Protection &amp; Ruqyah (Healing)">
           <div class="mv-tax-icon">🛡️</div>
           <div class="mv-tax-content">
-            <h4>Ruqyah &amp; Spiritual Healing</h4>
+            <h3>Ruqyah &amp; Spiritual Healing</h3>
             <p>Divine remedies, foundational Ruqyah of Al-Fatiha, and spiritual antidote verses.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">15 Verses</span>
@@ -375,7 +375,7 @@
         <div class="mv-taxonomy-card" data-category="Tawheed (Oneness of Allah)">
           <div class="mv-tax-icon">☝️</div>
           <div class="mv-tax-content">
-            <h4>Tawheed &amp; Sovereignty</h4>
+            <h3>Tawheed &amp; Sovereignty</h3>
             <p>Pure monotheism, Ayat ul-Kursi, Al-Ikhlas, and absolute sovereignty of Allah.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">22 Verses</span>
@@ -387,7 +387,7 @@
         <div class="mv-taxonomy-card" data-category="Anti-Sorcery &amp; Breaking Magic">
           <div class="mv-tax-icon">⚔️</div>
           <div class="mv-tax-content">
-            <h4>Anti-Sorcery &amp; Protection</h4>
+            <h3>Anti-Sorcery &amp; Protection</h3>
             <p>Breaking witchcraft, Harut &amp; Marut, Moses' staff, and Mu'awwidhatayn.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">12 Verses</span>
@@ -399,7 +399,7 @@
         <div class="mv-taxonomy-card" data-category="Ism-e-Azam (Greatest Names of Allah)">
           <div class="mv-tax-icon">👑</div>
           <div class="mv-tax-content">
-            <h4>Prophets &amp; Ism-e-Azam</h4>
+            <h3>Prophets &amp; Ism-e-Azam</h3>
             <p>Prophetic supplications and secret greatest names of Allah in Ilmul Hisab.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">14 Verses</span>
@@ -411,7 +411,7 @@
         <div class="mv-taxonomy-card" data-category="Signs &amp; Creation">
           <div class="mv-tax-icon">🌍</div>
           <div class="mv-tax-content">
-            <h4>Signs, Universe &amp; Creation</h4>
+            <h3>Signs, Universe &amp; Creation</h3>
             <p>Cosmic signs, heavens and earth, purpose of existence, and Ayat an-Nur.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">18 Verses</span>
@@ -423,7 +423,7 @@
         <div class="mv-taxonomy-card" data-category="General Exegesis &amp; Faith">
           <div class="mv-tax-icon">📖</div>
           <div class="mv-tax-content">
-            <h4>Faith, Hereafter &amp; Warning</h4>
+            <h3>Faith, Hereafter &amp; Warning</h3>
             <p>Hereafter, Paradise rewards, steadfastness, and warnings against hypocrisy.</p>
             <div class="mv-tax-footer">
               <span class="mv-tax-count">27 Verses</span>
@@ -586,10 +586,10 @@
       </div>
 
       <!-- VIEW 1: Rich Cards Grid View -->
-      <div class="mv-verses-grid-container mv-mode-all" id="mvCardsGrid" aria-live="polite" aria-label="Quranic verses cards"></div>
+      <div class="mv-verses-grid-container mv-mode-all" id="mvCardsGrid" role="region" aria-live="polite" aria-label="Quranic verses cards"></div>
 
       <!-- VIEW 2: Canonical Master Table View (Matching PDF Pages 4-11) -->
-      <div class="mv-master-table-wrapper" id="mvTableWrap" style="display:none;" aria-label="Canonical master table of 108 verses">
+      <div class="mv-master-table-wrapper" id="mvTableWrap" role="region" style="display:none;" aria-label="Canonical master table of 108 verses">
         <div class="mv-table-scroll-container">
           <table class="mv-canonical-table">
             <thead>
@@ -631,7 +631,7 @@
     </section>
   </main>
 
-<footer role="contentinfo">
+<footer>
       <div class="footer-container">
         <!-- Main 5-Column Grid -->
         <div class="footer-grid">
@@ -686,10 +686,10 @@
 
           <!-- Column 2: Sacred Sciences -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="quran.html" data-nav="quran">
@@ -719,10 +719,10 @@
 
           <!-- Column 3: Engineering -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
@@ -745,10 +745,10 @@
 
           <!-- Column 4: Site & Author -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="index.html" data-nav="index">Home</a>
@@ -769,10 +769,10 @@
 
           <!-- Column 5: Trust & Access -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="privacy.html" data-nav="privacy">
@@ -819,7 +819,7 @@
         </div>
       </div>
       <div class="mv-audio-bar-meta" aria-live="polite" aria-atomic="true">
-        <h5 id="mvAudioBarTitle">Al-Baqarah (2:255)</h5>
+        <h3 id="mvAudioBarTitle">Al-Baqarah (2:255)</h3>
         <p id="mvAudioBarSub">Ayah 255 • Qari Muhammad Ashiq</p>
       </div>
     </div>

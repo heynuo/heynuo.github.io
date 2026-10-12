@@ -985,7 +985,7 @@
         <span class="mv-theme-tag">${escapeHtml(item.category)}</span>
       </div>
 
-      <h3 style="font-family:var(--font-display); font-size:1.6rem; font-weight:800; color:var(--text); margin-bottom:4px;">
+      <h3 id="mvBonusModalTitle" style="font-family:var(--font-display); font-size:1.6rem; font-weight:800; color:var(--text); margin-bottom:4px;">
         ${escapeHtml(item.surahName)} (${item.verseRange}) — ${escapeHtml(item.surahNameAr)}
       </h3>
       <p style="font-size:0.88rem; color:var(--muted); margin-bottom:18px;">
@@ -1106,7 +1106,7 @@
             <span class="mv-top10-rank-pill ${isTop1 ? 'rank-1' : ''}">${isTop1 ? '👑 #1 SUPREME' : '#' + t.rank}</span>
             <span class="mv-top10-frequency">${escapeHtml(t.count)}</span>
           </div>
-          <h4>${escapeHtml(t.ref)}</h4>
+          <h3>${escapeHtml(t.ref)}</h3>
           <p>${escapeHtml(t.note)}</p>
           <span class="mv-top10-bottom-link">${String(t.targetId).startsWith('bonus-') ? 'Open Showcase ↗' : 'Jump to Ayah ↓'}</span>
         </div>

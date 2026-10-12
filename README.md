@@ -48,6 +48,11 @@
   - Web App Manifest (`manifest.json`) with app shortcuts and theme colors.
   - Cache-first Service Worker (`sw.js`) that caches core pages, CSS, and UI assets for offline study.
 
+- **Performance & Responsive Engineering:**
+  - Global styles ship as one flattened `css/heynuo.css` bundle instead of a 29-request `@import` waterfall (regenerate with `tools/build-css.ps1`).
+  - Banners use responsive `srcset`: `tools/optimize-images.ps1` generates compact 800px variants that the browser picks per viewport and pixel density.
+  - Card grids use `minmax(0, 1fr)` tracks and height-only `contain-intrinsic-size`, so off-screen cards can never inflate a track and clip content on phones.
+
 ---
 
 ## 📂 Project Structure
@@ -74,7 +79,9 @@ heynuo.github.io/
 ├── LICENSE                      # MIT Open Source License
 ├── README.md                    # Project documentation
 ├── css/
-│   ├── style.css                # Core design system, variables, dark/light tokens, SVG icons
+│   ├── heynuo.css               # GENERATED: single-file bundle every page links to (do not hand-edit)
+│   ├── style.css                # Bundle manifest: lists the partial import order for build-css.ps1
+│   ├── partials/                # Modular design-system sources merged into heynuo.css
 │   ├── home.css                 # Home-specific layouts, typewriter, and interactive grid
 │   ├── contact.css              # Contact page layout, presence clock, and topic pills
 │   ├── quran.css                # Surah search, playlist, and PDF grid styles
@@ -94,10 +101,13 @@ heynuo.github.io/
 │   ├── banners/                 # Optimized OpenGraph banners (1200x630, webp/jpg)
 │   └── icons/                   # Crisp UI graphics, theme icons, and metadata
 └── tools/                       # Maintenance and automation toolchain
-    ├── sync-components.ps1      # Component stamping script for headers, footers & modals
+    ├── build-css.ps1            # Flattens css/partials into the single css/heynuo.css bundle
+    ├── optimize-images.ps1      # Generates downscaled -800.jpg variants used by the srcset markup
+    ├── check-css.ps1            # CSS structure validator (balanced braces, unterminated strings)
     ├── validate-site.ps1        # Site integrity validator (links, assets, schemas)
-    ├── build-ruqyah.ps1         # Ruqyah dataset extractor & verification
-    ├── inject-ruqyah.ps1        # Static pre-renderer for 60 Ruqyah cards
+    ├── sync-components.ps1      # Component stamping script for headers, footers & modals
+    ├── build-and-inject-ruqyah.ps1 # Ruqyah dataset extractor, verifier & static pre-renderer
+    ├── serve.ps1                # Local static preview server
     └── components/              # Canonical HTML component templates
         ├── header.html          # Standard navigation with crisp inline SVGs
         ├── footer.html          # Standard footer with GitHub & shortcut triggers
@@ -189,6 +199,22 @@ Or using Node:
 npx serve .
 ```
 Then visit `http://localhost:8000`.
+
+---
+
+## 🔧 Rebuilding the CSS Bundle
+
+Page-specific stylesheets (`home.css`, `ruqyah.css`, …) are linked directly, but the global
+design system lives in `css/partials/` and is merged into a single `css/heynuo.css` that every
+page loads. After editing anything under `css/partials/` (or the import list in `css/style.css`),
+regenerate the bundle:
+
+```powershell
+pwsh tools/build-css.ps1
+```
+
+The generated file is committed, so the site also works with no build step. `tools/optimize-images.ps1`
+regenerates the `-800.jpg` banner variants the `srcset` markup references when banner images change.
 
 ---
 

@@ -643,7 +643,7 @@
      Prevents CLS by reserving space while off-screen.            */
   :where([data-cv]) {
     content-visibility: auto;
-    contain-intrinsic-size: auto 500px;
+    contain-intrinsic-size: auto none auto 500px;
   }
 
   /* =========================================================

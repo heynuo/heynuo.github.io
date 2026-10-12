@@ -1,7 +1,11 @@
 [CmdletBinding()]
 param(
-    [string]$CssRoot = (Join-Path $PSScriptRoot '..\css')
+    [string]$CssRoot = ''
 )
+
+if (-not $CssRoot) {
+    $CssRoot = if ($PSScriptRoot) { Join-Path $PSScriptRoot '..\css' } else { 'css' }
+}
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'

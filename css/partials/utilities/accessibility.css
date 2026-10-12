@@ -761,6 +761,17 @@
     display: inline;
   }
 
+  /* The exemption above is for links inside prose. Standalone link lists such
+     as the footer menu are real navigation controls, not prose, so they keep
+     a 44px touch target (matches the intent declared in footer.css). */
+  .footer-nav-list a,
+  .footer-social-row a {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
   /* Icon buttons — expand hit area */
   button[aria-label]:not([class*="btn"]),
   [class*="icon-btn"],

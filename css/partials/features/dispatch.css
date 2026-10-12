@@ -76,7 +76,7 @@
 
     /* skip painting off-screen — keeps the rest of the page snappy */
     content-visibility: auto;
-    contain-intrinsic-size: 240px;
+    contain-intrinsic-size: auto none auto 240px;
   }
 
   /* decorative top-right glow */

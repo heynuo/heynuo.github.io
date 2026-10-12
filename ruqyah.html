@@ -45,7 +45,7 @@
   <meta name="twitter:image" content="https://heynuo.github.io/assets/banners/ruqyah-theology.jpg">
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+    href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20fill='%232563eb'/%3E%3Ctext%20x='50'%20y='67'%20font-size='50'%20text-anchor='middle'%20fill='white'%20font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
     <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
   <meta property="og:image:width" content="1200">
@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- Core stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/heynuo.css">
   <link rel="stylesheet" href="css/ruqyah.css">
 
 </head>
@@ -66,7 +66,7 @@
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <!-- Header & Navigation -->
-  <header role="banner">
+  <header>
     <nav class="container" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
         <span class="logo-mark" aria-hidden="true">
@@ -138,7 +138,7 @@
         <a href="quran.html#pdf-downloads" class="quran-tab-btn">📥 Quran PDF Downloads</a>
       </nav>
       <!-- Live Stats Dashboard -->
-      <div class="ruqyah-stats-dashboard" id="ruqyahStats" aria-label="Ruqyah statistics">
+      <div class="ruqyah-stats-dashboard" id="ruqyahStats" role="group" aria-label="Ruqyah statistics">
         <div class="ruqyah-stat-chip">&#128214; <strong>60</strong> Ruqyah Verses</div>
         <div class="ruqyah-stat-chip">&#127991;&#65039; <strong>9</strong> Categories</div>
         <div class="ruqyah-stat-chip">&#11088; <strong id="statFavCount">0</strong> Favorites</div>
@@ -180,7 +180,7 @@
           <span>▶</span> Quick Recitation
         </button>
       </div>
-      <div class="ruqyah-filter-strip" id="ruqyahFilters" aria-label="Ruqyah categories">
+      <div class="ruqyah-filter-strip" id="ruqyahFilters" role="group" aria-label="Ruqyah categories">
         <button type="button" class="ruqyah-filter-pill active" data-category="all" aria-pressed="true"><span>&#10024; All</span> <span class="filter-count-badge">60</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="Foundational" aria-pressed="false"><span>Foundational</span> <span class="filter-count-badge">6</span></button>
         <button type="button" class="ruqyah-filter-pill" data-category="Protection &amp; Silencing" aria-pressed="false"><span>Protection &amp; Silencing</span> <span class="filter-count-badge">8</span></button>
@@ -225,7 +225,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">Al-Fatiha (1:1–7)</h3>
+            <h2 class="card-reference">Al-Fatiha (1:1–7)</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> The Opening – essential for all Ruqyah
@@ -299,7 +299,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">Al-Baqarah (2:255)</h3>
+            <h2 class="card-reference">Al-Baqarah (2:255)</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> Ayatul Kursi – the greatest verse of protection
@@ -368,7 +368,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">Al-Ikhlas (112:1–4)</h3>
+            <h2 class="card-reference">Al-Ikhlas (112:1–4)</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> The Sincerity – equivalent to one third of the Quran
@@ -442,7 +442,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">Al-Falaq (113:1–5)</h3>
+            <h2 class="card-reference">Al-Falaq (113:1–5)</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> The Daybreak – seeking refuge from all evil
@@ -516,7 +516,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">An-Nas (114:1–6)</h3>
+            <h2 class="card-reference">An-Nas (114:1–6)</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> Mankind – seeking refuge from whispers of jinn and men
@@ -590,7 +590,7 @@
             </div>
           </header>
           <div class="card-title-group">
-            <h3 class="card-reference">Bismillah</h3>
+            <h2 class="card-reference">Bismillah</h2>
           </div>
           <div class="card-purpose-callout">
             <strong>Spiritual Purpose:</strong> The phrase of blessing and beginning of every good
@@ -720,7 +720,7 @@
     </section>
   </main>
     <!-- Footer -->
-  <footer role="contentinfo">
+  <footer>
       <div class="footer-container">
         <!-- Main 5-Column Grid -->
         <div class="footer-grid">
@@ -774,10 +774,10 @@
           </div>
           <!-- Column 2: Sacred Sciences -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="quran.html" data-nav="quran">
@@ -806,10 +806,10 @@
           </div>
           <!-- Column 3: Engineering -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
@@ -831,10 +831,10 @@
           </div>
           <!-- Column 4: Site & Author -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="index.html" data-nav="index">Home</a>
@@ -854,10 +854,10 @@
           </div>
           <!-- Column 5: Trust & Access -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="privacy.html" data-nav="privacy">

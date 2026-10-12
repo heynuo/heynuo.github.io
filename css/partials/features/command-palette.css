@@ -518,7 +518,7 @@
   .cmd-palette-item,
   .cmd-palette-section-title {
     content-visibility: auto;
-    contain-intrinsic-size: auto var(--cmd-row-h);
+    contain-intrinsic-size: auto none auto var(--cmd-row-h);
   }
 
   /* --------------------------------------------

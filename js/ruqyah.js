@@ -529,7 +529,7 @@
         emptyStateEl.className = 'ruqyah-empty-state';
         emptyStateEl.setAttribute('role', 'status');
 
-        const heading = document.createElement('h3');
+        const heading = document.createElement('h2');
         heading.textContent = '🔍 No matching Ruqyah verses found';
         const message = document.createElement('p');
         message.textContent = 'Try searching for a different term like "Kursi", "Fatiha", "Jinn", or reset your category filter.';
@@ -562,7 +562,7 @@
     if (!list.length) {
       gridEl.innerHTML = `
         <div class="ruqyah-empty-state">
-          <h3>🔍 No matching Ruqyah verses found</h3>
+          <h2>🔍 No matching Ruqyah verses found</h2>
           <p>Try searching for a different term like "Kursi", "Fatiha", "Jinn", or reset your category filter.</p>
           <button type="button" class="ruqyah-filter-pill active" id="resetFiltersBtn">Reset Filters</button>
         </div>
@@ -612,7 +612,7 @@
           </header>
 
           <div class="card-title-group">
-            <h3 class="card-reference">${escapeHtml(item.reference)}</h3>
+            <h2 class="card-reference">${escapeHtml(item.reference)}</h2>
           </div>
 
           <div class="card-purpose-callout">

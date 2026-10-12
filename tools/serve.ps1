@@ -3,10 +3,14 @@ param(
     [ValidateRange(1, 65535)]
     [int]$Port = 8080,
 
-    [string]$Root = (Join-Path $PSScriptRoot '..'),
+    [string]$Root = '',
 
     [string]$BindAddress = '127.0.0.1'
 )
+
+if (-not $Root) {
+    $Root = if ($PSScriptRoot) { Join-Path $PSScriptRoot '..' } else { '.' }
+}
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -139,7 +143,7 @@ try {
         }
     }
 } catch {
-    Write-Error "Server failed on $prefix: $($_.Exception.Message)"
+    Write-Error "Server failed on ${prefix}: $($_.Exception.Message)"
     exit 1
 } finally {
     if ($listener.IsListening) { $listener.Stop() }

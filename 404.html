@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
@@ -23,13 +23,15 @@
   </script>
   <meta name="robots" content="noindex, follow">
   <title>Page Not Found - HeyNuo</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232563eb'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="Page Not Found - HeyNuo">
+  <meta property="og:image" content="https://heynuo.github.io/assets/banners/og-banner.jpg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20fill='%232563eb'/%3E%3Ctext%20x='50'%20y='67'%20font-size='50'%20text-anchor='middle'%20fill='white'%20font-weight='bold'%3EHN%3C/text%3E%3C/svg%3E">
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="HeyNuo RSS Feed" href="https://heynuo.github.io/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/heynuo.css">
   <!-- Persistent Quran Auto-Listening Audio Player -->
   <link rel="stylesheet" href="css/quran-player.css">
   <style>
@@ -67,7 +69,7 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
   <div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
 
-  <header role="banner">
+  <header>
     <nav class="container" aria-label="Main navigation">
       <a href="index.html" class="logo" aria-label="HeyNuo - Return to homepage">
         <span class="logo-mark" aria-hidden="true">
@@ -128,13 +130,13 @@
   </header>
   <div class="container">
     <main id="main-content" class="error-container">
-      <img src="assets/icons/astronaut.png" alt="Lost in space" class="error-illustration" width="130" height="130">
+      <img src="assets/icons/astronaut.png" alt="Lost in space" class="error-illustration" width="130" height="130" decoding="async" loading="lazy">
       <h1>404</h1>
       <p>Oops! The page you're looking for doesn't exist or has moved.</p>
       <div class="error-actions">
-        <a href="index.html" class="btn btn-primary"><img src="assets/icons/rocket.png" alt="" class="btn-icon" width="16" height="16"> Go Home</a>
-        <button type="button" class="btn btn-secondary" onclick="window.CommandPalette ? window.CommandPalette.open() : location.href='index.html'"><img src="assets/icons/search.png" alt="" class="btn-icon" width="16" height="16"> Search Articles</button>
-        <a href="contact.html" class="btn btn-secondary"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16"> Contact Me</a>
+        <a href="index.html" class="btn btn-primary"><img src="assets/icons/rocket.png" alt="" class="btn-icon" width="16" height="16" decoding="async" loading="lazy"> Go Home</a>
+        <button type="button" class="btn btn-secondary" onclick="window.CommandPalette ? window.CommandPalette.open() : location.href='index.html'"><img src="assets/icons/search.png" alt="" class="btn-icon" width="16" height="16" decoding="async" loading="lazy"> Search Articles</button>
+        <a href="contact.html" class="btn btn-secondary"><img src="assets/icons/email.png" alt="" class="btn-icon" width="16" height="16" decoding="async" loading="lazy"> Contact Me</a>
       </div>
 
       <div class="error-quick-jumps">
@@ -155,7 +157,7 @@
         </div>
       </div>
     </main>
-    <footer role="contentinfo">
+    <footer>
       <div class="footer-container">
         <!-- Main 5-Column Grid -->
         <div class="footer-grid">
@@ -210,10 +212,10 @@
 
           <!-- Column 2: Sacred Sciences -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">📖</span>
               <span>Sacred Sciences</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="quran.html" data-nav="quran">
@@ -243,10 +245,10 @@
 
           <!-- Column 3: Engineering -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">⚡</span>
               <span>Engineering</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="spring-boot-architecture.html" data-nav="spring-boot-architecture">
@@ -269,10 +271,10 @@
 
           <!-- Column 4: Site & Author -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">👤</span>
               <span>Site &amp; Author</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="index.html" data-nav="index">Home</a>
@@ -293,10 +295,10 @@
 
           <!-- Column 5: Trust & Access -->
           <div class="footer-col">
-            <h4 class="footer-heading">
+            <h2 class="footer-heading">
               <span class="footer-heading-icon" aria-hidden="true">🛡️</span>
               <span>Trust &amp; Access</span>
-            </h4>
+            </h2>
             <ul class="footer-nav-list">
               <li>
                 <a href="privacy.html" data-nav="privacy">

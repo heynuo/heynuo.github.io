@@ -176,7 +176,7 @@
 
     /* Perf for long lists */
     content-visibility: auto;
-    contain-intrinsic-size: auto 420px;
+    contain-intrinsic-size: auto none auto 420px;
 
     /* Entrance animation */
     animation: card-enter 0.5s var(--card-ease-out) backwards;

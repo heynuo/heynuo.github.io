@@ -1,7 +1,11 @@
 [CmdletBinding()]
 param(
-    [string]$Root = (Join-Path $PSScriptRoot '..')
+    [string]$Root = ''
 )
+
+if (-not $Root) {
+    $Root = if ($PSScriptRoot) { Join-Path $PSScriptRoot '..' } else { '.' }
+}
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -23,7 +27,7 @@ function Test-LocalReference {
         [Parameter(Mandatory)][string]$SourcePath,
         [Parameter(Mandatory)][string]$SiteRoot,
         [Parameter(Mandatory)][string]$Label,
-        [Parameter(Mandatory)][System.Collections.Generic.List[string]]$Errors
+        [Parameter(Mandatory)][AllowEmptyCollection()][System.Collections.Generic.List[string]]$Errors
     )
 
     $referenceText = [System.Net.WebUtility]::HtmlDecode($Reference.Trim())
@@ -93,6 +97,20 @@ try {
         '@import\s+(?:"([^"]+)"|''([^'']+)''|url\(\s*["'']?([^"''\)]+)["'']?\s*\))',
         [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
     )
+    # Tags and attributes, used to reject duplicated attributes such as two src=
+    # on one <img>. Browsers silently keep only the first copy, so the rendered
+    # page diverges from the markup and the document fails validation.
+    $tagRegex = [System.Text.RegularExpressions.Regex]::new(
+        '<[a-zA-Z][a-zA-Z0-9-]*(?:\s[^<>]*)?>',
+        [System.Text.RegularExpressions.RegexOptions]::Singleline
+    )
+    $attributeRegex = [System.Text.RegularExpressions.Regex]::new(
+        '\s+([^\s=/>]+)(?:\s*=\s*(?:"[^"]*"|''[^''>]*''|[^\s>]*))?',
+        [System.Text.RegularExpressions.RegexOptions]::Singleline
+    )
+    # Blank comments and inline script/style so example markup inside them is
+    # never scanned, while every character offset below stays valid.
+    $maskPatterns = @('(?s)<!--.*?-->', '(?is)<script\b[^>]*>.*?</script\s*>', '(?is)<style\b[^>]*>.*?</style\s*>')
 
     foreach ($file in $htmlFiles) {
         $content = [System.IO.File]::ReadAllText($file.FullName, [System.Text.Encoding]::UTF8)
@@ -111,6 +129,26 @@ try {
         } else {
             if ($footerMatch.Value -notmatch 'href="privacy\.html"') { $errors.Add("[$relativeFile] footer is missing the privacy link.") }
             if ($footerMatch.Value -notmatch 'href="rss\.xml"') { $errors.Add("[$relativeFile] footer is missing the RSS link.") }
+        }
+
+        $maskedContent = $content
+        foreach ($maskPattern in $maskPatterns) {
+            $maskedContent = [System.Text.RegularExpressions.Regex]::Replace($maskedContent, $maskPattern, {
+                param($maskMatch)
+                return New-Object string(' ', $maskMatch.Value.Length)
+            })
+        }
+        foreach ($tagMatch in $tagRegex.Matches($maskedContent)) {
+            $seenAttributes = @{}
+            foreach ($attributeMatch in $attributeRegex.Matches($tagMatch.Value)) {
+                $attributeName = $attributeMatch.Groups[1].Value.ToLowerInvariant()
+                if ($seenAttributes.ContainsKey($attributeName)) {
+                    $lineNumber = Get-LineNumber -Text $content -Index $tagMatch.Index
+                    $errors.Add("[$relativeFile] duplicate attribute '$attributeName' on line $lineNumber.")
+                    break
+                }
+                $seenAttributes[$attributeName] = $true
+            }
         }
 
         foreach ($match in $htmlReferenceRegex.Matches($content)) {

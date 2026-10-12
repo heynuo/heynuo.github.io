@@ -459,7 +459,7 @@
     gap: 8px;
     /* Perf: skip painting off-screen groups */
     content-visibility: auto;
-    contain-intrinsic-size: auto 140px;
+    contain-intrinsic-size: auto none auto 140px;
   }
 
   /* Staggered entrance when the modal opens.
